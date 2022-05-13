@@ -1,0 +1,39 @@
+html {
+    --color-background: #B8B5B2;
+    --color-primary: #44403C;
+}
+
+body {
+    background-color: var(--color-background);
+}
+
+.main-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+}
+
+.section-header {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sections-list {
+    position: fixed;
+    left: 28px;
+    top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sections-list-entry.current {
+    background-color: chartreuse;
+}
