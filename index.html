@@ -13,11 +13,24 @@
 </head>
 
 <body>
-    <div class="sections-list">
-        <a href="/works" id="menu-works" class="sections-list-entry">Works</a>
-        <a href="/studio" id="menu-studio" class="sections-list-entry">Studio</a>
-        <a href="/contacts" id="menu-contacts" class="sections-list-entry">Contacts</a>
-    </div>
+    <ul class="sections-list">
+        <li id="menu-works" class="sections-list-entry">
+            <a href="/works" class="link">Works</a>
+            <div class="sub-sections-collapsable">
+                <ul class="sub-sections">
+                    <li><a href="/studio/stonehenge" class="sub-link">Stonehenge</a></li>
+                    <li><a href="/studio/driving-simulator" class="sub-link">Driving Simulator</a></li>
+                    <li><a href="/studio/hello" class="sub-link">Something else</a></li>
+                </ul>
+            </div>
+        </li>
+        <li id="menu-studio" class="sections-list-entry">
+            <a href="/studio" class="link">Studio</a>
+        </li>
+        <li id="menu-contacts" class="sections-list-entry">
+            <a href="/contacts" class="link">Contacts</a>
+        </li>
+    </ul>
     <a href="/" id="menu-landing" class="nav-logo current">
         <div>
             <svg viewBox="0 0 348 134" fill="none" xmlns="http://www.w3.org/2000/svg">
