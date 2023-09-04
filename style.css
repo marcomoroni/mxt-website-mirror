@@ -1,3 +1,9 @@
+@font-face {
+    font-family: "Metric";
+    src: url(../fonts/test-metric-regular.woff2);
+    font-style: normal;
+}
+
 html {
     --color-background: #B8B5B2;
     --color-primary: #44403C;
@@ -5,6 +11,8 @@ html {
 
 body {
     background-color: var(--color-background);
+    font-family: "Metric";
+    font-size: 17px;
 }
 
 .main-container {
