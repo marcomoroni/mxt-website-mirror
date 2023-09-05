@@ -14,6 +14,7 @@
 html {
     --color-background: #B8B5B2;
     --color-primary: #44403C;
+    --color-primary-2: #ffffff;
     --color-nav-not-current: #8d8a87;
     --curve: cubic-bezier(0.1, 0.9, 0.18, 0.98);
 }
@@ -23,6 +24,16 @@ body {
     font-family: "Metric";
     font-size: 17px;
     columns: var(--color-primary);
+}
+
+.intro-text {
+    color: var(--color-primary-2);
+    font-size: 32px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20vh;
+    margin-bottom: 20vh;
 }
 
 .section {
@@ -53,6 +64,7 @@ body {
     font-size: 16px;
     letter-spacing: 0.4px;
     transition: color 0.2s ease-in-out;
+    user-select: none;
 }
 
 .sections-list-entry.current .link {
@@ -79,6 +91,7 @@ body {
 }
 
 .sub-sections .sub-link {
+    user-select: none;
     color: var(--color-nav-not-current);
     transition: opacity 0.4s ease-out;
 }
@@ -124,4 +137,24 @@ body {
     opacity: 0;
     pointer-events: none;
     transition-delay: 0s;
+}
+
+.big-logo {
+    width: 500px;
+}
+
+.works-preview-list {
+    --peek-other: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: -20px;
+}
+
+.work-preview {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: 3px solid green;
+    height: 100vh;
+
 }
