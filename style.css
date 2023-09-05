@@ -53,7 +53,7 @@ body {
     font-weight: 600;
     color: transparent;
     --stripe-size: 3px;
-    --other-stripe-color: #938F8C;
+    --other-stripe-color: #a19d9a;
     background: repeating-linear-gradient(80deg,
             var(--color-background),
             var(--color-background) var(--stripe-size),
