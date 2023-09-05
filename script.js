@@ -34,11 +34,36 @@ const sections = [
     },
 ];
 
+const worksSections = [
+    {
+        containerId: `w-stonehenge`,
+        menuItemId: `w-menu-stonehenge`,
+        containerEl: null,
+        menuItemEl: null
+    },
+    {
+        containerId: `w-driving-sim`,
+        menuItemId: `w-menu-driving-sim`,
+        containerEl: null,
+        menuItemEl: null
+    },
+    {
+        containerId: `w-hello`,
+        menuItemId: `w-menu-hello`,
+        containerEl: null,
+        menuItemEl: null
+    },
+];
+
 window.addEventListener(`load`, () => {
     // Cache elements.
     for (var i = 0; i < sections.length; i++) {
         sections[i].containerEl = document.getElementById(sections[i].containerId);
         sections[i].menuItemEl = document.getElementById(sections[i].menuItemId);
+    }
+    for (var i = 0; i < worksSections.length; i++) {
+        worksSections[i].containerEl = document.getElementById(worksSections[i].containerId);
+        worksSections[i].menuItemEl = document.getElementById(worksSections[i].menuItemId);
     }
 
     document.onscroll = () => onScrollOrResize(sections);
@@ -58,6 +83,7 @@ window.addEventListener(`load`, () => {
     }
 
     initOrUpdateCurrentSection();
+    updateCurrentWorksSection();
 });
 
 function onScrollOrResize(sections) {
@@ -74,6 +100,8 @@ function onScrollOrResize(sections) {
             break;
         }
     }
+
+    updateCurrentWorksSection();
 }
 
 function initOrUpdateCurrentSection() {
@@ -85,6 +113,20 @@ function initOrUpdateCurrentSection() {
         }
         else {
             section.menuItemEl.classList.remove(`current`);
+        }
+    }
+}
+
+function updateCurrentWorksSection() {
+    for (var i = 0; i < worksSections.length; i++) {
+        const worksSection = worksSections[i];
+        const boundingRect = worksSection.containerEl.getBoundingClientRect();
+        const isCurrent = boundingRect.top <= 0 && boundingRect.bottom > 0;
+        if (isCurrent) {
+            worksSection.menuItemEl.classList.add(`current`);
+        }
+        else {
+            worksSection.menuItemEl.classList.remove(`current`);
         }
     }
 }

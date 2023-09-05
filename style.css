@@ -93,19 +93,23 @@ body {
 .sub-sections .sub-link {
     user-select: none;
     color: var(--color-nav-not-current);
-    transition: opacity 0.4s ease-out;
+    transition: opacity 0.4s ease-out, color 0.2s ease-in-out;
+}
+
+.sub-sections .sub-link.current {
+    color: var(--color-primary);
 }
 
 .sub-sections :nth-child(1) .sub-link {
-    transition-delay: 0.2s;
+    transition-delay: 0.2s, 0s;
 }
 
 .sub-sections :nth-child(2) .sub-link {
-    transition-delay: 0.3s;
+    transition-delay: 0.3s, 0s;
 }
 
 .sub-sections :nth-child(3) .sub-link {
-    transition-delay: 0.4s;
+    transition-delay: 0.4s, 0s;
 }
 
 /* Add more as needed. */
@@ -120,8 +124,8 @@ body {
 
 .sections-list-entry:not(.current) .sub-link {
     opacity: 0;
-    transition-delay: 0s;
-    transition-duration: 0.2s;
+    transition-delay: 0s, 0s;
+    transition-duration: 0.2s, 0.2s;
 }
 
 .nav-logo {
