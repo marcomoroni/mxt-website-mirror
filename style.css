@@ -145,6 +145,8 @@ body {
 
 .big-logo {
     width: 500px;
+    /* Seems more visually pleasing. */
+    transform: translate(0px, -14px);
 }
 
 .works-preview-list {
