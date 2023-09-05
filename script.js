@@ -55,6 +55,35 @@ const worksSections = [
     },
 ];
 
+const sectionsObserver = new IntersectionObserver(
+    entries => {      
+        // Find the current section.
+        for (var i = sections.length - 1; i >= 0; i--) {
+            if (sections[i].containerEl.getBoundingClientRect().top <= 0) {
+                // This is the current URL.
+                // If it's different from the current URL.
+                if (document.location.pathname != sections[i].url) {
+                    window.history.pushState(``, ``, sections[i].url);
+                    initOrUpdateCurrentSection();
+                }
+
+                break;
+            }
+        }
+    },
+    {
+        threshold: [0, 1]
+    });
+
+const worksSectionsObserver = new IntersectionObserver(
+    entries => {
+        initOrUpdateCurrentWorksSection();
+    },
+    {
+        threshold: [0, 1]
+    }
+)
+
 window.addEventListener(`load`, () => {
     // Cache elements.
     for (var i = 0; i < sections.length; i++) {
@@ -65,9 +94,6 @@ window.addEventListener(`load`, () => {
         worksSections[i].containerEl = document.getElementById(worksSections[i].containerId);
         worksSections[i].menuItemEl = document.getElementById(worksSections[i].menuItemId);
     }
-
-    document.onscroll = () => onScrollOrResize(sections);
-    window.onresize = () => onScrollOrResize(sections);
 
     // Handle URL.
     var urlIsValid = false;
@@ -82,27 +108,14 @@ window.addEventListener(`load`, () => {
         history.replaceState(``, ``, `/`);
     }
 
-    initOrUpdateCurrentSection();
-    updateCurrentWorksSection();
-});
-
-function onScrollOrResize(sections) {
-    // Find the current section.
-    for (var i = sections.length - 1; i >= 0; i--) {
-        if (sections[i].containerEl.getBoundingClientRect().top <= 0) {
-            // This is the current URL.
-            // If it's different from the current URL.
-            if (document.location.pathname != sections[i].url) {
-                window.history.pushState(``, ``, sections[i].url);
-                initOrUpdateCurrentSection();
-            }
-
-            break;
-        }
+    // Add elements to check for visibility in the viewport.
+    for (var i = 0; i < sections.length; i++) {
+        sectionsObserver.observe(sections[i].containerEl);
     }
-
-    updateCurrentWorksSection();
-}
+    for (var i = 0; i < worksSections.length; i++) {
+        worksSectionsObserver.observe(worksSections[i].containerEl);
+    }
+});
 
 function initOrUpdateCurrentSection() {
     for (var i = 0; i < sections.length; i++) {
@@ -117,7 +130,7 @@ function initOrUpdateCurrentSection() {
     }
 }
 
-function updateCurrentWorksSection() {
+function initOrUpdateCurrentWorksSection() {
     for (var i = 0; i < worksSections.length; i++) {
         const worksSection = worksSections[i];
         const boundingRect = worksSection.containerEl.getBoundingClientRect();
