@@ -135,11 +135,6 @@ function initOrUpdateCurrentWorksSection() {
         const worksSection = worksSections[i];
         const boundingRect = worksSection.containerEl.getBoundingClientRect();
         const isCurrent = boundingRect.top <= 0 && boundingRect.bottom > 0;
-        if (isCurrent) {
-            worksSection.menuItemEl.classList.add(`current`);
-        }
-        else {
-            worksSection.menuItemEl.classList.remove(`current`);
-        }
+        worksSection.menuItemEl.classList.toggle(`current`, isCurrent);
     }
 }
