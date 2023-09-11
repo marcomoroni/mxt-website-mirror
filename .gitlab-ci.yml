@@ -23,4 +23,5 @@ deploy:
   stage: deploy
   script:
     - ssh ubuntu@testing.mxt.co.uk "rm -f -r ~/web/$TESTING_SITE_DIR/*"
+    - ssh ubuntu@testing.mxt.co.uk "mkdir -p ~/web/$TESTING_SITE_DIR"
     - scp -r $DIST_DIR/* ubuntu@testing.mxt.co.uk:~/web/$TESTING_SITE_DIR
