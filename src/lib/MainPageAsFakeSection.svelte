@@ -9,6 +9,7 @@
 	} from '$lib/currentMainPageSection';
 	import { onDestroy } from 'svelte';
 	import { previousPathname } from './previousPathname';
+	import { base } from '$app/paths';
 
 	export let sectionName: CurrentMainPageSection;
 	export let sectionId: string;
@@ -37,9 +38,12 @@
 		requestAnimationFrame(() => {
 			let navigatingFromAMainPageSection = false;
 			if ($previousPathname !== null) {
-				navigatingFromAMainPageSection = ['/', '/works', '/studio', '/contacts'].includes(
-					$previousPathname
-				);
+				navigatingFromAMainPageSection = [
+					`${base}/`,
+					`${base}/works`,
+					`${base}/studio`,
+					`${base}/contacts`
+				].includes($previousPathname);
 			}
 			const shouldScrollToTopOfSection = navigatingFromAMainPageSection;
 
