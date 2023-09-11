@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import MainPageSection from './MainPageSection.svelte';
 	import MenuEntry from './MenuEntry.svelte';
 	import { currentMainPageSection } from './currentMainPageSection';
@@ -52,28 +53,28 @@
 			</div>
 		</div>
 	</MenuEntry>
-	<MenuEntry isCurrent={navStudioIsCurrent} href="/studio" anchorId="nav-studio">
+	<MenuEntry isCurrent={navStudioIsCurrent} href="{base}/studio" anchorId="nav-studio">
 		<svelte:fragment slot="anchorInner">Studio</svelte:fragment>
 	</MenuEntry>
-	<MenuEntry isCurrent={navContactsIsCurrent} href="/contacts" anchorId="nav-contacts">
+	<MenuEntry isCurrent={navContactsIsCurrent} href="{base}/contacts" anchorId="nav-contacts">
 		<svelte:fragment slot="anchorInner">Contacts</svelte:fragment>
 	</MenuEntry>
 </nav>
 
-<MenuEntry isCurrent={navHomeIsCurrent} href="/" anchorId="nav-home" useLogo={true}>
+<MenuEntry isCurrent={navHomeIsCurrent} href="{base}/" anchorId="nav-home" useLogo={true}>
 	<svelte:fragment slot="anchorInner">Home</svelte:fragment>
 </MenuEntry>
 
-<MainPageSection id="section-home" associatedUrl="/">
+<MainPageSection id="section-home" associatedUrl="{base}/">
 	<HomeSection />
 </MainPageSection>
-<MainPageSection id="section-works" associatedUrl="/works">
+<MainPageSection id="section-works" associatedUrl="{base}/works">
 	<WorksSection />
 </MainPageSection>
-<MainPageSection id="section-studio" associatedUrl="/studio">
+<MainPageSection id="section-studio" associatedUrl="{base}/studio">
 	<StudioSection />
 </MainPageSection>
-<MainPageSection id="section-contacts" associatedUrl="/contacts">
+<MainPageSection id="section-contacts" associatedUrl="{base}/contacts">
 	<ContactsSection />
 </MainPageSection>
 
