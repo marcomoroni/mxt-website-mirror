@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { base } from '$app/paths';
 	import MainPageSection from './MainPageSection.svelte';
 	import MenuEntry from './MenuEntry.svelte';
 	import { currentMainPageSection } from './currentMainPageSection';
@@ -30,7 +29,7 @@
 </script>
 
 <nav class="menu">
-	<MenuEntry isCurrent={navWorksIsCurrent} href="{base}/works" anchorId="nav-works">
+	<MenuEntry isCurrent={navWorksIsCurrent} href="/works" anchorId="nav-works">
 		<svelte:fragment slot="anchorInner">Works</svelte:fragment>
 		<div slot="collapsable" class="sub-sections">
 			<div
@@ -53,28 +52,28 @@
 			</div>
 		</div>
 	</MenuEntry>
-	<MenuEntry isCurrent={navStudioIsCurrent} href="{base}/studio" anchorId="nav-studio">
+	<MenuEntry isCurrent={navStudioIsCurrent} href="/studio" anchorId="nav-studio">
 		<svelte:fragment slot="anchorInner">Studio</svelte:fragment>
 	</MenuEntry>
-	<MenuEntry isCurrent={navContactsIsCurrent} href="{base}/contacts" anchorId="nav-contacts">
+	<MenuEntry isCurrent={navContactsIsCurrent} href="/contacts" anchorId="nav-contacts">
 		<svelte:fragment slot="anchorInner">Contacts</svelte:fragment>
 	</MenuEntry>
 </nav>
 
-<MenuEntry isCurrent={navHomeIsCurrent} href="{base}/" anchorId="nav-home" useLogo={true}>
+<MenuEntry isCurrent={navHomeIsCurrent} href="/" anchorId="nav-home" useLogo={true}>
 	<svelte:fragment slot="anchorInner">Home</svelte:fragment>
 </MenuEntry>
 
-<MainPageSection id="section-home" associatedUrl="{base}/">
+<MainPageSection id="section-home" associatedUrl="/">
 	<HomeSection />
 </MainPageSection>
-<MainPageSection id="section-works" associatedUrl="{base}/works">
+<MainPageSection id="section-works" associatedUrl="/works">
 	<WorksSection />
 </MainPageSection>
-<MainPageSection id="section-studio" associatedUrl="{base}/studio">
+<MainPageSection id="section-studio" associatedUrl="/studio">
 	<StudioSection />
 </MainPageSection>
-<MainPageSection id="section-contacts" associatedUrl="{base}/contacts">
+<MainPageSection id="section-contacts" associatedUrl="/contacts">
 	<ContactsSection />
 </MainPageSection>
 

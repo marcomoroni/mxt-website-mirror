@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { base } from '$app/paths';
 	import SectionHeader from '$lib/SectionHeader.svelte';
 	import { currentWorkVisible, type CurrentWorkVisible } from '$lib/currentWorkVisible';
 	import { onDestroy, onMount } from 'svelte';
@@ -57,13 +56,13 @@
 <SectionHeader text="Works" />
 <ul class="works-list">
 	<li id="w-stonehenge" class="work-preview">
-		<a href="{base}/works/stonehenge" class="work-button">Stonehenge</a>
+		<a href="/works/stonehenge" class="work-button">Stonehenge</a>
 	</li>
 	<li id="w-driving-sim" class="work-preview">
-		<a href="{base}/works/driving-simulator" class="work-button">Driving Simulator</a>
+		<a href="/works/driving-simulator" class="work-button">Driving Simulator</a>
 	</li>
 	<li id="w-hello" class="work-preview">
-		<a href="{base}/works/hello" class="work-button">Something else</a>
+		<a href="/works/hello" class="work-button">Something else</a>
 	</li>
 </ul>
 
