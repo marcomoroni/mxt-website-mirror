@@ -30,7 +30,7 @@
 </script>
 
 <nav class="menu">
-	<MenuEntry isCurrent={navWorksIsCurrent} href="/works" anchorId="nav-works">
+	<MenuEntry isCurrent={navWorksIsCurrent} href="{base}/works" anchorId="nav-works">
 		<svelte:fragment slot="anchorInner">Works</svelte:fragment>
 		<div slot="collapsable" class="sub-sections">
 			<div
