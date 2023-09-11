@@ -11,10 +11,6 @@ const config = {
 	kit: {
         adapter: adapter()
 	},
-
-    paths: {
-        base: dev ? '' : '/new-mxt',
-    }
 };
 
 export default config;
