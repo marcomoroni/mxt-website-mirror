@@ -1,0 +1,26 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  DIST_DIR: build
+  TESTING_SITE_DIR: new-mxt
+
+workflow:
+  rules:
+  - if: $CI_PIPELINE_SOURCE == "web"
+
+build:
+  stage: build
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - $DIST_DIR/
+
+deploy:
+  stage: deploy
+  script:
+    - ssh ubuntu@testing.mxt.co.uk "rm -f -r ~/web/$TESTING_SITE_DIR/*"
+    - scp -r $DIST_DIR/* ubuntu@testing.mxt.co.uk:~/web/$TESTING_SITE_DIR
