@@ -60,9 +60,7 @@
 	</MenuEntry>
 </nav>
 
-<MenuEntry isCurrent={navHomeIsCurrent} href="/" anchorId="nav-home" useLogo={true}>
-	<svelte:fragment slot="anchorInner">Home</svelte:fragment>
-</MenuEntry>
+<MenuEntry isCurrent={navHomeIsCurrent} href="/" anchorId="nav-home" useLogo={true} />
 
 <MainPageSection id="section-home" associatedUrl="/">
 	<HomeSection />
@@ -80,11 +78,12 @@
 <style>
 	.menu {
 		position: fixed;
-		left: 35px;
-		top: 33px;
+		left: var(--top-left-menu-margin-left);
+		top: var(--top-left-menu-margin-top);
 		display: flex;
 		flex-direction: column;
 		gap: 16px;
+		z-index: 10;
 	}
 
 	:global(.menu-entry .mxt-logo) {

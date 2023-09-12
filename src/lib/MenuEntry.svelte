@@ -1,4 +1,5 @@
 <script lang="ts">
+	import MenuEntryText from './MenuEntryText.svelte';
 	import MxtLogo from './MxtLogo.svelte';
 
 	export let isCurrent: Boolean;
@@ -14,27 +15,13 @@
 		{#if useLogo}
 			<MxtLogo />
 		{:else}
-			<slot name="anchorInner" />
+			<MenuEntryText {isCurrent}><slot name="anchorInner" /></MenuEntryText>
 		{/if}
 	</a>
 	<div class="collapsable"><slot name="collapsable" /></div>
 </div>
 
 <style>
-	.menu-entry .nav-button {
-		color: var(--color-nav-not-current);
-		font-weight: 600;
-		text-transform: uppercase;
-		font-size: 16px;
-		letter-spacing: 0.4px;
-		transition: color 0.2s ease-in-out;
-		user-select: none;
-	}
-
-	.menu-entry.current .nav-button {
-		color: #3f3b38;
-	}
-
 	.collapsable {
 		position: relative;
 
