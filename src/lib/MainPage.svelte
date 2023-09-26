@@ -88,14 +88,14 @@
 
 	:global(.menu-entry .mxt-logo) {
 		position: fixed;
-		right: 35px;
+		right: var(--top-right-menu-margin-right);
 		top: 47px;
 		width: 100px;
 		transition: opacity 0.4s var(--curve) 0.5s, top 0.4s var(--curve) 0.5s;
 	}
 
 	:global(.menu-entry.current .mxt-logo) {
-		top: 43px;
+		top: var(--top-right-menu-margin-top);
 		opacity: 0;
 		pointer-events: none;
 		transition-delay: 0s;

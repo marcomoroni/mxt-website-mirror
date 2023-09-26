@@ -19,6 +19,8 @@ html {
     --curve: cubic-bezier(0.1, 0.9, 0.18, 0.98);
     --top-left-menu-margin-top: 33px;
     --top-left-menu-margin-left: 35px;
+    --top-right-menu-margin-top: 43px;
+    --top-right-menu-margin-right: 35px;
 }
 
 body {
@@ -26,9 +28,4 @@ body {
     font-family: "Metric";
     font-size: 17px;
     columns: var(--color-primary);
-}
-
-::view-transition-old(root),
-::view-transition-new(root) {
-    animation-duration: 0.1s;
 }
