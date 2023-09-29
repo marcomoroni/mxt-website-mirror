@@ -1,10 +1,10 @@
 <script>
 	import MxtLogoNoPadding from '$lib/MxtLogoNoPadding.svelte';
-	import TopBar from '$lib/TopBar.svelte';
 	import WidthContainer from '$lib/WidthContainer.svelte';
-</script>
+	import { navBarData } from '$lib/topBarData';
 
-<TopBar absolutePos={true} />
+	navBarData.set('home');
+</script>
 
 <div class="landing-container">
 	<div>
