@@ -13,13 +13,22 @@
 
 html {
     --color-background: #F5F1EF;
-    --color-primary: #3F3B38;
+    --color-primary: #5b544f;
     --curve: cubic-bezier(0.1, 0.9, 0.18, 0.98);
+    --main-width: 960px;
+    --horizontal-margin: 30px;
+}
+
+@media (max-width: 660px) {
+    html {
+        --horizontal-margin: 15px;
+    }
 }
 
 body {
     background-color: var(--color-background);
     font-family: "Metric";
     font-size: 17px;
-    columns: var(--color-primary);
+    color: var(--color-primary);
+    line-height: 1.3;
 }
