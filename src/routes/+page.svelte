@@ -1,15 +1,20 @@
 <script>
-	import MxtLogo from '$lib/MxtLogo.svelte';
+	import MxtLogoNoPadding from '$lib/MxtLogoNoPadding.svelte';
+	import WidthContainer from '$lib/WidthContainer.svelte';
 </script>
 
 <div class="landing-container">
-	<div class="logo">
-		<MxtLogo />
+	<div class="vertically-centered">
+		<WidthContainer>
+			<div class="logo">
+				<MxtLogoNoPadding />
+			</div>
+			<p class="text">
+				MXT are an immersive experience design and technology specialists, creating extended reality
+				environments for public sector and infrastructure partners.
+			</p>
+		</WidthContainer>
 	</div>
-	<p class="text">
-		MXT are an immersive experience design and technology specialists, creating extended reality
-		environments for public sector and infrastructure partners.
-	</p>
 </div>
 
 <style>
@@ -19,13 +24,11 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		align-items: center;
+		align-items: stretch;
 	}
 
 	.logo {
 		width: 540px;
-		margin-left: var(--horizontal-margin);
-		margin-right: var(--horizontal-margin);
 	}
 
 	@media (max-width: 1500px) {
@@ -40,7 +43,7 @@
 		}
 	}
 
-	@media (max-width: 440px) {
+	@media (max-width: 460px) {
 		.logo {
 			width: 270px;
 		}
@@ -50,8 +53,8 @@
 		margin-top: min(max(4vw, 60px), 130px);
 		max-width: var(--main-width);
 		font-size: 30px;
-		margin-left: var(--horizontal-margin);
-		margin-right: var(--horizontal-margin);
+		margin-left: auto;
+		margin-right: auto;
 	}
 
 	@media (max-width: 660px) {
