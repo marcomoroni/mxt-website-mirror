@@ -1,10 +1,13 @@
 <script>
 	import MxtLogoNoPadding from '$lib/MxtLogoNoPadding.svelte';
+	import TopBar from '$lib/TopBar.svelte';
 	import WidthContainer from '$lib/WidthContainer.svelte';
 </script>
 
+<TopBar absolutePos={true} />
+
 <div class="landing-container">
-	<div class="vertically-centered">
+	<div>
 		<WidthContainer>
 			<div class="logo">
 				<MxtLogoNoPadding />
@@ -51,14 +54,14 @@
 
 	.text {
 		margin-top: min(max(4vw, 60px), 130px);
-		max-width: var(--main-width);
+		max-width: 80%;
 		font-size: 30px;
-		margin-left: auto;
 		margin-right: auto;
 	}
 
 	@media (max-width: 660px) {
 		.text {
+			max-width: unset;
 			font-size: 25px;
 		}
 	}
