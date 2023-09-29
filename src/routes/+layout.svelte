@@ -4,8 +4,9 @@
 
 	$: absolutePos = $navBarData === 'home';
 	$: background = $navBarData === 'innerPage';
+	$: showLogo = $navBarData !== 'home';
 </script>
 
-<TopBar {absolutePos} {background} />
+<TopBar {absolutePos} {background} {showLogo} />
 
 <slot />

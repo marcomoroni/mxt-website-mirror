@@ -1,8 +1,11 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
+	import MxtLogoNoPadding from './MxtLogoNoPadding.svelte';
 	import WidthContainer from './WidthContainer.svelte';
 
 	export let absolutePos = false;
 	export let background = false;
+	export let showLogo = true;
 
 	const pages = [
 		{
@@ -29,6 +32,10 @@
 			{#each pages as page}
 				<a href={page.href}>{page.label}</a>
 			{/each}
+			<div class="spacer" />
+			{#if showLogo}
+				<a transition:fade={{ duration: 100 }} class="home-link" href="/"><MxtLogoNoPadding /></a>
+			{/if}
 		</nav>
 	</WidthContainer>
 </div>
@@ -47,6 +54,17 @@
 		align-items: center;
 		justify-content: start;
 		gap: 30px;
+	}
+
+	.spacer {
+		flex: 1;
+	}
+
+	.home-link {
+		/* Visual adjustement. */
+		margin-top: 3px;
+
+		width: 70px;
 	}
 
 	.abs {
