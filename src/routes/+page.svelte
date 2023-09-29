@@ -6,6 +6,10 @@
 	navBarData.set('home');
 </script>
 
+<svelte:head>
+	<title>MXT</title>
+</svelte:head>
+
 <div class="landing-container">
 	<div>
 		<WidthContainer>
@@ -31,7 +35,7 @@
 	}
 
 	.logo {
-		width: 540px;
+		width: 520px;
 	}
 
 	@media (max-width: 1500px) {
