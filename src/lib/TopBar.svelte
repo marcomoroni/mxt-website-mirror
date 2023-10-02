@@ -23,17 +23,16 @@
 			label: 'Contacts'
 		}
 	];
+
+	function toggleMenu() {
+		expanded = !expanded;
+	}
 </script>
 
 <div class="container" class:expanded class:abs={absolutePos} class:bg={background}>
 	<WidthContainer>
 		<nav class="top-bar">
-			<button
-				class="nav-bar-toggle style-like-a"
-				on:click={() => {
-					expanded = !expanded;
-				}}>Menu</button
-			>
+			<button class="nav-bar-toggle style-like-a" on:click={toggleMenu}>Menu</button>
 			{#each pages as page}
 				<a class="nav-link" href={page.href}>{page.label}</a>
 			{/each}
