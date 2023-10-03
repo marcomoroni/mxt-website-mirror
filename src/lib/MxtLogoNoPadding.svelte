@@ -38,11 +38,11 @@
 			stroke-width: 0px;
 		}
 
-		60% {
+		40% {
 			stroke-width: 0px;
 		}
 
-		65% {
+		45% {
 			stroke-width: 5px;
 		}
 
@@ -54,7 +54,7 @@
 	.animate .a,
 	.animate .b,
 	.animate .c {
-		animation: anim 3s ease-out 0s infinite;
+		animation: anim 3s var(--curve) 0s infinite;
 		stroke: var(--color-background);
 		stroke-width: 1px;
 	}
