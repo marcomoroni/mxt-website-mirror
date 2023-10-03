@@ -1,4 +1,5 @@
 <script>
+	import SecondaryPageHeader from '$lib/SecondaryPageHeader.svelte';
 	import { navBarData } from '$lib/topBarData';
 
 	navBarData.set('innerPage');
@@ -8,4 +9,4 @@
 	<title>Contacts</title>
 </svelte:head>
 
-<h1>Contacts</h1>
+<SecondaryPageHeader title="Contacts" />
