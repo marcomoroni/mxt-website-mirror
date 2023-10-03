@@ -1,13 +1,20 @@
-<svg viewBox="0 0 367 122" fill="none" xmlns="http://www.w3.org/2000/svg">
+<script lang="ts">
+	export let animate = false;
+</script>
+
+<svg class:animate viewBox="0 0 367 122" fill="none" xmlns="http://www.w3.org/2000/svg">
 	<path
+		class="a"
 		d="M13.6161 121.634C20.7369 121.634 26.5095 115.803 26.5095 108.61C26.5095 101.417 20.7369 95.5859 13.6161 95.5859C6.49524 95.5859 0.722656 101.417 0.722656 108.61C0.722656 115.803 6.49524 121.634 13.6161 121.634Z"
 		fill="#DFA638"
 	/>
 	<path
+		class="b"
 		d="M227.647 26.1244C234.768 26.1244 240.541 20.2933 240.541 13.1003C240.541 5.90727 234.768 0.0761719 227.647 0.0761719C220.526 0.0761719 214.754 5.90727 214.754 13.1003C214.754 20.2933 220.526 26.1244 227.647 26.1244Z"
 		fill="#CFCCB1"
 	/>
 	<path
+		class="c"
 		d="M353.718 26.1244C360.838 26.1244 366.611 20.2933 366.611 13.1003C366.611 5.90727 360.838 0.0761719 353.718 0.0761719C346.597 0.0761719 340.824 5.90727 340.824 13.1003C340.824 20.2933 346.597 26.1244 353.718 26.1244Z"
 		fill="#E7D852"
 	/>
@@ -24,3 +31,39 @@
 		fill="#5B544F"
 	/>
 </svg>
+
+<style>
+	@keyframes anim {
+		0% {
+			stroke-width: 0px;
+		}
+
+		60% {
+			stroke-width: 0px;
+		}
+
+		65% {
+			stroke-width: 5px;
+		}
+
+		100% {
+			stroke-width: 0px;
+		}
+	}
+
+	.animate .a,
+	.animate .b,
+	.animate .c {
+		animation: anim 3s ease-out 0s infinite;
+		stroke: var(--color-background);
+		stroke-width: 1px;
+	}
+
+	.animate .b {
+		animation-delay: 0.15s;
+	}
+
+	.animate .c {
+		animation-delay: 0.3s;
+	}
+</style>

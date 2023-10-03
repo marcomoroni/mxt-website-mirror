@@ -33,7 +33,7 @@
 	<div>
 		<WidthContainer>
 			<div class="logo">
-				<MxtLogoNoPadding />
+				<MxtLogoNoPadding animate={true} />
 			</div>
 			<p class="text">
 				MXT are an immersive experience design and technology specialists, creating extended reality
