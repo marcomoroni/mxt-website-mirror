@@ -103,7 +103,7 @@
 		grid-template-columns: 1fr 1fr 1fr;
 		grid-auto-rows: 1fr;
 		gap: var(--horizontal-margin);
-		margin-bottom: 200px;
+		margin-bottom: var(--horizontal-margin);
 	}
 
 	@media (max-width: 800px) {
