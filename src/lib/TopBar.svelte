@@ -93,13 +93,13 @@
 	}
 
 	.bg {
-		background-color: #ede9e6;
+		background-color: var(--color-top-bar);
 	}
 
 	@media (max-width: 700px) {
 		.container.expanded {
 			/* Force color. */
-			background-color: #ede9e6;
+			background-color: var(--color-top-bar);
 		}
 
 		.top-bar {
