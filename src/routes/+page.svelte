@@ -98,7 +98,7 @@
 	}
 
 	.link-cards {
-		display: grid;
+		display: none;
 		grid-auto-flow: row;
 		grid-template-columns: 1fr 1fr 1fr;
 		grid-auto-rows: 1fr;
@@ -109,6 +109,12 @@
 	@media (max-width: 800px) {
 		.link-cards {
 			grid-template-columns: 1fr;
+		}
+	}
+
+	@media (max-width: 700px) {
+		.link-cards {
+			display: grid;
 		}
 	}
 </style>
