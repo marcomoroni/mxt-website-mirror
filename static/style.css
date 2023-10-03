@@ -40,7 +40,8 @@ body {
 }
 
 a,
-.style-like-a {
+.style-like-a,
+a .style-like-a-inner {
     text-decoration: underline;
     text-decoration-thickness: max(1px, 0.0625rem);
     text-underline-offset: 0.1578em;
@@ -49,7 +50,9 @@ a,
 a:hover,
 a:focus,
 .style-like-a:hover,
-.style-like-a:focus {
+.style-like-a:focus,
+a:hover .style-like-a-inner,
+a:focus .style-like-a-inner {
     text-decoration-thickness: max(3px, 0.1875rem, 0.12em);
     -webkit-text-decoration-skip-ink: none;
     text-decoration-skip-ink: none;

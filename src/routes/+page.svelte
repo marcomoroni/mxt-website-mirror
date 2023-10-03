@@ -1,9 +1,28 @@
 <script>
+	import MainPageCard from '$lib/MainPageCard.svelte';
 	import MxtLogoNoPadding from '$lib/MxtLogoNoPadding.svelte';
 	import WidthContainer from '$lib/WidthContainer.svelte';
 	import { navBarData } from '$lib/topBarData';
 
 	navBarData.set('home');
+
+	const cards = [
+		{
+			title: 'Works',
+			descirption: 'Who we are and how we work with you',
+			href: '/works'
+		},
+		{
+			title: 'Studio',
+			descirption: 'Check out what we’ve been building',
+			href: '/studio'
+		},
+		{
+			title: 'Contacts',
+			descirption: 'Drop us a message',
+			href: '/contacts'
+		}
+	];
 </script>
 
 <svelte:head>
@@ -23,10 +42,18 @@
 		</WidthContainer>
 	</div>
 </div>
+<WidthContainer>
+	<ul class="link-cards">
+		{#each cards as card}
+			<MainPageCard href={card.href} title={card.title} desription={card.descirption} />
+		{/each}
+	</ul>
+</WidthContainer>
 
 <style>
 	.landing-container {
 		width: 100dvw;
+		max-width: 100%;
 		min-height: 100dvh;
 		display: flex;
 		flex-direction: column;
@@ -67,6 +94,21 @@
 		.text {
 			max-width: unset;
 			font-size: 25px;
+		}
+	}
+
+	.link-cards {
+		display: grid;
+		grid-auto-flow: row;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-auto-rows: 1fr;
+		gap: var(--horizontal-margin);
+		margin-bottom: 200px;
+	}
+
+	@media (max-width: 800px) {
+		.link-cards {
+			grid-template-columns: 1fr;
 		}
 	}
 </style>
