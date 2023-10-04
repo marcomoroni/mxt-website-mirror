@@ -8,9 +8,9 @@
 
 	const cards = [
 		{
-			title: 'Works',
+			title: 'Case studies',
 			descirption: 'Who we are and how we work with you',
-			href: '/works'
+			href: '/case-studies'
 		},
 		{
 			title: 'Studio',

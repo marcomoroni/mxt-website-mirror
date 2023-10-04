@@ -7,9 +7,9 @@
 	$: background = $navBarData !== 'home';
 	$: showLogo = $navBarData !== 'home';
 	$: highlight = match($navBarData)
-		.returnType<undefined | 'works' | 'studio' | 'contacts'>()
+		.returnType<undefined | 'caseStudies' | 'studio' | 'contacts'>()
 		.with('home', () => undefined)
-		.with({ works: P._ }, () => 'works')
+		.with({ caseStudies: P._ }, () => 'caseStudies')
 		.with('studio', () => 'studio')
 		.with('contacts', () => 'contacts')
 		.exhaustive();

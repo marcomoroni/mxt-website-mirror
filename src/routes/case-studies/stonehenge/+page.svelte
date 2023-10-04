@@ -1,7 +1,7 @@
 <script>
 	import { navBarData } from '$lib/topBarData';
 
-	navBarData.set({ works: 'stonehenge' });
+	navBarData.set({ caseStudies: 'stonehenge' });
 </script>
 
 <svelte:head>

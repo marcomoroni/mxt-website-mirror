@@ -6,15 +6,15 @@
 	export let absolutePos = false;
 	export let background = false;
 	export let showLogo = true;
-	export let highlight: undefined | 'works' | 'studio' | 'contacts';
+	export let highlight: undefined | 'caseStudies' | 'studio' | 'contacts';
 
 	let expanded = false;
 
 	const pages = [
 		{
-			href: '/works',
-			label: 'Works',
-			highlight: 'works'
+			href: '/case-studies',
+			label: 'Case studies',
+			highlight: 'caseStudies'
 		},
 		{
 			href: '/studio',

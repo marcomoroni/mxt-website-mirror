@@ -5,15 +5,15 @@
 	import { navBarData } from '$lib/topBarData';
 	import { worksData } from '$lib/worksData';
 
-	navBarData.set({ works: 'root' });
+	navBarData.set({ caseStudies: 'root' });
 </script>
 
 <svelte:head>
-	<title>Works</title>
+	<title>Case studies</title>
 </svelte:head>
 
 <SecondaryPageHeader
-	title="Works"
+	title="Case studies"
 	leadingParagraphs={[
 		`Our work in Immersive Technologies is being used to reduce business costs, accelerate
 			learning, enhance experiences, mitigate risk, simulate, evaluate, and much more across a range
