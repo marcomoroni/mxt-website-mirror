@@ -1,3 +1,9 @@
+<script>
+	import { navBarData } from '$lib/topBarData';
+
+	navBarData.set({ works: 'stonehenge' });
+</script>
+
 <svelte:head>
 	<title>Stonehenge</title>
 </svelte:head>

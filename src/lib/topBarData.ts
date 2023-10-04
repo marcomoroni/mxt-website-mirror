@@ -1,3 +1,5 @@
 import { writable, type Writable } from "svelte/store";
 
-export const navBarData: Writable<'home' | 'innerPage'> = writable('home');
+export type PageId = 'home' | { works: 'root' | 'stonehenge' } | 'studio' | 'contacts';
+
+export const navBarData: Writable<PageId> = writable('home');

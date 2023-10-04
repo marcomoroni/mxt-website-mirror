@@ -2,7 +2,7 @@
 	import SecondaryPageHeader from '$lib/SecondaryPageHeader.svelte';
 	import { navBarData } from '$lib/topBarData';
 
-	navBarData.set('innerPage');
+	navBarData.set('studio');
 </script>
 
 <svelte:head>

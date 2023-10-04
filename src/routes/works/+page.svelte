@@ -1,8 +1,11 @@
-<script>
+<script lang="ts">
 	import SecondaryPageHeader from '$lib/SecondaryPageHeader.svelte';
 	import WidthContainer from '$lib/WidthContainer.svelte';
 	import WorkCard from '$lib/WorkCard.svelte';
+	import { navBarData } from '$lib/topBarData';
 	import { worksData } from '$lib/worksData';
+
+	navBarData.set({ works: 'root' });
 </script>
 
 <svelte:head>

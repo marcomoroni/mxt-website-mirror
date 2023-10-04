@@ -6,21 +6,25 @@
 	export let absolutePos = false;
 	export let background = false;
 	export let showLogo = true;
+	export let highlight: undefined | 'works' | 'studio' | 'contacts';
 
 	let expanded = false;
 
 	const pages = [
 		{
 			href: '/works',
-			label: 'Works'
+			label: 'Works',
+			highlight: 'works'
 		},
 		{
 			href: '/studio',
-			label: 'Studio'
+			label: 'Studio',
+			highlight: 'studio'
 		},
 		{
 			href: '/contacts',
-			label: 'Contacts'
+			label: 'Contacts',
+			highlight: 'contacts'
 		}
 	];
 
@@ -34,7 +38,9 @@
 		<nav class="top-bar">
 			<button class="nav-bar-toggle style-like-a" on:click={toggleMenu}>Menu</button>
 			{#each pages as page}
-				<a class="nav-link" href={page.href}>{page.label}</a>
+				<a class="nav-link" href={page.href} class:current={page.highlight === highlight}
+					>{page.label}</a
+				>
 			{/each}
 			{#if showLogo}
 				<a transition:fade={{ duration: 100 }} class="home-link" href="/"><MxtLogoNoPadding /></a>
@@ -79,6 +85,10 @@
 
 	.expanded .nav-bar-toggle::after {
 		transform: translateY(1px) rotate(225deg) scale(1);
+	}
+
+	.nav-link.current {
+		color: #d29a2a;
 	}
 
 	.home-link {
