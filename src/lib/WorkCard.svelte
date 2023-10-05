@@ -27,10 +27,11 @@
 	}
 
 	.title {
-		font-size: 25px;
+		font-size: 23px;
 		font-weight: 600;
 		margin-top: 20px;
 		margin-bottom: 13px;
+		line-height: 1.46;
 		text-wrap: balance;
 	}
 
@@ -41,9 +42,9 @@
 
 	@media (max-width: 660px) {
 		.title {
-			font-size: 23px;
-			margin-top: 17px;
-			margin-bottom: 10px;
+			font-size: 22px;
+			margin-top: 18px;
+			margin-bottom: 12px;
 		}
 	}
 </style>

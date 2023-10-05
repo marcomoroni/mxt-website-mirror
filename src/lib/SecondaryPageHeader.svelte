@@ -24,7 +24,7 @@
 
 	.title {
 		padding-top: 120px;
-		font-weight: 500;
+		font-weight: 600;
 		font-size: 60px;
 		padding-bottom: 30px;
 	}
@@ -53,7 +53,7 @@
 
 		.leading-paragraph {
 			max-width: unset;
-			font-size: 19px;
+			font-size: 20px;
 		}
 
 		.leading-paragraph + .leading-paragraph {

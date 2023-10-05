@@ -30,9 +30,10 @@ html {
 body {
     background-color: var(--color-background);
     font-family: "Figtree";
-    font-size: 17px;
+    font-size: 16.5px;
     color: var(--color-primary);
-    line-height: 1.6;
+    line-height: 1.55;
+    font-weight: 440;
 }
 
 button {

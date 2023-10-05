@@ -102,8 +102,8 @@
 	.home-link {
 		position: absolute;
 		right: 0;
-		top: 19px;
-		width: 70px;
+		top: 20px;
+		width: 74px;
 	}
 
 	.abs {
