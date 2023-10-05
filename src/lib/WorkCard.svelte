@@ -31,10 +31,12 @@
 		font-weight: 500;
 		margin-top: 20px;
 		margin-bottom: 13px;
+		text-wrap: balance;
 	}
 
 	.leading-paragraph {
 		color: #a49f9b;
+		text-wrap: balance;
 	}
 
 	@media (max-width: 660px) {

@@ -88,6 +88,7 @@
 		max-width: 80%;
 		font-size: 30px;
 		margin-right: auto;
+		text-wrap: balance;
 	}
 
 	@media (max-width: 660px) {

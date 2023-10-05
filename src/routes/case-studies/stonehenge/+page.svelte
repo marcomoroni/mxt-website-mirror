@@ -229,12 +229,14 @@
 	.lead-paragraph {
 		font-size: 22px;
 		margin-top: 20px;
+		text-wrap: balance;
 	}
 
 	h1 {
 		font-size: 60px;
 		line-height: 1;
 		font-weight: 500;
+		text-wrap: balance;
 	}
 
 	p:not(.lead-paragraph) {
