@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
 	import MxtLogoNoPadding from './MxtLogoNoPadding.svelte';
 	import WidthContainer from './WidthContainer.svelte';
 
@@ -51,7 +50,7 @@
 				>
 			{/each}
 			{#if showLogo}
-				<a transition:fade={{ duration: 100 }} class="home-link" href="/"><MxtLogoNoPadding /></a>
+				<a class="home-link" href="/"><MxtLogoNoPadding /></a>
 			{/if}
 		</nav>
 	</WidthContainer>
