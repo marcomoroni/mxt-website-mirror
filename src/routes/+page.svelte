@@ -96,7 +96,7 @@
 	@media (max-width: 660px) {
 		.text {
 			max-width: unset;
-			font-size: 25px;
+			font-size: 22px;
 		}
 	}
 

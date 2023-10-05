@@ -53,7 +53,7 @@
 
 		.leading-paragraph {
 			max-width: unset;
-			font-size: 20px;
+			font-size: 17.5px;
 		}
 
 		.leading-paragraph + .leading-paragraph {

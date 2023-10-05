@@ -42,7 +42,7 @@
 
 	@media (max-width: 660px) {
 		.title {
-			font-size: 22px;
+			font-size: 20px;
 			margin-top: 18px;
 			margin-bottom: 12px;
 		}

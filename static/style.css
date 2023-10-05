@@ -36,6 +36,12 @@ body {
     font-weight: 440;
 }
 
+@media (max-width: 700px) {
+    body {
+        font-size: 14.5px;
+    }
+}
+
 button {
     cursor: pointer;
 }

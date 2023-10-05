@@ -282,7 +282,7 @@
 		}
 
 		.lead-paragraph {
-			font-size: 19px;
+			font-size: 17.5px;
 			margin-top: 17px;
 		}
 
@@ -297,11 +297,11 @@
 		}
 
 		h2 {
-			margin-top: 30px;
+			margin-top: 20px;
 		}
 
 		h3 {
-			margin-top: 30px;
+			margin-top: 17px;
 		}
 
 		ul {

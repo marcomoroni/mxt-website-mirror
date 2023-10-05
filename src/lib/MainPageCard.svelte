@@ -26,8 +26,8 @@
 	}
 
 	.title {
-		font-size: 23px;
-		font-weight: 500;
-		margin-bottom: 14px;
+		font-size: 20px;
+		font-weight: 600;
+		margin-bottom: 12px;
 	}
 </style>
