@@ -233,7 +233,7 @@
 	}
 
 	h1 {
-		font-size: 60px;
+		font-size: 52px;
 		line-height: 1.2;
 		font-weight: 600;
 		text-wrap: balance;
