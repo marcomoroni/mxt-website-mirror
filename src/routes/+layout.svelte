@@ -3,8 +3,20 @@
 	import { navBarData } from '$lib/topBarData';
 	import { P, match } from 'ts-pattern';
 
-	$: absolutePos = $navBarData === 'home';
-	$: background = $navBarData !== 'home';
+	$: isCaseStudy = match($navBarData)
+		.with({ caseStudies: P.select() }, (innerPage) => innerPage !== 'root')
+		.otherwise(() => false);
+	$: absolutePos = $navBarData === 'home' || isCaseStudy;
+	$: background = $navBarData !== 'home' && !isCaseStudy;
+	$: foregroundColours = match($navBarData)
+		.returnType<'default' | 'monochromeLight' | 'monochromeDark'>()
+		.with({ caseStudies: P.select() }, (caseStudy) =>
+			match(caseStudy)
+				.returnType<'default' | 'monochromeLight' | 'monochromeDark'>()
+				.with('stonehenge', () => 'monochromeLight')
+				.otherwise(() => 'default')
+		)
+		.otherwise(() => 'default');
 	$: showLogo = $navBarData !== 'home';
 	$: highlight = match($navBarData)
 		.returnType<undefined | 'caseStudies' | 'studio' | 'contacts'>()
@@ -15,6 +27,6 @@
 		.exhaustive();
 </script>
 
-<TopBar {absolutePos} {background} {showLogo} {highlight} />
+<TopBar {absolutePos} {background} {foregroundColours} {showLogo} {highlight} />
 
 <slot />

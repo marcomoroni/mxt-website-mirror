@@ -1,4 +1,5 @@
 <script>
+	import WidthContainer from '$lib/WidthContainer.svelte';
 	import { navBarData } from '$lib/topBarData';
 
 	navBarData.set({ caseStudies: 'stonehenge' });
@@ -8,13 +9,27 @@
 	<title>Stonehenge</title>
 </svelte:head>
 
-<div class="title-context">Work</div>
+<div class="title-box-stack">
+	<div class="title-image" style="background-image: url(/images/stonehenge.jpg)" />
+	<div class="title-box-container">
+		<div class="play-video-button-container">
+			<button class="play-video-button">Play video</button>
+		</div>
+		<div class="flex-expand">
+			<WidthContainer>
+				<div class="title-box">
+					<div class="title-context">Case study</div>
 
-<h1>Visualising the Stonehenge World Heritage site landscape</h1>
+					<h1>Visualising the Stonehenge World Heritage site landscape</h1>
 
-<p class="lead-paragraph">
-	Harnessing the power of immersive technologies for complex infrastructure projects
-</p>
+					<p class="lead-paragraph">
+						Harnessing the power of immersive technologies for complex infrastructure projects
+					</p>
+				</div>
+			</WidthContainer>
+		</div>
+	</div>
+</div>
 
 <h2 class="width-container">Background</h2>
 <p class="width-container">
@@ -158,7 +173,74 @@
 <div>----- quote ------</div>
 
 <style>
-	p {
+	.title-image {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100dvw;
+		max-width: 100%;
+		height: 100dvh;
+		background-size: cover;
+		background-position: center center;
+		z-index: -1;
+	}
+
+	.title-box-stack {
+		position: relative;
+	}
+
+	.title-box-container {
+		min-height: 100dvh;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.play-video-button-container {
+		padding-top: max(90px, 40dvh);
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+	}
+
+	.play-video-button {
+		background-color: red;
+	}
+
+	.flex-expand {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+	}
+
+	.title-box {
+		background-color: white;
+		padding-left: 37px;
+		padding-right: 37px;
+		padding-top: 36px;
+		padding-bottom: 36px;
+		margin-top: 60px;
+		margin-bottom: var(--horizontal-margin);
+	}
+
+	.title-context {
+		font-size: 25px;
+		color: #b6a79b;
+		margin-bottom: 27px;
+	}
+
+	.lead-paragraph {
+		font-size: 22px;
+		margin-top: 20px;
+	}
+
+	h1 {
+		font-size: 60px;
+		line-height: 1;
+		font-weight: 500;
+	}
+
+	p:not(.lead-paragraph) {
 		margin-top: 20px;
 		margin-bottom: 20px;
 	}
@@ -187,7 +269,30 @@
 	}
 
 	@media (max-width: 700px) {
-		p {
+		.title-box {
+			padding-left: 25px;
+			padding-right: 25px;
+			padding-top: 24px;
+			padding-bottom: 24px;
+			margin-top: 30px;
+		}
+
+		.title-context {
+			font-size: 21px;
+			margin-bottom: 22px;
+		}
+
+		.lead-paragraph {
+			font-size: 20px;
+			margin-top: 17px;
+		}
+
+		h1 {
+			font-size: 42px;
+			line-height: 1.1;
+		}
+
+		p:not(.lead-paragraph) {
 			margin-top: 15px;
 			margin-bottom: 15px;
 		}

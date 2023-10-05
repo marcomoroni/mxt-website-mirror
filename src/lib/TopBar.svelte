@@ -5,6 +5,7 @@
 
 	export let absolutePos = false;
 	export let background = false;
+	export let foregroundColours: 'default' | 'monochromeLight' | 'monochromeDark' = 'default';
 	export let showLogo = true;
 	export let highlight: undefined | 'caseStudies' | 'studio' | 'contacts';
 
@@ -33,7 +34,14 @@
 	}
 </script>
 
-<div class="container" class:expanded class:abs={absolutePos} class:bg={background}>
+<div
+	class="container"
+	class:expanded
+	class:abs={absolutePos}
+	class:bg={background}
+	class:monochrome-light={foregroundColours === 'monochromeLight'}
+	class:monochrome-dark={foregroundColours === 'monochromeDark'}
+>
 	<WidthContainer>
 		<nav class="top-bar">
 			<button class="nav-bar-toggle style-like-a" on:click={toggleMenu}>Menu</button>
@@ -52,7 +60,7 @@
 <style>
 	.container {
 		width: 100%;
-		transition: background-color 1s var(--curve);
+		z-index: 10;
 	}
 
 	.top-bar {
@@ -98,18 +106,52 @@
 		width: 70px;
 	}
 
-	:not(.expanded).abs {
+	.abs {
 		position: absolute;
+		top: 0;
+		left: 0;
 	}
 
 	.bg {
 		background-color: var(--color-top-bar);
 	}
 
+	@media (min-width: 700px) {
+		.monochrome-light .nav-link,
+		.monochrome-light .nav-bar-toggle {
+			color: var(--color-monochrome-light);
+		}
+
+		.monochrome-light .nav-bar-toggle::after {
+			border-color: var(--color-monochrome-light);
+		}
+
+		.monochrome-light .home-link :global(*) {
+			fill: var(--color-monochrome-light);
+		}
+
+		.monochrome-dark .nav-link,
+		.monochrome-dark .nav-bar-toggle {
+			color: var(--color-monochrome-dark);
+		}
+
+		.monochrome-dark .nav-bar-toggle::after {
+			border-color: var(--color-monochrome-dark);
+		}
+
+		.monochrome-dark .home-link :global(*) {
+			fill: var(--color-monochrome-dark);
+		}
+	}
+
 	@media (max-width: 700px) {
 		.container.expanded {
 			/* Force color. */
 			background-color: var(--color-top-bar);
+		}
+
+		.expanded.abs {
+			position: relative;
 		}
 
 		.top-bar {
@@ -129,6 +171,32 @@
 
 		.expanded .nav-link {
 			display: block;
+		}
+
+		:not(.expanded).monochrome-light .nav-link,
+		:not(.expanded).monochrome-light .nav-bar-toggle {
+			color: var(--color-monochrome-light);
+		}
+
+		:not(.expanded).monochrome-light .nav-bar-toggle::after {
+			border-color: var(--color-monochrome-light);
+		}
+
+		:not(.expanded).monochrome-light .home-link :global(*) {
+			fill: var(--color-monochrome-light);
+		}
+
+		:not(.expanded).monochrome-dark .nav-link,
+		:not(.expanded).monochrome-dark .nav-bar-toggle {
+			color: var(--color-monochrome-dark);
+		}
+
+		:not(.expanded).monochrome-dark .nav-bar-toggle::after {
+			border-color: var(--color-monochrome-dark);
+		}
+
+		:not(.expanded).monochrome-dark .home-link :global(*) {
+			fill: var(--color-monochrome-dark);
 		}
 	}
 </style>
