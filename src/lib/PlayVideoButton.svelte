@@ -18,6 +18,11 @@
 		align-items: center;
 	}
 
+	button:hover,
+	button:focus {
+		background-color: #42403fe6;
+	}
+
 	.icon {
 		--size: 22px;
 		width: var(--size);
