@@ -278,7 +278,7 @@
 
 		.title-context {
 			font-size: 21px;
-			margin-bottom: 22px;
+			margin-bottom: 19px;
 		}
 
 		.lead-paragraph {
@@ -287,7 +287,7 @@
 		}
 
 		h1 {
-			font-size: 42px;
+			font-size: 40px;
 			line-height: 1.2;
 		}
 
