@@ -1,4 +1,5 @@
 <script>
+	import PlayVideoButton from '$lib/PlayVideoButton.svelte';
 	import WidthContainer from '$lib/WidthContainer.svelte';
 	import { navBarData } from '$lib/topBarData';
 
@@ -13,7 +14,7 @@
 	<div class="title-image" style="background-image: url(/images/stonehenge.jpg)" />
 	<div class="title-box-container">
 		<div class="play-video-button-container">
-			<button class="play-video-button">Play video</button>
+			<PlayVideoButton />
 		</div>
 		<div class="flex-expand">
 			<WidthContainer>
@@ -196,14 +197,10 @@
 	}
 
 	.play-video-button-container {
-		padding-top: max(90px, 40dvh);
+		padding-top: max(110px, 40dvh);
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
-	}
-
-	.play-video-button {
-		background-color: red;
 	}
 
 	.flex-expand {
