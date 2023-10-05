@@ -26,6 +26,8 @@ html {
     --color-monochrome-dark: black;
     --curve: cubic-bezier(0.1, 0.9, 0.18, 0.98);
     --horizontal-margin: 30px;
+    --card-stroke: 1.5px;
+    --color-card-primary: var(--color-primary);
 }
 
 @media (max-width: 660px) {
