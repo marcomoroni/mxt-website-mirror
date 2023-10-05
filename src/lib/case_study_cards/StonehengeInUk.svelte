@@ -44,7 +44,7 @@
 
 	.uk :global(svg path) {
 		stroke: var(--color-card-primary);
-		stroke-width: 1.1px;
+		stroke-width: var(--card-stroke);
 		fill: var(--color-background);
 	}
 
