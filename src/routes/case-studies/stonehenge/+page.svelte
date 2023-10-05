@@ -227,7 +227,7 @@
 	}
 
 	.lead-paragraph {
-		font-size: 22px;
+		font-size: 21px;
 		margin-top: 20px;
 		text-wrap: balance;
 	}
@@ -282,13 +282,13 @@
 		}
 
 		.lead-paragraph {
-			font-size: 20px;
+			font-size: 19px;
 			margin-top: 17px;
 		}
 
 		h1 {
 			font-size: 42px;
-			line-height: 1.1;
+			line-height: 1.2;
 		}
 
 		p:not(.lead-paragraph) {

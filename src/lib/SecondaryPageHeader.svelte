@@ -25,12 +25,12 @@
 	.title {
 		padding-top: 120px;
 		font-weight: 500;
-		font-size: 70px;
+		font-size: 60px;
 		padding-bottom: 30px;
 	}
 
 	.leading-paragraph {
-		font-size: 22px;
+		font-size: 21px;
 		max-width: 80%;
 		line-height: 1.5;
 	}
@@ -47,13 +47,13 @@
 
 		.title {
 			padding-top: 80px;
-			font-size: 60px;
+			font-size: 42px;
 			padding-bottom: 20px;
 		}
 
 		.leading-paragraph {
 			max-width: unset;
-			font-size: 20px;
+			font-size: 19px;
 		}
 
 		.leading-paragraph + .leading-paragraph {
