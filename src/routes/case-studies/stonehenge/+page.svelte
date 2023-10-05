@@ -1,4 +1,5 @@
 <script>
+	import Gallery from '$lib/Gallery.svelte';
 	import PlayVideoButton from '$lib/PlayVideoButton.svelte';
 	import WidthContainer from '$lib/WidthContainer.svelte';
 	import { navBarData } from '$lib/topBarData';
@@ -42,6 +43,8 @@
 </p>
 
 <div>----- map -------</div>
+
+<Gallery />
 
 <h2 class="width-container">Challange</h2>
 <p class="width-container">
