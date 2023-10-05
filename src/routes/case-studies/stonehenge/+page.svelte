@@ -216,7 +216,7 @@
 		padding-right: 37px;
 		padding-top: 36px;
 		padding-bottom: 36px;
-		margin-top: 60px;
+		margin-top: 70px;
 		margin-bottom: var(--horizontal-margin);
 	}
 
@@ -273,7 +273,7 @@
 			padding-right: 25px;
 			padding-top: 24px;
 			padding-bottom: 24px;
-			margin-top: 50px;
+			margin-top: 60px;
 		}
 
 		.title-context {
