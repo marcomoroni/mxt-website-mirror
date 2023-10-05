@@ -30,7 +30,23 @@
 	}
 
 	.label {
-		margin-right: 26px;
-		margin-left: 8px;
+		margin-right: 24px;
+		margin-left: 9px;
+	}
+
+	@media (max-width: 700px) {
+		button {
+			height: 45px;
+		}
+
+		.icon {
+			--size: 19px;
+			margin-left: 17px;
+		}
+
+		.label {
+			margin-right: 22px;
+			margin-left: 7px;
+		}
 	}
 </style>
