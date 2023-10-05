@@ -32,6 +32,7 @@
 	.leading-paragraph {
 		font-size: 22px;
 		max-width: 80%;
+		line-height: 1.5;
 	}
 
 	.leading-paragraph + .leading-paragraph {

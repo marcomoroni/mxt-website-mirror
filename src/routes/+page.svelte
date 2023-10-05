@@ -89,6 +89,8 @@
 		font-size: 30px;
 		margin-right: auto;
 		text-wrap: balance;
+		font-weight: 500;
+		line-height: 1.5;
 	}
 
 	@media (max-width: 660px) {

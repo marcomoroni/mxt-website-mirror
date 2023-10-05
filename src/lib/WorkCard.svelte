@@ -28,7 +28,7 @@
 
 	.title {
 		font-size: 25px;
-		font-weight: 500;
+		font-weight: 600;
 		margin-top: 20px;
 		margin-bottom: 13px;
 		text-wrap: balance;

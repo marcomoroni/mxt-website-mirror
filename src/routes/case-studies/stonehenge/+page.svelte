@@ -234,8 +234,8 @@
 
 	h1 {
 		font-size: 60px;
-		line-height: 1;
-		font-weight: 500;
+		line-height: 1.2;
+		font-weight: 600;
 		text-wrap: balance;
 	}
 
@@ -246,13 +246,13 @@
 
 	h2 {
 		font-size: 29px;
-		font-weight: 500;
+		font-weight: 600;
 		margin-top: 70px;
 	}
 
 	h3 {
 		font-size: 21px;
-		font-weight: 500;
+		font-weight: 600;
 		margin-top: 70px;
 	}
 
