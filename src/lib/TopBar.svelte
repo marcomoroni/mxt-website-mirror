@@ -40,6 +40,7 @@
 	class:bg={background}
 	class:monochrome-light={foregroundColours === 'monochromeLight'}
 	class:monochrome-dark={foregroundColours === 'monochromeDark'}
+	class:any-selected={highlight !== undefined}
 >
 	<WidthContainer>
 		<nav class="top-bar">
@@ -94,8 +95,8 @@
 		transform: translateY(1px) rotate(225deg) scale(1);
 	}
 
-	.nav-link.current {
-		color: #d29a2a;
+	.any-selected .nav-link:not(.current) {
+		opacity: 0.6;
 	}
 
 	.home-link {
