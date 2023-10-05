@@ -13,7 +13,7 @@
 		.with({ caseStudies: P.select() }, (caseStudy) =>
 			match(caseStudy)
 				.returnType<'default' | 'monochromeLight' | 'monochromeDark'>()
-				.with('stonehenge', () => 'monochromeLight')
+				.with('stonehenge', () => 'monochromeDark')
 				.otherwise(() => 'default')
 		)
 		.otherwise(() => 'default');
