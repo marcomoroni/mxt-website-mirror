@@ -34,7 +34,7 @@
 		margin-left: 9px;
 	}
 
-	@media (max-width: 700px) {
+	@media (max-width: 660px) {
 		button {
 			height: 45px;
 		}

@@ -102,8 +102,8 @@
 	.home-link {
 		position: absolute;
 		right: 0;
-		top: 20px;
-		width: 74px;
+		top: 19px;
+		width: 80px;
 	}
 
 	.abs {
@@ -114,6 +114,13 @@
 
 	.bg {
 		background-color: var(--color-top-bar);
+	}
+
+	@media (max-width: 660px) {
+		.home-link {
+			top: 19px;
+			width: 74px;
+		}
 	}
 
 	@media (min-width: 700px) {
