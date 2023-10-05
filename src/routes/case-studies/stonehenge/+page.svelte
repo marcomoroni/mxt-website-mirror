@@ -271,7 +271,7 @@
 			padding-right: 25px;
 			padding-top: 24px;
 			padding-bottom: 24px;
-			margin-top: 30px;
+			margin-top: 50px;
 		}
 
 		.title-context {
