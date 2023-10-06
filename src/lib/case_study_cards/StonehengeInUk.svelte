@@ -17,16 +17,17 @@
 		aspect-ratio: 1 / 1;
 		padding: 20px;
 
-		--stripe-size: calc(var(--card-stroke) * 0.9);
+		--stripe-size: 1.4px;
 		--stripe-gap-size: 5px;
 		--stripe-color: var(--color-card-primary);
+		--fade: 0.5px;
 		background: repeating-linear-gradient(
 			135deg,
 			transparent,
 			transparent var(--stripe-gap-size),
-			var(--stripe-color) calc(var(--stripe-gap-size) + 0.2px),
+			var(--stripe-color) calc(var(--stripe-gap-size) + var(--fade)),
 			var(--stripe-color) calc(var(--stripe-gap-size) + var(--stripe-size)),
-			transparent calc(var(--stripe-gap-size) + var(--stripe-size) + 0.2px)
+			transparent calc(var(--stripe-gap-size) + var(--stripe-size) + var(--fade))
 		);
 	}
 
