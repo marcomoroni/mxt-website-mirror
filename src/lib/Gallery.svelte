@@ -1,6 +1,5 @@
 <script lang="ts">
 	import StonehengeInUk from './case_study_cards/StonehengeInUk.svelte';
-	import StonehengeNewOldMap from './case_study_cards/StonehengeNewOldMap.svelte';
 </script>
 
 <div class="gallery">
@@ -9,14 +8,6 @@
 			<StonehengeInUk />
 		</div>
 		<figcaption>Stonehenge location in the UK.</figcaption>
-	</figure>
-	<figure class="item">
-		<div class="figure-container">
-			<StonehengeNewOldMap />
-		</div>
-		<figcaption>
-			Stonehenge location in the UK. Stonehenge location in the UK. Stonehenge location in the UK.
-		</figcaption>
 	</figure>
 	<figure class="item expand color">
 		<div class="figure-container" />
@@ -69,7 +60,9 @@
 	}
 
 	.item.color .figure-container {
-		background-color: aquamarine;
+		background-image: url(/images/stonehenge.jpg);
+		background-size: cover;
+		background-position: center center;
 	}
 
 	.item figcaption {
