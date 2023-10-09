@@ -1,18 +1,26 @@
 <script lang="ts">
 	import StonehengeInUk from './case_study_cards/StonehengeInUk.svelte';
 	import StonehengeNewOldMap from './case_study_cards/StonehengeNewOldMap.svelte';
-
-	export let defaultScrollToEnd = false;
 </script>
 
-<div class="gallery" class:flex-direction-reverse={defaultScrollToEnd}>
-	<div class="placeholder">
-		<StonehengeInUk />
-	</div>
-	<div class="placeholder">
-		<StonehengeNewOldMap />
-	</div>
-	<div class="placeholder expand color" />
+<div class="gallery">
+	<figure class="item">
+		<div class="figure-container">
+			<StonehengeInUk />
+		</div>
+		<figcaption>Stonehenge location in the UK.</figcaption>
+	</figure>
+	<figure class="item">
+		<div class="figure-container">
+			<StonehengeNewOldMap />
+		</div>
+		<figcaption>
+			Stonehenge location in the UK. Stonehenge location in the UK. Stonehenge location in the UK.
+		</figcaption>
+	</figure>
+	<figure class="item expand color">
+		<div class="figure-container" />
+	</figure>
 </div>
 
 <style>
@@ -21,30 +29,60 @@
 		min-width: 100%;
 		display: flex;
 		flex-direction: row;
-		justify-content: center;
+		align-items: flex-start;
 		gap: var(--horizontal-margin);
-		padding-left: var(--horizontal-margin);
-		padding-right: var(--horizontal-margin);
+		/* TODO: dvw does not include scrollbars, so if the scroolbar is visible the calculation in not correct. */
+		--caluclated-padding: max(calc((100dvw - var(--content-width)) / 2), var(--horizontal-margin));
 		--peek: 10px;
-		height: min(400px, calc(100dvw - (var(--horizontal-margin) * 2) - var(--peek)));
 		overflow-x: scroll;
 		scroll-snap-type: x proximity;
+		--unit-1fr: var(--content-width);
+		--unit-2fr: calc((var(--content-width) - var(--horizontal-margin)) / 2);
 	}
 
-	.flex-direction-reverse {
-		flex-direction: row-reverse;
+	.gallery::-webkit-scrollbar {
+		display: none;
 	}
 
-	.placeholder {
-		height: 100%;
+	.item {
+		scroll-snap-align: start;
+		scroll-margin-left: var(--caluclated-padding);
+		display: table;
+	}
+
+	.item:first-child {
+		margin-left: var(--caluclated-padding);
+	}
+
+	.item:last-child {
+		margin-right: var(--caluclated-padding);
+	}
+
+	.figure-container {
+		position: relative;
+		height: min(var(--unit-2fr), calc(100dvw - (var(--horizontal-margin) * 2) - var(--peek)));
 		aspect-ratio: 1 / 1;
 	}
 
-	.placeholder.expand {
-		aspect-ratio: 1.5 / 1;
+	.item.expand .figure-container {
+		width: var(--unit-1fr);
 	}
 
-	.placeholder.color {
+	.item.color .figure-container {
 		background-color: aquamarine;
+	}
+
+	.item figcaption {
+		display: table-caption;
+		caption-side: bottom;
+		margin-top: 10px;
+		font-size: 15px;
+		color: #b3aaa6;
+	}
+
+	@media (max-width: 660px) {
+		.item figcaption {
+			font-size: 13.5px;
+		}
 	}
 </style>

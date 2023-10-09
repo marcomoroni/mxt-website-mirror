@@ -14,7 +14,8 @@
 
 <style>
 	.container {
-		aspect-ratio: 1 / 1;
+		width: 100%;
+		height: 100%;
 		padding: 20px;
 
 		--stripe-size: 1.4px;
