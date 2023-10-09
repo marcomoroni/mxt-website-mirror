@@ -12,7 +12,7 @@
 </svelte:head>
 
 <div class="title-box-stack">
-	<div class="title-image" style="background-image: url(/images/stonehenge.jpg)" />
+	<div class="title-image" style:background-image={'url(/images/stonehenge.jpg)'} />
 	<div class="title-box-container">
 		<div class="play-video-button-container">
 			<PlayVideoButton />
