@@ -12,6 +12,10 @@
 	function showVideo() {
 		videoIsVisible = true;
 	}
+
+	function hideVideo() {
+		videoIsVisible = false;
+	}
 </script>
 
 <svelte:head>
@@ -22,7 +26,9 @@
 	<div class="title-image" style:background-image={'url(/images/stonehenge.jpg)'} />
 	<div class="title-image-overlay" class:when-video-is-visible={videoIsVisible} />
 	{#if videoIsVisible}
-		<div class="video-container">
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<!-- svelte-ignore a11y-interactive-supports-focus -->
+		<div class="video-container" on:click={hideVideo} role="button">
 			<FillAspectRatio aspectRatio={{ x: 16, y: 9 }}>
 				<iframe
 					class="video-embed"
@@ -237,7 +243,7 @@
 		z-index: -1;
 		backdrop-filter: blur(12px);
 		opacity: 0;
-		transition: opacity 0.2s var(--curve);
+		transition: opacity 0.5s ease-out;
 	}
 
 	.title-image-overlay.when-video-is-visible {
