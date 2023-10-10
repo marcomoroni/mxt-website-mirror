@@ -1,10 +1,17 @@
 <script>
+	import FillAspectRatio from '$lib/FillAspectRatio.svelte';
 	import Gallery from '$lib/Gallery.svelte';
 	import PlayVideoButton from '$lib/PlayVideoButton.svelte';
 	import WidthContainer from '$lib/WidthContainer.svelte';
 	import { navBarData } from '$lib/topBarData';
 
 	navBarData.set({ caseStudies: 'stonehenge' });
+
+	let videoIsVisible = false;
+
+	function showVideo() {
+		videoIsVisible = true;
+	}
 </script>
 
 <svelte:head>
@@ -13,25 +20,55 @@
 
 <div class="title-box-stack">
 	<div class="title-image" style:background-image={'url(/images/stonehenge.jpg)'} />
-	<div class="title-box-container">
-		<div class="play-video-button-container">
-			<PlayVideoButton />
+	{#if videoIsVisible}
+		<div class="video-container">
+			<FillAspectRatio aspectRatio={{ x: 16, y: 9 }}>
+				<iframe
+					class="video-embed"
+					src="https://www.youtube-nocookie.com/embed/ScMzIvxBSi4?si=Ue7X_uGUbLlC4br3"
+					title="YouTube video player"
+					frameborder="0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+					allowfullscreen
+				/>
+			</FillAspectRatio>
 		</div>
-		<div class="flex-expand">
-			<WidthContainer>
-				<div class="title-box">
-					<div class="title-context">Case study</div>
+	{:else}
+		<div class="title-box-container">
+			<div class="play-video-button-container">
+				<PlayVideoButton on:click={showVideo} />
+			</div>
+			<div class="flex-expand">
+				<WidthContainer>
+					<div class="title-box">
+						<div class="title-context">Case study</div>
 
-					<h1>Visualising the Stonehenge World Heritage site landscape</h1>
+						<h1>Visualising the Stonehenge World Heritage site landscape</h1>
 
-					<p class="lead-paragraph">
-						Harnessing the power of immersive technologies for complex infrastructure projects
-					</p>
-				</div>
-			</WidthContainer>
+						<p class="lead-paragraph">
+							Harnessing the power of immersive technologies for complex infrastructure projects
+						</p>
+					</div>
+				</WidthContainer>
+			</div>
 		</div>
-	</div>
+	{/if}
 </div>
+
+{#if videoIsVisible}
+	<!-- TODO: remove code repetition. -->
+	<WidthContainer>
+		<div class="title-box when-video-is-visible">
+			<div class="title-context">Case study</div>
+
+			<h1>Visualising the Stonehenge World Heritage site landscape</h1>
+
+			<p class="lead-paragraph">
+				Harnessing the power of immersive technologies for complex infrastructure projects
+			</p>
+		</div>
+	</WidthContainer>
+{/if}
 
 <h2 class="width-container">Background</h2>
 <p class="width-container">
@@ -223,6 +260,10 @@
 		margin-bottom: var(--horizontal-margin);
 	}
 
+	.title-box.when-video-is-visible {
+		margin-top: var(--horizontal-margin);
+	}
+
 	.title-context {
 		font-size: 25px;
 		color: #b6a79b;
@@ -233,6 +274,20 @@
 		font-size: 21px;
 		margin-top: 20px;
 		text-wrap: balance;
+	}
+
+	.video-container {
+		height: 100dvh;
+		position: relative;
+		padding-top: 90px;
+		padding-bottom: 90px;
+		padding-left: var(--horizontal-margin);
+		padding-right: var(--horizontal-margin);
+	}
+
+	.video-embed {
+		width: 100%;
+		height: 100%;
 	}
 
 	h1 {
