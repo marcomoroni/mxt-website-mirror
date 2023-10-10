@@ -2,7 +2,7 @@
 	import Play from './icons/Play.svelte';
 </script>
 
-<button>
+<button on:click>
 	<div class="icon"><Play /></div>
 	<div class="label">Play video</div>
 </button>
