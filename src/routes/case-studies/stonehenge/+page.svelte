@@ -20,6 +20,7 @@
 
 <div class="title-box-stack">
 	<div class="title-image" style:background-image={'url(/images/stonehenge.jpg)'} />
+	<div class="title-image-overlay" class:when-video-is-visible={videoIsVisible} />
 	{#if videoIsVisible}
 		<div class="video-container">
 			<FillAspectRatio aspectRatio={{ x: 16, y: 9 }}>
@@ -214,16 +215,33 @@
 <div>----- quote ------</div>
 
 <style>
-	.title-image {
+	.title-image,
+	.title-image-overlay {
 		position: absolute;
 		top: 0;
 		left: 0;
 		width: 100dvw;
 		max-width: 100%;
 		height: 100dvh;
+	}
+
+	.title-image {
 		background-size: cover;
 		background-position: center center;
+		z-index: -2;
+	}
+
+	/* Animate the opacity instead of the backdrop-filter to fix a bug in Chromium 
+	   where during the transition the edges become black. */
+	.title-image-overlay {
 		z-index: -1;
+		backdrop-filter: blur(12px);
+		opacity: 0;
+		transition: opacity 0.2s var(--curve);
+	}
+
+	.title-image-overlay.when-video-is-visible {
+		opacity: 1;
 	}
 
 	.title-box-stack {
@@ -288,6 +306,7 @@
 	.video-embed {
 		width: 100%;
 		height: 100%;
+		background-color: black;
 	}
 
 	h1 {
