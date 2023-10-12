@@ -20,8 +20,6 @@
 
 				const color = obj.material.name == 'Mat_Lenses' ? accentColor : baseColor;
 
-				console.log(obj.material.name);
-
 				// Note `toneMapped: false`: this is so the colours match the ones in the HTML.
 				obj.material = new MeshBasicMaterial({ color: color, toneMapped: false });
 			}
