@@ -42,16 +42,9 @@
 		</p>
 	</WidthContainer>
 	<div class="three-container">
-		<div class="three-slot a">
-			<Three>
-				<Scene />
-			</Three>
-		</div>
-		<div class="three-slot b">
-			<Three>
-				<Scene />
-			</Three>
-		</div>
+		<Three>
+			<Scene />
+		</Three>
 	</div>
 </div>
 <WidthContainer>
@@ -138,26 +131,6 @@
 		width: 100%;
 		height: 100%;
 		overflow: hidden;
-		/* z-index: -10; todo: put on the back but keep it interactable */
-	}
-
-	.three-slot {
-		position: absolute;
-	}
-
-	.three-slot.a {
-		top: 0;
-		right: 0;
-		width: 600px;
-		height: 700px;
-		border: 2px dashed red;
-	}
-
-	.three-slot.b {
-		bottom: 0;
-		left: 0;
-		width: 800px;
-		height: 600px;
-		border: 2px dashed green;
+		z-index: -10; /* todo: it is not interactable */
 	}
 </style>

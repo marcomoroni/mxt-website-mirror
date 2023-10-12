@@ -5,7 +5,8 @@
 	import { Color, Mesh, MeshBasicMaterial } from 'three';
 	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-	const restScale = 30;
+	const restScale = 80;
+	const zoomScale = restScale + 10;
 	const baseColor = new Color('#e5dfdb');
 	const accentColor = new Color('white');
 
@@ -46,7 +47,7 @@
 		rotation.y={rotation}
 		position.y={1}
 		scale={$scale}
-		on:pointerenter={() => scale.set(40)}
+		on:pointerenter={() => scale.set(zoomScale)}
 		on:pointerleave={() => scale.set(restScale)}
 	/>
 {/if}
