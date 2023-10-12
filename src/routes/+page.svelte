@@ -138,7 +138,7 @@
 		width: 100%;
 		height: 100%;
 		overflow: hidden;
-		z-index: -10;
+		/* z-index: -10; todo: put on the back but keep it interactable */
 	}
 
 	.three-slot {
