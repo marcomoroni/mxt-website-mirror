@@ -30,6 +30,10 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@threlte/core": "^6.0.10",
+		"@threlte/extras": "^7.1.1",
+		"@types/three": "^0.157.0",
+		"three": "^0.157.0",
 		"ts-pattern": "^5.0.5"
 	}
 }

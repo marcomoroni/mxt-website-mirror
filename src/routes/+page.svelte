@@ -1,8 +1,10 @@
-<script>
+<script lang="ts">
 	import MainPageCard from '$lib/MainPageCard.svelte';
 	import MxtLogoNoPadding from '$lib/MxtLogoNoPadding.svelte';
 	import WidthContainer from '$lib/WidthContainer.svelte';
+	import Three from '$lib/three/Three.svelte';
 	import { navBarData } from '$lib/topBarData';
+	import Scene from '$lib/three/scenes/VRHeadset.svelte';
 
 	navBarData.set('home');
 
@@ -30,16 +32,26 @@
 </svelte:head>
 
 <div class="landing-container">
-	<div>
-		<WidthContainer>
-			<div class="logo">
-				<MxtLogoNoPadding animate={true} />
-			</div>
-			<p class="text">
-				MXT are an immersive experience design and technology specialists, creating extended reality
-				environments for public sector and infrastructure partners.
-			</p>
-		</WidthContainer>
+	<WidthContainer>
+		<div class="logo">
+			<MxtLogoNoPadding animate={true} />
+		</div>
+		<p class="text">
+			MXT are an immersive experience design and technology specialists, creating extended reality
+			environments for public sector and infrastructure partners.
+		</p>
+	</WidthContainer>
+	<div class="three-container">
+		<div class="three-slot a">
+			<Three>
+				<Scene />
+			</Three>
+		</div>
+		<div class="three-slot b">
+			<Three>
+				<Scene />
+			</Three>
+		</div>
 	</div>
 </div>
 <WidthContainer>
@@ -119,5 +131,32 @@
 		.link-cards {
 			display: grid;
 		}
+	}
+
+	.three-container {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+	}
+
+	.three-slot {
+		position: absolute;
+	}
+
+	.three-slot.a {
+		top: 0;
+		right: 0;
+		width: 600px;
+		height: 700px;
+		border: 2px dashed red;
+	}
+
+	.three-slot.b {
+		bottom: 0;
+		left: 0;
+		width: 800px;
+		height: 600px;
+		border: 2px dashed green;
 	}
 </style>
