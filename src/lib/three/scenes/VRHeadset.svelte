@@ -2,16 +2,24 @@
 	import { T, useFrame, useLoader } from '@threlte/core';
 	import { interactivity } from '@threlte/extras';
 	import { spring } from 'svelte/motion';
+	import { get } from 'svelte/store';
 	import { Color, Mesh, MeshBasicMaterial } from 'three';
 	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-	const restScale = 80;
-	const zoomScale = restScale + 10;
 	const baseColor = new Color('#e5dfdb');
 	const accentColor = new Color('white');
 
 	interactivity();
-	const scale = spring(restScale);
+	let isHovering = false;
+
+	let hoveringZoomAdd = spring(10);
+	$: {
+		hoveringZoomAdd.set(isHovering ? 10 : 0);
+	}
+	let scale = 40;
+	$: finalScale = scale + $hoveringZoomAdd;
+
+	let rotation = 0;
 
 	const gltf = useLoader(GLTFLoader).load('/models/VR_Headset.gltf');
 	gltf.then((gltf_) => {
@@ -26,8 +34,12 @@
 		});
 	});
 
-	let rotation = 0;
-	useFrame((state, delta) => {
+	useFrame(({ size, renderer }, delta) => {
+		const canvasWidth = get(size).width;
+		const canvasHeight = get(size).height;
+		scale = Math.min(canvasWidth, canvasHeight) * 0.08;
+
+		renderer.getSize;
 		rotation += delta * 0.2;
 	});
 </script>
@@ -46,8 +58,8 @@
 		is={$gltf.scene}
 		rotation.y={rotation}
 		position.y={1}
-		scale={$scale}
-		on:pointerenter={() => scale.set(zoomScale)}
-		on:pointerleave={() => scale.set(restScale)}
+		scale={finalScale}
+		on:pointerenter={() => (isHovering = true)}
+		on:pointerleave={() => (isHovering = false)}
 	/>
 {/if}
