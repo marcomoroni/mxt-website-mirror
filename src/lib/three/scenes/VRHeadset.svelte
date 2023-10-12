@@ -34,12 +34,11 @@
 		});
 	});
 
-	useFrame(({ size, renderer }, delta) => {
+	useFrame(({ size }, delta) => {
 		const canvasWidth = get(size).width;
 		const canvasHeight = get(size).height;
 		scale = Math.min(canvasWidth, canvasHeight) * 0.08;
 
-		renderer.getSize;
 		rotation += delta * 0.2;
 	});
 </script>
