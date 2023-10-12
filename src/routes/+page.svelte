@@ -4,7 +4,7 @@
 	import WidthContainer from '$lib/WidthContainer.svelte';
 	import Three from '$lib/three/Three.svelte';
 	import { navBarData } from '$lib/topBarData';
-	import Scene from '$lib/three/scenes/VRHeadset.svelte';
+	import VRHeadset from '$lib/three/scenes/VRHeadset.svelte';
 
 	navBarData.set('home');
 
@@ -25,6 +25,8 @@
 			href: '/contacts'
 		}
 	];
+
+	let modelLoaded = false;
 </script>
 
 <svelte:head>
@@ -41,9 +43,13 @@
 			environments for public sector and infrastructure partners.
 		</p>
 	</WidthContainer>
-	<div class="three-container">
+	<div class="three-container" class:loading={!modelLoaded}>
 		<Three>
-			<Scene />
+			<VRHeadset
+				on:modelLoaded={() => {
+					modelLoaded = true;
+				}}
+			/>
 		</Three>
 	</div>
 </div>
@@ -132,5 +138,10 @@
 		height: 100%;
 		overflow: hidden;
 		z-index: -10; /* todo: it is not interactable */
+		transition: opacity 2s var(--curve);
+	}
+
+	.three-container.loading {
+		opacity: 0;
 	}
 </style>

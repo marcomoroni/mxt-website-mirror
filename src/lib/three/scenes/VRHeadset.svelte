@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { T, useFrame, useLoader } from '@threlte/core';
 	import { interactivity } from '@threlte/extras';
+	import { createEventDispatcher } from 'svelte';
 	import { spring } from 'svelte/motion';
 	import { get } from 'svelte/store';
 	import { Color, Mesh, MeshBasicMaterial } from 'three';
@@ -20,6 +21,8 @@
 	const positionYAdd = (canvasHeight: number) => (canvasHeight / 2) * 0.002;
 	const positionYAnimationSpeed = 0.4;
 	const positionYAnimationDisplacement = 0.5;
+
+	const dispatch = createEventDispatcher();
 
 	interactivity();
 	let isHovering = false;
@@ -49,6 +52,8 @@
 				obj.material = new MeshBasicMaterial({ color: color, toneMapped: false });
 			}
 		});
+
+		dispatch('modelLoaded');
 	});
 
 	let totalTimeElapsed = 0;
