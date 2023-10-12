@@ -6,6 +6,8 @@
 	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 	const restScale = 30;
+	const baseColor = new Color('#e5dfdb');
+	const accentColor = new Color('white');
 
 	interactivity();
 	const scale = spring(restScale);
@@ -15,9 +17,6 @@
 		const model = gltf_.scene;
 		model.traverse((obj) => {
 			if (obj instanceof Mesh) {
-				const baseColor = new Color('#e5dfdb');
-				const accentColor = new Color('#DFA638');
-
 				const color = obj.material.name == 'Mat_Lenses' ? accentColor : baseColor;
 
 				// Note `toneMapped: false`: this is so the colours match the ones in the HTML.
