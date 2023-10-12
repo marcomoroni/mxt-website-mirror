@@ -1,8 +1,4 @@
-<script lang="ts">
-	export let animate = false;
-</script>
-
-<svg class:animate viewBox="0 0 367 122" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 367 122" fill="none" xmlns="http://www.w3.org/2000/svg">
 	<path
 		class="a"
 		d="M13.6161 121.634C20.7369 121.634 26.5095 115.803 26.5095 108.61C26.5095 101.417 20.7369 95.5859 13.6161 95.5859C6.49524 95.5859 0.722656 101.417 0.722656 108.61C0.722656 115.803 6.49524 121.634 13.6161 121.634Z"
@@ -31,39 +27,3 @@
 		fill="#5B544F"
 	/>
 </svg>
-
-<style>
-	@keyframes anim {
-		0% {
-			stroke-width: 0px;
-		}
-
-		40% {
-			stroke-width: 0px;
-		}
-
-		45% {
-			stroke-width: 5px;
-		}
-
-		100% {
-			stroke-width: 0px;
-		}
-	}
-
-	.animate .a,
-	.animate .b,
-	.animate .c {
-		animation: anim 3s var(--curve) 0s infinite;
-		stroke: var(--color-background);
-		stroke-width: 1px;
-	}
-
-	.animate .b {
-		animation-delay: 0.15s;
-	}
-
-	.animate .c {
-		animation-delay: 0.3s;
-	}
-</style>
