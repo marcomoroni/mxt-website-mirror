@@ -2,7 +2,7 @@
 	import { T, useFrame, useLoader } from '@threlte/core';
 	import { interactivity } from '@threlte/extras';
 	import { spring } from 'svelte/motion';
-	import { Mesh, MeshBasicMaterial } from 'three';
+	import { Color, Mesh, MeshBasicMaterial } from 'three';
 	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 	const restScale = 30;
@@ -15,8 +15,15 @@
 		const model = gltf_.scene;
 		model.traverse((obj) => {
 			if (obj instanceof Mesh) {
-				const color = obj.material.name == 'Mat_Strap' ? 'red' : 'cyan';
-				obj.material = new MeshBasicMaterial({ color: color });
+				const baseColor = new Color('#e5dfdb');
+				const accentColor = new Color('#DFA638');
+
+				const color = obj.material.name == 'Mat_Lenses' ? accentColor : baseColor;
+
+				console.log(obj.material.name);
+
+				// Note `toneMapped: false`: this is so the colours match the ones in the HTML.
+				obj.material = new MeshBasicMaterial({ color: color, toneMapped: false });
 			}
 		});
 	});
