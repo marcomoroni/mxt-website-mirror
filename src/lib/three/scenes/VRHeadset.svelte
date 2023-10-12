@@ -8,6 +8,16 @@
 
 	const baseColor = new Color('#e5dfdb');
 	const accentColor = new Color('white');
+	const rotationXAdd = -0.3;
+	const rotationXAnimationSpeed = 0.2;
+	const rotationXAnimationDisplacement = 0.2;
+	const rotationYAdd = Math.PI + -0.4;
+	const rotationYAnimationSpeed = 0.14;
+	const rotationYAnimationDisplacement = 0.5;
+	const rotationZAnimationSpeed = 0.12;
+	const rotationZAnimationDisplacement = 0.2;
+	const positionYAnimationSpeed = 0.4;
+	const positionYAnimationDisplacement = 0.5;
 
 	interactivity();
 	let isHovering = false;
@@ -19,7 +29,12 @@
 	let scale = 40;
 	$: finalScale = scale + $hoveringZoomAdd;
 
-	let rotation = 0;
+	let rotationX = 0;
+	let rotationY = 0;
+	let rotationZ = 0;
+
+	let positionX = 0;
+	let positionY = 0;
 
 	const gltf = useLoader(GLTFLoader).load('/models/VR_Headset.gltf');
 	gltf.then((gltf_) => {
@@ -34,19 +49,35 @@
 		});
 	});
 
+	let totalTimeElapsed = 0;
 	useFrame(({ size }, delta) => {
+		totalTimeElapsed += delta;
+
 		const canvasWidth = get(size).width;
 		const canvasHeight = get(size).height;
+
 		scale = Math.min(canvasWidth, canvasHeight) * 0.08;
 
-		rotation += delta * 0.2;
+		rotationX =
+			rotationXAdd +
+			Math.sin(totalTimeElapsed * rotationXAnimationSpeed) * rotationXAnimationDisplacement;
+		rotationY =
+			rotationYAdd +
+			Math.sin(totalTimeElapsed * rotationYAnimationSpeed) * rotationYAnimationDisplacement;
+		rotationZ =
+			Math.sin(totalTimeElapsed * rotationZAnimationSpeed) * rotationZAnimationDisplacement;
+
+		positionX = (canvasWidth / 2) * 0.004;
+		positionY =
+			(canvasHeight / 2) * 0.002 +
+			Math.sin(totalTimeElapsed * positionYAnimationSpeed) * positionYAnimationDisplacement;
 	});
 </script>
 
 <T.OrthographicCamera
 	makeDefault
 	zoom={90}
-	position={[10, 10, 10]}
+	position={[0, 0, 10]}
 	on:create={({ ref }) => {
 		ref.lookAt(0, 1, 0);
 	}}
@@ -55,8 +86,11 @@
 {#if $gltf}
 	<T
 		is={$gltf.scene}
-		rotation.y={rotation}
-		position.y={1}
+		position.x={positionX}
+		position.y={positionY}
+		rotation.x={rotationX}
+		rotation.y={rotationY}
+		rotation.z={rotationZ}
 		scale={finalScale}
 		on:pointerenter={() => (isHovering = true)}
 		on:pointerleave={() => (isHovering = false)}
