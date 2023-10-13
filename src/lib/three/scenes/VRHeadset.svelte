@@ -4,11 +4,12 @@
 	import { createEventDispatcher } from 'svelte';
 	import { spring } from 'svelte/motion';
 	import { get } from 'svelte/store';
-	import { Color, Mesh, MeshBasicMaterial } from 'three';
+	import { Color, Fog, Mesh, MeshBasicMaterial } from 'three';
 	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 	const baseColor = new Color('#e5dfdb');
 	const accentColor = new Color('white');
+	const fog = new Fog('#d7d0cc', 6, 22);
 	const rotationXAdd = -0.3;
 	const rotationXAnimationSpeed = 0.2;
 	const rotationXAnimationDisplacement = 0.2;
@@ -47,9 +48,14 @@
 		model.traverse((obj) => {
 			if (obj instanceof Mesh) {
 				const color = obj.material.name == 'Mat_Lenses' ? accentColor : baseColor;
+				const affectedByFog = obj.material.name !== 'Mat_Lenses';
 
 				// Note `toneMapped: false`: this is so the colours match the ones in the HTML.
-				obj.material = new MeshBasicMaterial({ color: color, toneMapped: false });
+				obj.material = new MeshBasicMaterial({
+					color: color,
+					fog: affectedByFog,
+					toneMapped: false
+				});
 			}
 		});
 
@@ -57,7 +63,7 @@
 	});
 
 	let totalTimeElapsed = 0;
-	useFrame(({ size }, delta) => {
+	useFrame(({ size, scene }, delta) => {
 		totalTimeElapsed += delta;
 
 		const canvasWidth = get(size).width;
@@ -78,6 +84,9 @@
 		positionY =
 			positionYAdd(canvasHeight) +
 			Math.sin(totalTimeElapsed * positionYAnimationSpeed) * positionYAnimationDisplacement;
+
+		// Not sure why `<T.Fog>` doesn't work. This however works.
+		if (scene.fog == null) scene.fog = fog;
 	});
 </script>
 
