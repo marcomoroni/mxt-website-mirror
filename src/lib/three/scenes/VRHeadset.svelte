@@ -28,7 +28,7 @@
 	interactivity();
 	let isHovering = false;
 
-	let hoveringZoomAdd = spring(10);
+	let hoveringZoomAdd = spring(0);
 	$: {
 		hoveringZoomAdd.set(isHovering ? 10 : 0);
 	}
