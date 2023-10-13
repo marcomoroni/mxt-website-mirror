@@ -18,8 +18,8 @@
 	const rotationYAnimationDisplacement = 0.5;
 	const rotationZAnimationSpeed = 0.12;
 	const rotationZAnimationDisplacement = 0.2;
-	const positionXAdd = (canvasWidth: number) => (canvasWidth / 2) * 0.004;
-	const positionYAdd = (canvasHeight: number) => (canvasHeight / 2) * 0.002;
+	const positionXAdd = (canvasWidth: number) => 0.1 + (canvasWidth / 2) * 0.0045;
+	const positionYAdd = (canvasHeight: number) => 0.5 + (canvasHeight / 2) * 0.002;
 	const positionYAnimationSpeed = 0.4;
 	const positionYAnimationDisplacement = 0.5;
 
