@@ -7,7 +7,7 @@
 	import { Color, Fog, Mesh, MeshBasicMaterial } from 'three';
 	import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-	const baseColor = new Color('#e5dfdb');
+	const baseColor = new Color('#efebe8');
 	const accentColor = new Color('white');
 	const fog = new Fog('#d7d0cc', 6, 22);
 	const rotationXAdd = -0.3;
