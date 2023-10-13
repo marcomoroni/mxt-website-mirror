@@ -55,7 +55,7 @@
 		width: var(--size);
 		height: var(--size);
 		border-radius: 10000px;
-		background-color: #dfa638;
+		background-color: var(--color-accent-1);
 		border: var(--card-stroke) solid var(--color-card-primary);
 		position: absolute;
 		top: 88%;
