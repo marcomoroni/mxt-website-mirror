@@ -90,16 +90,25 @@
 
 <div>----- map -------</div>
 
-<Gallery>
-	<GalleryItem>
-		<StonehengeInUk slot="figure" />
-		<svelte:fragment slot="caption">Stonehenge location in the UK.</svelte:fragment>
-	</GalleryItem>
-	<GalleryItem>
-		<div slot="figure" class="img-a" />
-		<svelte:fragment slot="caption">Stonehenge location in the UK.</svelte:fragment>
-	</GalleryItem>
-</Gallery>
+<div class="gallery-container">
+	<Gallery>
+		<GalleryItem>
+			<StonehengeInUk slot="figure" />
+			<svelte:fragment slot="caption">Stonehenge location in the UK.</svelte:fragment>
+		</GalleryItem>
+		<GalleryItem>
+			<div slot="figure" class="img-a" />
+		</GalleryItem>
+	</Gallery>
+</div>
+
+<div class="gallery-container">
+	<Gallery>
+		<GalleryItem>
+			<div slot="figure" class="img-a" />
+		</GalleryItem>
+	</Gallery>
+</div>
 
 <h2 class="width-container">Challange</h2>
 <p class="width-container">
@@ -361,6 +370,11 @@
 		margin: 0 0 5px;
 	}
 
+	.gallery-container {
+		margin-top: 70px;
+		margin-bottom: 70px;
+	}
+
 	.img-a {
 		width: 100%;
 		height: 100%;
@@ -409,6 +423,11 @@
 		ul {
 			margin-top: 15px;
 			margin-bottom: 15px;
+		}
+
+		.gallery-container {
+			margin-top: 30px;
+			margin-bottom: 30px;
 		}
 	}
 </style>
