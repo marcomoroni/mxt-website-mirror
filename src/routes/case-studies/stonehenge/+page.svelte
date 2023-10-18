@@ -96,19 +96,14 @@
 		<GalleryItem>
 			<StonehengeInUk slot="figure" />
 			<svelte:fragment slot="caption">
-				The location of the Stonehenge monument in the UK.
+				The location of the Stonehenge monument in the UK
 			</svelte:fragment>
 		</GalleryItem>
 		<GalleryItem>
 			<div slot="figure" class="img-a" />
-		</GalleryItem>
-	</Gallery>
-</div>
-
-<div class="gallery-container">
-	<Gallery>
-		<GalleryItem>
-			<div slot="figure" class="img-a" />
+			<svelte:fragment slot="caption">
+				The Stonehenge monument today, with the A303 Highway passing by
+			</svelte:fragment>
 		</GalleryItem>
 	</Gallery>
 </div>
@@ -126,6 +121,11 @@
 		<GalleryItem>
 			<div slot="figure" class="img-a" />
 		</GalleryItem>
+	</Gallery>
+</div>
+
+<div class="gallery-container">
+	<Gallery>
 		<GalleryItem>
 			<div slot="figure" class="img-a" />
 		</GalleryItem>
@@ -167,6 +167,14 @@
 	</Gallery>
 </div>
 
+<div class="gallery-container">
+	<Gallery>
+		<GalleryItem>
+			<div slot="figure" class="img-a" />
+		</GalleryItem>
+	</Gallery>
+</div>
+
 <h2 class="width-container">Development</h2>
 <p class="width-container">
 	The development phase spanned an initial three months, during which a data-driven and
@@ -191,7 +199,7 @@
 		</GalleryItem>
 		<GalleryItem>
 			<SimulationSources slot="figure" />
-			<svelte:fragment slot="caption">Parts of the simulation.</svelte:fragment>
+			<svelte:fragment slot="caption">Parts of the simulation</svelte:fragment>
 		</GalleryItem>
 	</Gallery>
 </div>
@@ -234,15 +242,35 @@
 		<GalleryItem>
 			<GameplayFreeRoaming slot="figure" />
 			<svelte:fragment slot="caption">
-				You are free to explore the environment in any combination you like.
+				You are free to explore the environment in any combination you like
 			</svelte:fragment>
 		</GalleryItem>
 		<GalleryItem>
 			<GameplayGuidedTour slot="figure" />
 			<svelte:fragment slot="caption">
 				You can follow a guided tour where you'll hear a voiceover in each tour part. Interrupt it
-				at any time by selecting a different option and resume it whenever you want.
+				at any time by selecting a different option and resume it whenever you want
 			</svelte:fragment>
+		</GalleryItem>
+	</Gallery>
+</div>
+
+<div class="gallery-container">
+	<Gallery>
+		<GalleryItem>
+			<div slot="figure" class="img-a" />
+			<svelte:fragment slot="caption">
+				In VR, all the controls are in a virtual 'tablet'
+			</svelte:fragment>
+		</GalleryItem>
+	</Gallery>
+</div>
+
+<div class="gallery-container">
+	<Gallery>
+		<GalleryItem>
+			<div slot="figure" class="img-a" />
+			<svelte:fragment slot="caption">Desktop version</svelte:fragment>
 		</GalleryItem>
 	</Gallery>
 </div>
