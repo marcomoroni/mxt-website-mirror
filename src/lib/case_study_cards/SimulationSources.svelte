@@ -13,7 +13,7 @@
 	<div class="container">
 		{#each simulationParts as part, i}
 			{#if i !== 0}
-				<div class="plus c{i}">+</div>
+				<div class="plus">+</div>
 			{/if}
 			<div>{part}</div>
 		{/each}
@@ -31,21 +31,9 @@
 	}
 
 	.plus {
-		font-size: 18px;
+		font-size: 22px;
 		margin-top: 4px;
 		margin-bottom: 7px;
-		font-weight: 800;
-	}
-
-	.c1 {
-		color: var(--color-accent-1);
-	}
-
-	.c2 {
-		color: var(--color-accent-2);
-	}
-
-	.c3 {
-		color: var(--color-accent-3);
+		font-weight: 380;
 	}
 </style>
