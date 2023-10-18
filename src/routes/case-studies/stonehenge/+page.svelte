@@ -1,9 +1,11 @@
-<script>
+<script lang="ts">
 	import FillAspectRatio from '$lib/FillAspectRatio.svelte';
-	import Gallery from '$lib/Gallery.svelte';
+	import Gallery from '$lib/gallery/Gallery.svelte';
 	import PlayVideoButton from '$lib/PlayVideoButton.svelte';
 	import WidthContainer from '$lib/WidthContainer.svelte';
 	import { navBarData } from '$lib/topBarData';
+	import GalleryItem from '$lib/gallery/GalleryItem.svelte';
+	import StonehengeInUk from '$lib/case_study_cards/StonehengeInUk.svelte';
 
 	navBarData.set({ caseStudies: 'stonehenge' });
 
@@ -88,7 +90,16 @@
 
 <div>----- map -------</div>
 
-<Gallery />
+<Gallery>
+	<GalleryItem>
+		<StonehengeInUk slot="figure" />
+		<svelte:fragment slot="caption">Stonehenge location in the UK.</svelte:fragment>
+	</GalleryItem>
+	<GalleryItem>
+		<div slot="figure" class="img-a" />
+		<svelte:fragment slot="caption">Stonehenge location in the UK.</svelte:fragment>
+	</GalleryItem>
+</Gallery>
 
 <h2 class="width-container">Challange</h2>
 <p class="width-container">
@@ -348,6 +359,14 @@
 
 	li {
 		margin: 0 0 5px;
+	}
+
+	.img-a {
+		width: 100%;
+		height: 100%;
+		background-image: url(/images/stonehenge.jpg);
+		background-size: cover;
+		background-position: center center;
 	}
 
 	@media (max-width: 700px) {

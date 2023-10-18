@@ -51,9 +51,8 @@
 	}
 
 	.stonehenge-pin {
-		--size: 3.4%;
-		width: var(--size);
-		height: var(--size);
+		width: 3.4%;
+		aspect-ratio: 1 /1;
 		border-radius: 10000px;
 		background-color: var(--color-accent-1);
 		border: var(--card-stroke) solid var(--color-card-primary);
