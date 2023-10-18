@@ -164,7 +164,7 @@
 	}
 
 	.animate-parts .c {
-		transition: transform 1.5s var(--curve);
+		transition: transform 1.1s var(--curve);
 	}
 
 	.part-current {

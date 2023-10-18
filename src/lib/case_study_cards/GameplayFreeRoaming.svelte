@@ -22,7 +22,7 @@
 			selectionPeriod = randomIntFromInterval(0, choicesPeriod.length - 1);
 			selectionSeason = randomIntFromInterval(0, choicesSeason.length - 1);
 			selectionPlane = randomIntFromInterval(0, choicesPlane.length - 1);
-		}, 1200);
+		}, 1500);
 	});
 
 	onDestroy(() => {
