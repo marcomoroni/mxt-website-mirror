@@ -45,8 +45,6 @@
 	}
 
 	:global(.gallery .item figcaption) {
-		display: table-caption;
-		caption-side: bottom;
 		margin-top: 10px;
 		font-size: 15px;
 		color: #b3aaa6;
