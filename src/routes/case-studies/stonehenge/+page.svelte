@@ -8,6 +8,7 @@
 	import StonehengeInUk from '$lib/case_study_cards/StonehengeInUk.svelte';
 	import GameplayFreeRoaming from '$lib/case_study_cards/GameplayFreeRoaming.svelte';
 	import GameplayGuidedTour from '$lib/case_study_cards/GameplayGuidedTour.svelte';
+	import SimulationSources from '$lib/case_study_cards/SimulationSources.svelte';
 
 	navBarData.set({ caseStudies: 'stonehenge' });
 
@@ -94,7 +95,9 @@
 	<Gallery>
 		<GalleryItem>
 			<StonehengeInUk slot="figure" />
-			<svelte:fragment slot="caption">Stonehenge location in the UK.</svelte:fragment>
+			<svelte:fragment slot="caption">
+				The location of the Stonehenge monument in the UK.
+			</svelte:fragment>
 		</GalleryItem>
 		<GalleryItem>
 			<div slot="figure" class="img-a" />
@@ -181,7 +184,17 @@
 	</li>
 </ul>
 
-<div>------- complex media/graphic of data sources in landscape---------</div>
+<div class="gallery-container">
+	<Gallery>
+		<GalleryItem>
+			<div slot="figure" class="img-a" />
+		</GalleryItem>
+		<GalleryItem>
+			<SimulationSources slot="figure" />
+			<svelte:fragment slot="caption">Parts of the simulation.</svelte:fragment>
+		</GalleryItem>
+	</Gallery>
+</div>
 
 <h3 class="width-container">Human-centered design approach</h3>
 <ul class="width-container">
@@ -227,9 +240,8 @@
 		<GalleryItem>
 			<GameplayGuidedTour slot="figure" />
 			<svelte:fragment slot="caption">
-				You can follow a guided tour where you'll hear a voiceover in each tour part. You can
-				interrupt it at any time by selecting a different option or by walking away from the guided
-				tour area. You can resume it any time.
+				You can follow a guided tour where you'll hear a voiceover in each tour part. Interrupt it
+				at any time by selecting a different option and resume it whenever you want.
 			</svelte:fragment>
 		</GalleryItem>
 	</Gallery>

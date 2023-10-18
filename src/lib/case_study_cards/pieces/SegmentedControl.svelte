@@ -7,6 +7,7 @@
 	export let variant: 'Normal' | 'GuidedTourSchema';
 	export let textZIndex: undefined | number = undefined;
 	export let containerZIndex: undefined | number = undefined;
+	export let accentColor: 1 | 2 | 3 | 4 = 1;
 
 	export const [send, receive] = crossfade({
 		duration: 600,
@@ -24,7 +25,11 @@
 		<div class="choice" style:z-index={textZIndex === undefined ? 'auto' : textZIndex}>
 			{choice}
 			{#if selected === i}
-				<div in:receive={{ key: 'aaaaa' }} out:send={{ key: 'aaaaa' }} class="selection" />
+				<div
+					in:receive={{ key: 'aaaaa' }}
+					out:send={{ key: 'aaaaa' }}
+					class="selection c{accentColor}"
+				/>
 			{/if}
 		</div>
 	{/each}
@@ -66,12 +71,27 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		background-color: var(--color-accent-3);
 		border: var(--card-stroke) solid var(--color-card-primary);
 		border-radius: 999999px;
 		width: 100%;
 		height: 100%;
 		z-index: -1;
+	}
+
+	.c1 {
+		background-color: var(--color-accent-1);
+	}
+
+	.c2 {
+		background-color: var(--color-accent-2);
+	}
+
+	.c3 {
+		background-color: var(--color-accent-3);
+	}
+
+	.c4 {
+		background-color: var(--color-accent-4);
 	}
 
 	.guided-tour-schema .selection {

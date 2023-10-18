@@ -37,12 +37,28 @@
 		<div class="col">
 			<SegmentedControl
 				variant={'Normal'}
+				accentColor={1}
 				choices={choicesLocation}
 				selected={selectionLocations}
 			/>
-			<SegmentedControl variant={'Normal'} choices={choicesPeriod} selected={selectionPeriod} />
-			<SegmentedControl variant={'Normal'} choices={choicesSeason} selected={selectionSeason} />
-			<SegmentedControl variant={'Normal'} choices={choicesPlane} selected={selectionPlane} />
+			<SegmentedControl
+				variant={'Normal'}
+				accentColor={2}
+				choices={choicesPeriod}
+				selected={selectionPeriod}
+			/>
+			<SegmentedControl
+				variant={'Normal'}
+				accentColor={3}
+				choices={choicesSeason}
+				selected={selectionSeason}
+			/>
+			<SegmentedControl
+				variant={'Normal'}
+				accentColor={4}
+				choices={choicesPlane}
+				selected={selectionPlane}
+			/>
 		</div>
 	</div>
 </CaseStudyCard>
