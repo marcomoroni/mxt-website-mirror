@@ -4,7 +4,7 @@
 </script>
 
 <CaseStudyCard>
-	<div class="container">
+	<div class="container card-stripe-pattern">
 		<div class="uk">
 			<UkOutline />
 			<div class="stonehenge-pin" />
@@ -17,19 +17,6 @@
 		width: 100%;
 		height: 100%;
 		padding: 20px;
-
-		--stripe-size: 1.4px;
-		--stripe-gap-size: 5px;
-		--stripe-color: var(--color-card-primary);
-		--fade: 0.5px;
-		background: repeating-linear-gradient(
-			135deg,
-			transparent,
-			transparent var(--stripe-gap-size),
-			var(--stripe-color) calc(var(--stripe-gap-size) + var(--fade)),
-			var(--stripe-color) calc(var(--stripe-gap-size) + var(--stripe-size)),
-			transparent calc(var(--stripe-gap-size) + var(--stripe-size) + var(--fade))
-		);
 	}
 
 	.uk {

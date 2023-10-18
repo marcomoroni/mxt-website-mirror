@@ -6,6 +6,8 @@
 	import { navBarData } from '$lib/topBarData';
 	import GalleryItem from '$lib/gallery/GalleryItem.svelte';
 	import StonehengeInUk from '$lib/case_study_cards/StonehengeInUk.svelte';
+	import GameplayFreeRoaming from '$lib/case_study_cards/GameplayFreeRoaming.svelte';
+	import GameplayGuidedTour from '$lib/case_study_cards/GameplayGuidedTour.svelte';
 
 	navBarData.set({ caseStudies: 'stonehenge' });
 
@@ -88,8 +90,6 @@
 	original setting.
 </p>
 
-<div>----- map -------</div>
-
 <div class="gallery-container">
 	<Gallery>
 		<GalleryItem>
@@ -118,7 +118,16 @@
 	presentations and illustrations was needed.
 </p>
 
-<div>----- photography -------</div>
+<div class="gallery-container">
+	<Gallery>
+		<GalleryItem>
+			<div slot="figure" class="img-a" />
+		</GalleryItem>
+		<GalleryItem>
+			<div slot="figure" class="img-a" />
+		</GalleryItem>
+	</Gallery>
+</div>
 
 <h2 class="width-container">Solution</h2>
 <p class="width-container">
@@ -139,7 +148,21 @@
 	immersive spaces.
 </p>
 
-<div>----- screenshots of solution and video -------</div>
+<div class="gallery-container">
+	<Gallery>
+		<GalleryItem>
+			<div slot="figure" class="img-a" />
+		</GalleryItem>
+	</Gallery>
+</div>
+
+<div class="gallery-container">
+	<Gallery>
+		<GalleryItem>
+			<div slot="figure" class="img-a" />
+		</GalleryItem>
+	</Gallery>
+</div>
 
 <h2 class="width-container">Development</h2>
 <p class="width-container">
@@ -192,6 +215,25 @@
 		</li>
 	</ul>
 </ul>
+
+<div class="gallery-container">
+	<Gallery>
+		<GalleryItem>
+			<GameplayFreeRoaming slot="figure" />
+			<svelte:fragment slot="caption">
+				You are free to explore the environment in any combination you like.
+			</svelte:fragment>
+		</GalleryItem>
+		<GalleryItem>
+			<GameplayGuidedTour slot="figure" />
+			<svelte:fragment slot="caption">
+				You can follow a guided tour where you'll hear a voiceover in each tour part. You can
+				interrupt it at any time by selecting a different option or by walking away from the guided
+				tour area. You can resume it any time.
+			</svelte:fragment>
+		</GalleryItem>
+	</Gallery>
+</div>
 
 <h2 class="width-container">Results and impact</h2>
 <p class="width-container">

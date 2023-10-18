@@ -58,7 +58,7 @@
 		}
 	}
 
-	@media (max-width: 500px) {
+	@media (max-width: 770px) {
 		/* 2 children */
 		:global(.gallery:has(.item:first-child:nth-last-child(2))),
 		:global(.gallery:has(.item:first-child:nth-last-child(2) ~ .item)) {
