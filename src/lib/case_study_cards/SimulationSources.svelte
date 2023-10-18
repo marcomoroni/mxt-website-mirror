@@ -32,8 +32,7 @@
 
 	.plus {
 		font-size: 22px;
-		margin-top: 4px;
-		margin-bottom: 7px;
+		margin-bottom: 4px;
 		font-weight: 380;
 	}
 </style>
