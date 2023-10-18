@@ -31,9 +31,10 @@
 	}
 
 	.plus {
-		font-size: 16px;
+		font-size: 18px;
 		margin-top: 4px;
 		margin-bottom: 7px;
+		font-weight: 800;
 	}
 
 	.c1 {
