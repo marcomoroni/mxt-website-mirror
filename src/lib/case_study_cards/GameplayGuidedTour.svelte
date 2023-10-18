@@ -15,19 +15,19 @@
 		{
 			location: 2,
 			period: 0
+		},
+		{
+			location: 0,
+			period: 1
+		},
+		{
+			location: 3,
+			period: 0
+		},
+		{
+			location: 3,
+			period: 1
 		}
-		// {
-		// 	location: 0,
-		// 	period: 1
-		// },
-		// {
-		// 	location: 3,
-		// 	period: 0
-		// },
-		// {
-		// 	location: 3,
-		// 	period: 1
-		// }
 	];
 
 	const choicesLocation = ['Stonehenge', 'Tunnel East', 'Tunnel West', 'Green Bridge'];
@@ -36,6 +36,8 @@
 	const choicesPlane = ['Ground', 'Sky'];
 
 	let currentGuidedTourPart = 0;
+	$: animateParts = currentGuidedTourPart !== 0;
+	$: animateRestart = currentGuidedTourPart === guidedTourParts.length - 1;
 
 	let interval: undefined | number = undefined;
 
@@ -57,7 +59,7 @@
 </script>
 
 <CaseStudyCard>
-	<div class="container">
+	<div class="container" class:animate-parts={animateParts} class:animate-restart={animateRestart}>
 		<div class="tablet">
 			<div class="col">
 				<SegmentedControl
@@ -116,7 +118,13 @@
 		align-items: center;
 		position: relative;
 		overflow: hidden;
-		transition: opacity 0.5s var(--curve);
+		transition: opacity 0.3s ease-in-out;
+		transition-delay: 0s;
+	}
+
+	.animate-restart {
+		opacity: 0;
+		transition-delay: 2.6s;
 	}
 
 	.col {
@@ -145,6 +153,9 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+
+	.animate-parts .c {
 		transition: transform 1.5s var(--curve);
 	}
 
