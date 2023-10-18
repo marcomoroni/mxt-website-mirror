@@ -17,6 +17,14 @@
 			period: 0
 		},
 		{
+			location: 2,
+			period: 1
+		},
+		{
+			location: 0,
+			period: 0
+		},
+		{
 			location: 0,
 			period: 1
 		},
