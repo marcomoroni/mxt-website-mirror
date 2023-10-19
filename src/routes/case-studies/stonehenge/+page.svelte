@@ -248,9 +248,9 @@
 		<GalleryItem>
 			<GameplayGuidedTour slot="figure" />
 			<svelte:fragment slot="caption">
-				You can follow a guided tour where you'll hear a voiceover in each tour part. The tour will
-				continue when you are in the correct location and period (present or future). Interrupt it
-				at any time by selecting a different option and resume it whenever you want
+				You can follow a guided tour. In each tour part, which is activated when you are in the
+				correct combination of location and period (present of future), you'll hear a voiceover.
+				Interrupt it at any time by selecting a different option and resume it whenever you want
 			</svelte:fragment>
 		</GalleryItem>
 	</Gallery>
