@@ -28,7 +28,7 @@
 	<div class="box phone">
 		<div class="box-label">Phone</div>
 		<div class="box-content">
-			<a href="tel: 0203 633 5450">0203 633 5450</a>
+			<a href="tel:+44 0203 633 5450">0203 633 5450</a>
 		</div>
 	</div>
 	<div class="box address">
