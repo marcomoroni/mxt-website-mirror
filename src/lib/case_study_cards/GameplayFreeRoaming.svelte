@@ -6,7 +6,7 @@
 
 	const choicesLocation = ['Stonehenge', 'Tunnel East', 'Tunnel West', 'Green Bridge'];
 	const choicesPeriod = ['Present', 'Future'];
-	const choicesSeason = ['Summer', 'Winter'];
+	const choicesSeason = ['Day', 'Night'];
 	const choicesPlane = ['Ground', 'Sky'];
 
 	let selectionLocations = 0;
