@@ -249,7 +249,7 @@
 			<GameplayGuidedTour slot="figure" />
 			<svelte:fragment slot="caption">
 				You can follow a guided tour. In each tour part, which is activated when you are in the
-				correct combination of location and period (present of future), you'll hear a voiceover.
+				correct combination of location and period (present or future), you'll hear a voiceover.
 				Interrupt it at any time by selecting a different option and resume it whenever you want
 			</svelte:fragment>
 		</GalleryItem>
