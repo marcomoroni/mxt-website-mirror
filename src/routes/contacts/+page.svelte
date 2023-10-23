@@ -18,7 +18,7 @@
 	]}
 />
 
-<WidthContainer>
+<div class="boxes">
 	<div class="box email">
 		<div class="box-label">E-mail</div>
 		<div class="box-content">
@@ -37,12 +37,41 @@
 			The Courtyard<br />4 Evelyn Road<br />London<br />W4 5JL
 		</div>
 	</div>
-</WidthContainer>
+</div>
 
 <style>
+	.boxes {
+		display: grid;
+		grid-auto-flow: row;
+		grid-template-columns: 1fr 1fr 1fr;
+		grid-auto-rows: 1fr;
+		gap: var(--horizontal-margin);
+		margin-left: auto;
+		margin-right: auto;
+		margin-bottom: var(--bottom-page-margin);
+		max-width: 1200px;
+	}
+
+	/* The value is 1400px + (30 * 2).
+   1400px is the max width
+   30 is the margin */
+	@media (max-width: 1260px) {
+		.boxes {
+			max-width: unset;
+			margin-left: var(--horizontal-margin);
+			margin-right: var(--horizontal-margin);
+		}
+	}
+
+	@media (max-width: 1000px) {
+		.boxes {
+			grid-template-columns: 1fr;
+			grid-auto-rows: unset;
+		}
+	}
+
 	.box {
 		padding: 30px;
-		margin-bottom: var(--horizontal-margin);
 
 		--stripe-size: 10px;
 		--stripe-gap-size: 4px;
@@ -57,10 +86,6 @@
 			var(--stripe-color) calc(var(--stripe-gap-size) + var(--stripe-size)),
 			var(--stripe-gap-color) calc(var(--stripe-gap-size) + var(--stripe-size) + var(--fade))
 		);
-	}
-
-	.box:last-child {
-		margin-bottom: var(--bottom-page-margin);
 	}
 
 	.box-label {
