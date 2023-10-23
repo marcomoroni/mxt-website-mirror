@@ -18,7 +18,7 @@
 
 <style>
 	.title-bg {
-		/* background-color: cyan; */
+		margin-bottom: 50px;
 		padding-bottom: 70px;
 	}
 
@@ -41,7 +41,6 @@
 
 	@media (max-width: 660px) {
 		.title-bg {
-			/* background-color: cyan; */
 			padding-bottom: 50px;
 		}
 

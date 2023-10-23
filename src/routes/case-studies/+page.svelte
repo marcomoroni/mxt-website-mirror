@@ -46,7 +46,6 @@
 		column-gap: var(--horizontal-margin);
 		row-gap: 50px;
 		margin-bottom: var(--bottom-page-margin);
-		margin-top: 50px;
 	}
 
 	@media (max-width: 800px) {

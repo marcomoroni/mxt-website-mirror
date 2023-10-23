@@ -42,7 +42,6 @@
 <style>
 	.box {
 		padding: 30px;
-		/* background-color: #dfa738c9; */
 		margin-bottom: var(--horizontal-margin);
 
 		--stripe-size: 10px;
@@ -71,5 +70,6 @@
 
 	.box-content {
 		font-weight: 650;
+		font-size: 18px;
 	}
 </style>
