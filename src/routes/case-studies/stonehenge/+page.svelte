@@ -417,7 +417,7 @@
 	}
 
 	.end-of-page {
-		margin-top: 160px;
+		margin-top: var(--bottom-page-margin);
 	}
 
 	h1 {
@@ -508,10 +508,6 @@
 		ul {
 			margin-top: 15px;
 			margin-bottom: 15px;
-		}
-
-		.end-of-page {
-			margin-top: 50px;
 		}
 
 		.gallery-container {

@@ -45,7 +45,7 @@
 		grid-auto-rows: 1fr;
 		column-gap: var(--horizontal-margin);
 		row-gap: 50px;
-		margin-bottom: 170px;
+		margin-bottom: var(--bottom-page-margin);
 		margin-top: 50px;
 	}
 
@@ -58,7 +58,6 @@
 	@media (max-width: 660px) {
 		.cards {
 			row-gap: 40px;
-			margin-bottom: 80px;
 		}
 	}
 </style>

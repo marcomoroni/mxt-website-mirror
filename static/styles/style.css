@@ -22,6 +22,7 @@ html {
     --curve: cubic-bezier(0.1, 0.9, 0.18, 0.98);
     --content-width: 960px;
     --horizontal-margin: 30px;
+    --bottom-page-margin: 160px;
     --card-stroke: 1.6px;
     --color-card-primary: var(--color-primary);
 }
@@ -29,6 +30,7 @@ html {
 @media (max-width: 660px) {
     html {
         --horizontal-margin: 15px;
+        --bottom-page-margin: 50px;
     }
 }
 
