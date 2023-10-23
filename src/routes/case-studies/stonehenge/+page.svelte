@@ -319,9 +319,7 @@
 	Heritage and New Technologies. Heidelberg: Propylaeum.
 </p>
 
-<div>----- screenshot of solution ------</div>
-
-<div>----- quote ------</div>
+<div class="end-of-page" />
 
 <style>
 	.title-image,
@@ -418,6 +416,10 @@
 		background-color: black;
 	}
 
+	.end-of-page {
+		margin-top: 160px;
+	}
+
 	h1 {
 		font-size: 52px;
 		line-height: 1.2;
@@ -506,6 +508,10 @@
 		ul {
 			margin-top: 15px;
 			margin-bottom: 15px;
+		}
+
+		.end-of-page {
+			margin-top: 50px;
 		}
 
 		.gallery-container {
