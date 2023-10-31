@@ -24,44 +24,44 @@
 		row-gap: var(--horizontal-margin);
 	}
 
-	:global(.gallery.child-count-1) {
+	.gallery.child-count-1 {
 		grid-template-columns: 1fr;
 	}
 
-	:global(.gallery.child-count-2) {
+	.gallery.child-count-2 {
 		grid-template-columns: 1fr 1fr;
 	}
 
-	:global(.gallery .item) {
+	.gallery :global(.item) {
 		display: table;
 	}
 
-	:global(.gallery.child-count-1 .figure-container) {
+	.gallery.child-count-1 :global(.figure-container) {
 		aspect-ratio: calc(2) / 1;
 	}
 
-	:global(.gallery.child-count-2 .figure-container) {
+	.gallery.child-count-2 :global(.figure-container) {
 		aspect-ratio: 1 / 1;
 	}
 
-	:global(.gallery .item figcaption) {
+	.gallery :global(.item figcaption) {
 		margin-top: 10px;
 		font-size: 15px;
 		color: #b3aaa6;
 	}
 
 	@media (max-width: 660px) {
-		:global(.gallery .item figcaption) {
+		.gallery :global(.item figcaption) {
 			font-size: 13.5px;
 		}
 	}
 
 	@media (max-width: 770px) {
-		:global(.gallery.child-count-2) {
+		.gallery.child-count-2 {
 			grid-template-columns: 1fr;
 		}
 
-		:global(.gallery.child-count-1 .figure-container) {
+		.gallery.child-count-1 :global(.figure-container) {
 			aspect-ratio: 1 / 1;
 		}
 	}
