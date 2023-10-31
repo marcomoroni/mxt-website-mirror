@@ -92,7 +92,7 @@
 </p>
 
 <div class="gallery-container">
-	<Gallery>
+	<Gallery childCount={2}>
 		<GalleryItem>
 			<StonehengeInUk slot="figure" />
 			<svelte:fragment slot="caption">
@@ -117,7 +117,7 @@
 </p>
 
 <div class="gallery-container">
-	<Gallery>
+	<Gallery childCount={1}>
 		<GalleryItem>
 			<div slot="figure" class="img-a" />
 		</GalleryItem>
@@ -125,7 +125,7 @@
 </div>
 
 <div class="gallery-container">
-	<Gallery>
+	<Gallery childCount={1}>
 		<GalleryItem>
 			<div slot="figure" class="img-a" />
 		</GalleryItem>
@@ -152,7 +152,7 @@
 </p>
 
 <div class="gallery-container">
-	<Gallery>
+	<Gallery childCount={1}>
 		<GalleryItem>
 			<div slot="figure" class="img-a" />
 		</GalleryItem>
@@ -160,7 +160,7 @@
 </div>
 
 <div class="gallery-container">
-	<Gallery>
+	<Gallery childCount={1}>
 		<GalleryItem>
 			<div slot="figure" class="img-a" />
 		</GalleryItem>
@@ -168,7 +168,7 @@
 </div>
 
 <div class="gallery-container">
-	<Gallery>
+	<Gallery childCount={1}>
 		<GalleryItem>
 			<div slot="figure" class="img-a" />
 		</GalleryItem>
@@ -193,7 +193,7 @@
 </ul>
 
 <div class="gallery-container">
-	<Gallery>
+	<Gallery childCount={2}>
 		<GalleryItem>
 			<div slot="figure" class="img-a" />
 		</GalleryItem>
@@ -238,7 +238,7 @@
 </ul>
 
 <div class="gallery-container">
-	<Gallery>
+	<Gallery childCount={2}>
 		<GalleryItem>
 			<GameplayFreeRoaming slot="figure" />
 			<svelte:fragment slot="caption">
@@ -257,7 +257,7 @@
 </div>
 
 <div class="gallery-container">
-	<Gallery>
+	<Gallery childCount={1}>
 		<GalleryItem>
 			<div slot="figure" class="img-a" />
 			<svelte:fragment slot="caption">
@@ -268,7 +268,7 @@
 </div>
 
 <div class="gallery-container">
-	<Gallery>
+	<Gallery childCount={1}>
 		<GalleryItem>
 			<div slot="figure" class="img-a" />
 			<svelte:fragment slot="caption">Desktop version</svelte:fragment>
