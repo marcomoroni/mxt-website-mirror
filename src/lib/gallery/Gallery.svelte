@@ -1,9 +1,16 @@
 <script lang="ts">
 	import WidthContainer from '../WidthContainer.svelte';
+
+	// The `:has` selector is not supported in Firefox, and adding a class relative the number of children
+	// using `use` is not immediate, so in a few initial frames there is an icorrect layout.
+	// For the time being, hardcode this value.
+	export let childCount: number;
+
+	let childCountClass = `child-count-${childCount}`;
 </script>
 
 <WidthContainer>
-	<div class="gallery">
+	<div class="gallery {childCountClass}">
 		<slot />
 	</div>
 </WidthContainer>
@@ -17,15 +24,11 @@
 		row-gap: var(--horizontal-margin);
 	}
 
-	/* https://stackoverflow.com/questions/8720931/can-css-detect-the-number-of-children-an-element-has */
-	/* 1 child */
-	:global(.gallery:has(.item:first-child:nth-last-child(1))) {
+	:global(.gallery.child-count-1) {
 		grid-template-columns: 1fr;
 	}
 
-	/* 2 children */
-	:global(.gallery:has(.item:first-child:nth-last-child(2))),
-	:global(.gallery:has(.item:first-child:nth-last-child(2) ~ .item)) {
+	:global(.gallery.child-count-2) {
 		grid-template-columns: 1fr 1fr;
 	}
 
@@ -33,14 +36,11 @@
 		display: table;
 	}
 
-	/* 1 child */
-	:global(.gallery:has(.item:first-child:nth-last-child(1)) .figure-container) {
+	:global(.gallery.child-count-1 .figure-container) {
 		aspect-ratio: calc(2) / 1;
 	}
 
-	/* 2 children */
-	:global(.gallery:has(.item:first-child:nth-last-child(2)) .figure-container),
-	:global(.gallery:has(.item:first-child:nth-last-child(2) ~ .item) .figure-container) {
+	:global(.gallery.child-count-2 .figure-container) {
 		aspect-ratio: 1 / 1;
 	}
 
@@ -57,14 +57,11 @@
 	}
 
 	@media (max-width: 770px) {
-		/* 2 children */
-		:global(.gallery:has(.item:first-child:nth-last-child(2))),
-		:global(.gallery:has(.item:first-child:nth-last-child(2) ~ .item)) {
+		:global(.gallery.child-count-2) {
 			grid-template-columns: 1fr;
 		}
 
-		/* 1 child */
-		:global(.gallery:has(.item:first-child:nth-last-child(1)) .figure-container) {
+		:global(.gallery.child-count-1 .figure-container) {
 			aspect-ratio: 1 / 1;
 		}
 	}
