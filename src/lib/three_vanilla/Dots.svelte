@@ -1,4 +1,6 @@
 <script lang="ts">
+	// Based on https://github.com/mrdoob/three.js/blob/master/examples/webgl_points_waves.html
+
 	import { createEventDispatcher } from 'svelte';
 	import * as THREE from 'three';
 	import { ImprovedNoise } from 'three/examples/jsm/math/ImprovedNoise.js';
