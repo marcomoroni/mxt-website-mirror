@@ -2,9 +2,8 @@
 	import MainPageCard from '$lib/MainPageCard.svelte';
 	import MxtLogoNoPadding from '$lib/MxtLogoNoPadding.svelte';
 	import WidthContainer from '$lib/WidthContainer.svelte';
-	import Three from '$lib/three/Three.svelte';
 	import { navBarData } from '$lib/topBarData';
-	import VRHeadset from '$lib/three/scenes/VRHeadset.svelte';
+	import Dots from '$lib/three_vanilla/Dots.svelte';
 
 	navBarData.set('home');
 
@@ -44,13 +43,11 @@
 		</p>
 	</WidthContainer>
 	<div class="three-container" class:loading={!modelLoaded}>
-		<Three>
-			<VRHeadset
-				on:modelLoaded={() => {
-					modelLoaded = true;
-				}}
-			/>
-		</Three>
+		<Dots
+			on:modelLoaded={() => {
+				modelLoaded = true;
+			}}
+		/>
 	</div>
 </div>
 <WidthContainer>
