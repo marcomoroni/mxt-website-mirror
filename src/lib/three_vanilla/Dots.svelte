@@ -4,19 +4,27 @@
 	import { createEventDispatcher } from 'svelte';
 	import * as THREE from 'three';
 	import { ImprovedNoise } from 'three/examples/jsm/math/ImprovedNoise.js';
+	import { noise3D } from './shader_utils/noise-3d';
 
 	const dispatch = createEventDispatcher();
 
 	const vertexShader = `
-attribute float scale;
+uniform float time;
+attribute vec2 dotIndex;
 varying vec3 vColor;
+
+${noise3D}
 
 void main() {
 
-	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+	float posXNoise = cnoise(vec3(dotIndex.r * 0.1 + 3.0, dotIndex.g * 0.1 - 6.0, time * 0.00006));
+	float posYNoise = cnoise(vec3(dotIndex.r * 0.1 + 80.0, dotIndex.g * 0.1 - 30.0, time * 0.00006));
+	float posX = position.r + posXNoise * 700.0;
+	float posY = position.g + posYNoise * 700.0;
+	vec4 mvPosition = modelViewMatrix * vec4( posX, posY, 0.0, 1.0 );
 
-	// gl_PointSize = scale * ( 300.0 / - mvPosition.z );
-	gl_PointSize = scale;
+	float scaleNoise = cnoise(vec3(dotIndex.r * 0.07, dotIndex.g * 0.07, time * 0.0003));
+	gl_PointSize = scaleNoise * 50.0;
 
 	gl_Position = projectionMatrix * mvPosition;
 
@@ -25,8 +33,10 @@ void main() {
 	`;
 
 	const fragmentShader = `
-// uniform vec3 color;
+uniform float time;
 varying vec3 vColor;
+
+${noise3D}
 	
 void main() {
 	
@@ -46,8 +56,11 @@ void main() {
 
 		const container = el;
 
-		// let count = 0;
 		const noise = new ImprovedNoise();
+
+		// `new Date().getTime()` is too large to use in shader, so use time since start.
+		let startTime = new Date().getTime();
+		let timeSinceStart = 0;
 
 		const baseColor = new THREE.Color('#E5DEDA');
 		// const baseColor = new THREE.Color('white');
@@ -79,44 +92,42 @@ void main() {
 
 		const numParticles = AMOUNTX * AMOUNTY;
 
-		const restPositions = new Float32Array(numParticles * 3);
+		const dotIndex = new Float32Array(numParticles * 2);
 		const positions = new Float32Array(numParticles * 3);
-		const scales = new Float32Array(numParticles);
 		const colors = new Float32Array(numParticles * 3);
 
 		let i = 0,
-			j = 0;
+			j = 0,
+			p = 0;
 
 		for (let ix = 0; ix < AMOUNTX; ix++) {
 			for (let iy = 0; iy < AMOUNTY; iy++) {
-				restPositions[i] = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2; // x
-				restPositions[i + 1] = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2; // y
-				restPositions[i + 2] = 0; // z
+				dotIndex[p] = ix;
+				dotIndex[p + 1] = iy;
 
-				positions[i] = restPositions[i];
-				positions[i + 1] = restPositions[i + 1];
-				positions[i + 2] = restPositions[i + 2];
-
-				scales[j] = 1;
+				positions[i] = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2; // x
+				positions[i + 1] = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2; // y
+				positions[i + 2] = 0; // z
 
 				colors[i] = baseColor.r;
 				colors[i + 1] = baseColor.g;
 				colors[i + 2] = baseColor.b;
 
 				i += 3;
+				p += 2;
 				j++;
 			}
 		}
 
 		const geometry = new THREE.BufferGeometry();
+		geometry.setAttribute('dotIndex', new THREE.BufferAttribute(dotIndex, 2));
 		geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-		geometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
 		geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
 		const material = new THREE.ShaderMaterial({
-			// uniforms: {
-			// 	color: { value: new THREE.Color('red') }
-			// },
+			uniforms: {
+				time: { value: timeSinceStart }
+			},
 			vertexShader,
 			fragmentShader,
 			vertexColors: true,
@@ -177,28 +188,20 @@ void main() {
 			camera.lookAt(scene.position);
 
 			const positions = particles.geometry.attributes.position.array;
-			const scales = particles.geometry.attributes.scale.array;
 			const colors = particles.geometry.attributes.color.array;
 
 			let i = 0,
 				j = 0;
 
-			const now = new Date().getTime();
+			timeSinceStart = new Date().getTime() - startTime;
 
 			for (let ix = 0; ix < AMOUNTX; ix++) {
 				for (let iy = 0; iy < AMOUNTY; iy++) {
-					const scaleNoise = noise.noise(ix * 0.07, iy * 0.07, now * 0.0003);
-					const posXNoise = noise.noise(ix * 0.1 + 3, iy * 0.1 - 6, now * 0.00006);
-					const posYNoise = noise.noise(ix * 0.1 + 80, iy * 0.1 - 30, now * 0.00006);
-					const accentColorNoise = noise.noise(ix * 0.8 + 30, iy * 0.8 + 230, now * 0.0002);
-
-					// positions[i + 2] = Math.sin((ix + count) * 0.3) * 50 + Math.sin((iy + count) * 0.5) * 50;
-					positions[i] = restPositions[i] + posXNoise * 700; // x
-					positions[i + 1] = restPositions[i + 1] + posYNoise * 700; // y
-
-					// scales[j] =
-					// 	(Math.sin((ix + count) * 0.3) + 1) * 20 + (Math.sin((iy + count) * 0.5) + 1) * 20;
-					scales[j] = scaleNoise * 50;
+					const accentColorNoise = noise.noise(
+						ix * 0.8 + 30,
+						iy * 0.8 + 230,
+						timeSinceStart * 0.0002
+					);
 
 					const color = new THREE.Color().lerpColors(
 						baseColor,
@@ -214,13 +217,10 @@ void main() {
 				}
 			}
 
-			particles.geometry.attributes.position.needsUpdate = true;
-			particles.geometry.attributes.scale.needsUpdate = true;
 			particles.geometry.attributes.color.needsUpdate = true;
+			particles.material.uniforms.time.value = timeSinceStart;
 
 			renderer.render(scene, camera);
-
-			// count += 0.1;
 		}
 
 		dispatch('modelLoaded');
