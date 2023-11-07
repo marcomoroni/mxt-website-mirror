@@ -13,7 +13,7 @@
 
 	export let dotsActive: Writable<boolean>;
 
-	const animRadius = spring(0, { stiffness: 0.0024, damping: 0.75 });
+	const animRadius = spring(0, { stiffness: 0.0021, damping: 0.75 });
 	const animVisibility = spring($dotsActive ? 1 : 0, { stiffness: 0.02 });
 	$: {
 		// if ($dotsActive) {
@@ -41,20 +41,20 @@ ${quarticInOut}
 
 void main() {
 
-	float anim0to1 = clamp(map( distanceFromCenter - animRadius, 0.0, -2500.0, 0.0, 1.0), 0.0, 1.0);
+	float anim0to1 = clamp(map( distanceFromCenter - animRadius, 0.0, -2800.0, 0.0, 1.0), 0.0, 1.0);
 	anim0to1 = quarticInOut(anim0to1);
-	float anim0to1_2 = clamp(map( (distanceFromCenter - animRadius) + 600.0 , 0.0, -3700.0, 0.0, 1.0), 0.0, 1.0);
+	float anim0to1_2 = clamp(map( (distanceFromCenter - animRadius) + 600.0 , 0.0, -4700.0, 0.0, 1.0), 0.0, 1.0);
 	anim0to1_2 = quarticInOut(anim0to1_2);
 
-	float posXNoise = cnoise(vec3(dotIndex.r * 0.1 + 3.0, dotIndex.g * 0.1 - 6.0, time * 0.00006));
-	float posYNoise = cnoise(vec3(dotIndex.r * 0.1 + 80.0, dotIndex.g * 0.1 - 30.0, time * 0.00006));
+	float posXNoise = cnoise(vec3(dotIndex.r * 0.03 + 3.0, dotIndex.g * 0.03 - 6.0, time * 0.00006));
+	float posYNoise = cnoise(vec3(dotIndex.r * 0.03 + 80.0, dotIndex.g * 0.03 - 30.0, time * 0.00006));
 	float posX = position.r + mix(0.0, posXNoise * 900.0, anim0to1_2);
 	float posY = position.g + mix(0.0, posYNoise * 900.0, anim0to1_2);
 	vec4 mvPosition = modelViewMatrix * vec4( posX, posY, 0.0, 1.0 );
 
-	float scaleNoise = cnoise(vec3(dotIndex.r * 0.07, dotIndex.g * 0.07, time * 0.0003));
+	float scaleNoise = cnoise(vec3(dotIndex.r * 0.03, dotIndex.g * 0.03, time * 0.0003));
 	scaleNoise = map(scaleNoise, -1.0, 1.0, -0.4, 1.0);
-	float scale = mix(200.0, scaleNoise * 60.0, anim0to1);
+	float scale = mix(200.0, scaleNoise * 20.0, anim0to1);
 	scale = scale * animVisibility;
 	gl_PointSize = scale;
 
@@ -107,9 +107,9 @@ void main() {
 	let unsubscribe2: Unsubscriber | undefined = undefined;
 
 	function initScene(el: HTMLElement) {
-		const SEPARATION = 140,
-			AMOUNTX = 60,
-			AMOUNTY = 60;
+		const SEPARATION = 50,
+			AMOUNTX = 200,
+			AMOUNTY = 200;
 
 		const container = el;
 
