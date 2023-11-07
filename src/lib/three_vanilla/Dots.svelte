@@ -103,12 +103,6 @@ void main() {
 			new THREE.Color('#E7D852')
 		];
 
-		let mouseX = 0,
-			mouseY = 0;
-
-		let windowHalfX = window.innerWidth / 2;
-		let windowHalfY = window.innerHeight / 2;
-
 		// Init
 
 		const camera = new THREE.PerspectiveCamera(
@@ -120,6 +114,7 @@ void main() {
 		camera.position.z = 1500;
 
 		const scene = new THREE.Scene();
+		camera.lookAt(scene.position);
 
 		//
 
@@ -185,7 +180,6 @@ void main() {
 		container.appendChild(renderer.domElement);
 
 		container.style.touchAction = 'none';
-		container.addEventListener('pointermove', onPointerMove);
 
 		//
 
@@ -194,22 +188,10 @@ void main() {
 		animate();
 
 		function onWindowResize() {
-			windowHalfX = window.innerWidth / 2;
-			windowHalfY = window.innerHeight / 2;
-
 			camera.aspect = window.innerWidth / window.innerHeight;
 			camera.updateProjectionMatrix();
 
 			renderer.setSize(window.innerWidth, window.innerHeight);
-		}
-
-		//
-
-		function onPointerMove(event: any) {
-			if (event.isPrimary === false) return;
-
-			mouseX = event.clientX - windowHalfX;
-			mouseY = event.clientY - windowHalfY;
 		}
 
 		//
@@ -221,10 +203,6 @@ void main() {
 		}
 
 		function render() {
-			camera.position.x += (mouseX - camera.position.x) * 0.05;
-			camera.position.y += (-mouseY - camera.position.y) * 0.05;
-			camera.lookAt(scene.position);
-
 			timeSinceStart = new Date().getTime() - startTime;
 			particles.material.uniforms.time.value = timeSinceStart + timeStartRandAdd;
 
