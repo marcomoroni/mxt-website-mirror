@@ -1,67 +1,126 @@
 <script lang="ts">
 	// Based on https://github.com/mrdoob/three.js/blob/master/examples/webgl_points_waves.html
 
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onDestroy } from 'svelte';
 	import * as THREE from 'three';
-	import { ImprovedNoise } from 'three/examples/jsm/math/ImprovedNoise.js';
+	import { noise3D } from './shader_utils/noise-3d';
+	import { spring, type Unsubscriber } from 'svelte/motion';
+	import { map } from './shader_utils/map';
+	import { quarticInOut } from './shader_utils/quartic-in-out';
+	import type { Writable } from 'svelte/store';
 
 	const dispatch = createEventDispatcher();
 
+	export let dotsActive: Writable<boolean>;
+
+	const animRadius = spring(0, { stiffness: 0.0024, damping: 0.75 });
+	const animVisibility = spring($dotsActive ? 1 : 0, { stiffness: 0.02 });
+	$: {
+		// if ($dotsActive) {
+		// 	animRadius.set(0, { hard: true });
+		// }
+		animVisibility.set($dotsActive ? 1 : 0);
+	}
+
 	const vertexShader = `
-attribute float scale;
-varying vec3 vColor;
+uniform float time;
+uniform float animRadius;
+uniform float animVisibility;
+attribute vec2 dotIndex;
+attribute float distanceFromCenter;
+out float vAnim;
+out vec2 vDotIndex;
+out float vAccentColor1Noise;
+out float vAccentColor2Noise;
+
+${noise3D}
+
+${map}
+
+${quarticInOut}
 
 void main() {
 
-	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+	float anim0to1 = clamp(map( distanceFromCenter - animRadius, 0.0, -2500.0, 0.0, 1.0), 0.0, 1.0);
+	anim0to1 = quarticInOut(anim0to1);
+	float anim0to1_2 = clamp(map( (distanceFromCenter - animRadius) + 600.0 , 0.0, -3700.0, 0.0, 1.0), 0.0, 1.0);
+	anim0to1_2 = quarticInOut(anim0to1_2);
 
-	// gl_PointSize = scale * ( 300.0 / - mvPosition.z );
+	float posXNoise = cnoise(vec3(dotIndex.r * 0.1 + 3.0, dotIndex.g * 0.1 - 6.0, time * 0.00006));
+	float posYNoise = cnoise(vec3(dotIndex.r * 0.1 + 80.0, dotIndex.g * 0.1 - 30.0, time * 0.00006));
+	float posX = position.r + mix(0.0, posXNoise * 900.0, anim0to1_2);
+	float posY = position.g + mix(0.0, posYNoise * 900.0, anim0to1_2);
+	vec4 mvPosition = modelViewMatrix * vec4( posX, posY, 0.0, 1.0 );
+
+	float scaleNoise = cnoise(vec3(dotIndex.r * 0.07, dotIndex.g * 0.07, time * 0.0003));
+	scaleNoise = map(scaleNoise, -1.0, 1.0, -0.4, 1.0);
+	float scale = mix(200.0, scaleNoise * 60.0, anim0to1);
+	scale = scale * animVisibility;
 	gl_PointSize = scale;
 
 	gl_Position = projectionMatrix * mvPosition;
 
-	vColor = color;
+	vAnim = anim0to1;
+	vDotIndex = dotIndex;
+	vAccentColor1Noise = posXNoise;
+	vAccentColor2Noise = posYNoise;
 }
 	`;
 
 	const fragmentShader = `
-// uniform vec3 color;
-varying vec3 vColor;
+uniform float time;
+uniform float animRadius;
+uniform vec3 baseColor;
+uniform vec3 accentColor1;
+uniform vec3 accentColor2;
+in vec2 vDotIndex;
+in float vAnim;
+in float vAccentColor1Noise;
+in float vAccentColor2Noise;
+
+${noise3D}
+
+${map}
 	
 void main() {
 	
 	if ( length( gl_PointCoord - vec2( 0.5, 0.5 ) ) > 0.475 ) discard;
+
+	float color1Noise = map(vAccentColor1Noise, -1.0, 1.0, 0.0, 1.0);
+	float color2Noise = map(vAccentColor2Noise, -1.0, 1.0, 0.0, 1.0);
+	// Accent colour only on heigher values.
+	color1Noise = map(color1Noise, 0.6, 0.7, 0.0, 1.0);
+	color2Noise = map(color2Noise, 0.6, 0.7, 0.0, 1.0);
+	color1Noise = clamp(color1Noise, 0.0, 1.0);
+	color2Noise = clamp(color2Noise, 0.0, 1.0);
+	vec3 color = mix( baseColor.rgb, accentColor1.rgb, color1Noise * vAnim );
+	color = mix( color.rgb, accentColor2.rgb, color2Noise * vAnim );
 	
-	gl_FragColor = vec4( vColor.rgb, 1.0 );
+	gl_FragColor = vec4( color.rgb, 1.0 );
 
 	#include <tonemapping_fragment>
 	#include <colorspace_fragment>
 }
 `;
 
+	let unsubscribe1: Unsubscriber | undefined = undefined;
+	let unsubscribe2: Unsubscriber | undefined = undefined;
+
 	function initScene(el: HTMLElement) {
 		const SEPARATION = 140,
-			AMOUNTX = 30,
-			AMOUNTY = 30;
+			AMOUNTX = 60,
+			AMOUNTY = 60;
 
 		const container = el;
 
-		// let count = 0;
-		const noise = new ImprovedNoise();
+		// `new Date().getTime()` is too large to use in shader, so use time since start.
+		const startTime = new Date().getTime();
+		const timeStartRandAdd = Math.random() * 100000;
+		let timeSinceStart = 0;
 
 		const baseColor = new THREE.Color('#E5DEDA');
-		// const baseColor = new THREE.Color('white');
-		const accentColors = [
-			new THREE.Color('#dfa638'),
-			new THREE.Color('#CFCCB1'),
-			new THREE.Color('#E7D852')
-		];
-
-		let mouseX = 0,
-			mouseY = 0;
-
-		let windowHalfX = window.innerWidth / 2;
-		let windowHalfY = window.innerHeight / 2;
+		const accentColor1 = new THREE.Color('#DEBA76');
+		const accentColor2 = new THREE.Color('#ECE293');
 
 		// Init
 
@@ -74,49 +133,55 @@ void main() {
 		camera.position.z = 1500;
 
 		const scene = new THREE.Scene();
+		camera.lookAt(scene.position);
 
 		//
 
 		const numParticles = AMOUNTX * AMOUNTY;
 
-		const restPositions = new Float32Array(numParticles * 3);
+		const dotIndex = new Float32Array(numParticles * 2);
 		const positions = new Float32Array(numParticles * 3);
-		const scales = new Float32Array(numParticles);
-		const colors = new Float32Array(numParticles * 3);
+		const distancesFromCenter = new Float32Array(numParticles);
+
+		let maxDistanceFromCenter = 0;
 
 		let i = 0,
-			j = 0;
+			j = 0,
+			p = 0;
 
 		for (let ix = 0; ix < AMOUNTX; ix++) {
 			for (let iy = 0; iy < AMOUNTY; iy++) {
-				restPositions[i] = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2; // x
-				restPositions[i + 1] = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2; // y
-				restPositions[i + 2] = 0; // z
+				dotIndex[p] = ix;
+				dotIndex[p + 1] = iy;
 
-				positions[i] = restPositions[i];
-				positions[i + 1] = restPositions[i + 1];
-				positions[i + 2] = restPositions[i + 2];
+				positions[i] = ix * SEPARATION - (AMOUNTX * SEPARATION) / 2; // x
+				positions[i + 1] = iy * SEPARATION - (AMOUNTY * SEPARATION) / 2; // y
+				positions[i + 2] = 0; // z
 
-				scales[j] = 1;
-
-				colors[i] = baseColor.r;
-				colors[i + 1] = baseColor.g;
-				colors[i + 2] = baseColor.b;
+				const distanceFromCenter = Math.hypot(positions[i], positions[i + 1]);
+				distancesFromCenter[j] = distanceFromCenter;
+				if (distanceFromCenter > maxDistanceFromCenter) maxDistanceFromCenter = distanceFromCenter;
 
 				i += 3;
+				p += 2;
 				j++;
 			}
 		}
 
 		const geometry = new THREE.BufferGeometry();
+		geometry.setAttribute('dotIndex', new THREE.BufferAttribute(dotIndex, 2));
 		geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-		geometry.setAttribute('scale', new THREE.BufferAttribute(scales, 1));
-		geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+		geometry.setAttribute('distanceFromCenter', new THREE.BufferAttribute(distancesFromCenter, 1));
 
 		const material = new THREE.ShaderMaterial({
-			// uniforms: {
-			// 	color: { value: new THREE.Color('red') }
-			// },
+			uniforms: {
+				time: { value: timeSinceStart + timeStartRandAdd },
+				animRadius: { value: animRadius },
+				animVisibility: { value: animVisibility },
+				baseColor: { value: baseColor },
+				accentColor1: { value: accentColor1 },
+				accentColor2: { value: accentColor2 }
+			},
 			vertexShader,
 			fragmentShader,
 			vertexColors: true,
@@ -136,7 +201,6 @@ void main() {
 		container.appendChild(renderer.domElement);
 
 		container.style.touchAction = 'none';
-		container.addEventListener('pointermove', onPointerMove);
 
 		//
 
@@ -145,22 +209,10 @@ void main() {
 		animate();
 
 		function onWindowResize() {
-			windowHalfX = window.innerWidth / 2;
-			windowHalfY = window.innerHeight / 2;
-
 			camera.aspect = window.innerWidth / window.innerHeight;
 			camera.updateProjectionMatrix();
 
 			renderer.setSize(window.innerWidth, window.innerHeight);
-		}
-
-		//
-
-		function onPointerMove(event: any) {
-			if (event.isPrimary === false) return;
-
-			mouseX = event.clientX - windowHalfX;
-			mouseY = event.clientY - windowHalfY;
 		}
 
 		//
@@ -172,73 +224,30 @@ void main() {
 		}
 
 		function render() {
-			camera.position.x += (mouseX - camera.position.x) * 0.05;
-			camera.position.y += (-mouseY - camera.position.y) * 0.05;
-			camera.lookAt(scene.position);
-
-			const positions = particles.geometry.attributes.position.array;
-			const scales = particles.geometry.attributes.scale.array;
-			const colors = particles.geometry.attributes.color.array;
-
-			let i = 0,
-				j = 0;
-
-			const now = new Date().getTime();
-
-			for (let ix = 0; ix < AMOUNTX; ix++) {
-				for (let iy = 0; iy < AMOUNTY; iy++) {
-					const scaleNoise = noise.noise(ix * 0.07, iy * 0.07, now * 0.0003);
-					const posXNoise = noise.noise(ix * 0.1 + 3, iy * 0.1 - 6, now * 0.00006);
-					const posYNoise = noise.noise(ix * 0.1 + 80, iy * 0.1 - 30, now * 0.00006);
-					const accentColorNoise = noise.noise(ix * 0.8 + 30, iy * 0.8 + 230, now * 0.0002);
-
-					// positions[i + 2] = Math.sin((ix + count) * 0.3) * 50 + Math.sin((iy + count) * 0.5) * 50;
-					positions[i] = restPositions[i] + posXNoise * 700; // x
-					positions[i + 1] = restPositions[i + 1] + posYNoise * 700; // y
-
-					// scales[j] =
-					// 	(Math.sin((ix + count) * 0.3) + 1) * 20 + (Math.sin((iy + count) * 0.5) + 1) * 20;
-					scales[j] = scaleNoise * 50;
-
-					const color = new THREE.Color().lerpColors(
-						baseColor,
-						accentColors[0],
-						clamp(mapRange(mapRange(accentColorNoise, -1, 1, 0, 1), 0.8, 0.82, 0, 1), 0, 1)
-					);
-					colors[i] = color.r;
-					colors[i + 1] = color.g;
-					colors[i + 2] = color.b;
-
-					i += 3;
-					j++;
-				}
-			}
-
-			particles.geometry.attributes.position.needsUpdate = true;
-			particles.geometry.attributes.scale.needsUpdate = true;
-			particles.geometry.attributes.color.needsUpdate = true;
+			timeSinceStart = new Date().getTime() - startTime;
+			particles.material.uniforms.time.value = timeSinceStart + timeStartRandAdd;
 
 			renderer.render(scene, camera);
-
-			// count += 0.1;
 		}
 
+		unsubscribe1 = animRadius.subscribe(
+			(value) => (particles.material.uniforms.animRadius.value = value)
+		);
+		unsubscribe2 = animVisibility.subscribe(
+			(value) => (particles.material.uniforms.animVisibility.value = value)
+		);
+
 		dispatch('modelLoaded');
+
+		setTimeout(() => {
+			animRadius.set(maxDistanceFromCenter);
+		}, 500);
 	}
 
-	function mapRange(
-		value: number,
-		low1: number,
-		high1: number,
-		low2: number,
-		high2: number
-	): number {
-		return low2 + ((high2 - low2) * (value - low1)) / (high1 - low1);
-	}
-
-	function clamp(value: number, low: number, high: number): number {
-		return value < low ? low : value > high ? high : value;
-	}
+	onDestroy(() => {
+		unsubscribe1?.();
+		unsubscribe2?.();
+	});
 </script>
 
 <div use:initScene />
