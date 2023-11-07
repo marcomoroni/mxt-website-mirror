@@ -16,9 +16,6 @@
 	const animRadius = spring(0, { stiffness: 0.0021, damping: 0.75 });
 	const animVisibility = spring($dotsActive ? 1 : 0, { stiffness: 0.02 });
 	$: {
-		// if ($dotsActive) {
-		// 	animRadius.set(0, { hard: true });
-		// }
 		animVisibility.set($dotsActive ? 1 : 0);
 	}
 
@@ -54,7 +51,7 @@ void main() {
 
 	float scaleNoise = cnoise(vec3(dotIndex.r * 0.03, dotIndex.g * 0.03, time * 0.0003));
 	scaleNoise = map(scaleNoise, -1.0, 1.0, -0.4, 1.0);
-	float scale = mix(200.0, scaleNoise * 20.0, anim0to1);
+	float scale = mix(150.0, scaleNoise * 20.0, anim0to1);
 	scale = scale * animVisibility;
 	gl_PointSize = scale;
 
@@ -184,7 +181,6 @@ void main() {
 			},
 			vertexShader,
 			fragmentShader,
-			vertexColors: true,
 			toneMapped: false
 		});
 
