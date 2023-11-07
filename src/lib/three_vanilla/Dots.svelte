@@ -7,6 +7,7 @@
 	import { noise3D } from './shader_utils/noise-3d';
 	import { spring, type Unsubscriber } from 'svelte/motion';
 	import { map } from './shader_utils/map';
+	import { quarticInOut } from './shader_utils/quartic-in-out';
 
 	const dispatch = createEventDispatcher();
 
@@ -21,14 +22,19 @@ ${noise3D}
 
 ${map}
 
+${quarticInOut}
+
 void main() {
 
-	float anim0to1 = clamp( animRadius / distanceFromCenter, 0.0, 1.0 );
+	float anim0to1 = clamp(map( distanceFromCenter - animRadius, 0.0, -2500.0, 0.0, 1.0), 0.0, 1.0);
+	anim0to1 = quarticInOut(anim0to1);
+	float anim0to1_2 = clamp(map( (distanceFromCenter - animRadius) + 600.0 , 0.0, -3700.0, 0.0, 1.0), 0.0, 1.0);
+	anim0to1_2 = quarticInOut(anim0to1_2);
 
 	float posXNoise = cnoise(vec3(dotIndex.r * 0.1 + 3.0, dotIndex.g * 0.1 - 6.0, time * 0.00006));
 	float posYNoise = cnoise(vec3(dotIndex.r * 0.1 + 80.0, dotIndex.g * 0.1 - 30.0, time * 0.00006));
-	float posX = position.r + mix(0.0, posXNoise * 900.0, anim0to1);
-	float posY = position.g + mix(0.0, posYNoise * 900.0, anim0to1);
+	float posX = position.r + mix(0.0, posXNoise * 900.0, anim0to1_2);
+	float posY = position.g + mix(0.0, posYNoise * 900.0, anim0to1_2);
 	vec4 mvPosition = modelViewMatrix * vec4( posX, posY, 0.0, 1.0 );
 
 	float scaleNoise = cnoise(vec3(dotIndex.r * 0.07, dotIndex.g * 0.07, time * 0.0003));
@@ -65,18 +71,19 @@ void main() {
 
 	function initScene(el: HTMLElement) {
 		// Values for animations.
-		const animRadius = spring(0, { stiffness: 0.002 });
+		const animRadius = spring(0, { stiffness: 0.0024, damping: 0.75 });
 
 		const SEPARATION = 140,
-			AMOUNTX = 30,
-			AMOUNTY = 30;
+			AMOUNTX = 60,
+			AMOUNTY = 60;
 
 		const container = el;
 
 		const noise = new ImprovedNoise();
 
 		// `new Date().getTime()` is too large to use in shader, so use time since start.
-		let startTime = new Date().getTime();
+		const startTime = new Date().getTime();
+		const timeStartRandAdd = Math.random() * 100000;
 		let timeSinceStart = 0;
 
 		const baseColor = new THREE.Color('#E5DEDA');
@@ -145,7 +152,7 @@ void main() {
 
 		const material = new THREE.ShaderMaterial({
 			uniforms: {
-				time: { value: timeSinceStart },
+				time: { value: timeSinceStart + timeStartRandAdd },
 				animRadius: { value: animRadius },
 				baseColor: { value: baseColor }
 			},
@@ -209,7 +216,7 @@ void main() {
 			camera.lookAt(scene.position);
 
 			timeSinceStart = new Date().getTime() - startTime;
-			particles.material.uniforms.time.value = timeSinceStart;
+			particles.material.uniforms.time.value = timeSinceStart + timeStartRandAdd;
 
 			renderer.render(scene, camera);
 		}
@@ -220,7 +227,9 @@ void main() {
 
 		dispatch('modelLoaded');
 
-		animRadius.set(maxDistanceFromCenter);
+		setTimeout(() => {
+			animRadius.set(maxDistanceFromCenter);
+		}, 500);
 	}
 
 	onDestroy(() => {
