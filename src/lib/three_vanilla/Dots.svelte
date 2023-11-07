@@ -29,6 +29,8 @@ uniform float animVisibility;
 attribute vec2 dotIndex;
 attribute float distanceFromCenter;
 out float vAnim;
+out vec2 vDotIndex;
+out float vAccentColorNoise;
 
 ${noise3D}
 
@@ -58,6 +60,8 @@ void main() {
 	gl_Position = projectionMatrix * mvPosition;
 
 	vAnim = anim0to1;
+	vDotIndex = dotIndex;
+	vAccentColorNoise = posXNoise;
 }
 	`;
 
@@ -65,15 +69,26 @@ void main() {
 uniform float time;
 uniform float animRadius;
 uniform vec3 baseColor;
+uniform vec3 accentColor;
+in vec2 vDotIndex;
 in float vAnim;
+in float vAccentColorNoise;
 
 ${noise3D}
+
+${map}
 	
 void main() {
 	
 	if ( length( gl_PointCoord - vec2( 0.5, 0.5 ) ) > 0.475 ) discard;
+
+	float colorNoise = map(vAccentColorNoise, -1.0, 1.0, 0.0, 1.0);
+	// Accent colour only on heigher values.
+	colorNoise = map(colorNoise, 0.6, 0.7, 0.0, 1.0);
+	colorNoise = clamp(colorNoise, 0.0, 1.0);
+	vec3 color = mix( baseColor.rgb, accentColor.rgb, colorNoise * vAnim );
 	
-	gl_FragColor = vec4( baseColor.rgb, 1.0 );
+	gl_FragColor = vec4( color.rgb, 1.0 );
 
 	#include <tonemapping_fragment>
 	#include <colorspace_fragment>
@@ -96,12 +111,7 @@ void main() {
 		let timeSinceStart = 0;
 
 		const baseColor = new THREE.Color('#E5DEDA');
-		// const baseColor = new THREE.Color('white');
-		const accentColors = [
-			new THREE.Color('#dfa638'),
-			new THREE.Color('#CFCCB1'),
-			new THREE.Color('#E7D852')
-		];
+		const accentColor = new THREE.Color('#DEBA76');
 
 		// Init
 
@@ -159,7 +169,8 @@ void main() {
 				time: { value: timeSinceStart + timeStartRandAdd },
 				animRadius: { value: animRadius },
 				animVisibility: { value: animVisibility },
-				baseColor: { value: baseColor }
+				baseColor: { value: baseColor },
+				accentColor: { value: accentColor }
 			},
 			vertexShader,
 			fragmentShader,
