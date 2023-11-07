@@ -30,7 +30,8 @@ attribute vec2 dotIndex;
 attribute float distanceFromCenter;
 out float vAnim;
 out vec2 vDotIndex;
-out float vAccentColorNoise;
+out float vAccentColor1Noise;
+out float vAccentColor2Noise;
 
 ${noise3D}
 
@@ -61,7 +62,8 @@ void main() {
 
 	vAnim = anim0to1;
 	vDotIndex = dotIndex;
-	vAccentColorNoise = posXNoise;
+	vAccentColor1Noise = posXNoise;
+	vAccentColor2Noise = posYNoise;
 }
 	`;
 
@@ -69,10 +71,12 @@ void main() {
 uniform float time;
 uniform float animRadius;
 uniform vec3 baseColor;
-uniform vec3 accentColor;
+uniform vec3 accentColor1;
+uniform vec3 accentColor2;
 in vec2 vDotIndex;
 in float vAnim;
-in float vAccentColorNoise;
+in float vAccentColor1Noise;
+in float vAccentColor2Noise;
 
 ${noise3D}
 
@@ -82,11 +86,15 @@ void main() {
 	
 	if ( length( gl_PointCoord - vec2( 0.5, 0.5 ) ) > 0.475 ) discard;
 
-	float colorNoise = map(vAccentColorNoise, -1.0, 1.0, 0.0, 1.0);
+	float color1Noise = map(vAccentColor1Noise, -1.0, 1.0, 0.0, 1.0);
+	float color2Noise = map(vAccentColor2Noise, -1.0, 1.0, 0.0, 1.0);
 	// Accent colour only on heigher values.
-	colorNoise = map(colorNoise, 0.6, 0.7, 0.0, 1.0);
-	colorNoise = clamp(colorNoise, 0.0, 1.0);
-	vec3 color = mix( baseColor.rgb, accentColor.rgb, colorNoise * vAnim );
+	color1Noise = map(color1Noise, 0.6, 0.7, 0.0, 1.0);
+	color2Noise = map(color2Noise, 0.6, 0.7, 0.0, 1.0);
+	color1Noise = clamp(color1Noise, 0.0, 1.0);
+	color2Noise = clamp(color2Noise, 0.0, 1.0);
+	vec3 color = mix( baseColor.rgb, accentColor1.rgb, color1Noise * vAnim );
+	color = mix( color.rgb, accentColor2.rgb, color2Noise * vAnim );
 	
 	gl_FragColor = vec4( color.rgb, 1.0 );
 
@@ -111,7 +119,8 @@ void main() {
 		let timeSinceStart = 0;
 
 		const baseColor = new THREE.Color('#E5DEDA');
-		const accentColor = new THREE.Color('#DEBA76');
+		const accentColor1 = new THREE.Color('#DEBA76');
+		const accentColor2 = new THREE.Color('#ECE293');
 
 		// Init
 
@@ -170,7 +179,8 @@ void main() {
 				animRadius: { value: animRadius },
 				animVisibility: { value: animVisibility },
 				baseColor: { value: baseColor },
-				accentColor: { value: accentColor }
+				accentColor1: { value: accentColor1 },
+				accentColor2: { value: accentColor2 }
 			},
 			vertexShader,
 			fragmentShader,
