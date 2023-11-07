@@ -3,7 +3,6 @@
 	import MxtLogoNoPadding from '$lib/MxtLogoNoPadding.svelte';
 	import WidthContainer from '$lib/WidthContainer.svelte';
 	import { navBarData } from '$lib/topBarData';
-	import Dots from '$lib/three_vanilla/Dots.svelte';
 
 	navBarData.set('home');
 
@@ -24,8 +23,6 @@
 			href: '/contacts'
 		}
 	];
-
-	let modelLoaded = false;
 </script>
 
 <svelte:head>
@@ -42,13 +39,6 @@
 			environments for public sector and infrastructure partners.
 		</p>
 	</WidthContainer>
-	<div class="three-container" class:loading={!modelLoaded}>
-		<Dots
-			on:modelLoaded={() => {
-				modelLoaded = true;
-			}}
-		/>
-	</div>
 </div>
 <WidthContainer>
 	<ul class="link-cards">
@@ -127,18 +117,5 @@
 		.link-cards {
 			display: grid;
 		}
-	}
-
-	.three-container {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		overflow: hidden;
-		z-index: -10; /* todo: it is not interactable */
-		transition: opacity 2s var(--curve);
-	}
-
-	.three-container.loading {
-		opacity: 0;
 	}
 </style>

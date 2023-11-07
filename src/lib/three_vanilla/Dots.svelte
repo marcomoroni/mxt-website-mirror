@@ -3,17 +3,29 @@
 
 	import { createEventDispatcher, onDestroy } from 'svelte';
 	import * as THREE from 'three';
-	import { ImprovedNoise } from 'three/examples/jsm/math/ImprovedNoise.js';
 	import { noise3D } from './shader_utils/noise-3d';
 	import { spring, type Unsubscriber } from 'svelte/motion';
 	import { map } from './shader_utils/map';
 	import { quarticInOut } from './shader_utils/quartic-in-out';
+	import type { Writable } from 'svelte/store';
 
 	const dispatch = createEventDispatcher();
+
+	export let dotsActive: Writable<boolean>;
+
+	const animRadius = spring(0, { stiffness: 0.0024, damping: 0.75 });
+	const animVisibility = spring($dotsActive ? 1 : 0, { stiffness: 0.02 });
+	$: {
+		// if ($dotsActive) {
+		// 	animRadius.set(0, { hard: true });
+		// }
+		animVisibility.set($dotsActive ? 1 : 0);
+	}
 
 	const vertexShader = `
 uniform float time;
 uniform float animRadius;
+uniform float animVisibility;
 attribute vec2 dotIndex;
 attribute float distanceFromCenter;
 out float vAnim;
@@ -39,8 +51,9 @@ void main() {
 
 	float scaleNoise = cnoise(vec3(dotIndex.r * 0.07, dotIndex.g * 0.07, time * 0.0003));
 	scaleNoise = map(scaleNoise, -1.0, 1.0, -0.4, 1.0);
-
-	gl_PointSize = mix(200.0, scaleNoise * 60.0, anim0to1);
+	float scale = mix(200.0, scaleNoise * 60.0, anim0to1);
+	scale = scale * animVisibility;
+	gl_PointSize = scale;
 
 	gl_Position = projectionMatrix * mvPosition;
 
@@ -67,19 +80,15 @@ void main() {
 }
 `;
 
-	let unsubscribe: Unsubscriber | undefined = undefined;
+	let unsubscribe1: Unsubscriber | undefined = undefined;
+	let unsubscribe2: Unsubscriber | undefined = undefined;
 
 	function initScene(el: HTMLElement) {
-		// Values for animations.
-		const animRadius = spring(0, { stiffness: 0.0024, damping: 0.75 });
-
 		const SEPARATION = 140,
 			AMOUNTX = 60,
 			AMOUNTY = 60;
 
 		const container = el;
-
-		const noise = new ImprovedNoise();
 
 		// `new Date().getTime()` is too large to use in shader, so use time since start.
 		const startTime = new Date().getTime();
@@ -154,6 +163,7 @@ void main() {
 			uniforms: {
 				time: { value: timeSinceStart + timeStartRandAdd },
 				animRadius: { value: animRadius },
+				animVisibility: { value: animVisibility },
 				baseColor: { value: baseColor }
 			},
 			vertexShader,
@@ -221,8 +231,11 @@ void main() {
 			renderer.render(scene, camera);
 		}
 
-		unsubscribe = animRadius.subscribe(
+		unsubscribe1 = animRadius.subscribe(
 			(value) => (particles.material.uniforms.animRadius.value = value)
+		);
+		unsubscribe2 = animVisibility.subscribe(
+			(value) => (particles.material.uniforms.animVisibility.value = value)
 		);
 
 		dispatch('modelLoaded');
@@ -233,7 +246,8 @@ void main() {
 	}
 
 	onDestroy(() => {
-		unsubscribe?.();
+		unsubscribe1?.();
+		unsubscribe2?.();
 	});
 
 	function mapRange(
