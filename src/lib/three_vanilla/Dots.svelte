@@ -7,7 +7,7 @@
 	import { spring, type Unsubscriber } from 'svelte/motion';
 	import { map } from './shader_utils/map';
 	import { quarticInOut } from './shader_utils/quartic-in-out';
-	import type { Writable } from 'svelte/store';
+	import { get, type Writable } from 'svelte/store';
 	import { colors } from '$lib/dotsEffectData';
 
 	const dispatch = createEventDispatcher();
@@ -190,11 +190,11 @@ void main() {
 				time: { value: timeSinceStart + timeStartRandAdd },
 				animRadius: { value: animRadius },
 				animVisibility: { value: animVisibility },
-				baseColor: { value: $colors.base },
-				accentColor1: { value: $colors.accent1 },
-				accentColor2: { value: $colors.accent2 },
-				accentColor3: { value: $colors.accent3 },
-				accentColor4: { value: $colors.accent4 }
+				baseColor: { value: get(colors).base },
+				accentColor1: { value: get(colors).accent1 },
+				accentColor2: { value: get(colors).accent2 },
+				accentColor3: { value: get(colors).accent3 },
+				accentColor4: { value: get(colors).accent4 }
 			},
 			vertexShader,
 			fragmentShader,
