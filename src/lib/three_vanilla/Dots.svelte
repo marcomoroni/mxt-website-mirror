@@ -27,8 +27,6 @@ attribute vec2 dotIndex;
 attribute float distanceFromCenter;
 out float vAnim;
 out vec2 vDotIndex;
-out float vAccentColor1Noise;
-out float vAccentColor2Noise;
 
 const float rippleAnim1Fade = 2800.0;
 const float rippleAnim2DistFromAnim1 = 600.0;
@@ -74,8 +72,6 @@ void main() {
 
 	vAnim = rippleAnim1;
 	vDotIndex = dotIndex;
-	vAccentColor1Noise = posXNoise;
-	vAccentColor2Noise = posYNoise;
 }
 	`;
 
@@ -85,30 +81,36 @@ uniform float animRadius;
 uniform vec3 baseColor;
 uniform vec3 accentColor1;
 uniform vec3 accentColor2;
+uniform vec3 accentColor3;
+uniform vec3 accentColor4;
 in vec2 vDotIndex;
 in float vAnim;
-in float vAccentColor1Noise;
-in float vAccentColor2Noise;
 
+const float colorNoiseScale = 0.03;
 // Before .r use the first colour, between .r and .g fade, and after .g use second colour.
-const vec2 colorGradientRange = vec2(0.6, 0.7);
+const vec2 colorGradientRange = vec2(0.65, 0.75);
 
 ${noise3D}
 
 ${map}
+
+vec3 addColor(vec3 initialColor, vec3 otherColor, vec2 noiseStartPos, float noiseScale, float noiseTimeMult, vec2 dotIndex, vec2 colorGradientRange, float apply) {
+	float noise = cnoise(vec3(dotIndex.r * noiseScale + noiseStartPos.r, dotIndex.g * noiseScale + noiseStartPos.g, time * noiseTimeMult));
+	noise = map(noise, -1.0, 1.0, 0.0, 1.0);
+	noise = map(noise, colorGradientRange.r, colorGradientRange.g, 0.0, 1.0);
+	noise = clamp(noise, 0.0, 1.0);
+	vec3 color = mix( initialColor.rgb, otherColor.rgb, noise * apply );
+	return color;
+}
 	
 void main() {
 	
 	if ( length( gl_PointCoord - vec2( 0.5, 0.5 ) ) > 0.475 ) discard;
 
-	float color1Noise = map(vAccentColor1Noise, -1.0, 1.0, 0.0, 1.0);
-	float color2Noise = map(vAccentColor2Noise, -1.0, 1.0, 0.0, 1.0);
-	color1Noise = map(color1Noise, colorGradientRange.r, colorGradientRange.g, 0.0, 1.0);
-	color2Noise = map(color2Noise, colorGradientRange.r, colorGradientRange.g, 0.0, 1.0);
-	color1Noise = clamp(color1Noise, 0.0, 1.0);
-	color2Noise = clamp(color2Noise, 0.0, 1.0);
-	vec3 color = mix( baseColor.rgb, accentColor1.rgb, color1Noise * vAnim );
-	color = mix( color.rgb, accentColor2.rgb, color2Noise * vAnim );
+	vec3 color = addColor( baseColor, accentColor1, vec2(10.0, 60.0), colorNoiseScale, 0.00003, vDotIndex, colorGradientRange, vAnim );
+	color = addColor( color, accentColor2, vec2(8.0, 30.0), colorNoiseScale, 0.000035, vDotIndex, colorGradientRange, vAnim );
+	color = addColor( color, accentColor3, vec2(14.0, 2.0), colorNoiseScale, 0.00004, vDotIndex, colorGradientRange, vAnim );
+	color = addColor( color, accentColor4, vec2(-5.0, -10.0), colorNoiseScale, 0.000045, vDotIndex, colorGradientRange, vAnim );
 	
 	gl_FragColor = vec4( color.rgb, 1.0 );
 
@@ -135,6 +137,8 @@ void main() {
 		const baseColor = new THREE.Color('#E5DEDA');
 		const accentColor1 = new THREE.Color('#DEBA76');
 		const accentColor2 = new THREE.Color('#ECE293');
+		const accentColor3 = new THREE.Color('#e6d5ba');
+		const accentColor4 = new THREE.Color('#d7c9be');
 
 		// Init
 
@@ -194,7 +198,9 @@ void main() {
 				animVisibility: { value: animVisibility },
 				baseColor: { value: baseColor },
 				accentColor1: { value: accentColor1 },
-				accentColor2: { value: accentColor2 }
+				accentColor2: { value: accentColor2 },
+				accentColor3: { value: accentColor3 },
+				accentColor4: { value: accentColor4 }
 			},
 			vertexShader,
 			fragmentShader,
