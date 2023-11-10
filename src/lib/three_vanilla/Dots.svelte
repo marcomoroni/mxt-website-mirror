@@ -8,6 +8,7 @@
 	import { map } from './shader_utils/map';
 	import { quarticInOut } from './shader_utils/quartic-in-out';
 	import type { Writable } from 'svelte/store';
+	import { colors } from '$lib/dotsEffectData';
 
 	const dispatch = createEventDispatcher();
 
@@ -119,8 +120,7 @@ void main() {
 }
 `;
 
-	let unsubscribe1: Unsubscriber | undefined = undefined;
-	let unsubscribe2: Unsubscriber | undefined = undefined;
+	let unsubscribe: Array<Unsubscriber> = [];
 
 	function initScene(el: HTMLElement) {
 		const SEPARATION = 50,
@@ -133,12 +133,6 @@ void main() {
 		const startTime = new Date().getTime();
 		const timeStartRandAdd = Math.random() * 100000;
 		let timeSinceStart = 0;
-
-		const baseColor = new THREE.Color('#E5DEDA');
-		const accentColor1 = new THREE.Color('#DEBA76');
-		const accentColor2 = new THREE.Color('#ECE293');
-		const accentColor3 = new THREE.Color('#e6d5ba');
-		const accentColor4 = new THREE.Color('#d7c9be');
 
 		// Init
 
@@ -196,11 +190,11 @@ void main() {
 				time: { value: timeSinceStart + timeStartRandAdd },
 				animRadius: { value: animRadius },
 				animVisibility: { value: animVisibility },
-				baseColor: { value: baseColor },
-				accentColor1: { value: accentColor1 },
-				accentColor2: { value: accentColor2 },
-				accentColor3: { value: accentColor3 },
-				accentColor4: { value: accentColor4 }
+				baseColor: { value: $colors.base },
+				accentColor1: { value: $colors.accent1 },
+				accentColor2: { value: $colors.accent2 },
+				accentColor3: { value: $colors.accent3 },
+				accentColor4: { value: $colors.accent4 }
 			},
 			vertexShader,
 			fragmentShader,
@@ -249,11 +243,22 @@ void main() {
 			renderer.render(scene, camera);
 		}
 
-		unsubscribe1 = animRadius.subscribe(
-			(value) => (particles.material.uniforms.animRadius.value = value)
+		unsubscribe.push(
+			animRadius.subscribe((value) => (particles.material.uniforms.animRadius.value = value))
 		);
-		unsubscribe2 = animVisibility.subscribe(
-			(value) => (particles.material.uniforms.animVisibility.value = value)
+		unsubscribe.push(
+			animVisibility.subscribe(
+				(value) => (particles.material.uniforms.animVisibility.value = value)
+			)
+		);
+		unsubscribe.push(
+			colors.subscribe((value) => {
+				particles.material.uniforms.baseColor.value = value.base;
+				particles.material.uniforms.accentColor1.value = value.accent1;
+				particles.material.uniforms.accentColor2.value = value.accent2;
+				particles.material.uniforms.accentColor3.value = value.accent3;
+				particles.material.uniforms.accentColor4.value = value.accent4;
+			})
 		);
 
 		dispatch('modelLoaded');
@@ -264,8 +269,7 @@ void main() {
 	}
 
 	onDestroy(() => {
-		unsubscribe1?.();
-		unsubscribe2?.();
+		unsubscribe.forEach((u) => u());
 	});
 </script>
 
