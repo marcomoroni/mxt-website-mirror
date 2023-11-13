@@ -1,4 +1,5 @@
 <script lang="ts">
+	import DevControls from '$lib/DevControls.svelte';
 	import TopBar from '$lib/TopBar.svelte';
 	import Dots from '$lib/three_vanilla/Dots.svelte';
 	import { navBarData } from '$lib/topBarData';
@@ -47,6 +48,8 @@
 <TopBar {absolutePos} {background} {foregroundColours} {showLogo} {highlight} />
 
 <slot />
+
+<DevControls />
 
 <style>
 	.three-container {
