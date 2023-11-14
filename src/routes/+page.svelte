@@ -35,8 +35,8 @@
 			<MxtLogoNoPadding />
 		</div>
 		<p class="text">
-			MXT are an immersive experience design and technology specialists, creating extended reality
-			environments for public sector and infrastructure partners.
+			MXT are an immersive technology company providing learning, research and visualisation
+			services to transport and infrastructure partners.
 		</p>
 	</WidthContainer>
 </div>
