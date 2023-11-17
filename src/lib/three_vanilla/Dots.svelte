@@ -87,9 +87,9 @@ uniform vec3 accentColor4;
 in vec2 vDotIndex;
 in float vAnim;
 
-const float colorNoiseScale = 0.03;
+const float colorNoiseScale = 0.04;
 // Before .r use the first colour, between .r and .g fade, and after .g use second colour.
-const vec2 colorGradientRange = vec2(0.65, 0.75);
+const vec2 colorGradientRange = vec2(0.4, 0.6);
 
 ${noise3D}
 
@@ -110,8 +110,8 @@ void main() {
 
 	vec3 color = addColor( baseColor, accentColor1, vec2(10.0, 60.0), colorNoiseScale, 0.00003, vDotIndex, colorGradientRange, vAnim );
 	color = addColor( color, accentColor2, vec2(8.0, 30.0), colorNoiseScale, 0.000035, vDotIndex, colorGradientRange, vAnim );
-	color = addColor( color, accentColor3, vec2(14.0, 2.0), colorNoiseScale, 0.00004, vDotIndex, colorGradientRange, vAnim );
-	color = addColor( color, accentColor4, vec2(-5.0, -10.0), colorNoiseScale, 0.000045, vDotIndex, colorGradientRange, vAnim );
+	// color = addColor( color, accentColor3, vec2(14.0, 2.0), colorNoiseScale, 0.00004, vDotIndex, colorGradientRange, vAnim );
+	// color = addColor( color, accentColor4, vec2(-5.0, -10.0), colorNoiseScale, 0.000045, vDotIndex, colorGradientRange, vAnim );
 	
 	gl_FragColor = vec4( color.rgb, 1.0 );
 
@@ -192,9 +192,9 @@ void main() {
 				animVisibility: { value: animVisibility },
 				baseColor: { value: get(colors).base },
 				accentColor1: { value: get(colors).accent1 },
-				accentColor2: { value: get(colors).accent2 },
-				accentColor3: { value: get(colors).accent3 },
-				accentColor4: { value: get(colors).accent4 }
+				accentColor2: { value: get(colors).accent2 }
+				// accentColor3: { value: get(colors).accent3 },
+				// accentColor4: { value: get(colors).accent4 }
 			},
 			vertexShader,
 			fragmentShader,
@@ -256,8 +256,8 @@ void main() {
 				particles.material.uniforms.baseColor.value = value.base;
 				particles.material.uniforms.accentColor1.value = value.accent1;
 				particles.material.uniforms.accentColor2.value = value.accent2;
-				particles.material.uniforms.accentColor3.value = value.accent3;
-				particles.material.uniforms.accentColor4.value = value.accent4;
+				// particles.material.uniforms.accentColor3.value = value.accent3;
+				// particles.material.uniforms.accentColor4.value = value.accent4;
 			})
 		);
 

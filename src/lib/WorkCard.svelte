@@ -36,7 +36,7 @@
 	}
 
 	.leading-paragraph {
-		color: #a49f9b;
+		color: #9ba1a4;
 		text-wrap: balance;
 	}
 
