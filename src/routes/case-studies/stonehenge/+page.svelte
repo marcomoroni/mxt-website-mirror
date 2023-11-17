@@ -391,7 +391,7 @@
 
 	.title-context {
 		font-size: 25px;
-		color: #b6a79b;
+		color: #a1aeb1;
 		margin-bottom: 27px;
 	}
 

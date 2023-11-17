@@ -47,7 +47,7 @@
 	.gallery :global(.item figcaption) {
 		margin-top: 10px;
 		font-size: 15px;
-		color: #b3aaa6;
+		color: #a6afb3;
 	}
 
 	@media (max-width: 660px) {
