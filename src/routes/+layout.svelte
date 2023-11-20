@@ -3,7 +3,7 @@
 	import TopBar from '$lib/TopBar.svelte';
 	import Dots from '$lib/three_vanilla/Dots.svelte';
 	import { navBarData } from '$lib/topBarData';
-	import { writable } from 'svelte/store';
+	import { writable, type Writable } from 'svelte/store';
 	import { P, match } from 'ts-pattern';
 
 	$: isCaseStudy = match($navBarData)
@@ -12,15 +12,16 @@
 	$: absolutePos = $navBarData === 'home' || isCaseStudy;
 	// $: background = $navBarData !== 'home' && !isCaseStudy;
 	$: background = false;
-	$: foregroundColours = match($navBarData)
-		.returnType<'default' | 'monochromeLight' | 'monochromeDark'>()
-		.with({ caseStudies: P.select() }, (caseStudy) =>
-			match(caseStudy)
-				.returnType<'default' | 'monochromeLight' | 'monochromeDark'>()
-				.with('stonehenge', () => 'monochromeDark')
-				.otherwise(() => 'default')
-		)
-		.otherwise(() => 'default');
+	// $: foregroundColours = match($navBarData)
+	// 	.returnType<'default' | 'monochromeLight' | 'monochromeDark'>()
+	// 	.with({ caseStudies: P.select() }, (caseStudy) =>
+	// 		match(caseStudy)
+	// 			.returnType<'default' | 'monochromeLight' | 'monochromeDark'>()
+	// 			.with('stonehenge', () => 'monochromeDark')
+	// 			.otherwise(() => 'default')
+	// 	)
+	// 	.otherwise(() => 'default');
+	$: foregroundColours = 'default';
 	$: showLogo = $navBarData !== 'home';
 	$: highlight = match($navBarData)
 		.returnType<undefined | 'caseStudies' | 'studio' | 'contacts'>()
@@ -32,13 +33,27 @@
 		.exhaustive();
 
 	let modelLoaded = false;
-	const dotsActive = writable(false);
-	$: dotsActive.set($navBarData === 'home');
+	// const dotsActive = writable(false);
+	// $: dotsActive.set($navBarData === 'home');
+	const dotsActive = writable(true);
+	const accentColors = writable(true);
+	$: accentColors.set($navBarData === 'home');
+	const fitModel: Writable<'No' | { modelUrl: string }> = writable('No');
+	$: fitModel.set(
+		match($navBarData)
+			.returnType<'No' | { modelUrl: string }>()
+			.with({ caseStudies: 'stonehenge' }, () => ({
+				modelUrl: '/models/StonehengePoints.gltf'
+			}))
+			.otherwise(() => 'No')
+	);
 </script>
 
 <div class="three-container" class:loading={!modelLoaded}>
 	<Dots
 		{dotsActive}
+		{fitModel}
+		accentColorsActive={accentColors}
 		on:modelLoaded={() => {
 			modelLoaded = true;
 		}}
@@ -49,7 +64,7 @@
 
 <slot />
 
-<DevControls />
+<!-- <DevControls /> -->
 
 <style>
 	.three-container {

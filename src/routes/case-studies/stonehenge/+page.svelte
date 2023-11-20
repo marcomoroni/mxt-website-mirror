@@ -28,7 +28,7 @@
 </svelte:head>
 
 <div class="title-box-stack">
-	<div class="title-image" style:background-image={'url(/images/stonehenge.jpg)'} />
+	<!-- <div class="title-image" style:background-image={'url(/images/stonehenge.jpg)'} /> -->
 	<div class="title-image-overlay" class:when-video-is-visible={videoIsVisible} />
 	{#if videoIsVisible}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -48,7 +48,7 @@
 	{:else}
 		<div class="title-box-container">
 			<div class="play-video-button-container">
-				<PlayVideoButton on:click={showVideo} />
+				<!-- <PlayVideoButton on:click={showVideo} /> -->
 			</div>
 			<div class="flex-expand">
 				<WidthContainer>
