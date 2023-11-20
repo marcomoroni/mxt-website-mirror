@@ -120,8 +120,6 @@ void main() {
 }
 `;
 
-	let unsubscribe: Array<Unsubscriber> = [];
-
 	function initScene(el: HTMLElement) {
 		const SEPARATION = 50,
 			AMOUNTX = 200,
@@ -243,34 +241,37 @@ void main() {
 			renderer.render(scene, camera);
 		}
 
-		unsubscribe.push(
-			animRadius.subscribe((value) => (particles.material.uniforms.animRadius.value = value))
+		const unsubscribeAnimRadius = animRadius.subscribe(
+			(value) => (particles.material.uniforms.animRadius.value = value)
 		);
-		unsubscribe.push(
-			animVisibility.subscribe(
-				(value) => (particles.material.uniforms.animVisibility.value = value)
-			)
+		const unsubscribeAnimVisibility = animVisibility.subscribe(
+			(value) => (particles.material.uniforms.animVisibility.value = value)
 		);
-		unsubscribe.push(
-			colors.subscribe((value) => {
-				particles.material.uniforms.baseColor.value = value.base;
-				particles.material.uniforms.accentColor1.value = value.accent1;
-				particles.material.uniforms.accentColor2.value = value.accent2;
-				// particles.material.uniforms.accentColor3.value = value.accent3;
-				// particles.material.uniforms.accentColor4.value = value.accent4;
-			})
-		);
-
+		const unsubscribeColors = colors.subscribe((value) => {
+			particles.material.uniforms.baseColor.value = value.base;
+			particles.material.uniforms.accentColor1.value = value.accent1;
+			particles.material.uniforms.accentColor2.value = value.accent2;
+			// particles.material.uniforms.accentColor3.value = value.accent3;
+			// particles.material.uniforms.accentColor4.value = value.accent4;
+		});
 		dispatch('modelLoaded');
 
 		setTimeout(() => {
 			animRadius.set(maxDistanceFromCenter);
 		}, 500);
-	}
 
-	onDestroy(() => {
-		unsubscribe.forEach((u) => u());
-	});
+		return {
+			destroy() {
+				unsubscribeAnimRadius();
+				unsubscribeAnimVisibility();
+				unsubscribeColors();
+				geometry.dispose();
+				material.dispose();
+				renderer.dispose();
+				window.removeEventListener('resize', onWindowResize);
+			}
+		};
+	}
 </script>
 
 <div use:initScene />
