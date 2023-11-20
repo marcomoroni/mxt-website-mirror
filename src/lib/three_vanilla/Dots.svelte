@@ -69,7 +69,7 @@ const float posNoiseMult = 900.0;
 const vec2 scaleNoiseStartPos = vec2(0.0, 0.0);
 const float scaleNoiseScale = 0.03;
 const float scaleNoiseTimeMult = 0.0003;
-const float scaleNoiseMult = 20.0;
+const float scaleNoiseMult = 18.0;
 
 const float scaleWhenFitModel = 8.0;
 
@@ -174,13 +174,13 @@ void main() {
 
 		const calculateCameraPosition = (animFitModelCamera: number) => {
 			return {
-				pos: new THREE.Vector3(0, 1100 * animFitModelCamera, lerp(1500, 2700, animFitModelCamera)),
-				lookAt: new THREE.Vector3(0, lerp(0, -200, animFitModelCamera), 0)
+				pos: new THREE.Vector3(0, 2100 * animFitModelCamera, lerp(3700, 4900, animFitModelCamera)),
+				lookAt: new THREE.Vector3(0, lerp(0, -100, animFitModelCamera), 0)
 			};
 		};
 
 		const camera = new THREE.PerspectiveCamera(
-			75,
+			40,
 			window.innerWidth / window.innerHeight,
 			1,
 			10000
