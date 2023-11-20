@@ -21,7 +21,9 @@
 	// 			.otherwise(() => 'default')
 	// 	)
 	// 	.otherwise(() => 'default');
-	$: foregroundColours = 'default';
+	$: foregroundColours = (() => {
+		return 'default' as 'default' | 'monochromeLight' | 'monochromeDark';
+	})();
 	$: showLogo = $navBarData !== 'home';
 	$: highlight = match($navBarData)
 		.returnType<undefined | 'caseStudies' | 'studio' | 'contacts'>()
