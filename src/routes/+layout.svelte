@@ -66,7 +66,7 @@
 
 <slot />
 
-<!-- <DevControls /> -->
+<DevControls />
 
 <style>
 	.three-container {
