@@ -51,10 +51,6 @@ export function dotsAnimationController(
 	const dotsAccentColoursAnim = spring(get(animationValuesStores.dotsAccentColours), {
 		stiffness: 0.02
 	});
-	// const dotsGridToModelAnimAnim = spring(get(animationValuesStores.dotGridToModelPos), {
-	// 	stiffness: 0.01,
-	// 	precision: 0.0001
-	// });
 	const dotsGridToModelAnimAnim = tweened(get(animationValuesStores.dotGridToModelPos), {
 		duration: 6000,
 		easing: linear
@@ -64,9 +60,6 @@ export function dotsAnimationController(
 		[...animationValuesStores.modelsOpacity.entries()].map(([name_, store]) => [
 			name_,
 			tweened(get(store), { duration: 3000, easing: linear })
-			// spring(get(store), {
-			// 	stiffness: 0.005
-			// })
 		])
 	);
 	const cameraGridToModelAnim = spring(get(animationValuesStores.cameraGridToModel), {
@@ -89,8 +82,6 @@ export function dotsAnimationController(
 		value = quarticInOut(value);
 		value = map(value, 0, 1, 0, 2.1);
 		value = saturate(value);
-		// --- you'll also likely to make the animation a liear tween
-		// ...
 
 		animationValuesStores.dotGridToModelPos.set(value);
 	});
@@ -129,12 +120,11 @@ export function dotsAnimationController(
 					});
 					match(scenarioTransitioningTo.fitModel)
 						.with({ Yes: { name: P.select() } }, (modelName) => {
-							dotsGridToModelAnimAnim.set(1, { hard: 1 });
+							dotsGridToModelAnimAnim.update(() => 1);
 							animationValuesStores.dotsModelPositions.set(models.get(modelName)!.vertices());
 							modelOpacityAnims.get(modelName)!.set(1);
 							cameraGridToModelAnim.set(1, { hard: true });
 							homePageRippleAnim.set(1, { hard: true });
-							// ...
 						})
 						.with('No', () => {
 							dotsVisibilityAnim.set(1);
