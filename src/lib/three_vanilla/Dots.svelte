@@ -51,6 +51,8 @@ uniform float time;
 uniform float animRadius;
 uniform float animVisibility;
 uniform float animFitModel;
+uniform float animFixedScale;
+uniform float animVisibilityWhenFitModel;
 attribute vec2 dotIndex;
 attribute float distanceFromCenter;
 attribute vec3 modelPosition;
@@ -101,8 +103,9 @@ void main() {
 	float scaleNoise = cnoise(vec3(dotIndex.r * scaleNoiseScale + scaleNoiseStartPos.r, dotIndex.g * scaleNoiseScale + scaleNoiseStartPos.g, time * scaleNoiseTimeMult));
 	scaleNoise = map(scaleNoise, -1.0, 1.0, -0.4, 1.0);
 	float scale = mix(150.0, scaleNoise * scaleNoiseMult, rippleAnim1);
-	scale = mix(scale, scaleWhenFitModel, animFitModel); // --- this needs to be a new value, not bound to animFitModel
-	scale = scale * animVisibility;
+	scale = mix(scale, scaleWhenFitModel, animFixedScale);
+	scale = scale * animVisibility * animVisibilityWhenFitModel;
+	// scale = scale * animVisibility; // --- temp
 
 	gl_PointSize = scale;
 
@@ -286,6 +289,10 @@ void main() {
 				animVisibility: { value: animationController.values.dotsVisibility.get() },
 				animFitModel: { value: animationController.values.dotsGridToModel.get() },
 				animAccentColors: { value: animationController.values.dotsAccentColours.get() },
+				animFixedScale: { value: animationController.values.dotFixedScale.get() },
+				animVisibilityWhenFitModel: {
+					value: animationController.values.dotsVisibilityWhenInModel.get()
+				},
 				baseColor: { value: get(colors).base },
 				accentColor1: { value: get(colors).accent1 },
 				accentColor2: { value: get(colors).accent2 }
@@ -352,8 +359,16 @@ void main() {
 			}
 		);
 		const unsubscribeFitModel = animationController.values.dotsGridToModel.subscribe((value) => {
+			console.log(value);
 			particles.material.uniforms.animFitModel.value = value;
 		});
+		const unsubscribeFixedScale = animationController.values.dotFixedScale.subscribe((value) => {
+			particles.material.uniforms.animFixedScale.value = value;
+		});
+		const unsubscribeAnimVisibilityWhenFitModel =
+			animationController.values.dotsVisibilityWhenInModel.subscribe((value) => {
+				particles.material.uniforms.animVisibilityWhenFitModel.value = value;
+			});
 		const unsubscribeModelDotVertices = animationController.values.dotsModelPositions.subscribe(
 			(value) => {
 				const modelPositions = particles.geometry.attributes.modelPosition.array;
@@ -400,6 +415,8 @@ void main() {
 				unsubscribeAnimAccentColors();
 				unsubscribeFitModel();
 				unsubscribeModelDotVertices();
+				unsubscribeFixedScale();
+				unsubscribeAnimVisibilityWhenFitModel();
 				unusbscribersShadedModlesOpacities.forEach((unsubscribe) => {
 					unsubscribe();
 				});

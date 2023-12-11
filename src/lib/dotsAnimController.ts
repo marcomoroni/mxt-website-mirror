@@ -1,4 +1,4 @@
-import { linear } from 'svelte/easing';
+import { linear, quartInOut } from 'svelte/easing';
 import { spring, tweened, type Unsubscriber } from 'svelte/motion';
 import { get, writable } from 'svelte/store';
 import { P, match } from 'ts-pattern';
@@ -33,6 +33,10 @@ export function dotsAnimationController(
 	let currentScenario: 'None' | { Scenario: Scenario } = 'None';
 	let nextScenario: 'None' | { Scenario: Scenario } = 'None';
 
+	const dotsGridToModelAnimAnimDuration = 4000;
+	const dotFixedScaleAnimDuration = 4000;
+	const dotsVisibilityWhenInModelAnimDuration = 2000;
+
 	// These are the values that are exposed to the outside.
 	const animationValuesStores = {
 		dotsVisibility: writable(0),
@@ -41,7 +45,10 @@ export function dotsAnimationController(
 		dotsModelPositions: writable(new Float32Array(particlesCountTot * 3)),
 		modelsOpacity: new Map([...models.keys()].map((key) => [key, writable(0)])),
 		cameraGridToModel: writable(0),
-		homePageRipple: writable(0)
+		homePageRipple: writable(0),
+		// When morphin into a model, the size of the dots becomes the same across all the dots.
+		dotFixedScale: writable(0),
+		dotsVisibilityWhenInModel: writable(0)
 	};
 
 	// Animations.
@@ -52,14 +59,13 @@ export function dotsAnimationController(
 		stiffness: 0.02
 	});
 	const dotsGridToModelAnimAnim = tweened(get(animationValuesStores.dotGridToModelPos), {
-		duration: 6000,
-		easing: linear
+		duration: dotsGridToModelAnimAnimDuration,
+		easing: quartInOut
 	});
-	// ---- this should be passed through a curve, so it stays at 0 for longer
 	const modelOpacityAnims = new Map(
 		[...animationValuesStores.modelsOpacity.entries()].map(([name_, store]) => [
 			name_,
-			tweened(get(store), { duration: 3000, easing: linear })
+			tweened(get(store), { duration: 4000, easing: linear })
 		])
 	);
 	const cameraGridToModelAnim = spring(get(animationValuesStores.cameraGridToModel), {
@@ -69,6 +75,17 @@ export function dotsAnimationController(
 		stiffness: 0.0021,
 		damping: 0.75
 	});
+	const dotFixedScaleAnim = tweened(get(animationValuesStores.dotFixedScale), {
+		duration: dotFixedScaleAnimDuration,
+		easing: quartInOut
+	});
+	const dotsVisibilityWhenInModelAnim = tweened(
+		get(animationValuesStores.dotsVisibilityWhenInModel),
+		{
+			duration: dotsVisibilityWhenInModelAnimDuration,
+			easing: quartInOut
+		}
+	);
 
 	// Bind animations to the values that are exposed to the user.
 	const dotsVisibilityAnimUnsubscriber = dotsVisibilityAnim.subscribe((value) =>
@@ -78,21 +95,11 @@ export function dotsAnimationController(
 		animationValuesStores.dotsAccentColours.set(value)
 	);
 	const dotsGridToModelAnimAnimUnsubscriber = dotsGridToModelAnimAnim.subscribe((value) => {
-		// Map to a curve that make the 1 last longer.
-		value = quarticInOut(value);
-		value = map(value, 0, 1, 0, 2.1);
-		value = saturate(value);
-
 		animationValuesStores.dotGridToModelPos.set(value);
 	});
 	const modelOpacityAnimsUnsubscribers = [...modelOpacityAnims.entries()].reduce(
 		(unsubscribers, [name, anim]) => {
 			const unsubscriber = anim.subscribe((value) => {
-				// Map to a curve that make the 0 last longer.
-				value = quarticInOut(value);
-				value = map(value, 0, 1, -1.1, 1);
-				value = saturate(value);
-
 				animationValuesStores.modelsOpacity.get(name)?.set(value);
 			});
 			return [unsubscriber, ...unsubscribers];
@@ -105,6 +112,14 @@ export function dotsAnimationController(
 	const homePageRippleAnimUnsubscriber = homePageRippleAnim.subscribe((value) => {
 		animationValuesStores.homePageRipple.set(value);
 	});
+	const dotFixedScaleAnimUnsibscriber = dotFixedScaleAnim.subscribe((value) => {
+		animationValuesStores.dotFixedScale.set(value);
+	});
+	const dotsVisibilityWhenInModelAnimUnsibscriber = dotsVisibilityWhenInModelAnim.subscribe(
+		(value) => {
+			animationValuesStores.dotsVisibilityWhenInModel.set(value);
+		}
+	);
 
 	const tryTransitionToNextScenario = () => {
 		// If can start transition to next scenario.
@@ -118,17 +133,20 @@ export function dotsAnimationController(
 					dotsAccentColoursAnim.set(scenarioTransitioningTo.accentColorsActive ? 1 : 0, {
 						hard: true
 					});
+					dotsVisibilityAnim.set(1);
 					match(scenarioTransitioningTo.fitModel)
 						.with({ Yes: { name: P.select() } }, (modelName) => {
-							dotsGridToModelAnimAnim.update(() => 1);
+							dotsGridToModelAnimAnim.set(1, { duration: 0 }); // this does not override it?
 							animationValuesStores.dotsModelPositions.set(models.get(modelName)!.vertices());
 							modelOpacityAnims.get(modelName)!.set(1);
 							cameraGridToModelAnim.set(1, { hard: true });
 							homePageRippleAnim.set(1, { hard: true });
+							dotFixedScaleAnim.set(1, { duration: 0 });
+							dotsVisibilityWhenInModelAnim.set(0, { duration: 0 });
 						})
 						.with('No', () => {
-							dotsVisibilityAnim.set(1);
 							cameraGridToModelAnim.set(0, { hard: true });
+							dotsVisibilityWhenInModelAnim.update(() => 1);
 							setTimeout(() => {
 								homePageRippleAnim.set(1);
 							}, 500);
@@ -138,7 +156,7 @@ export function dotsAnimationController(
 					dotsAccentColoursAnim.set(scenarioTransitioningTo.accentColorsActive ? 1 : 0);
 
 					match(from.fitModel).with({ Yes: { name: P.select() } }, (modelName) => {
-						modelOpacityAnims.get(modelName)!.set(0);
+						modelOpacityAnims.get(modelName)!.set(0, { delay: 0 });
 					});
 
 					// If from model to no model.
@@ -152,15 +170,29 @@ export function dotsAnimationController(
 
 					match(scenarioTransitioningTo.fitModel)
 						.with({ Yes: { name: P.select() } }, (modelName) => {
-							dotsVisibilityAnim.set(0);
-							dotsGridToModelAnimAnim.set(1);
-							modelOpacityAnims.get(modelName)!.set(1);
+							dotsGridToModelAnimAnim.set(1, {
+								duration: dotsGridToModelAnimAnimDuration,
+								delay: 0
+							});
+							modelOpacityAnims.get(modelName)!.set(1, { delay: 3000 });
 							cameraGridToModelAnim.set(1);
+							dotFixedScaleAnim.set(1, { duration: dotFixedScaleAnimDuration, delay: 0 });
+							dotsVisibilityWhenInModelAnim.set(0, {
+								duration: dotsVisibilityWhenInModelAnimDuration,
+								delay: 4000
+							});
 						})
 						.with('No', () => {
-							dotsVisibilityAnim.set(1);
-							dotsGridToModelAnimAnim.set(0);
+							dotsGridToModelAnimAnim.set(0, {
+								duration: dotsGridToModelAnimAnimDuration,
+								delay: 2000
+							});
 							cameraGridToModelAnim.set(0);
+							dotFixedScaleAnim.set(0, { duration: dotFixedScaleAnimDuration, delay: 2000 });
+							dotsVisibilityWhenInModelAnim.set(1, {
+								duration: dotsVisibilityWhenInModelAnimDuration,
+								delay: 1000
+							});
 						});
 				})
 				.exhaustive();
@@ -204,6 +236,14 @@ export function dotsAnimationController(
 			homePageRipple: {
 				subscribe: animationValuesStores.homePageRipple.subscribe,
 				get: () => get(animationValuesStores.homePageRipple)
+			},
+			dotFixedScale: {
+				subscribe: animationValuesStores.dotFixedScale.subscribe,
+				get: () => get(animationValuesStores.dotFixedScale)
+			},
+			dotsVisibilityWhenInModel: {
+				subscribe: animationValuesStores.dotsVisibilityWhenInModel.subscribe,
+				get: () => get(animationValuesStores.dotsVisibilityWhenInModel)
 			}
 		},
 		update: (scenario: Scenario) => {
@@ -223,18 +263,8 @@ export function dotsAnimationController(
 			});
 			cameraGridToModelAnimUnsubscriber();
 			homePageRippleAnimUnsubscriber();
+			dotFixedScaleAnimUnsibscriber();
+			dotsVisibilityWhenInModelAnimUnsibscriber();
 		}
 	};
-}
-
-function quarticInOut(t: number): number {
-	return t < 0.5 ? +8.0 * Math.pow(t, 4.0) : -8.0 * Math.pow(t - 1.0, 4.0) + 1.0;
-}
-
-function map(value: number, min1: number, max1: number, min2: number, max2: number): number {
-	return min2 + ((value - min1) * (max2 - min2)) / (max1 - min1);
-}
-
-function saturate(value: number): number {
-	return Math.min(1, Math.max(0, value));
 }
