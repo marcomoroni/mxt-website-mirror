@@ -4,45 +4,46 @@
 	import { createEventDispatcher } from 'svelte';
 	import * as THREE from 'three';
 	import { noise3D } from './shader_utils/noise-3d';
-	import { spring } from 'svelte/motion';
 	import { map } from './shader_utils/map';
 	import { quarticInOut } from './shader_utils/quartic-in-out';
-	import { get, writable, type Writable } from 'svelte/store';
+	import { get } from 'svelte/store';
 	import { colors } from '$lib/dotsEffectData';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 	import { lerp } from '$lib/utils/lerp';
-	import { match, P } from 'ts-pattern';
+	import { dotsAnimationController, type Scenario } from '$lib/dotsAnimController';
+	import type { Unsubscriber } from 'svelte/motion';
 
 	const gltfScaleMult = 1000;
 
+	const AMOUNTX = 200,
+		AMOUNTY = 200;
+
 	const dispatch = createEventDispatcher();
 
-	export let dotsActive: Writable<boolean>;
-	export let accentColorsActive: Writable<boolean>;
-	export let fitModel: Writable<'No' | { modelUrl: string }>;
+	const modelVertices: Map<string, { vertices: () => Float32Array }> = new Map([
+		['stonehenge', { vertices: () => new Float32Array() }]
+	]);
 
-	const animRadius = spring(0, { stiffness: 0.0021, damping: 0.75 });
-	const animVisibility = spring($dotsActive ? 1 : 0, { stiffness: 0.02 });
-	$: {
-		animVisibility.set($dotsActive ? 1 : 0);
-	}
+	const mountedAnimationControllerHandle = Symbol();
+	const dotsReadyAnimationControllerHandle = Symbol();
+	const stonehengeDotVerticesHandle = Symbol();
+	const stonehengeShadedModelHandle = Symbol();
+	const animationController = dotsAnimationController(
+		[
+			dotsReadyAnimationControllerHandle,
+			mountedAnimationControllerHandle,
+			stonehengeDotVerticesHandle,
+			stonehengeShadedModelHandle
+		],
+		{ x: AMOUNTX, y: AMOUNTY },
+		modelVertices
+	);
 
-	const animAccentColours = spring($accentColorsActive ? 1 : 0, { stiffness: 0.02 });
+	export let scenario: undefined | Scenario;
 	$: {
-		animAccentColours.set($accentColorsActive ? 1 : 0);
-	}
-
-	let modelIsLoaded = writable(false);
-	const animFitModelDots = spring($fitModel !== 'No' && $modelIsLoaded ? 1 : 0, {
-		stiffness: 0.01,
-		precision: 0.0001
-	});
-	const animFitModelCamera = spring($fitModel !== 'No' && $modelIsLoaded ? 1 : 0, {
-		stiffness: 0.002
-	});
-	$: {
-		animFitModelDots.set($fitModel !== 'No' && $modelIsLoaded ? 1 : 0);
-		animFitModelCamera.set($fitModel !== 'No' && $modelIsLoaded ? 1 : 0);
+		if (scenario) {
+			animationController.update(scenario);
+		}
 	}
 
 	const vertexShader = `
@@ -100,9 +101,8 @@ void main() {
 	float scaleNoise = cnoise(vec3(dotIndex.r * scaleNoiseScale + scaleNoiseStartPos.r, dotIndex.g * scaleNoiseScale + scaleNoiseStartPos.g, time * scaleNoiseTimeMult));
 	scaleNoise = map(scaleNoise, -1.0, 1.0, -0.4, 1.0);
 	float scale = mix(150.0, scaleNoise * scaleNoiseMult, rippleAnim1);
+	scale = mix(scale, scaleWhenFitModel, animFitModel); // --- this needs to be a new value, not bound to animFitModel
 	scale = scale * animVisibility;
-
-	scale = mix(scale, scaleWhenFitModel, animFitModel);
 
 	gl_PointSize = scale;
 
@@ -161,9 +161,7 @@ void main() {
 `;
 
 	function initScene(el: HTMLElement) {
-		const SEPARATION = 50,
-			AMOUNTX = 200,
-			AMOUNTY = 200;
+		const SEPARATION = 50;
 
 		const container = el;
 
@@ -185,16 +183,58 @@ void main() {
 			1,
 			10000
 		);
-		const camPos = calculateCameraPosition(get(animFitModelCamera));
+		const camPos = calculateCameraPosition(animationController.values.cameraGridToModel.get());
 		camera.position.set(camPos.pos.x, camPos.pos.y, camPos.pos.z);
 		camera.lookAt(camPos.lookAt);
 
 		const scene = new THREE.Scene();
 
-		const unsubscribeAnimFitModelCamera = animFitModelCamera.subscribe((value) => {
-			const camPos = calculateCameraPosition(value);
-			camera.position.set(camPos.pos.x, camPos.pos.y, camPos.pos.z);
-			camera.lookAt(camPos.lookAt);
+		const unsubscribeAnimFitModelCamera = animationController.values.cameraGridToModel.subscribe(
+			(value) => {
+				const camPos = calculateCameraPosition(value);
+				camera.position.set(camPos.pos.x, camPos.pos.y, camPos.pos.z);
+				camera.lookAt(camPos.lookAt);
+			}
+		);
+
+		const shadedModels: Map<string, THREE.MeshBasicMaterial> = new Map();
+
+		// Load all models.
+		[
+			{
+				dotsWrapModel: '/models/StonehengePoints.gltf',
+				shadedModel: '/models/StonehengePoints.gltf',
+				name: 'stonehenge'
+			}
+		].forEach(({ dotsWrapModel, shadedModel, name }) => {
+			getModelVertices(dotsWrapModel, gltfScaleMult).then((value) => {
+				modelVertices.get(name)!.vertices = () => value;
+				animationController.resolveInitialHandle(stonehengeDotVerticesHandle);
+			});
+
+			loadModel(shadedModel, gltfScaleMult).then((value) => {
+				scene.add(value);
+
+				animationController.resolveInitialHandle(stonehengeShadedModelHandle);
+
+				value.traverse((obj) => {
+					if (obj instanceof THREE.Mesh) {
+						const color = new THREE.Color('red');
+
+						// Note `toneMapped: false`: this is so the colours match the ones in the HTML.
+						obj.material = new THREE.MeshBasicMaterial({
+							color: color,
+							fog: false,
+							transparent: true,
+							toneMapped: false
+						});
+
+						obj.material.opacity = animationController.values.modelOpacities.get(name)!.get();
+
+						shadedModels.set(name, obj.material);
+					}
+				});
+			});
 		});
 
 		const numParticles = AMOUNTX * AMOUNTY;
@@ -242,10 +282,10 @@ void main() {
 		const material = new THREE.ShaderMaterial({
 			uniforms: {
 				time: { value: timeSinceStart + timeStartRandAdd },
-				animRadius: { value: animRadius },
-				animVisibility: { value: animVisibility },
-				animFitModel: { value: get(animFitModelDots) },
-				animAccentColors: { value: get(animAccentColours) },
+				animRadius: { value: animationController.values.homePageRipple.get() },
+				animVisibility: { value: animationController.values.dotsVisibility.get() },
+				animFitModel: { value: animationController.values.dotsGridToModel.get() },
+				animAccentColors: { value: animationController.values.dotsAccentColours.get() },
 				baseColor: { value: get(colors).base },
 				accentColor1: { value: get(colors).accent1 },
 				accentColor2: { value: get(colors).accent2 }
@@ -291,11 +331,13 @@ void main() {
 			renderer.render(scene, camera);
 		}
 
-		const unsubscribeAnimRadius = animRadius.subscribe(
-			(value) => (particles.material.uniforms.animRadius.value = value)
+		const unsubscribeAnimRadius = animationController.values.homePageRipple.subscribe(
+			(value) => (particles.material.uniforms.animRadius.value = value * maxDistanceFromCenter)
 		);
-		const unsubscribeAnimVisibility = animVisibility.subscribe(
-			(value) => (particles.material.uniforms.animVisibility.value = value)
+		const unsubscribeAnimVisibility = animationController.values.dotsVisibility.subscribe(
+			(value) => {
+				particles.material.uniforms.animVisibility.value = value;
+			}
 		);
 		const unsubscribeColors = colors.subscribe((value) => {
 			particles.material.uniforms.baseColor.value = value.base;
@@ -304,72 +346,106 @@ void main() {
 			// particles.material.uniforms.accentColor3.value = value.accent3;
 			// particles.material.uniforms.accentColor4.value = value.accent4;
 		});
-		const unsubscribeAnimAccentColors = animAccentColours.subscribe((value) => {
-			particles.material.uniforms.animAccentColors.value = value;
-		});
-
-		const loader = new GLTFLoader();
-		const unsubscribeLoadModel = fitModel.subscribe((value) => {
-			modelIsLoaded.set(false);
-
-			match(value).with({ modelUrl: P.select() }, (modelUrl) => {
-				loader.load(modelUrl, function (gltf) {
-					gltf.scene.scale.set(gltfScaleMult, gltfScaleMult, gltfScaleMult);
-					// scene.add(gltf.scene);
-
-					for (const child of gltf.scene.children) {
-						child.traverseVisible((child) => {
-							if (child instanceof THREE.Mesh) {
-								const vertices = child.geometry.attributes.position.array;
-
-								const modelPositions = particles.geometry.attributes.modelPosition.array;
-								let i = 0;
-								for (let ix = 0; ix < AMOUNTX; ix++) {
-									for (let iy = 0; iy < AMOUNTY; iy++) {
-										if (i < vertices.length) {
-											modelPositions[i] = vertices[i] * gltfScaleMult;
-											modelPositions[i + 1] = vertices[i + 1] * gltfScaleMult;
-											modelPositions[i + 2] = vertices[i + 2] * gltfScaleMult;
-										}
-
-										i += 3;
-									}
-								}
-								particles.geometry.attributes.modelPosition.needsUpdate = true;
-							}
-						});
-					}
-
-					modelIsLoaded.set(true);
-				});
-			});
-		});
-
-		const unsubscribeFitModel = animFitModelDots.subscribe((value) => {
+		const unsubscribeAnimAccentColors = animationController.values.dotsAccentColours.subscribe(
+			(value) => {
+				particles.material.uniforms.animAccentColors.value = value;
+			}
+		);
+		const unsubscribeFitModel = animationController.values.dotsGridToModel.subscribe((value) => {
 			particles.material.uniforms.animFitModel.value = value;
 		});
+		const unsubscribeModelDotVertices = animationController.values.dotsModelPositions.subscribe(
+			(value) => {
+				const modelPositions = particles.geometry.attributes.modelPosition.array;
+				let i = 0;
+				for (let ix = 0; ix < AMOUNTX; ix++) {
+					for (let iy = 0; iy < AMOUNTY; iy++) {
+						if (i < value.length) {
+							modelPositions[i] = value[i] * gltfScaleMult;
+							modelPositions[i + 1] = value[i + 1] * gltfScaleMult;
+							modelPositions[i + 2] = value[i + 2] * gltfScaleMult;
+						}
+
+						i += 3;
+					}
+				}
+				particles.geometry.attributes.modelPosition.needsUpdate = true;
+			}
+		);
+		const unusbscribersShadedModlesOpacities = [
+			...animationController.values.modelOpacities.entries()
+		].reduce((unsubscribers, [name, store]) => {
+			const unsubscriber = store.subscribe((value) => {
+				const mat = shadedModels.get(name);
+				if (mat) {
+					mat.opacity = value;
+				}
+			});
+			return [unsubscriber, ...unsubscribers];
+		}, [] as Array<Unsubscriber>);
+
+		animationController.resolveInitialHandle(dotsReadyAnimationControllerHandle);
 
 		dispatch('modelLoaded');
 
-		setTimeout(() => {
-			animRadius.set(maxDistanceFromCenter);
-		}, 500);
+		animationController.resolveInitialHandle(mountedAnimationControllerHandle);
 
 		return {
 			destroy() {
+				animationController.dispose();
 				unsubscribeAnimFitModelCamera();
 				unsubscribeAnimRadius();
 				unsubscribeAnimVisibility();
 				unsubscribeColors();
 				unsubscribeAnimAccentColors();
 				unsubscribeFitModel();
-				unsubscribeLoadModel();
+				unsubscribeModelDotVertices();
+				unusbscribersShadedModlesOpacities.forEach((unsubscribe) => {
+					unsubscribe();
+				});
 				geometry.dispose();
 				material.dispose();
 				renderer.dispose();
+				for (const [, material] of shadedModels) {
+					material.dispose();
+				}
 				window.removeEventListener('resize', onWindowResize);
 			}
 		};
+	}
+
+	async function getModelVertices(modelUrl: string, scaleMult: number): Promise<Float32Array> {
+		return new Promise((resolve) => {
+			const loader = new GLTFLoader();
+
+			loader.load(modelUrl, function (gltf) {
+				gltf.scene.scale.set(scaleMult, scaleMult, scaleMult);
+
+				for (const child of gltf.scene.children) {
+					child.traverseVisible((child) => {
+						if (child instanceof THREE.Mesh) {
+							const vertices = child.geometry.attributes.position.array;
+							resolve(vertices);
+							return; // ?
+						}
+					});
+				}
+			});
+		});
+	}
+
+	async function loadModel(
+		modelUrl: string,
+		scaleMult: number
+	): Promise<THREE.Group<THREE.Object3DEventMap>> {
+		return new Promise((resolve) => {
+			const loader = new GLTFLoader();
+
+			loader.load(modelUrl, function (gltf) {
+				gltf.scene.scale.set(scaleMult, scaleMult, scaleMult);
+				resolve(gltf.scene);
+			});
+		});
 	}
 </script>
 

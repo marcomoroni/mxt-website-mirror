@@ -3,7 +3,7 @@
 	import TopBar from '$lib/TopBar.svelte';
 	import Dots from '$lib/three_vanilla/Dots.svelte';
 	import { navBarData } from '$lib/topBarData';
-	import { writable, type Writable } from 'svelte/store';
+	import { derived, writable, type Writable } from 'svelte/store';
 	import { P, match } from 'ts-pattern';
 
 	$: isCaseStudy = match($navBarData)
@@ -35,27 +35,27 @@
 		.exhaustive();
 
 	let modelLoaded = false;
-	// const dotsActive = writable(false);
-	// $: dotsActive.set($navBarData === 'home');
-	const dotsActive = writable(true);
-	const accentColors = writable(true);
-	$: accentColors.set($navBarData === 'home');
-	const fitModel: Writable<'No' | { modelUrl: string }> = writable('No');
-	$: fitModel.set(
-		match($navBarData)
-			.returnType<'No' | { modelUrl: string }>()
-			.with({ caseStudies: 'stonehenge' }, () => ({
-				modelUrl: '/models/StonehengePoints.gltf'
-			}))
-			.otherwise(() => 'No')
+
+	const dotsEffectScenario = derived(navBarData, ($navBarData) =>
+		$navBarData === undefined
+			? undefined
+			: {
+					accentColorsActive: $navBarData === 'home',
+					fitModel: match($navBarData)
+						.returnType<'No' | { Yes: { name: string } }>()
+						.with({ caseStudies: 'stonehenge' }, () => ({
+							Yes: {
+								name: 'stonehenge'
+							}
+						}))
+						.otherwise(() => 'No')
+			  }
 	);
 </script>
 
 <div class="three-container" class:loading={!modelLoaded}>
 	<Dots
-		{dotsActive}
-		{fitModel}
-		accentColorsActive={accentColors}
+		scenario={$dotsEffectScenario}
 		on:modelLoaded={() => {
 			modelLoaded = true;
 		}}
