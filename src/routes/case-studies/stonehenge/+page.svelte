@@ -82,6 +82,11 @@
 	</WidthContainer>
 {/if}
 
+<div class="backdrop-fade" />
+<div class="backdrop-anchor">
+	<div class="backdrop" />
+</div>
+
 <h2 class="width-container">Background</h2>
 <p class="width-container">
 	Stonehenge, one of the world's most iconic prehistoric landscapes, has been the focus of over 50
@@ -418,6 +423,30 @@
 
 	.end-of-page {
 		margin-top: var(--bottom-page-margin);
+	}
+
+	.backdrop-fade {
+		width: 100%;
+		height: 20px;
+		background: linear-gradient(
+			color-mix(in srgb, var(--color-background), transparent 100%),
+			var(--color-background)
+		);
+	}
+
+	.backdrop-anchor {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		height: 0px;
+		z-index: -1;
+	}
+
+	.backdrop {
+		background-color: var(--color-background);
+		width: 100%;
+		height: 100dvh;
+		position: absolute;
 	}
 
 	h1 {
