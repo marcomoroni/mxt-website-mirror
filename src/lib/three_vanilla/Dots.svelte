@@ -58,6 +58,7 @@ attribute float distanceFromCenter;
 attribute vec3 modelPosition;
 out float vAnim;
 out vec2 vDotIndex;
+out float vScale;
 
 const float rippleAnim1Fade = 2800.0;
 const float rippleAnim2DistFromAnim1 = 600.0;
@@ -113,6 +114,7 @@ void main() {
 
 	vAnim = rippleAnim1;
 	vDotIndex = dotIndex;
+	vScale = scale;
 }
 	`;
 
@@ -127,6 +129,7 @@ uniform vec3 accentColor3;
 uniform vec3 accentColor4;
 in vec2 vDotIndex;
 in float vAnim;
+in float vScale;
 
 const float colorNoiseScale = 0.04;
 // Before .r use the first colour, between .r and .g fade, and after .g use second colour.
@@ -146,6 +149,8 @@ vec3 addColor(vec3 initialColor, vec3 otherColor, vec2 noiseStartPos, float nois
 }
 	
 void main() {
+
+	if ( vScale <= 0.01 ) discard;
 	
 	if ( length( gl_PointCoord - vec2( 0.5, 0.5 ) ) > 0.475 ) discard;
 
