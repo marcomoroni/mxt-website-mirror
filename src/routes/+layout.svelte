@@ -3,7 +3,7 @@
 	import TopBar from '$lib/TopBar.svelte';
 	import Dots from '$lib/three_vanilla/Dots.svelte';
 	import { navBarData } from '$lib/topBarData';
-	import { writable } from 'svelte/store';
+	import { derived, writable, type Writable } from 'svelte/store';
 	import { P, match } from 'ts-pattern';
 
 	$: isCaseStudy = match($navBarData)
@@ -12,15 +12,18 @@
 	$: absolutePos = $navBarData === 'home' || isCaseStudy;
 	// $: background = $navBarData !== 'home' && !isCaseStudy;
 	$: background = false;
-	$: foregroundColours = match($navBarData)
-		.returnType<'default' | 'monochromeLight' | 'monochromeDark'>()
-		.with({ caseStudies: P.select() }, (caseStudy) =>
-			match(caseStudy)
-				.returnType<'default' | 'monochromeLight' | 'monochromeDark'>()
-				.with('stonehenge', () => 'monochromeDark')
-				.otherwise(() => 'default')
-		)
-		.otherwise(() => 'default');
+	// $: foregroundColours = match($navBarData)
+	// 	.returnType<'default' | 'monochromeLight' | 'monochromeDark'>()
+	// 	.with({ caseStudies: P.select() }, (caseStudy) =>
+	// 		match(caseStudy)
+	// 			.returnType<'default' | 'monochromeLight' | 'monochromeDark'>()
+	// 			.with('stonehenge', () => 'monochromeDark')
+	// 			.otherwise(() => 'default')
+	// 	)
+	// 	.otherwise(() => 'default');
+	$: foregroundColours = (() => {
+		return 'default' as 'default' | 'monochromeLight' | 'monochromeDark';
+	})();
 	$: showLogo = $navBarData !== 'home';
 	$: highlight = match($navBarData)
 		.returnType<undefined | 'caseStudies' | 'studio' | 'contacts'>()
@@ -32,13 +35,27 @@
 		.exhaustive();
 
 	let modelLoaded = false;
-	const dotsActive = writable(false);
-	$: dotsActive.set($navBarData === 'home');
+
+	const dotsEffectScenario = derived(navBarData, ($navBarData) =>
+		$navBarData === undefined
+			? undefined
+			: {
+					accentColorsActive: $navBarData === 'home',
+					fitModel: match($navBarData)
+						.returnType<'No' | { Yes: { name: string } }>()
+						.with({ caseStudies: 'stonehenge' }, () => ({
+							Yes: {
+								name: 'stonehenge'
+							}
+						}))
+						.otherwise(() => 'No')
+			  }
+	);
 </script>
 
 <div class="three-container" class:loading={!modelLoaded}>
 	<Dots
-		{dotsActive}
+		scenario={$dotsEffectScenario}
 		on:modelLoaded={() => {
 			modelLoaded = true;
 		}}
