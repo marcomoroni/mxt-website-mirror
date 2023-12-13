@@ -9,6 +9,7 @@
 	import GameplayFreeRoaming from '$lib/case_study_cards/GameplayFreeRoaming.svelte';
 	import GameplayGuidedTour from '$lib/case_study_cards/GameplayGuidedTour.svelte';
 	import SimulationSources from '$lib/case_study_cards/SimulationSources.svelte';
+	import StonehengeMap from '$lib/case_study_cards/StonehengeMap.svelte';
 
 	navBarData.set({ caseStudies: 'stonehenge' });
 
@@ -197,7 +198,9 @@
 	</li>
 </ul>
 
-<div class="gallery-container">
+<StonehengeMap />
+
+<!-- <div class="gallery-container">
 	<Gallery childCount={2}>
 		<GalleryItem>
 			<div slot="figure" class="img-a" />
@@ -207,7 +210,7 @@
 			<svelte:fragment slot="caption">Parts of the simulation</svelte:fragment>
 		</GalleryItem>
 	</Gallery>
-</div>
+</div> -->
 
 <h3 class="width-container">Human-centered design approach</h3>
 <ul class="width-container">

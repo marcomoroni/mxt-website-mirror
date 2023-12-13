@@ -1,4 +1,8 @@
-<div class="card">
+<script lang="ts">
+	export let border = true;
+</script>
+
+<div class="card" class:no-border={!border}>
 	<slot />
 </div>
 
@@ -13,5 +17,9 @@
 		font-weight: 600;
 		font-size: 12px;
 		letter-spacing: 0.02rem;
+	}
+
+	.card.no-border {
+		border: none;
 	}
 </style>
