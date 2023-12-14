@@ -5,6 +5,10 @@
 
 	const layers = [
 		{
+			img: '/images/A303Elevation_Alpha.png',
+			label: 'Terrain'
+		},
+		{
 			img: '/images/A303Roads.png',
 			label: 'Roads'
 		},
