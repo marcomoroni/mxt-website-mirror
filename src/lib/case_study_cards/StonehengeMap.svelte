@@ -5,29 +5,24 @@
 
 	const layers = [
 		{
-			img: 'img...',
-			label: 'Roads',
-			backgroundColor: 'tomato'
+			img: '/images/A303Roads.png',
+			label: 'Roads'
 		},
 		{
 			img: 'img...',
-			label: 'Traffic',
-			backgroundColor: 'green'
+			label: 'Traffic'
 		},
 		{
-			img: 'img...',
-			label: 'Land',
-			backgroundColor: 'yellowgreen'
+			img: '/images/A303LandUse.png',
+			label: 'Land'
 		},
 		{
-			img: 'img...',
-			label: 'Trees',
-			backgroundColor: 'cyan'
+			img: '/images/A303Trees.png',
+			label: 'Trees'
 		},
 		{
-			img: 'img...',
-			label: 'New road',
-			backgroundColor: 'salmon'
+			img: '/images/A303NewRoads.png',
+			label: 'New road'
 		}
 	];
 
@@ -55,14 +50,13 @@
 <CaseStudyCard border={false}>
 	<div class="container">
 		<div class="map">
-			{#each layers as { img, backgroundColor }, i (i)}
+			<div class="map-layer" style:background-image={`url(/images/A303Base.png)`} />
+			{#each layers as { img }, i (i)}
 				<div
 					class="map-layer"
 					class:hidden={i !== currentLayer}
-					style:background-color={backgroundColor}
-				>
-					{img}
-				</div>
+					style:background-image={`url(${img})`}
+				/>
 			{/each}
 		</div>
 		<div class="legend">
@@ -80,14 +74,22 @@
 	.container {
 		width: 100%;
 		user-select: none;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		max-height: 100dvh;
+		margin-top: 60px;
+		margin-bottom: 60px;
 	}
 
 	.map {
 		margin-left: var(--horizontal-margin);
 		margin-right: var(--horizontal-margin);
-		aspect-ratio: 4 / 3;
-		margin-bottom: 15px;
+		margin-bottom: 20px;
 		position: relative;
+		flex: 1;
+		align-self: stretch;
+		aspect-ratio: 8 / 4;
 	}
 
 	.map-layer {
@@ -97,6 +99,8 @@
 		width: 100%;
 		height: 100%;
 		transition: opacity 1s ease-in-out;
+		background-size: cover;
+		background-position: center center;
 	}
 
 	.map-layer.hidden {
