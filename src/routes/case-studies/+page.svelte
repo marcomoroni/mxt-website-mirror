@@ -41,21 +41,17 @@
 	.cards {
 		display: grid;
 		grid-auto-flow: row;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 1fr;
 		grid-auto-rows: 1fr;
 		column-gap: var(--horizontal-margin);
-		row-gap: 50px;
+		row-gap: 200px;
+		margin-top: 200px;
 		margin-bottom: var(--bottom-page-margin);
-	}
-
-	@media (max-width: 800px) {
-		.cards {
-			grid-template-columns: 1fr;
-		}
 	}
 
 	@media (max-width: 660px) {
 		.cards {
+			margin-top: 40px;
 			row-gap: 40px;
 		}
 	}
