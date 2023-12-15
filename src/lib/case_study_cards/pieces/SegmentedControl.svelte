@@ -4,7 +4,7 @@
 
 	export let choices: Array<string>;
 	export let selected: number | undefined = undefined;
-	export let variant: 'Normal' | 'GuidedTourSchema';
+	export let variant: 'Normal' | 'GuidedTourSchema' | 'MapLegend';
 	export let textZIndex: undefined | number = undefined;
 	export let containerZIndex: undefined | number = undefined;
 	export let accentColor: 1 | 2 | 3 | 4 = 1;
@@ -17,8 +17,11 @@
 
 <div
 	class="segmented-control"
-	style:grid-template-columns={'1fr '.repeat(Math.min(2, choices.length))}
+	style:grid-template-columns={'1fr '.repeat(
+		variant === 'MapLegend' ? choices.length : Math.min(2, choices.length)
+	)}
 	class:guided-tour-schema={variant === 'GuidedTourSchema'}
+	class:map-legend={variant === 'MapLegend'}
 	style:z-index={containerZIndex === undefined ? 'auto' : containerZIndex}
 >
 	{#each choices as choice, i (i)}
@@ -48,8 +51,13 @@
 		border-radius: calc((var(--choice-height) / 2) + (var(--p) * 2));
 	}
 
-	.segmented-control.guided-tour-schema {
+	.segmented-control.guided-tour-schema,
+	.segmented-control.map-legend {
 		border-color: transparent;
+	}
+
+	.segmented-control.map-legend {
+		padding: 0;
 	}
 
 	.guided-tour-schema .choice {
