@@ -29,7 +29,7 @@
 	.title {
 		font-size: 23px;
 		font-weight: 600;
-		margin-top: 20px;
+		margin-top: 28px;
 		margin-bottom: 13px;
 		line-height: 1.46;
 		text-wrap: balance;
