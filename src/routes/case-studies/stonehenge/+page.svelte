@@ -9,6 +9,7 @@
 	import GameplayFreeRoaming from '$lib/case_study_cards/GameplayFreeRoaming.svelte';
 	import GameplayGuidedTour from '$lib/case_study_cards/GameplayGuidedTour.svelte';
 	import SimulationSources from '$lib/case_study_cards/SimulationSources.svelte';
+	import StonehengeMap from '$lib/case_study_cards/StonehengeMap.svelte';
 
 	navBarData.set({ caseStudies: 'stonehenge' });
 
@@ -81,6 +82,11 @@
 		</div>
 	</WidthContainer>
 {/if}
+
+<div class="backdrop-fade" />
+<div class="backdrop-anchor">
+	<div class="backdrop" />
+</div>
 
 <h2 class="width-container">Background</h2>
 <p class="width-container">
@@ -192,7 +198,9 @@
 	</li>
 </ul>
 
-<div class="gallery-container">
+<StonehengeMap />
+
+<!-- <div class="gallery-container">
 	<Gallery childCount={2}>
 		<GalleryItem>
 			<div slot="figure" class="img-a" />
@@ -202,7 +210,7 @@
 			<svelte:fragment slot="caption">Parts of the simulation</svelte:fragment>
 		</GalleryItem>
 	</Gallery>
-</div>
+</div> -->
 
 <h3 class="width-container">Human-centered design approach</h3>
 <ul class="width-container">
@@ -418,6 +426,30 @@
 
 	.end-of-page {
 		margin-top: var(--bottom-page-margin);
+	}
+
+	.backdrop-fade {
+		width: 100%;
+		height: 20px;
+		background: linear-gradient(
+			color-mix(in srgb, var(--color-background), transparent 100%),
+			var(--color-background)
+		);
+	}
+
+	.backdrop-anchor {
+		width: 100%;
+		position: sticky;
+		top: 0;
+		height: 0px;
+		z-index: -1;
+	}
+
+	.backdrop {
+		background-color: var(--color-background);
+		width: 100%;
+		height: 100dvh;
+		position: absolute;
 	}
 
 	h1 {
