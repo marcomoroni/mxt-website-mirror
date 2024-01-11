@@ -9,7 +9,7 @@
 			label: 'Terrain'
 		},
 		{
-			img: '/images/A303Roads.png',
+			img: '/images/A303Roads_BW.png',
 			label: 'Roads'
 		},
 		{
@@ -21,11 +21,11 @@
 			label: 'Land'
 		},
 		{
-			img: '/images/A303Trees.png',
+			img: '/images/A303Trees_BW.png',
 			label: 'Trees'
 		},
 		{
-			img: '/images/A303NewRoads.png',
+			img: '/images/A303NewRoads_BW.png',
 			label: 'New road'
 		}
 	];
@@ -54,10 +54,11 @@
 <CaseStudyCard border={false}>
 	<div class="container">
 		<div class="map">
-			<div class="map-layer" style:background-image={`url(/images/A303Base.png)`} />
+			<div class="map-layer" style:background-image={`url(/images/A303Base_BW.png)`} />
+			<div class="map-layer solid-color" />
 			{#each layers as { img }, i (i)}
 				<div
-					class="map-layer"
+					class="map-layer tinted"
 					class:hidden={i !== currentLayer}
 					style:background-image={`url(${img})`}
 				/>
@@ -105,6 +106,14 @@
 		transition: opacity 1s ease-in-out;
 		background-size: cover;
 		background-position: center center;
+	}
+
+	.tinted {
+		filter: sepia(100%) hue-rotate(159deg);
+	}
+
+	.solid-color {
+		background-color: color-mix(in srgb, var(--color-background), transparent 30%);
 	}
 
 	.map-layer.hidden {
