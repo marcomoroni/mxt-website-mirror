@@ -15,7 +15,7 @@
 	<div class="vertical-margin" />
 	<div class="inner">
 		<div class="horizontal-margin" />
-		<div class="coming-soon">New website coming soon</div>
+		<div class="coming-soon">Our new website is coming soon.</div>
 		<div class="horizontal-margin" />
 	</div>
 	<div class="vertical-margin" />

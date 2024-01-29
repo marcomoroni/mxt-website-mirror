@@ -70,7 +70,7 @@
 			left: 500px;
 		}
 		100% {
-			left: -100px;
+			left: -700px;
 		}
 	}
 
@@ -96,7 +96,7 @@
 			background-color: var(--color-accent-6);
 		}
 		50% {
-			background-color: var(--color-accent-4);
+			background-color: var(--color-accent-1);
 		}
 		100% {
 			background-color: var(--color-accent-2);
@@ -195,8 +195,8 @@
 		/* For some reason I need this hack in order to make the blur effect work properly
         on the lower edge. */
 		height: calc(100% - 1px);
-		backdrop-filter: blur(150px);
-		-webkit-backdrop-filter: blur(150px);
-		background-color: color-mix(in srgb, var(--color-background), transparent 80%);
+		backdrop-filter: blur(170px);
+		-webkit-backdrop-filter: blur(170px);
+		background-color: color-mix(in srgb, var(--color-background), transparent 58%);
 	}
 </style>
