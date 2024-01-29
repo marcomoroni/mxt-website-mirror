@@ -1,24 +1,51 @@
+<script lang="ts">
+	import Aurora from '$lib/Aurora.svelte';
+	import MxtLogo from '$lib/MXTLogo.svelte';
+</script>
+
 <svelte:head>
 	<title>MXT</title>
 </svelte:head>
+
+<div class="aurora-container">
+	<Aurora />
+</div>
 
 <div class="container">
 	<div class="vertical-margin" />
 	<div class="inner">
 		<div class="horizontal-margin" />
-		<div class="coming-soon">Coming soon</div>
+		<div class="coming-soon">New website coming soon</div>
 		<div class="horizontal-margin" />
 	</div>
 	<div class="vertical-margin" />
 </div>
 
+<div class="logo-container">
+	<MxtLogo />
+</div>
+
 <style>
+	.aurora-container {
+		position: fixed;
+		width: 100%;
+		height: 100dvh;
+	}
+
+	.logo-container {
+		position: absolute;
+		width: 80px;
+		top: 24px;
+		left: 24px;
+	}
+
 	.container {
 		width: 100%;
 		min-height: 100dvh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		position: relative;
 	}
 
 	.vertical-margin {
@@ -34,7 +61,7 @@
 
 	.horizontal-margin {
 		flex: 1;
-		min-width: 20px;
+		min-width: 24px;
 	}
 
 	.coming-soon {
