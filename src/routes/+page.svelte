@@ -3,21 +3,41 @@
 </svelte:head>
 
 <div class="container">
-	<div class="margin" />
-	<div>Coming soon</div>
-	<div class="margin" />
+	<div class="vertical-margin" />
+	<div class="inner">
+		<div class="horizontal-margin" />
+		<div class="coming-soon">Coming soon</div>
+		<div class="horizontal-margin" />
+	</div>
+	<div class="vertical-margin" />
 </div>
 
 <style>
 	.container {
 		width: 100%;
-		height: 100dvh;
+		min-height: 100dvh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 	}
 
-	.margin {
+	.vertical-margin {
 		flex: 1;
+		min-height: 40px;
+	}
+
+	.inner {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+	}
+
+	.horizontal-margin {
+		flex: 1;
+		min-width: 20px;
+	}
+
+	.coming-soon {
+		text-align: center;
 	}
 </style>
