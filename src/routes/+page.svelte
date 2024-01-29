@@ -22,7 +22,7 @@
 </div>
 
 <div class="logo-container">
-	<MxtLogo />
+	<MxtLogo style="glass" />
 </div>
 
 <style>
@@ -34,9 +34,9 @@
 
 	.logo-container {
 		position: absolute;
-		width: 80px;
-		top: 24px;
-		left: 24px;
+		width: 60px;
+		top: 30px;
+		left: 30px;
 	}
 
 	.container {
