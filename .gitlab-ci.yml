@@ -4,7 +4,6 @@ stages:
 
 variables:
   DIST_DIR: build
-  TESTING_SITE_DIR: new-mxt
 
 workflow:
   rules:
@@ -22,6 +21,5 @@ build:
 deploy:
   stage: deploy
   script:
-    - ssh ubuntu@testing.mxt.co.uk "rm -f -r ~/web/$TESTING_SITE_DIR/*"
-    - ssh ubuntu@testing.mxt.co.uk "mkdir -p ~/web/$TESTING_SITE_DIR"
-    - scp -r $DIST_DIR/* ubuntu@testing.mxt.co.uk:~/web/$TESTING_SITE_DIR
+    - ssh $WEB_HOST "rm -f -r ~/web/*"
+    - scp -r $DIST_DIR/* ${WEB_HOST}:~/web
