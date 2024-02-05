@@ -15,7 +15,12 @@
 	<div class="vertical-margin" />
 	<div class="inner">
 		<div class="horizontal-margin" />
-		<div class="coming-soon">Our new website is coming soon.</div>
+		<div class="type-container coming-soon">
+			<p>Our new website is coming soon.</p>
+			<p class="dim">
+				But you can still say hello at <a href="mailto:info@mxt.co.uk">info@mxt.co.uk</a>!
+			</p>
+		</div>
 		<div class="horizontal-margin" />
 	</div>
 	<div class="vertical-margin" />
@@ -64,7 +69,14 @@
 		min-width: 24px;
 	}
 
+	.type-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
 	.coming-soon {
 		text-align: center;
+		line-height: 1.8;
 	}
 </style>
