@@ -1,0 +1,42 @@
+@font-face {
+	font-family: 'Figtree';
+	src: url(./fonts/Figtree-VariableFont_wght.ttf);
+}
+
+@font-face {
+	font-family: 'Figtree';
+	src: url(./fonts/Figtree-Italic-VariableFont_wght.ttf);
+	font-style: italic;
+}
+
+html {
+	--color-background: #f5f1ef;
+	--color-primary: #5a554e;
+	--horizontal-margin: 30px;
+	--color-logo-base: var(--color-primary);
+	--color-accent-1: #b8c26c;
+	--color-accent-2: #db8c3f;
+	--color-accent-3: #badad5;
+	--color-accent-4: #1d5755;
+	--color-accent-5: #f5dee4;
+	--color-accent-6: #edbd6b;
+}
+
+body {
+	background-color: var(--color-background);
+	font-family: 'Figtree';
+	font-size: 16.5px;
+	color: var(--color-primary);
+	line-height: 1.55;
+	font-weight: 440;
+}
+
+button {
+	cursor: pointer;
+}
+
+a {
+	text-decoration: underline;
+	text-decoration-thickness: max(1px, 0.0625rem);
+	text-underline-offset: 0.1578em;
+}
