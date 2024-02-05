@@ -18,7 +18,7 @@
 		<div class="type-container coming-soon">
 			<p>Our new website is coming soon.</p>
 			<p class="dim">
-				But you can still say hello at <a href="mailto:info@mxt.co.uk">info@mxt.co.uk</a>!
+				Contact us at <a href="mailto:info@mxt.co.uk">info@mxt.co.uk</a>.
 			</p>
 		</div>
 		<div class="horizontal-margin" />
