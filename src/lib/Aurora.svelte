@@ -197,6 +197,6 @@
 		height: calc(100% - 1px);
 		backdrop-filter: blur(170px);
 		-webkit-backdrop-filter: blur(170px);
-		background-color: color-mix(in srgb, var(--color-background), transparent 58%);
+		background-color: color-mix(in srgb, var(--color-background), transparent 70%);
 	}
 </style>
