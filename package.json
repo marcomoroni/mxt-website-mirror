@@ -12,7 +12,6 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/adapter-static": "^2.0.3",
 		"@sveltejs/kit": "^1.20.4",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
@@ -30,10 +29,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@threlte/core": "^6.0.10",
-		"@threlte/extras": "^7.1.1",
-		"@types/three": "^0.157.0",
-		"three": "^0.157.0",
 		"ts-pattern": "^5.0.5"
 	}
 }

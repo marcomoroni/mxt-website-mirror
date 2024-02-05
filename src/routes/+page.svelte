@@ -1,121 +1,82 @@
 <script lang="ts">
-	import MainPageCard from '$lib/MainPageCard.svelte';
-	import MxtLogoNoPadding from '$lib/MxtLogoNoPadding.svelte';
-	import WidthContainer from '$lib/WidthContainer.svelte';
-	import { navBarData } from '$lib/topBarData';
-
-	navBarData.set('home');
-
-	const cards = [
-		{
-			title: 'Case studies',
-			descirption: 'Who we are and how we work with you',
-			href: '/case-studies'
-		},
-		{
-			title: 'Studio',
-			descirption: 'Check out what we’ve been building',
-			href: '/studio'
-		},
-		{
-			title: 'Contacts',
-			descirption: 'Drop us a message',
-			href: '/contacts'
-		}
-	];
+	import Aurora from '$lib/Aurora.svelte';
+	import MxtLogo from '$lib/MXTLogo.svelte';
 </script>
 
 <svelte:head>
 	<title>MXT</title>
 </svelte:head>
 
-<div class="landing-container">
-	<WidthContainer>
-		<div class="logo">
-			<MxtLogoNoPadding />
-		</div>
-		<p class="text">
-			MXT are an immersive technology company providing learning, research and visualisation
-			services to transport and infrastructure partners.
-		</p>
-	</WidthContainer>
+<div class="aurora-container">
+	<Aurora />
 </div>
-<WidthContainer>
-	<ul class="link-cards">
-		{#each cards as card}
-			<MainPageCard href={card.href} title={card.title} desription={card.descirption} />
-		{/each}
-	</ul>
-</WidthContainer>
+
+<div class="container">
+	<div class="vertical-margin" />
+	<div class="inner">
+		<div class="horizontal-margin" />
+		<div class="type-container coming-soon">
+			<p>Our new website is coming soon.</p>
+			<p class="dim">
+				But you can still say hello at <a href="mailto:info@mxt.co.uk">info@mxt.co.uk</a>!
+			</p>
+		</div>
+		<div class="horizontal-margin" />
+	</div>
+	<div class="vertical-margin" />
+</div>
+
+<div class="logo-container">
+	<MxtLogo style="glass" />
+</div>
 
 <style>
-	.landing-container {
-		width: 100dvw;
-		max-width: 100%;
+	.aurora-container {
+		position: fixed;
+		width: 100%;
+		height: 100dvh;
+	}
+
+	.logo-container {
+		position: absolute;
+		width: 60px;
+		top: 30px;
+		left: 30px;
+	}
+
+	.container {
+		width: 100%;
 		min-height: 100dvh;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
-		align-items: stretch;
+		align-items: center;
+		position: relative;
 	}
 
-	.logo {
-		width: 520px;
+	.vertical-margin {
+		flex: 1;
+		min-height: 40px;
 	}
 
-	@media (max-width: 1500px) {
-		.logo {
-			width: 500px;
-		}
+	.inner {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
 	}
 
-	@media (max-width: 660px) {
-		.logo {
-			width: 400px;
-		}
+	.horizontal-margin {
+		flex: 1;
+		min-width: 24px;
 	}
 
-	@media (max-width: 460px) {
-		.logo {
-			width: 270px;
-		}
+	.type-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 
-	.text {
-		margin-top: min(max(4vw, 60px), 130px);
-		max-width: 80%;
-		font-size: 30px;
-		margin-right: auto;
-		text-wrap: balance;
-		font-weight: 500;
-		line-height: 1.5;
-	}
-
-	@media (max-width: 660px) {
-		.text {
-			max-width: unset;
-			font-size: 22px;
-		}
-	}
-
-	.link-cards {
-		display: none;
-		grid-auto-flow: row;
-		grid-template-columns: 1fr 1fr 1fr;
-		grid-auto-rows: 1fr;
-		gap: var(--horizontal-margin);
-		margin-bottom: var(--horizontal-margin);
-	}
-
-	@media (max-width: 800px) {
-		.link-cards {
-			grid-template-columns: 1fr;
-		}
-	}
-
-	@media (max-width: 700px) {
-		.link-cards {
-			display: grid;
-		}
+	.coming-soon {
+		text-align: center;
+		line-height: 1.8;
 	}
 </style>
