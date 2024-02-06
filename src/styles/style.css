@@ -1,11 +1,11 @@
 @font-face {
 	font-family: 'Figtree';
-	src: url(./fonts/Figtree-VariableFont_wght.ttf);
+	src: url(/fonts/Figtree-VariableFont_wght.ttf);
 }
 
 @font-face {
 	font-family: 'Figtree';
-	src: url(./fonts/Figtree-Italic-VariableFont_wght.ttf);
+	src: url(/fonts/Figtree-Italic-VariableFont_wght.ttf);
 	font-style: italic;
 }
 
@@ -24,7 +24,7 @@ html {
 
 body {
 	background-color: var(--color-background);
-	font-family: 'Figtree';
+	font-family: 'Figtree', sans-serif;
 	font-size: 16.5px;
 	color: var(--color-primary);
 	line-height: 1.55;
