@@ -20,7 +20,7 @@
 			<div class="shape {shape.class}" class:visible />
 		{/each}
 	</div>
-	<div class="blur" />
+	<div class="blur" class:visible />
 </div>
 
 <style>
@@ -209,5 +209,11 @@
 		backdrop-filter: blur(170px);
 		-webkit-backdrop-filter: blur(170px);
 		background-color: color-mix(in srgb, var(--color-background), transparent 70%);
+	}
+
+	/* Hide this as well for better performance. */
+	.blur:not(.visible) {
+		transition-delay: 6.5s;
+		opacity: 0;
 	}
 </style>
