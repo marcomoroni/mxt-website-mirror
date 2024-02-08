@@ -66,7 +66,7 @@
 		top: 0;
 		left: 0;
 		width: 100%;
-		height: 100px;
+		height: var(--nav-bar-height);
 		z-index: 1;
 		display: flex;
 		flex-direction: row;
