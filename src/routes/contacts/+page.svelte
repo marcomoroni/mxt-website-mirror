@@ -47,6 +47,12 @@
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
-		gap: 20px;
+		font-weight: 600;
+		font-size: 19px;
+		gap: 30px;
+	}
+
+	.type-container a {
+		text-decoration: none;
 	}
 </style>
