@@ -10,12 +10,14 @@
 			class: 's3'
 		}
 	];
+
+	export let visible = false;
 </script>
 
 <div class="container">
 	<div class="shapes-pivot">
 		{#each shapes as shape}
-			<div class="shape {shape.class}" />
+			<div class="shape {shape.class}" class:visible />
 		{/each}
 	</div>
 	<div class="blur" />
@@ -42,6 +44,15 @@
 		position: absolute;
 		border-radius: 100%;
 		transform: translate(-50%, -50%);
+		transition: opacity 5s var(--ease);
+	}
+
+	.shape.visible {
+		transition-delay: 1s;
+	}
+
+	.shape:not(.visible) {
+		opacity: 0;
 	}
 
 	@keyframes s1-anim-1 {
