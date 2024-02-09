@@ -90,6 +90,7 @@
 		padding-left: 18px;
 		padding-right: 18px;
 		text-decoration: none;
+		font-weight: 500;
 	}
 
 	.page-link.current-page {

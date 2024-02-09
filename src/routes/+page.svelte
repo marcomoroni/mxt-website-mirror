@@ -74,6 +74,7 @@
 		max-width: 800px;
 		text-wrap: balance;
 		text-align: center;
+		font-weight: 500;
 	}
 
 	.a-c-b-c {
