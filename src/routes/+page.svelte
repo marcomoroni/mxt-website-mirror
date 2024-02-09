@@ -42,12 +42,12 @@
 		flex: 1 1 0px;
 	}
 
-	.a-a {
+	.a-a,
+	.a-c {
 		min-height: calc(var(--nav-bar-height) + 40px);
 	}
 
 	.a-c {
-		min-height: 40px;
 		display: flex;
 		flex-direction: row;
 		align-items: flex-start;
@@ -77,7 +77,7 @@
 	}
 
 	.a-c-b-c {
-		height: 40px;
+		height: 90px;
 	}
 
 	.a-b {
