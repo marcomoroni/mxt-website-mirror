@@ -21,5 +21,14 @@ build:
 deploy:
   stage: deploy
   script:
-    - ssh $WEB_HOST "rm -f -r ~/web/*"
-    - scp -r $DIST_DIR/* ${WEB_HOST}:~/web
+    - $TARGET = ""
+    - >
+      if ($DEPLOY_TO_PROD -eq 1) {
+        $TARGET = $TARGET_PROD
+      } else {
+        $TARGET = $TARGET_DEV
+      }
+
+    - $HOST_ADDR, $HOST_PATH = $TARGET.Split(":")
+    - ssh $HOST_ADDR "rm -f -r $HOST_PATH/*"
+    - scp -r $DIST_DIR/* ${HOST_ADDR}:${HOST_PATH}
