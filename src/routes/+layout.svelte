@@ -75,7 +75,7 @@
 
 	.left,
 	.right {
-		flex: 1;
+		flex: 1 1 0px;
 	}
 
 	.central {
