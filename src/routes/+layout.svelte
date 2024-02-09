@@ -56,7 +56,7 @@
 <style>
 	.aurora-container {
 		z-index: -1;
-		position: absolute;
+		position: fixed;
 		width: 100%;
 		height: 100dvh;
 	}
