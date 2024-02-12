@@ -6,23 +6,27 @@
 		title: string;
 		leadParagraph: string;
 		threeState: 'case-studies-anchor-a303' | 'case-studies-anchor-p2' | 'case-studies-anchor-p3';
+		href: string;
 	}> = [
 		{
 			title: 'Visualising the Stonehenge World Heritage site landscape',
 			leadParagraph:
 				'Harnessing the power of immersive technologies for complex infrastructure projects',
-			threeState: 'case-studies-anchor-a303'
+			threeState: 'case-studies-anchor-a303',
+			href: '/case-studies/stonehenge/'
 		},
 		{
 			title: 'Case study 2',
 			leadParagraph: 'Lead paragraph ',
-			threeState: 'case-studies-anchor-p2'
+			threeState: 'case-studies-anchor-p2',
+			href: '/case-studies/p2/'
 		},
 		{
 			title: 'Case study 3',
 			leadParagraph:
 				'Harnessing the power of immersive technologies for complex infrastructure projects',
-			threeState: 'case-studies-anchor-p3'
+			threeState: 'case-studies-anchor-p3',
+			href: '/case-studies/p3/'
 		}
 	];
 
@@ -113,11 +117,11 @@
 <ul class="case-studies-list">
 	{#each caseStudies as caseStudy}
 		<li class="case-study-card" use:scrollObserve={caseStudy.threeState}>
-			<div class="box">
+			<a class="box" href={caseStudy.href}>
 				<div class="background" />
 				<div class="title">{caseStudy.title}</div>
 				<div class="lead-paragraph">{caseStudy.leadParagraph}</div>
-			</div>
+			</a>
 		</li>
 	{/each}
 </ul>
@@ -146,10 +150,12 @@
 	}
 
 	.box {
+		display: block;
 		position: relative;
 		width: calc(100% - (var(--margin) * 2));
 		height: calc(100% - var(--margin));
 		top: 0;
 		left: var(--margin);
+		text-decoration: none;
 	}
 </style>
