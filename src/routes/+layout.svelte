@@ -4,9 +4,41 @@
 	import { page } from '$app/stores';
 	import MxtLogo from '$lib/MXTLogo.svelte';
 	import Aurora from '$lib/Aurora.svelte';
+	import ThreeScene from '$lib/ThreeScene.svelte';
+	import { P, match } from 'ts-pattern';
+	import { caseStudiesPageIntersectingCard } from '$lib/threeStateStores';
 
 	$: inHome = $page.url.pathname === '/';
 	let hoveringHomeLink = false;
+
+	// --- use svelte's context to set inner anchors
+
+	$: threeState = match({
+		path: $page.url.pathname,
+		caseStudiesPageIntersectingCard: $caseStudiesPageIntersectingCard
+	})
+		.returnType<
+			| 'home'
+			| 'case-studies'
+			| 'case-studies-anchor-a303'
+			| 'case-studies-anchor-p2'
+			| 'case-studies-anchor-p3'
+			| 'case-study-a303'
+			| 'case-study-p2'
+			| 'case-study-p3'
+			| 'studio'
+			| 'hidden'
+		>()
+		.with({ path: '/' }, () => 'home')
+		.with(
+			{ path: '/case-studies/', caseStudiesPageIntersectingCard: P.select() },
+			(s) => s ?? 'case-studies'
+		)
+		.with({ path: '/case-studies/stonehenge/' }, () => 'case-study-a303')
+		.with({ path: '/case-studies/p2/' }, () => 'case-study-p2')
+		.with({ path: '/case-studies/p3/' }, () => 'case-study-p3')
+		.with({ path: '/studio/' }, () => 'studio')
+		.otherwise(() => 'hidden');
 </script>
 
 <svelte:head>
@@ -15,6 +47,10 @@
 
 <div class="aurora-container">
 	<Aurora visible={$page.url.pathname === '/contacts/'} />
+</div>
+
+<div class="three-container">
+	<ThreeScene state={threeState} />
 </div>
 
 <nav class="top-bar">
@@ -55,6 +91,13 @@
 
 <style>
 	.aurora-container {
+		z-index: -3;
+		position: fixed;
+		width: 100%;
+		height: 100dvh;
+	}
+
+	.three-container {
 		z-index: -1;
 		position: fixed;
 		width: 100%;
@@ -121,6 +164,6 @@
 	}
 
 	.logo-container {
-		width: 60px;
+		width: 62px;
 	}
 </style>
