@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { match } from 'ts-pattern';
 
 	export let state:
@@ -13,6 +14,7 @@
 		| 'studio'
 		| 'hidden';
 
+	let mounted = false; // Keep in mind that three will be initialized on mount.
 	$: color = match(state)
 		.with('home', () => 'burlywood')
 		.with('case-studies', () => 'aquamarine')
@@ -25,11 +27,17 @@
 		.with('studio', () => 'coral')
 		.with('hidden', () => 'white')
 		.exhaustive();
+
+	onMount(() => {
+		mounted = true;
+	});
 </script>
 
-<div class="container">
-	<div class="three-model-placeholder" style:background-color={color} />
-</div>
+{#if mounted}
+	<div class="container">
+		<div class="three-model-placeholder" style:background-color={color} />
+	</div>
+{/if}
 
 <style>
 	.container {

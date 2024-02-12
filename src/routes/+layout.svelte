@@ -11,11 +11,13 @@
 	$: inHome = $page.url.pathname === '/';
 	let hoveringHomeLink = false;
 
-	// --- use svelte's context to set inner anchors
+	let scrollY: number;
+	$: atTopOfWindow = scrollY <= 40;
 
 	$: threeState = match({
 		path: $page.url.pathname,
-		caseStudiesPageIntersectingCard: $caseStudiesPageIntersectingCard
+		caseStudiesPageIntersectingCard: $caseStudiesPageIntersectingCard,
+		atTopOfWindow
 	})
 		.returnType<
 			| 'home'
@@ -34,12 +36,22 @@
 			{ path: '/case-studies/', caseStudiesPageIntersectingCard: P.select() },
 			(s) => s ?? 'case-studies'
 		)
-		.with({ path: '/case-studies/stonehenge/' }, () => 'case-study-a303')
-		.with({ path: '/case-studies/p2/' }, () => 'case-study-p2')
-		.with({ path: '/case-studies/p3/' }, () => 'case-study-p3')
-		.with({ path: '/studio/' }, () => 'studio')
+		.with({ path: '/case-studies/stonehenge/', atTopOfWindow: P.select() }, (atTopOfWindow) =>
+			atTopOfWindow ? 'case-study-a303' : 'hidden'
+		)
+		.with({ path: '/case-studies/p2/', atTopOfWindow: P.select() }, (atTopOfWindow) =>
+			atTopOfWindow ? 'case-study-p2' : 'hidden'
+		)
+		.with({ path: '/case-studies/p3/', atTopOfWindow: P.select() }, (atTopOfWindow) =>
+			atTopOfWindow ? 'case-study-p3' : 'hidden'
+		)
+		.with({ path: '/studio/', atTopOfWindow: P.select() }, (atTopOfWindow) =>
+			atTopOfWindow ? 'studio' : 'hidden'
+		)
 		.otherwise(() => 'hidden');
 </script>
+
+<svelte:window bind:scrollY />
 
 <svelte:head>
 	<title>MXT</title>
