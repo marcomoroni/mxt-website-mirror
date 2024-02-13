@@ -14,6 +14,13 @@
 		| 'studio'
 		| 'hidden';
 
+	let logs: Array<string> = [];
+	$: {
+		if (mounted) {
+			logs = [...logs, state];
+		}
+	}
+
 	let mounted = false; // Keep in mind that three will be initialized on mount.
 	$: color = match(state)
 		.with('home', () => 'burlywood')
@@ -37,6 +44,12 @@
 	<div class="container">
 		<div class="three-model-placeholder" style:background-color={color} />
 	</div>
+
+	<div class="debug-log">
+		{#each logs as log}
+			<li>{log}</li>
+		{/each}
+	</div>
 {/if}
 
 <style>
@@ -53,5 +66,12 @@
 		bottom: -200px;
 		right: -200px;
 		transition: background-color 1s var(--ease);
+	}
+
+	.debug-log {
+		position: fixed;
+		top: 20px;
+		left: 20px;
+		font-size: 10px;
 	}
 </style>
