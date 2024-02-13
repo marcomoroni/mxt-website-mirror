@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 	import { match } from 'ts-pattern';
 
+	const DEV_debugLog = false;
+
 	export let state:
 		| 'home'
 		| 'case-studies'
@@ -45,11 +47,13 @@
 		<div class="three-model-placeholder" style:background-color={color} />
 	</div>
 
-	<div class="debug-log">
-		{#each logs as log}
-			<li>{log}</li>
-		{/each}
-	</div>
+	{#if DEV_debugLog}
+		<div class="debug-log">
+			{#each logs as log}
+				<li>{log}</li>
+			{/each}
+		</div>
+	{/if}
 {/if}
 
 <style>
@@ -58,14 +62,24 @@
 		height: 100%;
 	}
 
+	@keyframes placeholder-anim {
+		0% {
+			right: 30%;
+		}
+		100% {
+			right: 70%;
+		}
+	}
+
 	.three-model-placeholder {
 		width: 600px;
 		height: 600px;
 		border-radius: 10000px;
 		position: absolute;
-		bottom: -200px;
-		right: -200px;
+		bottom: 90px;
 		transition: background-color 1s var(--ease);
+		transform: translate(50%, 50%);
+		animation: placeholder-anim 10s ease-in-out 0s infinite alternate;
 	}
 
 	.debug-log {

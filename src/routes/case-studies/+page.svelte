@@ -103,7 +103,6 @@
 
 <style>
 	.landing {
-		border: 2px solid cyan;
 		height: 100dvh;
 		width: 100%;
 	}
@@ -113,7 +112,6 @@
 		height: calc(100dvh - var(--margin));
 		width: 100%;
 		scroll-snap-align: start;
-		border: 2px solid green;
 	}
 
 	.background {
@@ -121,7 +119,7 @@
 		width: 100%;
 		height: 100%;
 		z-index: -2;
-		background-color: rgba(0, 0, 0, 0.322);
+		border: 3px solid white;
 	}
 
 	.box {
