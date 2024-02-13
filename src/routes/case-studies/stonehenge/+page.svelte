@@ -1,8 +1,16 @@
-Stonehenge
-<div class="content" />
+<script lang="ts">
+	import CaseStudyLanding from '$lib/CaseStudyLanding.svelte';
+	import { caseStudiesData } from '$lib/caseStudiesData';
+
+	const caseStudyData = caseStudiesData[0];
+</script>
+
+<CaseStudyLanding title={caseStudyData.title} leadParagraph={caseStudyData.leadParagraph} />
+<div class="spacer-landing-content" />
+<div>Content...</div>
 
 <style>
-	.content {
-		height: 200dvh;
+	.spacer-landing-content {
+		height: 60px;
 	}
 </style>
