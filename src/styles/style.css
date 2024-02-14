@@ -13,6 +13,7 @@ html {
 	--color-background: #f5f1ef;
 	--color-primary: #5a554e;
 	--horizontal-margin: 30px;
+	--ease: cubic-bezier(0.22, 0.6, 0.36, 1);
 	--color-logo-base: var(--color-primary);
 	--color-accent-1: #b8c26c;
 	--color-accent-2: #db8c3f;
@@ -20,12 +21,14 @@ html {
 	--color-accent-4: #1d5755;
 	--color-accent-5: #f5dee4;
 	--color-accent-6: #edbd6b;
+	--nav-bar-height: 100px;
+	--case-study-margin: 20px;
 }
 
 body {
 	background-color: var(--color-background);
 	font-family: 'Figtree', sans-serif;
-	font-size: 16.5px;
+	font-size: 16px;
 	color: var(--color-primary);
 	line-height: 1.55;
 	font-weight: 440;
@@ -39,4 +42,8 @@ a {
 	text-decoration: underline;
 	text-decoration-thickness: max(1px, 0.0625rem);
 	text-underline-offset: 0.1578em;
+}
+
+svg {
+	display: block;
 }

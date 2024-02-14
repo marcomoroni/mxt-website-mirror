@@ -56,4 +56,8 @@
 		fill: #ba874c57;
 		backdrop-filter: blur(40px) brightness(120%);
 	}
+
+	svg * {
+		transition: fill 0.5s var(--ease);
+	}
 </style>
