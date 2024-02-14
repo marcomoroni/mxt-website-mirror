@@ -97,6 +97,7 @@
 					<CaseStudyTitleBox title={caseStudy.title} leadParagraph={caseStudy.leadParagraph} />
 				</div>
 			</a>
+			<div class="bottom-spacer" />
 		</li>
 	{/each}
 </ul>
@@ -109,9 +110,7 @@
 
 	.case-study-card {
 		--margin: 40px;
-		height: calc(100dvh - var(--margin));
 		width: 100%;
-		scroll-snap-align: start;
 	}
 
 	.background {
@@ -126,7 +125,7 @@
 		display: flex;
 		position: relative;
 		width: calc(100% - (var(--margin) * 2));
-		height: calc(100% - var(--margin));
+		min-height: calc(100dvh - (var(--margin) * 2));
 		top: 0;
 		left: var(--margin);
 		text-decoration: none;
@@ -134,7 +133,12 @@
 		justify-content: flex-end;
 	}
 
+	.bottom-spacer {
+		height: var(--margin);
+	}
+
 	.case-study-title-box-container {
+		margin-top: 50px;
 		margin-left: 30px;
 		margin-right: 30px;
 		margin-bottom: 30px;
