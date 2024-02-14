@@ -7,8 +7,10 @@
 	import ThreeScene from '$lib/ThreeScene.svelte';
 	import { P, match } from 'ts-pattern';
 	import { caseStudiesPageIntersectingCard } from '$lib/threeStateStores';
+	import { onMount } from 'svelte';
 
-	$: inHome = $page.url.pathname === '/';
+	let mounted = false;
+
 	let hoveringHomeLink = false;
 
 	let scrollY: number;
@@ -62,6 +64,18 @@
 		)
 		.with({ path: '/studio/', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
 		.otherwise(() => false);
+
+	function initialScroll(el: HTMLElement) {
+		let w = el.getElementsByClassName('home-link')[0]!.clientWidth;
+		w -= 30;
+		el.scroll(w, 0);
+
+		// Since this scroll happens when the element is mounted, the the nav bar until it is mounted.
+	}
+
+	onMount(() => {
+		mounted = true;
+	});
 </script>
 
 <svelte:window bind:scrollY />
@@ -78,19 +92,17 @@
 	<ThreeScene state={threeState} />
 </div>
 
-<nav class="top-bar">
+<nav class="top-bar" use:initialScroll class:not-ready={!mounted}>
 	<div class="left">
 		<a
-			href={inHome ? undefined : '/'}
+			href="/"
 			class="home-link"
-			class:current-page={inHome}
-			aria-hidden={inHome}
 			aria-label="Home"
 			on:mouseenter={() => (hoveringHomeLink = true)}
 			on:mouseleave={() => (hoveringHomeLink = false)}
 		>
 			<div class="logo-container">
-				<MxtLogo style={hoveringHomeLink && !inHome ? 'default' : 'glass'} />
+				<MxtLogo style={hoveringHomeLink ? 'default' : 'glass'} />
 			</div>
 		</a>
 	</div>
@@ -109,7 +121,9 @@
 			Contacts
 		</a>
 	</div>
-	<div class="right" />
+	<div class="right">
+		<div class="nav-right-margin" />
+	</div>
 </nav>
 
 <slot />
@@ -144,6 +158,13 @@
 		display: flex;
 		flex-direction: row;
 		align-items: center;
+		overflow-x: scroll;
+		scrollbar-width: none;
+		transition: opacity 1s var(--ease) 0.5s;
+	}
+
+	.top-bar.not-ready {
+		opacity: 0;
 	}
 
 	.left,
@@ -164,6 +185,7 @@
 		padding-right: 18px;
 		text-decoration: none;
 		font-weight: 500;
+		white-space: nowrap;
 	}
 
 	.page-link.current-page {
@@ -183,17 +205,15 @@
 		align-self: stretch;
 		display: flex;
 		flex-direction: row;
-		align-content: center;
+		justify-content: center;
 		align-items: center;
-		transition: opacity 1s var(--ease);
-	}
-
-	.home-link.current-page {
-		opacity: 0;
-		transition-delay: 2s;
 	}
 
 	.logo-container {
 		width: 62px;
+	}
+
+	.nav-right-margin {
+		width: 30px;
 	}
 </style>
