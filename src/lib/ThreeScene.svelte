@@ -14,7 +14,7 @@
 		| 'case-study-p2'
 		| 'case-study-p3'
 		| 'studio'
-		| 'hidden';
+		| 'contacts';
 
 	let logs: Array<string> = [];
 	$: {
@@ -34,7 +34,7 @@
 		.with('case-study-p2', () => 'cyan')
 		.with('case-study-p3', () => 'black')
 		.with('studio', () => 'coral')
-		.with('hidden', () => 'white')
+		.with('contacts', () => 'white')
 		.exhaustive();
 
 	onMount(() => {

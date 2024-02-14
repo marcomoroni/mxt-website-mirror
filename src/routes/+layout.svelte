@@ -16,8 +16,7 @@
 
 	$: threeState = match({
 		path: $page.url.pathname,
-		caseStudiesPageIntersectingCard: $caseStudiesPageIntersectingCard,
-		atTopOfWindow
+		caseStudiesPageIntersectingCard: $caseStudiesPageIntersectingCard
 	})
 		.returnType<
 			| 'home'
@@ -29,26 +28,40 @@
 			| 'case-study-p2'
 			| 'case-study-p3'
 			| 'studio'
-			| 'hidden'
+			| 'contacts'
 		>()
 		.with({ path: '/' }, () => 'home')
 		.with(
 			{ path: '/case-studies/', caseStudiesPageIntersectingCard: P.select() },
 			(s) => s ?? 'case-studies'
 		)
-		.with({ path: '/case-studies/stonehenge/', atTopOfWindow: P.select() }, (atTopOfWindow) =>
-			atTopOfWindow ? 'case-study-a303' : 'hidden'
+		.with({ path: '/case-studies/stonehenge/' }, () => 'case-study-a303')
+		.with({ path: '/case-studies/p2/' }, () => 'case-study-p2')
+		.with({ path: '/case-studies/p3/' }, () => 'case-study-p3')
+		.with({ path: '/studio/' }, () => 'studio')
+		.otherwise(() => 'contacts');
+
+	$: threeHidden = match({
+		path: $page.url.pathname,
+		atTopOfWindow
+	})
+		.returnType<boolean>()
+		.with({ path: '/' }, () => false)
+		.with({ path: '/case-studies/' }, () => false)
+		.with(
+			{ path: '/case-studies/stonehenge/', atTopOfWindow: P.select() },
+			(atTopOfWindow) => !atTopOfWindow
 		)
-		.with({ path: '/case-studies/p2/', atTopOfWindow: P.select() }, (atTopOfWindow) =>
-			atTopOfWindow ? 'case-study-p2' : 'hidden'
+		.with(
+			{ path: '/case-studies/p2/', atTopOfWindow: P.select() },
+			(atTopOfWindow) => !atTopOfWindow
 		)
-		.with({ path: '/case-studies/p3/', atTopOfWindow: P.select() }, (atTopOfWindow) =>
-			atTopOfWindow ? 'case-study-p3' : 'hidden'
+		.with(
+			{ path: '/case-studies/p3/', atTopOfWindow: P.select() },
+			(atTopOfWindow) => !atTopOfWindow
 		)
-		.with({ path: '/studio/', atTopOfWindow: P.select() }, (atTopOfWindow) =>
-			atTopOfWindow ? 'studio' : 'hidden'
-		)
-		.otherwise(() => 'hidden');
+		.with({ path: '/studio/', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
+		.otherwise(() => false);
 </script>
 
 <svelte:window bind:scrollY />
@@ -61,7 +74,7 @@
 	<Aurora visible={$page.url.pathname === '/contacts/'} />
 </div>
 
-<div class="three-container">
+<div class="three-container" class:hidden={threeHidden}>
 	<ThreeScene state={threeState} />
 </div>
 
@@ -85,7 +98,7 @@
 		<a
 			href="/case-studies"
 			class="page-link"
-			class:current-page={$page.url.pathname === '/case-studies/'}
+			class:current-page={$page.url.pathname.startsWith('/case-studies/')}
 		>
 			Case studies
 		</a>
@@ -114,6 +127,11 @@
 		position: fixed;
 		width: 100%;
 		height: 100dvh;
+		transition: opacity 1s var(--ease) 0.2s;
+	}
+
+	.three-container.hidden {
+		opacity: 0;
 	}
 
 	.top-bar {
