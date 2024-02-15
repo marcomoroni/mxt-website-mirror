@@ -53,15 +53,17 @@
 
 		const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvasEl, alpha: true });
 
-		const geometry = new THREE.BoxGeometry(1, 1, 1);
-		// Note `toneMapped: false`: this is so the colours match the ones in the HTML.
+		const boxSize = 1;
+		const geometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
+		// `toneMapped: false` makes the colours match the ones in the HTML.
 		const material = new THREE.MeshBasicMaterial({ color: 0xdb8c3f, toneMapped: false });
 		const cube = new THREE.Mesh(geometry, material);
+		cube.position.y = boxSize / 2;
 		scene.add(cube);
 
 		camera.position.y = 3;
 		camera.position.z = 5;
-		camera.lookAt(new THREE.Vector3(0, 0, 0));
+		camera.lookAt(cube.position);
 
 		const resize = () => {
 			// --- should I use a resize observer?
@@ -77,7 +79,7 @@
 
 			requestAnimationFrame(animate);
 
-			cube.rotation.y += 0.001 * dt;
+			cube.rotation.y += 0.0006 * dt;
 
 			renderer.render(scene, camera);
 		};
