@@ -58,13 +58,31 @@
 	function initThreeScene(canvasEl: HTMLCanvasElement) {
 		const scene = new THREE.Scene();
 		const camera = new THREE.PerspectiveCamera(
-			75,
+			65,
 			window.innerWidth / window.innerHeight,
 			0.1,
 			1000
 		);
 
 		const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvasEl, alpha: true });
+
+		// Dioramas are placed in a circumference at equal distances.
+		// To create the illusion of them moving around diverse dispositions animate the control points
+		// of this circumference, along with the camera.
+		const railCircumference = {
+			center: new THREE.Vector3(0, 0, 0),
+			radius: 4,
+			polarAngleRad: 0
+		};
+		const positionInCircumference = (
+			circumference: { center: THREE.Vector3; radius: number; polarAngleRad: number },
+			polarAngleDiplRad: number
+		) => {
+			return {
+				x: Math.cos(circumference.polarAngleRad + polarAngleDiplRad) * circumference.radius,
+				z: Math.sin(circumference.polarAngleRad + polarAngleDiplRad) * circumference.radius
+			};
+		};
 
 		const dioramaInstances = dioramasData.reduce((out, dioramaData, i, array) => {
 			const boxSize = 1;
@@ -73,21 +91,25 @@
 			const material = new THREE.MeshBasicMaterial({ color: dioramaData.color, toneMapped: false });
 			const cube = new THREE.Mesh(geometry, material);
 			cube.position.y = boxSize / 2;
-			cube.position.x = lerp(-3, 3, i / (array.length - 1));
+			const ownPolarAngle = lerp(0, 2 * Math.PI, i / array.length);
 
 			return [
 				...out,
 				{
 					cube,
+					ownPolarAngle,
 					dispose: () => {
 						geometry.dispose();
 						material.dispose();
 					}
 				}
 			];
-		}, [] as Array<{ cube: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>; dispose: () => void }>);
-		dioramaInstances.forEach(({ cube }) => {
+		}, [] as Array<{ cube: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>; ownPolarAngle: number; dispose: () => void }>);
+		dioramaInstances.forEach(({ cube, ownPolarAngle }) => {
 			scene.add(cube);
+			const pos = positionInCircumference(railCircumference, ownPolarAngle);
+			cube.position.x = pos.x;
+			cube.position.z = pos.z;
 		});
 
 		camera.position.y = 3;
@@ -102,14 +124,21 @@
 		};
 
 		let previousTimeStamp = document.timeline.currentTime as DOMHighResTimeStamp;
+		let shouldRequestNewAnimationFrame = true;
 		const animate = (timeStamp: DOMHighResTimeStamp) => {
 			const dt = timeStamp - previousTimeStamp;
 			previousTimeStamp = timeStamp;
 
-			requestAnimationFrame(animate);
+			if (shouldRequestNewAnimationFrame) {
+				requestAnimationFrame(animate);
+			}
 
-			dioramaInstances.forEach(({ cube }) => {
-				cube.rotation.y += 0.0006 * dt;
+			railCircumference.polarAngleRad += 0.0003 * dt;
+			railCircumference.polarAngleRad %= 2 * Math.PI; // Normalize angle.
+			dioramaInstances.forEach(({ cube, ownPolarAngle }) => {
+				const pos = positionInCircumference(railCircumference, ownPolarAngle);
+				cube.position.x = pos.x;
+				cube.position.z = pos.z;
 			});
 
 			renderer.render(scene, camera);
@@ -122,6 +151,7 @@
 
 		return {
 			destroy() {
+				shouldRequestNewAnimationFrame = false;
 				dioramaInstances.forEach(({ dispose }) => {
 					dispose();
 				});
