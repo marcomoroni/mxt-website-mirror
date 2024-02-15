@@ -84,18 +84,24 @@
 		const initialSceneSettings = sceneSettings(state);
 
 		// Springs.
-		const cameraPosYSpring = spring(initialSceneSettings.camera.pos.y, { stiffness: 0.01 });
-		const cameraPosZSpring = spring(initialSceneSettings.camera.pos.z, { stiffness: 0.01 });
+		const springs = {
+			camera: {
+				pos: {
+					y: spring(initialSceneSettings.camera.pos.y, { stiffness: 0.01 }),
+					z: spring(initialSceneSettings.camera.pos.z, { stiffness: 0.01 })
+				}
+			}
+		};
 
 		const udpateSpringTargets = () => {
 			const currentSceneSettings = sceneSettings(state);
-			cameraPosYSpring.set(currentSceneSettings.camera.pos.y);
-			cameraPosZSpring.set(currentSceneSettings.camera.pos.z);
+			springs.camera.pos.y.set(currentSceneSettings.camera.pos.y);
+			springs.camera.pos.z.set(currentSceneSettings.camera.pos.z);
 		};
 
 		const applySpringValues = (camera: THREE.PerspectiveCamera) => {
-			camera.position.y = get(cameraPosYSpring);
-			camera.position.z = get(cameraPosZSpring);
+			camera.position.y = get(springs.camera.pos.y);
+			camera.position.z = get(springs.camera.pos.z);
 		};
 
 		const scene = new THREE.Scene();
