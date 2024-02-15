@@ -3,6 +3,8 @@
 	import { match } from 'ts-pattern';
 	import * as THREE from 'three';
 	import { lerp } from './lerp';
+	import { spring } from 'svelte/motion';
+	import { get } from 'svelte/store';
 
 	const DEV_debugLog = false;
 
@@ -30,6 +32,29 @@
 		| 'studio'
 		| 'contacts';
 
+	const sceneSettings = (
+		state:
+			| 'home'
+			| 'case-studies'
+			| 'case-studies-anchor-a303'
+			| 'case-studies-anchor-p2'
+			| 'case-studies-anchor-p3'
+			| 'case-study-a303'
+			| 'case-study-p2'
+			| 'case-study-p3'
+			| 'studio'
+			| 'contacts'
+	) => {
+		return {
+			camera: {
+				pos: {
+					y: state === 'studio' ? 7 : 3,
+					z: state === 'studio' ? 0 : 5
+				}
+			}
+		};
+	};
+
 	let logs: Array<string> = [];
 	$: {
 		if (mounted) {
@@ -56,6 +81,23 @@
 	});
 
 	function initThreeScene(canvasEl: HTMLCanvasElement) {
+		const initialSceneSettings = sceneSettings(state);
+
+		// Springs.
+		const cameraPosYSpring = spring(initialSceneSettings.camera.pos.y, { stiffness: 0.01 });
+		const cameraPosZSpring = spring(initialSceneSettings.camera.pos.z, { stiffness: 0.01 });
+
+		const udpateSpringTargets = () => {
+			const currentSceneSettings = sceneSettings(state);
+			cameraPosYSpring.set(currentSceneSettings.camera.pos.y);
+			cameraPosZSpring.set(currentSceneSettings.camera.pos.z);
+		};
+
+		const applySpringValues = (camera: THREE.PerspectiveCamera) => {
+			camera.position.y = get(cameraPosYSpring);
+			camera.position.z = get(cameraPosZSpring);
+		};
+
 		const scene = new THREE.Scene();
 		const camera = new THREE.PerspectiveCamera(
 			65,
@@ -112,10 +154,6 @@
 			cube.position.z = pos.z;
 		});
 
-		camera.position.y = 3;
-		camera.position.z = 5;
-		camera.lookAt(0, 0, 0);
-
 		const resize = () => {
 			// --- should I use a resize observer?
 			renderer.setSize(window.innerWidth, window.innerHeight);
@@ -140,6 +178,9 @@
 				cube.position.x = pos.x;
 				cube.position.z = pos.z;
 			});
+			udpateSpringTargets();
+			applySpringValues(camera);
+			camera.lookAt(0, 0, 0);
 
 			renderer.render(scene, camera);
 		};
