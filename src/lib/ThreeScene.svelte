@@ -2,8 +2,21 @@
 	import { onMount } from 'svelte';
 	import { match } from 'ts-pattern';
 	import * as THREE from 'three';
+	import { lerp } from './lerp';
 
 	const DEV_debugLog = false;
+
+	const dioramasData = [
+		{
+			color: 0xdb8c3f
+		},
+		{
+			color: 0x000000
+		},
+		{
+			color: 0xffffff
+		}
+	];
 
 	export let state:
 		| 'home'
@@ -53,17 +66,33 @@
 
 		const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvasEl, alpha: true });
 
-		const boxSize = 1;
-		const geometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
-		// `toneMapped: false` makes the colours match the ones in the HTML.
-		const material = new THREE.MeshBasicMaterial({ color: 0xdb8c3f, toneMapped: false });
-		const cube = new THREE.Mesh(geometry, material);
-		cube.position.y = boxSize / 2;
-		scene.add(cube);
+		const dioramaInstances = dioramasData.reduce((out, dioramaData, i, array) => {
+			const boxSize = 1;
+			const geometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
+			// `toneMapped: false` makes the colours match the ones in the HTML.
+			const material = new THREE.MeshBasicMaterial({ color: dioramaData.color, toneMapped: false });
+			const cube = new THREE.Mesh(geometry, material);
+			cube.position.y = boxSize / 2;
+			cube.position.x = lerp(-3, 3, i / (array.length - 1));
+
+			return [
+				...out,
+				{
+					cube,
+					dispose: () => {
+						geometry.dispose();
+						material.dispose();
+					}
+				}
+			];
+		}, [] as Array<{ cube: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>; dispose: () => void }>);
+		dioramaInstances.forEach(({ cube }) => {
+			scene.add(cube);
+		});
 
 		camera.position.y = 3;
 		camera.position.z = 5;
-		camera.lookAt(cube.position);
+		camera.lookAt(0, 0, 0);
 
 		const resize = () => {
 			// --- should I use a resize observer?
@@ -79,7 +108,9 @@
 
 			requestAnimationFrame(animate);
 
-			cube.rotation.y += 0.0006 * dt;
+			dioramaInstances.forEach(({ cube }) => {
+				cube.rotation.y += 0.0006 * dt;
+			});
 
 			renderer.render(scene, camera);
 		};
@@ -91,8 +122,9 @@
 
 		return {
 			destroy() {
-				geometry.dispose();
-				material.dispose();
+				dioramaInstances.forEach(({ dispose }) => {
+					dispose();
+				});
 				renderer.dispose();
 			}
 		};
