@@ -29,6 +29,8 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@types/three": "^0.161.2",
+		"three": "^0.161.0",
 		"ts-pattern": "^5.0.5"
 	}
 }

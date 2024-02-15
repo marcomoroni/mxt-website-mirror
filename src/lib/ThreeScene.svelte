@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { match } from 'ts-pattern';
+	import * as THREE from 'three';
 
 	const DEV_debugLog = false;
 
@@ -40,12 +41,63 @@
 	onMount(() => {
 		mounted = true;
 	});
+
+	function initThreeScene(canvasEl: HTMLCanvasElement) {
+		const scene = new THREE.Scene();
+		const camera = new THREE.PerspectiveCamera(
+			75,
+			window.innerWidth / window.innerHeight,
+			0.1,
+			1000
+		);
+
+		const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvasEl, alpha: true });
+
+		const geometry = new THREE.BoxGeometry(1, 1, 1);
+		// Note `toneMapped: false`: this is so the colours match the ones in the HTML.
+		const material = new THREE.MeshBasicMaterial({ color: 0xdb8c3f, toneMapped: false });
+		const cube = new THREE.Mesh(geometry, material);
+		scene.add(cube);
+
+		camera.position.z = 5;
+
+		const resize = () => {
+			// --- should I use a resize observer?
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+		};
+
+		const animate = () => {
+			requestAnimationFrame(animate);
+
+			cube.rotation.x += 0.01;
+			cube.rotation.y += 0.01;
+
+			renderer.render(scene, camera);
+		};
+
+		resize();
+		animate();
+
+		window.addEventListener('resize', resize);
+
+		return {
+			destroy() {
+				geometry.dispose();
+				material.dispose();
+				renderer.dispose();
+			}
+		};
+	}
 </script>
 
 {#if mounted}
 	<div class="container">
 		<div class="three-model-placeholder" style:background-color={color} />
 	</div>
+
+	<canvas use:initThreeScene />
 
 	{#if DEV_debugLog}
 		<div class="debug-log">
@@ -60,6 +112,7 @@
 	.container {
 		width: 100%;
 		height: 100%;
+		position: absolute;
 	}
 
 	@keyframes placeholder-anim {
@@ -80,6 +133,12 @@
 		transition: background-color 1s var(--ease);
 		transform: translate(50%, 50%);
 		animation: placeholder-anim 10s ease-in-out 0s infinite alternate;
+	}
+
+	canvas {
+		width: 100%;
+		height: 100%;
+		position: absolute;
 	}
 
 	.debug-log {
