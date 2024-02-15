@@ -59,7 +59,9 @@
 		const cube = new THREE.Mesh(geometry, material);
 		scene.add(cube);
 
+		camera.position.y = 3;
 		camera.position.z = 5;
+		camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 		const resize = () => {
 			// --- should I use a resize observer?
@@ -68,17 +70,20 @@
 			camera.updateProjectionMatrix();
 		};
 
-		const animate = () => {
+		let previousTimeStamp = document.timeline.currentTime as DOMHighResTimeStamp;
+		const animate = (timeStamp: DOMHighResTimeStamp) => {
+			const dt = timeStamp - previousTimeStamp;
+			previousTimeStamp = timeStamp;
+
 			requestAnimationFrame(animate);
 
-			cube.rotation.x += 0.01;
-			cube.rotation.y += 0.01;
+			cube.rotation.y += 0.001 * dt;
 
 			renderer.render(scene, camera);
 		};
 
 		resize();
-		animate();
+		animate(previousTimeStamp);
 
 		window.addEventListener('resize', resize);
 
