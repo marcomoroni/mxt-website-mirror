@@ -3,9 +3,8 @@
 	import { match } from 'ts-pattern';
 	import * as THREE from 'three';
 	import { lerp } from './lerp';
-	import { tweened } from 'svelte/motion';
+	import { spring } from 'svelte/motion';
 	import { derived, get, writable, type Unsubscriber } from 'svelte/store';
-	import { quadInOut } from 'svelte/easing';
 
 	const DEV_debugLog = false;
 
@@ -99,60 +98,68 @@
 	function initThreeScene(canvasEl: HTMLCanvasElement) {
 		const storeUnsubscribers: Array<Unsubscriber> = [];
 
-		const tweenSettings = { duration: 2000, easing: quadInOut };
-		const tweens = {
+		const springs = {
 			camera: {
 				pos: {
-					y: tweened(get(sceneSettings.camera.pos.y), tweenSettings),
-					z: tweened(get(sceneSettings.camera.pos.z), tweenSettings)
+					y: spring(get(sceneSettings.camera.pos.y), { stiffness: 0.003, damping: 0.2 }),
+					z: spring(get(sceneSettings.camera.pos.z), { stiffness: 0.003, damping: 0.2 })
 				}
 			},
 			railCircumference: {
 				center: {
-					x: tweened(get(sceneSettings.railCircumference.center.x), tweenSettings),
-					z: tweened(get(sceneSettings.railCircumference.center.z), tweenSettings)
+					x: spring(get(sceneSettings.railCircumference.center.x), {
+						stiffness: 0.003,
+						damping: 0.2
+					}),
+					z: spring(get(sceneSettings.railCircumference.center.z), {
+						stiffness: 0.003,
+						damping: 0.2
+					})
 				},
-				radius: tweened(get(sceneSettings.railCircumference.radius), tweenSettings)
+				radius: spring(get(sceneSettings.railCircumference.radius), {
+					stiffness: 0.001,
+					damping: 0.2
+				})
 			}
 		};
 
-		// Update every tween store when its associated raw value changes.
+		// Update every spring store when its associated raw value changes.
 		storeUnsubscribers.push(
-			sceneSettings.camera.pos.y.subscribe((v) => tweens.camera.pos.y.set(v))
+			sceneSettings.camera.pos.y.subscribe((v) => springs.camera.pos.y.set(v))
 		);
 		storeUnsubscribers.push(
-			sceneSettings.camera.pos.z.subscribe((v) => tweens.camera.pos.z.set(v))
+			sceneSettings.camera.pos.z.subscribe((v) => springs.camera.pos.z.set(v))
 		);
 		storeUnsubscribers.push(
 			sceneSettings.railCircumference.center.x.subscribe((v) =>
-				tweens.railCircumference.center.x.set(v)
+				springs.railCircumference.center.x.set(v)
 			)
 		);
 		storeUnsubscribers.push(
 			sceneSettings.railCircumference.center.z.subscribe((v) =>
-				tweens.railCircumference.center.z.set(v)
+				springs.railCircumference.center.z.set(v)
 			)
 		);
 		storeUnsubscribers.push(
 			sceneSettings.railCircumference.radius.subscribe((v) =>
-				tweens.railCircumference.radius.set(v)
+				springs.railCircumference.radius.set(v)
 			)
 		);
 
-		// The values of the tweens are not applied by the stores themselves. Instead, this function
+		// The values of the springs are not applied by the stores themselves. Instead, this function
 		// is called every frame and it manually reads values from the stores.
-		const applyTweenValues = (
+		const applySpringValues = (
 			camera: THREE.PerspectiveCamera,
 			railCircumference: { center: THREE.Vector3; radius: number }
 		) => {
-			camera.position.y = get(tweens.camera.pos.y);
-			camera.position.z = get(tweens.camera.pos.z);
+			camera.position.y = get(springs.camera.pos.y);
+			camera.position.z = get(springs.camera.pos.z);
 			railCircumference.center = new THREE.Vector3(
-				get(tweens.railCircumference.center.x),
+				get(springs.railCircumference.center.x),
 				0,
-				get(tweens.railCircumference.center.z)
+				get(springs.railCircumference.center.z)
 			);
-			railCircumference.radius = get(tweens.railCircumference.radius);
+			railCircumference.radius = get(springs.railCircumference.radius);
 		};
 
 		const scene = new THREE.Scene();
@@ -227,7 +234,7 @@
 				requestAnimationFrame(animate);
 			}
 
-			applyTweenValues(camera, railCircumference);
+			applySpringValues(camera, railCircumference);
 			railCircumference.polarAngleRad += 0.0003 * dt;
 			railCircumference.polarAngleRad %= 2 * Math.PI; // Normalize angle.
 			dioramaInstances.forEach(({ cube, ownPolarAngle }) => {
