@@ -92,13 +92,11 @@
 				}
 			}
 		};
-
 		const udpateSpringTargets = () => {
 			const currentSceneSettings = sceneSettings(state);
 			springs.camera.pos.y.set(currentSceneSettings.camera.pos.y);
 			springs.camera.pos.z.set(currentSceneSettings.camera.pos.z);
 		};
-
 		const applySpringValues = (camera: THREE.PerspectiveCamera) => {
 			camera.position.y = get(springs.camera.pos.y);
 			camera.position.z = get(springs.camera.pos.z);
@@ -132,7 +130,7 @@
 			};
 		};
 
-		const dioramaInstances = dioramasData.reduce((out, dioramaData, i, array) => {
+		const dioramaInstances = dioramasData.map((dioramaData, i, array) => {
 			const boxSize = 1;
 			const geometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
 			// `toneMapped: false` makes the colours match the ones in the HTML.
@@ -140,19 +138,15 @@
 			const cube = new THREE.Mesh(geometry, material);
 			cube.position.y = boxSize / 2;
 			const ownPolarAngle = lerp(0, 2 * Math.PI, i / array.length);
-
-			return [
-				...out,
-				{
-					cube,
-					ownPolarAngle,
-					dispose: () => {
-						geometry.dispose();
-						material.dispose();
-					}
+			return {
+				cube,
+				ownPolarAngle,
+				dispose: () => {
+					geometry.dispose();
+					material.dispose();
 				}
-			];
-		}, [] as Array<{ cube: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial, THREE.Object3DEventMap>; ownPolarAngle: number; dispose: () => void }>);
+			};
+		});
 		dioramaInstances.forEach(({ cube, ownPolarAngle }) => {
 			scene.add(cube);
 			const pos = positionInCircumference(railCircumference, ownPolarAngle);
