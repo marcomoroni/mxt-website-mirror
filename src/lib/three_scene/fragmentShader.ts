@@ -18,9 +18,9 @@ export const fragmentShader = `
         vec3 tintedShadowX = mix(accentColor1, accentColor2, map(vNormalWorld.x, -1.0, 1.0, 0.0, 1.0));
         vec3 tintedShadowY = accentColor3;
         vec3 tintedShadowXY = mix(tintedShadowX, tintedShadowY, 1.0 - abs(vNormalWorld.x));
-        float tintedShadowZAlpha = map(vNormalWorld.z, -1.0, 1.0, 0.0, 1.0);
+        float tintedShadowZAlpha = clamp(vNormalWorld.z, 0.0, 1.0); // Negative numbers become 0 (they are 'behind' the object).
         tintedShadowZAlpha = clamp(map(tintedShadowZAlpha, 0.0, 1.0, -2.1, 1.0), 0.0, 1.0); // Make it more colorful.
-        tintedShadowZAlpha = min(tintedShadowZAlpha, 0.8);
+        tintedShadowZAlpha = min(tintedShadowZAlpha, 0.6);
         vec3 tintedShadowZ = mix(tintedShadowXY, baseColorShadow, tintedShadowZAlpha);
 
         // Map the ambient occlusion to colours: the light colour is 'baseColour' and the dark colour is 'tintedShadow'.
