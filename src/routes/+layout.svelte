@@ -73,6 +73,11 @@
 		// Since this scroll happens when the element is mounted, the the nav bar until it is mounted.
 	}
 
+	let topBarEl: HTMLElement;
+	function scrollToStartOfTopBar() {
+		topBarEl.scroll({ left: 0, behavior: 'smooth' });
+	}
+
 	onMount(() => {
 		mounted = true;
 	});
@@ -92,7 +97,7 @@
 	<ThreeScene state={threeState} />
 </div>
 
-<nav class="top-bar" use:initialScroll class:not-ready={!mounted}>
+<nav class="top-bar" use:initialScroll bind:this={topBarEl} class:not-ready={!mounted}>
 	<div class="left">
 		<a
 			href="/"
@@ -100,6 +105,7 @@
 			aria-label="Home"
 			on:mouseenter={() => (hoveringHomeLink = true)}
 			on:mouseleave={() => (hoveringHomeLink = false)}
+			on:click={scrollToStartOfTopBar}
 		>
 			<div class="logo-container">
 				<MxtLogo style={hoveringHomeLink ? 'default' : 'glass'} />
@@ -175,7 +181,10 @@
 	.central {
 		display: flex;
 		flex-direction: row;
+		align-items: center;
+		height: 100%;
 		gap: 10px;
+		z-index: 2;
 	}
 
 	.page-link {
@@ -215,5 +224,29 @@
 
 	.nav-right-margin {
 		width: 30px;
+	}
+
+	@supports (scroll-timeline: --scroll-timeline x) and (animation-timeline: --scroll-timeline) {
+		.top-bar {
+			scroll-timeline: --scroll-timeline x;
+		}
+
+		@keyframes hide-logo {
+			0% {
+				opacity: 1;
+			}
+			100% {
+				opacity: 0;
+			}
+		}
+
+		.left {
+			position: sticky;
+			left: 0;
+			animation-name: hide-logo;
+			animation-timeline: --scroll-timeline;
+			animation-fill-mode: both;
+			animation-range-end: exit 30px;
+		}
 	}
 </style>
