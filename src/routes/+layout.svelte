@@ -8,6 +8,7 @@
 	import { P, match } from 'ts-pattern';
 	import { caseStudiesPageIntersectingCard } from '$lib/threeStateStores';
 	import { onMount } from 'svelte';
+	import { spring } from 'svelte/motion';
 
 	let mounted = false;
 
@@ -64,6 +65,10 @@
 		)
 		.with({ path: '/studio/', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
 		.otherwise(() => false);
+	const threeSceneOpacity = spring(threeHidden ? 0 : 1, { stiffness: 0.1, damping: 0.8 });
+	$: {
+		threeSceneOpacity.set(threeHidden ? 0 : 1);
+	}
 
 	function initialScroll(el: HTMLElement) {
 		let w = el.getElementsByClassName('home-link')[0]!.clientWidth;
@@ -93,7 +98,7 @@
 	<Aurora visible={$page.url.pathname === '/contacts/'} />
 </div>
 
-<div class="three-container" class:hidden={threeHidden}>
+<div class="three-container" style:opacity={$threeSceneOpacity}>
 	<ThreeScene state={threeState} />
 </div>
 
@@ -147,11 +152,6 @@
 		position: fixed;
 		width: 100%;
 		height: 100dvh;
-		transition: opacity 1s var(--ease) 0.2s;
-	}
-
-	.three-container.hidden {
-		opacity: 0;
 	}
 
 	.top-bar {
