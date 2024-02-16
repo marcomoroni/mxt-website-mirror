@@ -5,18 +5,22 @@
 	import { lerp } from './lerp';
 	import { spring } from 'svelte/motion';
 	import { derived, get, writable, type Unsubscriber } from 'svelte/store';
+	import { vertexShader } from './three_scene/vertexShader';
+	import { fragmentShader } from './three_scene/fragmentShader';
+
+	// --- todo: move this file in folder
 
 	const DEV_debugLog = false;
 
 	const dioramasData = [
 		{
-			color: 0xdb8c3f
+			geometry: () => new THREE.SphereGeometry(1)
 		},
 		{
-			color: 0x000000
+			geometry: () => new THREE.BoxGeometry(1, 1, 1)
 		},
 		{
-			color: 0xffffff
+			geometry: () => new THREE.TorusKnotGeometry(1, 0.2, 300, 8, 5, 11)
 		}
 	];
 
@@ -60,6 +64,19 @@
 				y: derived(stateStore, ($s) => ($s === 'studio' ? 7 : 3)),
 				z: derived(stateStore, ($s) => ($s === 'studio' ? 0 : 5))
 			}
+		},
+		accentColourScheme: {
+			visibility: derived(stateStore, ($s) =>
+				[
+					'case-studies-anchor-a303',
+					'case-studies-anchor-p2',
+					'case-studies-anchor-p3',
+					'case-study-a303',
+					'case-study-p2',
+					'case-study-p3'
+				].includes($s)
+			),
+			variant: 0
 		},
 		railCircumference: {
 			center: {
@@ -105,6 +122,12 @@
 					z: spring(get(sceneSettings.camera.pos.z), { stiffness: 0.003, damping: 0.2 })
 				}
 			},
+			accentColourScheme: {
+				visibility: spring(get(sceneSettings.accentColourScheme.visibility) ? 0 : 1, {
+					stiffness: 0.006,
+					damping: 0.2
+				})
+			},
 			railCircumference: {
 				center: {
 					x: spring(get(sceneSettings.railCircumference.center.x), {
@@ -129,6 +152,11 @@
 		);
 		storeUnsubscribers.push(
 			sceneSettings.camera.pos.z.subscribe((v) => springs.camera.pos.z.set(v))
+		);
+		storeUnsubscribers.push(
+			sceneSettings.accentColourScheme.visibility.subscribe((v) =>
+				springs.accentColourScheme.visibility.set(v ? 0 : 1)
+			)
 		);
 		storeUnsubscribers.push(
 			sceneSettings.railCircumference.center.x.subscribe((v) =>
@@ -194,15 +222,24 @@
 		};
 
 		const dioramaInstances = dioramasData.map((dioramaData, i, array) => {
-			const boxSize = 1;
-			const geometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
-			// `toneMapped: false` makes the colours match the ones in the HTML.
-			const material = new THREE.MeshBasicMaterial({ color: dioramaData.color, toneMapped: false });
-			const cube = new THREE.Mesh(geometry, material);
-			cube.position.y = boxSize / 2;
+			const geometry = dioramaData.geometry();
+			const material = new THREE.ShaderMaterial({
+				vertexShader: vertexShader,
+				fragmentShader: fragmentShader,
+				uniforms: {
+					baseColor: { value: new THREE.Color('white') },
+					baseColorShadow: { value: new THREE.Color('#C0BBB1') },
+					accentColor1: { value: new THREE.Color('#db8c3f') },
+					accentColor2: { value: new THREE.Color('#badad5') },
+					accentColor3: { value: new THREE.Color('#b8c26c') }
+				},
+				// `toneMapped: false` makes the colours match the ones in the HTML.
+				toneMapped: false
+			});
+			const mesh = new THREE.Mesh(geometry, material);
 			const ownPolarAngle = lerp(0, 2 * Math.PI, i / array.length);
 			return {
-				cube,
+				mesh,
 				ownPolarAngle,
 				dispose: () => {
 					geometry.dispose();
@@ -210,11 +247,11 @@
 				}
 			};
 		});
-		dioramaInstances.forEach(({ cube, ownPolarAngle }) => {
-			scene.add(cube);
+		dioramaInstances.forEach(({ mesh, ownPolarAngle }) => {
+			scene.add(mesh);
 			const pos = positionInCircumference(railCircumference, ownPolarAngle);
-			cube.position.x = pos.x;
-			cube.position.z = pos.z;
+			mesh.position.x = pos.x;
+			mesh.position.z = pos.z;
 		});
 
 		const resize = () => {
@@ -237,12 +274,13 @@
 			applySpringValues(camera, railCircumference);
 			railCircumference.polarAngleRad += 0.0003 * dt;
 			railCircumference.polarAngleRad %= 2 * Math.PI; // Normalize angle.
-			dioramaInstances.forEach(({ cube, ownPolarAngle }) => {
+			dioramaInstances.forEach(({ mesh, ownPolarAngle }) => {
 				const pos = positionInCircumference(railCircumference, ownPolarAngle);
-				cube.position.x = pos.x;
-				cube.position.z = pos.z;
+				mesh.position.x = pos.x;
+				mesh.position.z = pos.z;
+				// mesh.rotation.y += 0.0007 * dt;
 			});
-			camera.lookAt(0, 0, 0);
+			camera.lookAt(0, 0, 1);
 
 			renderer.render(scene, camera);
 		};
@@ -260,6 +298,7 @@
 					dispose();
 				});
 				renderer.dispose();
+				renderer.forceContextLoss();
 			}
 		};
 	}
