@@ -51,6 +51,13 @@
 					y: state === 'studio' ? 7 : 3,
 					z: state === 'studio' ? 0 : 5
 				}
+			},
+			railCircumference: {
+				center: {
+					x: state === 'case-studies' ? -3 : 0,
+					z: 0
+				},
+				radius: state === 'studio' ? 2 : 4
 			}
 		};
 	};
@@ -90,16 +97,35 @@
 					y: spring(initialSceneSettings.camera.pos.y, { stiffness: 0.01 }),
 					z: spring(initialSceneSettings.camera.pos.z, { stiffness: 0.01 })
 				}
+			},
+			railCircumference: {
+				center: {
+					x: spring(initialSceneSettings.railCircumference.center.x, { stiffness: 0.01 }),
+					z: spring(initialSceneSettings.railCircumference.center.z, { stiffness: 0.01 })
+				},
+				radius: spring(initialSceneSettings.railCircumference.radius, { stiffness: 0.005 })
 			}
 		};
 		const udpateSpringTargets = () => {
 			const currentSceneSettings = sceneSettings(state);
 			springs.camera.pos.y.set(currentSceneSettings.camera.pos.y);
 			springs.camera.pos.z.set(currentSceneSettings.camera.pos.z);
+			springs.railCircumference.center.x.set(currentSceneSettings.railCircumference.center.x);
+			springs.railCircumference.center.z.set(currentSceneSettings.railCircumference.center.z);
+			springs.railCircumference.radius.set(currentSceneSettings.railCircumference.radius);
 		};
-		const applySpringValues = (camera: THREE.PerspectiveCamera) => {
+		const applySpringValues = (
+			camera: THREE.PerspectiveCamera,
+			railCircumference: { center: THREE.Vector3; radius: number }
+		) => {
 			camera.position.y = get(springs.camera.pos.y);
 			camera.position.z = get(springs.camera.pos.z);
+			railCircumference.center = new THREE.Vector3(
+				get(springs.railCircumference.center.x),
+				0,
+				get(springs.railCircumference.center.z)
+			);
+			railCircumference.radius = get(springs.railCircumference.radius);
 		};
 
 		const scene = new THREE.Scene();
@@ -125,8 +151,12 @@
 			polarAngleDiplRad: number
 		) => {
 			return {
-				x: Math.cos(circumference.polarAngleRad + polarAngleDiplRad) * circumference.radius,
-				z: Math.sin(circumference.polarAngleRad + polarAngleDiplRad) * circumference.radius
+				x:
+					Math.cos(circumference.polarAngleRad + polarAngleDiplRad) * circumference.radius +
+					circumference.center.x,
+				z:
+					Math.sin(circumference.polarAngleRad + polarAngleDiplRad) * circumference.radius +
+					circumference.center.z
 			};
 		};
 
@@ -171,6 +201,8 @@
 				requestAnimationFrame(animate);
 			}
 
+			udpateSpringTargets();
+			applySpringValues(camera, railCircumference);
 			railCircumference.polarAngleRad += 0.0003 * dt;
 			railCircumference.polarAngleRad %= 2 * Math.PI; // Normalize angle.
 			dioramaInstances.forEach(({ cube, ownPolarAngle }) => {
@@ -178,8 +210,6 @@
 				cube.position.x = pos.x;
 				cube.position.z = pos.z;
 			});
-			udpateSpringTargets();
-			applySpringValues(camera);
 			camera.lookAt(0, 0, 0);
 
 			renderer.render(scene, camera);
