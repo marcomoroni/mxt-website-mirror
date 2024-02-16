@@ -3,8 +3,9 @@
 	import { match } from 'ts-pattern';
 	import * as THREE from 'three';
 	import { lerp } from './lerp';
-	import { spring } from 'svelte/motion';
-	import { get } from 'svelte/store';
+	import { tweened } from 'svelte/motion';
+	import { derived, get, writable, type Unsubscriber } from 'svelte/store';
+	import { quadInOut } from 'svelte/easing';
 
 	const DEV_debugLog = false;
 
@@ -32,34 +33,42 @@
 		| 'studio'
 		| 'contacts';
 
-	const sceneSettings = (
-		state:
-			| 'home'
-			| 'case-studies'
-			| 'case-studies-anchor-a303'
-			| 'case-studies-anchor-p2'
-			| 'case-studies-anchor-p3'
-			| 'case-study-a303'
-			| 'case-study-p2'
-			| 'case-study-p3'
-			| 'studio'
-			| 'contacts'
-	) => {
-		return {
-			camera: {
-				pos: {
-					y: state === 'studio' ? 7 : 3,
-					z: state === 'studio' ? 0 : 5
-				}
-			},
-			railCircumference: {
-				center: {
-					x: state === 'case-studies' ? -3 : 0,
-					z: 0
-				},
-				radius: state === 'studio' ? 2 : 4
+	// This is needed because I need some reactivity that I can't have with implicit Svelte
+	// component reactivity.
+	const stateStore = writable<
+		| 'home'
+		| 'case-studies'
+		| 'case-studies-anchor-a303'
+		| 'case-studies-anchor-p2'
+		| 'case-studies-anchor-p3'
+		| 'case-study-a303'
+		| 'case-study-p2'
+		| 'case-study-p3'
+		| 'studio'
+		| 'contacts'
+	>(state);
+	$: {
+		stateStore.set(state);
+	}
+	// --- todo: proxy this state as a delayed state
+
+	// Given a state, calculate all values in the 3D scene.
+	// Note that I can only use simple numbers as the stores values and not objects otherwise reactivity
+	// will be triggered even if the leaves o the object are the same.
+	const sceneSettings = {
+		camera: {
+			pos: {
+				y: derived(stateStore, ($s) => ($s === 'studio' ? 7 : 3)),
+				z: derived(stateStore, ($s) => ($s === 'studio' ? 0 : 5))
 			}
-		};
+		},
+		railCircumference: {
+			center: {
+				x: derived(stateStore, ($s) => ($s === 'case-studies' ? -3 : 0)),
+				z: derived(stateStore, ($s) => 0)
+			},
+			radius: derived(stateStore, ($s) => ($s === 'studio' ? 2 : 4))
+		}
 	};
 
 	let logs: Array<string> = [];
@@ -88,44 +97,62 @@
 	});
 
 	function initThreeScene(canvasEl: HTMLCanvasElement) {
-		const initialSceneSettings = sceneSettings(state);
+		const storeUnsubscribers: Array<Unsubscriber> = [];
 
-		// Springs.
-		const springs = {
+		const tweenSettings = { duration: 2000, easing: quadInOut };
+		const tweens = {
 			camera: {
 				pos: {
-					y: spring(initialSceneSettings.camera.pos.y, { stiffness: 0.01 }),
-					z: spring(initialSceneSettings.camera.pos.z, { stiffness: 0.01 })
+					y: tweened(get(sceneSettings.camera.pos.y), tweenSettings),
+					z: tweened(get(sceneSettings.camera.pos.z), tweenSettings)
 				}
 			},
 			railCircumference: {
 				center: {
-					x: spring(initialSceneSettings.railCircumference.center.x, { stiffness: 0.01 }),
-					z: spring(initialSceneSettings.railCircumference.center.z, { stiffness: 0.01 })
+					x: tweened(get(sceneSettings.railCircumference.center.x), tweenSettings),
+					z: tweened(get(sceneSettings.railCircumference.center.z), tweenSettings)
 				},
-				radius: spring(initialSceneSettings.railCircumference.radius, { stiffness: 0.005 })
+				radius: tweened(get(sceneSettings.railCircumference.radius), tweenSettings)
 			}
 		};
-		const udpateSpringTargets = () => {
-			const currentSceneSettings = sceneSettings(state);
-			springs.camera.pos.y.set(currentSceneSettings.camera.pos.y);
-			springs.camera.pos.z.set(currentSceneSettings.camera.pos.z);
-			springs.railCircumference.center.x.set(currentSceneSettings.railCircumference.center.x);
-			springs.railCircumference.center.z.set(currentSceneSettings.railCircumference.center.z);
-			springs.railCircumference.radius.set(currentSceneSettings.railCircumference.radius);
-		};
-		const applySpringValues = (
+
+		// Update every tween store when its associated raw value changes.
+		storeUnsubscribers.push(
+			sceneSettings.camera.pos.y.subscribe((v) => tweens.camera.pos.y.set(v))
+		);
+		storeUnsubscribers.push(
+			sceneSettings.camera.pos.z.subscribe((v) => tweens.camera.pos.z.set(v))
+		);
+		storeUnsubscribers.push(
+			sceneSettings.railCircumference.center.x.subscribe((v) =>
+				tweens.railCircumference.center.x.set(v)
+			)
+		);
+		storeUnsubscribers.push(
+			sceneSettings.railCircumference.center.z.subscribe((v) =>
+				tweens.railCircumference.center.z.set(v)
+			)
+		);
+		storeUnsubscribers.push(
+			sceneSettings.railCircumference.radius.subscribe((v) =>
+				tweens.railCircumference.radius.set(v)
+			)
+		);
+
+		// The values of the tweens are not applied by the stores themselves. Instead, this function
+		// is called every frame and it manually reads values from the stores.
+		const applyTweenValues = (
 			camera: THREE.PerspectiveCamera,
 			railCircumference: { center: THREE.Vector3; radius: number }
 		) => {
-			camera.position.y = get(springs.camera.pos.y);
-			camera.position.z = get(springs.camera.pos.z);
+			camera.position.y = get(tweens.camera.pos.y);
+			camera.position.z = get(tweens.camera.pos.z);
 			railCircumference.center = new THREE.Vector3(
-				get(springs.railCircumference.center.x),
+				get(tweens.railCircumference.center.x),
 				0,
-				get(springs.railCircumference.center.z)
+				get(tweens.railCircumference.center.z)
 			);
-			railCircumference.radius = get(springs.railCircumference.radius);
+			railCircumference.radius = get(tweens.railCircumference.radius);
 		};
 
 		const scene = new THREE.Scene();
@@ -135,7 +162,6 @@
 			0.1,
 			1000
 		);
-
 		const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvasEl, alpha: true });
 
 		// Dioramas are placed in a circumference at equal distances.
@@ -201,8 +227,7 @@
 				requestAnimationFrame(animate);
 			}
 
-			udpateSpringTargets();
-			applySpringValues(camera, railCircumference);
+			applyTweenValues(camera, railCircumference);
 			railCircumference.polarAngleRad += 0.0003 * dt;
 			railCircumference.polarAngleRad %= 2 * Math.PI; // Normalize angle.
 			dioramaInstances.forEach(({ cube, ownPolarAngle }) => {
@@ -223,6 +248,7 @@
 		return {
 			destroy() {
 				shouldRequestNewAnimationFrame = false;
+				storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
 				dioramaInstances.forEach(({ dispose }) => {
 					dispose();
 				});
