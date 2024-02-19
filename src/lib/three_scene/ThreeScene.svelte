@@ -17,8 +17,6 @@
 	} from '$lib/accentColors';
 	import { lerp } from '$lib/lerp';
 
-	// --- todo: move this file in folder
-
 	const DEV_debugLog = false;
 
 	const dioramasData = [
