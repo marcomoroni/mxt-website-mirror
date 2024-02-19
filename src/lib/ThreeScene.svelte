@@ -8,6 +8,14 @@
 	import { vertexShader } from './three_scene/vertexShader';
 	import { fragmentShader } from './three_scene/fragmentShader';
 	import { match } from 'ts-pattern';
+	import {
+		accentColor1,
+		accentColor2,
+		accentColor3,
+		accentColor4,
+		accentColor5,
+		accentColor6
+	} from './accentColors';
 
 	// --- todo: move this file in folder
 
@@ -25,10 +33,10 @@
 		}
 	];
 	const colorPalettes = [
-		{ accentColor1: '#db8c3f', accentColor2: '#badad5', accentColor3: '#b8c26c' },
-		{ accentColor1: '#EDBD6B', accentColor2: '#F5DEE4', accentColor3: '#1D5755' },
-		{ accentColor1: 'cyan', accentColor2: 'cyan', accentColor3: 'cyan' },
-		{ accentColor1: 'yellow', accentColor2: 'yellow', accentColor3: 'yellow' }
+		{ accentColor1: accentColor2, accentColor2: accentColor3, accentColor3: accentColor1 },
+		{ accentColor1: accentColor4, accentColor2: '#DCDAC3', accentColor3: '#BDD2D5' },
+		{ accentColor1: '#CAA98B', accentColor2: '#6B796A', accentColor3: accentColor5 },
+		{ accentColor1: '#CDD9C5', accentColor2: accentColor6, accentColor3: '#FFE8B0' }
 	];
 
 	export let state:
@@ -116,7 +124,8 @@
 			},
 			colorPaletteIndex: spring(get(sceneSettings.colorPaletteIndex), {
 				stiffness: 0.003,
-				damping: 0.2
+				damping: 0.2,
+				precision: 0.001
 			}),
 			railCircumference: {
 				center: {
