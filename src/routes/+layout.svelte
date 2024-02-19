@@ -6,7 +6,7 @@
 	import Aurora from '$lib/Aurora.svelte';
 	import ThreeScene from '$lib/three_scene/ThreeScene.svelte';
 	import { P, match } from 'ts-pattern';
-	import { caseStudiesPageIntersectingCard } from '$lib/threeStateStores';
+	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
 	import { onMount } from 'svelte';
 	import { spring } from 'svelte/motion';
 

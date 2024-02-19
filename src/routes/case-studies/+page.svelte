@@ -1,7 +1,7 @@
 <script lang="ts">
 	import CaseStudyTitleBox from '$lib/CaseStudyTitleBox.svelte';
 	import { caseStudiesData } from '$lib/caseStudiesData';
-	import { caseStudiesPageIntersectingCard } from '$lib/threeStateStores';
+	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
 	import { onDestroy } from 'svelte';
 
 	// Every case study has an intersection observer, but on their own they are not enough.
