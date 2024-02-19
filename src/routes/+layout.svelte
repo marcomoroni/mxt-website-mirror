@@ -4,7 +4,7 @@
 	import { page } from '$app/stores';
 	import MxtLogo from '$lib/MXTLogo.svelte';
 	import Aurora from '$lib/Aurora.svelte';
-	import ThreeScene from '$lib/ThreeScene.svelte';
+	import ThreeScene from '$lib/three_scene/ThreeScene.svelte';
 	import { P, match } from 'ts-pattern';
 	import { caseStudiesPageIntersectingCard } from '$lib/threeStateStores';
 	import { onMount } from 'svelte';

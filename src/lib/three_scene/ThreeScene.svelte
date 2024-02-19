@@ -2,11 +2,10 @@
 	import { onMount } from 'svelte';
 	import * as THREE from 'three';
 	import * as d3 from 'd3';
-	import { lerp } from './lerp';
 	import { spring } from 'svelte/motion';
 	import { derived, get, writable, type Unsubscriber } from 'svelte/store';
-	import { vertexShader } from './three_scene/vertexShader';
-	import { fragmentShader } from './three_scene/fragmentShader';
+	import { vertexShader } from './vertexShader';
+	import { fragmentShader } from './fragmentShader';
 	import { match } from 'ts-pattern';
 	import {
 		accentColor1,
@@ -15,7 +14,8 @@
 		accentColor4,
 		accentColor5,
 		accentColor6
-	} from './accentColors';
+	} from '$lib/accentColors';
+	import { lerp } from '$lib/lerp';
 
 	// --- todo: move this file in folder
 
