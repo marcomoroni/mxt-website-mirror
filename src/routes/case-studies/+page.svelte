@@ -2,89 +2,71 @@
 	import CaseStudyTitleBox from '$lib/CaseStudyTitleBox.svelte';
 	import { caseStudiesData } from '$lib/caseStudiesData';
 	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
-	import { onDestroy } from 'svelte';
+	import { onMount } from 'svelte';
 
-	// Every case study has an intersection observer, but on their own they are not enough.
-	// This map, along with the following $ is needed to compensate for:
-	//  - I also need to know when none of them are intersecting
-	//  - the intersection observer threshold does not distingush between top 50% or bottom 50%,
-	//    so I'm going to check which element has the lowest maxBoundingClientRect y.
-	let intersectingCards: Map<
-		'case-studies-anchor-a303' | 'case-studies-anchor-p2' | 'case-studies-anchor-p3',
-		{ boundingClientRectY: number }
-	> = new Map();
-	$: {
-		const newThreeState:
+	// `IntersectionObserver` does not work well in this situation becasue getting the first state asyncronously
+	// is not enough.
+
+	let scrollY: number;
+	let windowHeight: number;
+
+	// Note that these are in order.
+	const cards: Array<{
+		el: HTMLElement;
+		threeState: 'case-studies-anchor-a303' | 'case-studies-anchor-p2' | 'case-studies-anchor-p3';
+	}> = [];
+
+	function checkNewState() {
+		let newThreeState:
 			| undefined
 			| 'case-studies-anchor-a303'
 			| 'case-studies-anchor-p2'
-			| 'case-studies-anchor-p3' = Array.from(intersectingCards.entries()).reduce(
-			(previous, current) => {
-				if (previous === undefined) {
-					return {
-						stateName: current[0],
-						maxBoundingClientRectY: current[1].boundingClientRectY
-					};
-				} else if (current[1].boundingClientRectY > previous.maxBoundingClientRectY) {
-					return {
-						stateName: current[0],
-						maxBoundingClientRectY: current[1].boundingClientRectY
-					};
-				} else {
-					return previous;
-				}
-			},
-			undefined as
-				| undefined
-				| {
-						stateName:
-							| 'case-studies-anchor-a303'
-							| 'case-studies-anchor-p2'
-							| 'case-studies-anchor-p3';
-						maxBoundingClientRectY: number;
-				  }
-		)?.stateName;
+			| 'case-studies-anchor-p3' = undefined;
+		for (const card of cards) {
+			const hasPassedHalfWindow = card.el.getBoundingClientRect().y < windowHeight / 2;
+			if (hasPassedHalfWindow) {
+				newThreeState = card.threeState;
+			} else {
+				break;
+			}
+		}
 
 		caseStudiesPageIntersectingCard.set(newThreeState);
 	}
+
+	$: {
+		if (scrollY) {
+			let newThreeState:
+				| undefined
+				| 'case-studies-anchor-a303'
+				| 'case-studies-anchor-p2'
+				| 'case-studies-anchor-p3' = undefined;
+			for (const card of cards) {
+				const hasPassedHalfWindow = card.el.getBoundingClientRect().y < windowHeight / 2;
+				if (hasPassedHalfWindow) {
+					newThreeState = card.threeState;
+				} else {
+					break;
+				}
+			}
+
+			caseStudiesPageIntersectingCard.set(newThreeState);
+		}
+	}
+
+	onMount(() => {
+		checkNewState();
+	});
 
 	function scrollObserve(
 		el: HTMLElement,
 		threeState: 'case-studies-anchor-a303' | 'case-studies-anchor-p2' | 'case-studies-anchor-p3'
 	) {
-		const observer = new IntersectionObserver(
-			(entries) => {
-				console.assert(entries.length === 1);
-				entries.forEach((entry) => {
-					if (entry.isIntersecting) {
-						intersectingCards.set(threeState, { boundingClientRectY: entry.boundingClientRect.y });
-						intersectingCards = intersectingCards;
-					} else {
-						intersectingCards.delete(threeState);
-						intersectingCards = intersectingCards;
-					}
-				});
-			},
-			{
-				rootMargin: '0px',
-				threshold: 0.5
-			}
-		);
-
-		observer.observe(el);
-
-		return {
-			destroy() {
-				observer.disconnect();
-				intersectingCards.delete(threeState);
-			}
-		};
+		cards.push({ el, threeState });
 	}
-
-	onDestroy(() => {
-		intersectingCards.clear();
-	});
 </script>
+
+<svelte:window bind:scrollY bind:innerHeight={windowHeight} />
 
 <div class="landing">Case studies</div>
 
