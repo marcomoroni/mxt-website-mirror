@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { match } from 'ts-pattern';
 	import * as THREE from 'three';
+	import * as d3 from 'd3';
 	import { lerp } from './lerp';
 	import { spring } from 'svelte/motion';
 	import { derived, get, writable, type Unsubscriber } from 'svelte/store';
 	import { vertexShader } from './three_scene/vertexShader';
 	import { fragmentShader } from './three_scene/fragmentShader';
+	import { match } from 'ts-pattern';
 
 	// --- todo: move this file in folder
 
@@ -22,6 +23,12 @@
 		{
 			geometry: () => new THREE.TorusKnotGeometry(1, 0.2, 300, 8, 5, 11)
 		}
+	];
+	const colorPalettes = [
+		{ accentColor1: '#db8c3f', accentColor2: '#badad5', accentColor3: '#b8c26c' },
+		{ accentColor1: '#EDBD6B', accentColor2: '#F5DEE4', accentColor3: '#1D5755' },
+		{ accentColor1: 'cyan', accentColor2: 'cyan', accentColor3: 'cyan' },
+		{ accentColor1: 'yellow', accentColor2: 'yellow', accentColor3: 'yellow' }
 	];
 
 	export let state:
@@ -65,19 +72,16 @@
 				z: derived(stateStore, ($s) => ($s === 'studio' ? 0 : 5))
 			}
 		},
-		accentColourScheme: {
-			visibility: derived(stateStore, ($s) =>
-				[
-					'case-studies-anchor-a303',
-					'case-studies-anchor-p2',
-					'case-studies-anchor-p3',
-					'case-study-a303',
-					'case-study-p2',
-					'case-study-p3'
-				].includes($s)
-			),
-			variant: 0
-		},
+		colorPaletteIndex: derived(stateStore, ($s) =>
+			match($s)
+				.with('case-studies-anchor-a303', () => 1)
+				.with('case-studies-anchor-p2', () => 2)
+				.with('case-studies-anchor-p3', () => 3)
+				.with('case-study-a303', () => 1)
+				.with('case-study-p2', () => 2)
+				.with('case-study-p3', () => 3)
+				.otherwise(() => 0)
+		),
 		railCircumference: {
 			center: {
 				x: derived(stateStore, ($s) => ($s === 'case-studies' ? -3 : 0)),
@@ -110,12 +114,10 @@
 					z: spring(get(sceneSettings.camera.pos.z), { stiffness: 0.003, damping: 0.2 })
 				}
 			},
-			accentColourScheme: {
-				visibility: spring(get(sceneSettings.accentColourScheme.visibility) ? 0 : 1, {
-					stiffness: 0.006,
-					damping: 0.2
-				})
-			},
+			colorPaletteIndex: spring(get(sceneSettings.colorPaletteIndex), {
+				stiffness: 0.003,
+				damping: 0.2
+			}),
 			railCircumference: {
 				center: {
 					x: spring(get(sceneSettings.railCircumference.center.x), {
@@ -142,9 +144,7 @@
 			sceneSettings.camera.pos.z.subscribe((v) => springs.camera.pos.z.set(v))
 		);
 		storeUnsubscribers.push(
-			sceneSettings.accentColourScheme.visibility.subscribe((v) =>
-				springs.accentColourScheme.visibility.set(v ? 0 : 1)
-			)
+			sceneSettings.colorPaletteIndex.subscribe((v) => springs.colorPaletteIndex.set(v))
 		);
 		storeUnsubscribers.push(
 			sceneSettings.railCircumference.center.x.subscribe((v) =>
@@ -166,7 +166,8 @@
 		// is called every frame and it manually reads values from the stores.
 		const applySpringValues = (
 			camera: THREE.PerspectiveCamera,
-			railCircumference: { center: THREE.Vector3; radius: number }
+			railCircumference: { center: THREE.Vector3; radius: number },
+			colorPalette: { accentColor1: string; accentColor2: string; accentColor3: string }
 		) => {
 			camera.position.y = get(springs.camera.pos.y);
 			camera.position.z = get(springs.camera.pos.z);
@@ -176,6 +177,19 @@
 				get(springs.railCircumference.center.z)
 			);
 			railCircumference.radius = get(springs.railCircumference.radius);
+			const colorPaletteI = get(springs.colorPaletteIndex) / (colorPalettes.length - 1);
+			colorPalette.accentColor1 = d3.piecewise(
+				d3.interpolateRgb.gamma(2.2),
+				colorPalettes.map((p) => p.accentColor1)
+			)(colorPaletteI);
+			colorPalette.accentColor2 = d3.piecewise(
+				d3.interpolateRgb.gamma(2.2),
+				colorPalettes.map((p) => p.accentColor2)
+			)(colorPaletteI);
+			colorPalette.accentColor3 = d3.piecewise(
+				d3.interpolateRgb.gamma(2.2),
+				colorPalettes.map((p) => p.accentColor3)
+			)(colorPaletteI);
 		};
 
 		const scene = new THREE.Scene();
@@ -209,17 +223,20 @@
 			};
 		};
 
+		const colorPalette = { ...colorPalettes[0] };
+
 		const dioramaInstances = dioramasData.map((dioramaData, i, array) => {
 			const geometry = dioramaData.geometry();
+			// --- todo: make only one instance of the material
 			const material = new THREE.ShaderMaterial({
 				vertexShader: vertexShader,
 				fragmentShader: fragmentShader,
 				uniforms: {
 					baseColor: { value: new THREE.Color('white') },
 					baseColorShadow: { value: new THREE.Color('#C0BBB1') },
-					accentColor1: { value: new THREE.Color('#db8c3f') },
-					accentColor2: { value: new THREE.Color('#badad5') },
-					accentColor3: { value: new THREE.Color('#b8c26c') }
+					accentColor1: { value: new THREE.Color(colorPalette.accentColor1) },
+					accentColor2: { value: new THREE.Color(colorPalette.accentColor2) },
+					accentColor3: { value: new THREE.Color(colorPalette.accentColor3) }
 				},
 				// `toneMapped: false` makes the colours match the ones in the HTML.
 				toneMapped: false
@@ -259,14 +276,17 @@
 				requestAnimationFrame(animate);
 			}
 
-			applySpringValues(camera, railCircumference);
-			railCircumference.polarAngleRad += 0.0003 * dt;
+			applySpringValues(camera, railCircumference, colorPalette);
+			// railCircumference.polarAngleRad += 0.0003 * dt;
 			railCircumference.polarAngleRad %= 2 * Math.PI; // Normalize angle.
 			dioramaInstances.forEach(({ mesh, ownPolarAngle }) => {
 				const pos = positionInCircumference(railCircumference, ownPolarAngle);
 				mesh.position.x = pos.x;
 				mesh.position.z = pos.z;
-				// mesh.rotation.y += 0.0007 * dt;
+				mesh.rotation.y += 0.0007 * dt;
+				mesh.material.uniforms.accentColor1.value = new THREE.Color(colorPalette.accentColor1);
+				mesh.material.uniforms.accentColor2.value = new THREE.Color(colorPalette.accentColor2);
+				mesh.material.uniforms.accentColor3.value = new THREE.Color(colorPalette.accentColor3);
 			});
 			camera.lookAt(0, 0, 1);
 
