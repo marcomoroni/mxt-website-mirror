@@ -6,7 +6,7 @@
 	import { derived, get, writable, type Unsubscriber } from 'svelte/store';
 	import { vertexShader } from './vertexShader';
 	import { fragmentShader } from './fragmentShader';
-	import { match } from 'ts-pattern';
+	import { P, match } from 'ts-pattern';
 	import {
 		accentColor1,
 		accentColor2,
@@ -16,6 +16,7 @@
 		accentColor6
 	} from '$lib/accentColors';
 	import { lerp } from '$lib/lerp';
+	import { toRadians } from '$lib/angleConversions';
 
 	const DEV_debugLog = false;
 
@@ -93,7 +94,8 @@
 				x: derived(stateStore, ($s) => ($s === 'case-studies' ? -3 : 0)),
 				z: derived(stateStore, ($s) => 0)
 			},
-			radius: derived(stateStore, ($s) => ($s === 'studio' ? 2 : 4))
+			radius: derived(stateStore, ($s) => ($s === 'studio' ? 2 : 4)),
+			polarAngleDeg: derived(stateStore, ($s) => ($s === 'home' ? 'KeepRotating' : { At: 0 }))
 		}
 	};
 
@@ -112,6 +114,26 @@
 
 	function initThreeScene(canvasEl: HTMLCanvasElement) {
 		const storeUnsubscribers: Array<Unsubscriber> = [];
+
+		// A store that can be updated every frame when there is a continuous rotation.
+		const railCircumferencePolarAngleRad = writable(
+			match(get(sceneSettings.railCircumference.polarAngleDeg))
+				.with('KeepRotating', () => 350) // --- temp. will be 0
+				.with({ At: P.select() }, (to) => to)
+				.exhaustive()
+		);
+		storeUnsubscribers.push(
+			sceneSettings.railCircumference.polarAngleDeg.subscribe((v) => {
+				railCircumferencePolarAngleRad.update((currentAngle) =>
+					match(get(sceneSettings.railCircumference.polarAngleDeg))
+						.with('KeepRotating', () => currentAngle)
+						.with({ At: P.select() }, (to) => to)
+						.exhaustive()
+				);
+			})
+		);
+
+		// LERP ANGLE?
 
 		const springs = {
 			camera: {
@@ -178,12 +200,14 @@
 		) => {
 			camera.position.y = get(springs.camera.pos.y);
 			camera.position.z = get(springs.camera.pos.z);
+
 			railCircumference.center = new THREE.Vector3(
 				get(springs.railCircumference.center.x),
 				0,
 				get(springs.railCircumference.center.z)
 			);
 			railCircumference.radius = get(springs.railCircumference.radius);
+
 			const colorPaletteI = get(springs.colorPaletteIndex) / (colorPalettes.length - 1);
 			colorPalette.accentColor1 = d3.piecewise(
 				d3.interpolateRgb.gamma(2.2),
@@ -214,18 +238,20 @@
 		const railCircumference = {
 			center: new THREE.Vector3(0, 0, 0),
 			radius: 4,
-			polarAngleRad: 0
+			polarAngleDeg: get(railCircumferencePolarAngleRad)
 		};
 		const positionInCircumference = (
-			circumference: { center: THREE.Vector3; radius: number; polarAngleRad: number },
-			polarAngleDiplRad: number
+			circumference: { center: THREE.Vector3; radius: number; polarAngleDeg: number },
+			polarAngleDiplDeg: number
 		) => {
 			return {
 				x:
-					Math.cos(circumference.polarAngleRad + polarAngleDiplRad) * circumference.radius +
+					Math.cos(toRadians(circumference.polarAngleDeg + polarAngleDiplDeg)) *
+						circumference.radius +
 					circumference.center.x,
 				z:
-					Math.sin(circumference.polarAngleRad + polarAngleDiplRad) * circumference.radius +
+					Math.sin(toRadians(circumference.polarAngleDeg + polarAngleDiplDeg)) *
+						circumference.radius +
 					circumference.center.z
 			};
 		};
@@ -249,19 +275,19 @@
 				toneMapped: false
 			});
 			const mesh = new THREE.Mesh(geometry, material);
-			const ownPolarAngle = lerp(0, 2 * Math.PI, i / array.length);
+			const ownPolarAngleDeg = lerp(0, 360, i / array.length);
 			return {
 				mesh,
-				ownPolarAngle,
+				ownPolarAngleDeg,
 				dispose: () => {
 					geometry.dispose();
 					material.dispose();
 				}
 			};
 		});
-		dioramaInstances.forEach(({ mesh, ownPolarAngle }) => {
+		dioramaInstances.forEach(({ mesh, ownPolarAngleDeg }) => {
 			scene.add(mesh);
-			const pos = positionInCircumference(railCircumference, ownPolarAngle);
+			const pos = positionInCircumference(railCircumference, ownPolarAngleDeg);
 			mesh.position.x = pos.x;
 			mesh.position.z = pos.z;
 		});
@@ -283,11 +309,32 @@
 				requestAnimationFrame(animate);
 			}
 
+			// Rotation.
+			match(get(sceneSettings.railCircumference.polarAngleDeg)).with('KeepRotating', () => {
+				railCircumferencePolarAngleRad.update((v) => {
+					const newAngle = v + 0.02 * dt;
+					return newAngle;
+				});
+			});
+			const clockwise = true;
+			const currentRotation = railCircumference.polarAngleDeg;
+			const targetRotation = get(railCircumferencePolarAngleRad);
+			let shortestAngle = (targetRotation - currentRotation + 360) % 360;
+			if (shortestAngle > 360 / 2) {
+				shortestAngle -= 360;
+			}
+			const direction = clockwise ? 1 : -1;
+			const maxRotationDelta = 300; // Maximum rotation change per second.
+			const rotationDelta =
+				Math.min(maxRotationDelta * dt * 0.01, Math.abs(shortestAngle)) * direction;
+			const dampFactor = 0.1; // Adjust damping factor as needed
+			const dampedRotationDelta = rotationDelta * (1 - Math.exp(-dampFactor * dt * 0.01));
+			const newRotation = (currentRotation + dampedRotationDelta + 360) % 360;
+			railCircumference.polarAngleDeg = newRotation;
+
 			applySpringValues(camera, railCircumference, colorPalette);
-			// railCircumference.polarAngleRad += 0.0003 * dt;
-			railCircumference.polarAngleRad %= 2 * Math.PI; // Normalize angle.
-			dioramaInstances.forEach(({ mesh, ownPolarAngle }) => {
-				const pos = positionInCircumference(railCircumference, ownPolarAngle);
+			dioramaInstances.forEach(({ mesh, ownPolarAngleDeg }) => {
+				const pos = positionInCircumference(railCircumference, ownPolarAngleDeg);
 				mesh.position.x = pos.x;
 				mesh.position.z = pos.z;
 				mesh.rotation.y += 0.0007 * dt;
@@ -295,7 +342,7 @@
 				mesh.material.uniforms.accentColor2.value = new THREE.Color(colorPalette.accentColor2);
 				mesh.material.uniforms.accentColor3.value = new THREE.Color(colorPalette.accentColor3);
 			});
-			camera.lookAt(0, 0, 1);
+			camera.lookAt(0, 0, 0);
 
 			renderer.render(scene, camera);
 		};
