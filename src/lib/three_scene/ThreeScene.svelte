@@ -17,6 +17,7 @@
 	} from '$lib/accentColors';
 	import { lerp } from '$lib/lerp';
 	import { toRadians } from '$lib/angleConversions';
+	import { rotationAnimation } from './rotationAnimation';
 
 	const DEV_debugLog = false;
 
@@ -91,11 +92,21 @@
 		),
 		railCircumference: {
 			center: {
-				x: derived(stateStore, ($s) => ($s === 'case-studies' ? -3 : 0)),
+				x: derived(stateStore, ($s) => ($s.startsWith('case-stud') ? -3 : 0)),
 				z: derived(stateStore, ($s) => 0)
 			},
 			radius: derived(stateStore, ($s) => ($s === 'studio' ? 2 : 4)),
-			polarAngleDeg: derived(stateStore, ($s) => ($s === 'home' ? 'KeepRotating' : { At: 0 }))
+			// polarAngleDeg: derived(stateStore, ($s) => ($s === 'home' ? 'KeepRotating' : { At: 0 }))
+			polarAngleDeg: derived(stateStore, ($s) =>
+				match($s)
+					.with('case-studies-anchor-a303', () => ({ At: 0 }))
+					.with('case-studies-anchor-p2', () => ({ At: (360 / 3) * 1 }))
+					.with('case-studies-anchor-p3', () => ({ At: (360 / 3) * 2 }))
+					.with('case-study-a303', () => ({ At: 0 }))
+					.with('case-study-p2', () => ({ At: (360 / 3) * 1 }))
+					.with('case-study-p3', () => ({ At: (360 / 3) * 2 }))
+					.otherwise(() => 'KeepRotating')
+			)
 		}
 	};
 
@@ -116,7 +127,7 @@
 		const storeUnsubscribers: Array<Unsubscriber> = [];
 
 		// A store that can be updated every frame when there is a continuous rotation.
-		const railCircumferencePolarAngleRad = writable(
+		const railCircumferencePolarAngleRadTarget = writable(
 			match(get(sceneSettings.railCircumference.polarAngleDeg))
 				.with('KeepRotating', () => 350) // --- temp. will be 0
 				.with({ At: P.select() }, (to) => to)
@@ -124,7 +135,7 @@
 		);
 		storeUnsubscribers.push(
 			sceneSettings.railCircumference.polarAngleDeg.subscribe((v) => {
-				railCircumferencePolarAngleRad.update((currentAngle) =>
+				railCircumferencePolarAngleRadTarget.update((currentAngle) =>
 					match(get(sceneSettings.railCircumference.polarAngleDeg))
 						.with('KeepRotating', () => currentAngle)
 						.with({ At: P.select() }, (to) => to)
@@ -238,19 +249,19 @@
 		const railCircumference = {
 			center: new THREE.Vector3(0, 0, 0),
 			radius: 4,
-			polarAngleDeg: get(railCircumferencePolarAngleRad)
+			polarAngleDeg: rotationAnimation(get(railCircumferencePolarAngleRadTarget), true)
 		};
 		const positionInCircumference = (
-			circumference: { center: THREE.Vector3; radius: number; polarAngleDeg: number },
+			circumference: { center: THREE.Vector3; radius: number; polarAngleDeg: { rotation: number } },
 			polarAngleDiplDeg: number
 		) => {
 			return {
 				x:
-					Math.cos(toRadians(circumference.polarAngleDeg + polarAngleDiplDeg)) *
+					Math.cos(toRadians(circumference.polarAngleDeg.rotation + polarAngleDiplDeg)) *
 						circumference.radius +
 					circumference.center.x,
 				z:
-					Math.sin(toRadians(circumference.polarAngleDeg + polarAngleDiplDeg)) *
+					Math.sin(toRadians(circumference.polarAngleDeg.rotation + polarAngleDiplDeg)) *
 						circumference.radius +
 					circumference.center.z
 			};
@@ -311,33 +322,20 @@
 
 			// Rotation.
 			match(get(sceneSettings.railCircumference.polarAngleDeg)).with('KeepRotating', () => {
-				railCircumferencePolarAngleRad.update((v) => {
-					const newAngle = v + 0.02 * dt;
+				railCircumferencePolarAngleRadTarget.update((v) => {
+					const newAngle = v + 0.01 * dt;
 					return newAngle;
 				});
 			});
-			const clockwise = true;
-			const currentRotation = railCircumference.polarAngleDeg;
-			const targetRotation = get(railCircumferencePolarAngleRad);
-			let shortestAngle = (targetRotation - currentRotation + 360) % 360;
-			if (shortestAngle > 360 / 2) {
-				shortestAngle -= 360;
-			}
-			const direction = clockwise ? 1 : -1;
-			const maxRotationDelta = 300; // Maximum rotation change per second.
-			const rotationDelta =
-				Math.min(maxRotationDelta * dt * 0.01, Math.abs(shortestAngle)) * direction;
-			const dampFactor = 0.1; // Adjust damping factor as needed
-			const dampedRotationDelta = rotationDelta * (1 - Math.exp(-dampFactor * dt * 0.01));
-			const newRotation = (currentRotation + dampedRotationDelta + 360) % 360;
-			railCircumference.polarAngleDeg = newRotation;
+			railCircumference.polarAngleDeg.setTargetRotation(get(railCircumferencePolarAngleRadTarget));
+			railCircumference.polarAngleDeg.tick(dt);
 
 			applySpringValues(camera, railCircumference, colorPalette);
 			dioramaInstances.forEach(({ mesh, ownPolarAngleDeg }) => {
 				const pos = positionInCircumference(railCircumference, ownPolarAngleDeg);
 				mesh.position.x = pos.x;
 				mesh.position.z = pos.z;
-				mesh.rotation.y += 0.0007 * dt;
+				// mesh.rotation.y += 0.0007 * dt;
 				mesh.material.uniforms.accentColor1.value = new THREE.Color(colorPalette.accentColor1);
 				mesh.material.uniforms.accentColor2.value = new THREE.Color(colorPalette.accentColor2);
 				mesh.material.uniforms.accentColor3.value = new THREE.Color(colorPalette.accentColor3);
