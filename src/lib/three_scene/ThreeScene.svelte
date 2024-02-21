@@ -129,7 +129,7 @@
 		// A store that can be updated every frame when there is a continuous rotation.
 		const railCircumferencePolarAngleRadTarget = writable(
 			match(get(sceneSettings.railCircumference.polarAngleDeg))
-				.with('KeepRotating', () => 350) // --- temp. will be 0
+				.with('KeepRotating', () => 0)
 				.with({ At: P.select() }, (to) => to)
 				.exhaustive()
 		);
@@ -143,8 +143,6 @@
 				);
 			})
 		);
-
-		// LERP ANGLE?
 
 		const springs = {
 			camera: {
@@ -251,18 +249,17 @@
 			radius: 4,
 			polarAngleDeg: rotationAnimation(get(railCircumferencePolarAngleRadTarget), true)
 		};
-		const positionInCircumference = (
-			circumference: { center: THREE.Vector3; radius: number; polarAngleDeg: { rotation: number } },
-			polarAngleDiplDeg: number
-		) => {
+		const positionInCircumference = (circumference: {
+			center: THREE.Vector3;
+			radius: number;
+			polarAngleDeg: number;
+		}) => {
 			return {
 				x:
-					Math.cos(toRadians(circumference.polarAngleDeg.rotation + polarAngleDiplDeg)) *
-						circumference.radius +
+					Math.cos(toRadians(-circumference.polarAngleDeg)) * circumference.radius +
 					circumference.center.x,
 				z:
-					Math.sin(toRadians(circumference.polarAngleDeg.rotation + polarAngleDiplDeg)) *
-						circumference.radius +
+					Math.sin(toRadians(-circumference.polarAngleDeg)) * circumference.radius +
 					circumference.center.z
 			};
 		};
@@ -296,11 +293,8 @@
 				}
 			};
 		});
-		dioramaInstances.forEach(({ mesh, ownPolarAngleDeg }) => {
+		dioramaInstances.forEach(({ mesh }) => {
 			scene.add(mesh);
-			const pos = positionInCircumference(railCircumference, ownPolarAngleDeg);
-			mesh.position.x = pos.x;
-			mesh.position.z = pos.z;
 		});
 
 		const resize = () => {
@@ -322,17 +316,18 @@
 
 			// Rotation.
 			match(get(sceneSettings.railCircumference.polarAngleDeg)).with('KeepRotating', () => {
-				railCircumferencePolarAngleRadTarget.update((v) => {
-					const newAngle = v + 0.01 * dt;
-					return newAngle;
-				});
+				railCircumferencePolarAngleRadTarget.update((v) => v + 0.01 * dt);
 			});
 			railCircumference.polarAngleDeg.setTargetRotation(get(railCircumferencePolarAngleRadTarget));
 			railCircumference.polarAngleDeg.tick(dt);
 
 			applySpringValues(camera, railCircumference, colorPalette);
 			dioramaInstances.forEach(({ mesh, ownPolarAngleDeg }) => {
-				const pos = positionInCircumference(railCircumference, ownPolarAngleDeg);
+				const pos = positionInCircumference({
+					center: railCircumference.center,
+					radius: railCircumference.radius,
+					polarAngleDeg: railCircumference.polarAngleDeg.rotation - ownPolarAngleDeg
+				});
 				mesh.position.x = pos.x;
 				mesh.position.z = pos.z;
 				// mesh.rotation.y += 0.0007 * dt;
