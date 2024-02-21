@@ -98,6 +98,7 @@
 			radius: derived(stateStore, ($s) => ($s === 'studio' ? 2 : 4)),
 			polarAngleDeg: derived(stateStore, ($s) =>
 				match($s)
+					.returnType<'KeepRotating' | { At: number }>()
 					.with('case-studies-anchor-a303', () => ({ At: 0 }))
 					.with('case-studies-anchor-p2', () => ({ At: (360 / 3) * 1 }))
 					.with('case-studies-anchor-p3', () => ({ At: (360 / 3) * 2 }))
