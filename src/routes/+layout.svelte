@@ -10,8 +10,6 @@
 	import { onMount } from 'svelte';
 	import { spring } from 'svelte/motion';
 
-	let mounted = false;
-
 	let hoveringHomeLink = false;
 
 	let scrollY: number;
@@ -73,19 +71,17 @@
 	function initialScroll(el: HTMLElement) {
 		let w = el.getElementsByClassName('home-link')[0]!.clientWidth;
 		w -= 30;
-		el.scroll(w, 0);
-
-		// Since this scroll happens when the element is mounted, the the nav bar until it is mounted.
+		el.scroll({
+			top: 0,
+			left: w,
+			behavior: 'smooth'
+		});
 	}
 
 	let topBarEl: HTMLElement;
 	function scrollToStartOfTopBar() {
 		topBarEl.scroll({ left: 0, behavior: 'smooth' });
 	}
-
-	onMount(() => {
-		mounted = true;
-	});
 </script>
 
 <svelte:window bind:scrollY />
@@ -102,7 +98,7 @@
 	<ThreeScene state={threeState} />
 </div>
 
-<nav class="top-bar" use:initialScroll bind:this={topBarEl} class:not-ready={!mounted}>
+<nav class="top-bar" use:initialScroll bind:this={topBarEl}>
 	<div class="left">
 		<a
 			href="/"
@@ -166,11 +162,6 @@
 		align-items: center;
 		overflow-x: scroll;
 		scrollbar-width: none;
-		transition: opacity 1s var(--ease) 0.5s;
-	}
-
-	.top-bar.not-ready {
-		opacity: 0;
 	}
 
 	.left,
