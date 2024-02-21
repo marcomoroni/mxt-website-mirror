@@ -4,12 +4,11 @@
 	import { page } from '$app/stores';
 	import MxtLogo from '$lib/MXTLogo.svelte';
 	import Aurora from '$lib/Aurora.svelte';
-	import ThreeScene from '$lib/ThreeScene.svelte';
+	import ThreeScene from '$lib/three_scene/ThreeScene.svelte';
 	import { P, match } from 'ts-pattern';
-	import { caseStudiesPageIntersectingCard } from '$lib/threeStateStores';
+	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
 	import { onMount } from 'svelte';
-
-	let mounted = false;
+	import { spring } from 'svelte/motion';
 
 	let hoveringHomeLink = false;
 
@@ -64,18 +63,25 @@
 		)
 		.with({ path: '/studio/', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
 		.otherwise(() => false);
+	const threeSceneOpacity = spring(threeHidden ? 0 : 1, { stiffness: 0.1, damping: 0.8 });
+	$: {
+		threeSceneOpacity.set(threeHidden ? 0 : 1);
+	}
 
 	function initialScroll(el: HTMLElement) {
 		let w = el.getElementsByClassName('home-link')[0]!.clientWidth;
 		w -= 30;
-		el.scroll(w, 0);
-
-		// Since this scroll happens when the element is mounted, the the nav bar until it is mounted.
+		el.scroll({
+			top: 0,
+			left: w,
+			behavior: 'smooth'
+		});
 	}
 
-	onMount(() => {
-		mounted = true;
-	});
+	let topBarEl: HTMLElement;
+	function scrollToStartOfTopBar() {
+		topBarEl.scroll({ left: 0, behavior: 'smooth' });
+	}
 </script>
 
 <svelte:window bind:scrollY />
@@ -88,11 +94,11 @@
 	<Aurora visible={$page.url.pathname === '/contacts/'} />
 </div>
 
-<div class="three-container" class:hidden={threeHidden}>
+<div class="three-container" style:opacity={$threeSceneOpacity}>
 	<ThreeScene state={threeState} />
 </div>
 
-<nav class="top-bar" use:initialScroll class:not-ready={!mounted}>
+<nav class="top-bar" use:initialScroll bind:this={topBarEl}>
 	<div class="left">
 		<a
 			href="/"
@@ -100,6 +106,7 @@
 			aria-label="Home"
 			on:mouseenter={() => (hoveringHomeLink = true)}
 			on:mouseleave={() => (hoveringHomeLink = false)}
+			on:click={scrollToStartOfTopBar}
 		>
 			<div class="logo-container">
 				<MxtLogo style={hoveringHomeLink ? 'default' : 'glass'} />
@@ -141,11 +148,6 @@
 		position: fixed;
 		width: 100%;
 		height: 100dvh;
-		transition: opacity 1s var(--ease) 0.2s;
-	}
-
-	.three-container.hidden {
-		opacity: 0;
 	}
 
 	.top-bar {
@@ -160,11 +162,6 @@
 		align-items: center;
 		overflow-x: scroll;
 		scrollbar-width: none;
-		transition: opacity 1s var(--ease) 0.5s;
-	}
-
-	.top-bar.not-ready {
-		opacity: 0;
 	}
 
 	.left,
@@ -175,7 +172,10 @@
 	.central {
 		display: flex;
 		flex-direction: row;
+		align-items: center;
+		height: 100%;
 		gap: 10px;
+		z-index: 2;
 	}
 
 	.page-link {
@@ -215,5 +215,29 @@
 
 	.nav-right-margin {
 		width: 30px;
+	}
+
+	@supports (scroll-timeline: --scroll-timeline x) and (animation-timeline: --scroll-timeline) {
+		.top-bar {
+			scroll-timeline: --scroll-timeline x;
+		}
+
+		@keyframes hide-logo {
+			0% {
+				opacity: 1;
+			}
+			100% {
+				opacity: 0;
+			}
+		}
+
+		.left {
+			position: sticky;
+			left: 0;
+			animation-name: hide-logo;
+			animation-timeline: --scroll-timeline;
+			animation-fill-mode: both;
+			animation-range-end: exit 30px;
+		}
 	}
 </style>
