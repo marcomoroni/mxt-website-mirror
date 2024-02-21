@@ -38,6 +38,7 @@
 		{ accentColor1: '#CAA98B', accentColor2: '#6B796A', accentColor3: accentColor5 },
 		{ accentColor1: '#CDD9C5', accentColor2: accentColor6, accentColor3: '#FFE8B0' }
 	];
+	const dioramaOwnPolarAngleMultWhenSmall = 0.3;
 
 	export let state:
 		| 'home'
@@ -92,22 +93,49 @@
 		),
 		railCircumference: {
 			center: {
-				x: derived(stateStore, ($s) => ($s.startsWith('case-stud') ? -3 : 0)),
+				x: derived(stateStore, ($s) =>
+					$s.includes('anchor') || $s.includes('case-study-') ? -3 : 0
+				),
 				z: derived(stateStore, ($s) => 0)
 			},
 			radius: derived(stateStore, ($s) => ($s === 'studio' ? 2 : 4)),
-			polarAngleDeg: derived(stateStore, ($s) =>
+			// An angle animated always clockwise.
+			polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
 				match($s)
 					.returnType<'KeepRotating' | { At: number }>()
+					.with('case-studies', () => ({ At: 0 }))
 					.with('case-studies-anchor-a303', () => ({ At: 0 }))
-					.with('case-studies-anchor-p2', () => ({ At: (360 / 3) * 1 }))
-					.with('case-studies-anchor-p3', () => ({ At: (360 / 3) * 2 }))
+					.with('case-studies-anchor-p2', () => ({ At: 0 }))
+					.with('case-studies-anchor-p3', () => ({ At: 0 }))
 					.with('case-study-a303', () => ({ At: 0 }))
-					.with('case-study-p2', () => ({ At: (360 / 3) * 1 }))
-					.with('case-study-p3', () => ({ At: (360 / 3) * 2 }))
+					.with('case-study-p2', () => ({ At: 0 }))
+					.with('case-study-p3', () => ({ At: 0 }))
 					.otherwise(() => 'KeepRotating')
+			),
+			// A displacement added after the above. Always animated towards the closest value.
+			polarAngleDegAnimatedToClosest: derived(stateStore, ($s) =>
+				match($s)
+					.with('case-studies', () => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenSmall - 90)
+					.with('case-studies-anchor-a303', () => 0 * dioramaOwnPolarAngleMultWhenSmall)
+					.with('case-studies-anchor-p2', () => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenSmall)
+					.with('case-studies-anchor-p3', () => (360 / 3) * 2 * dioramaOwnPolarAngleMultWhenSmall)
+					.with('case-study-a303', () => 0 * dioramaOwnPolarAngleMultWhenSmall)
+					.with('case-study-p2', () => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenSmall)
+					.with('case-study-p3', () => (360 / 3) * 2 * dioramaOwnPolarAngleMultWhenSmall)
+					.otherwise(() => 0)
 			)
-		}
+		},
+		dioramasOwnPolarAngleMult: derived(stateStore, ($s) =>
+			match($s)
+				.with('case-studies', () => dioramaOwnPolarAngleMultWhenSmall)
+				.with('case-studies-anchor-a303', () => dioramaOwnPolarAngleMultWhenSmall)
+				.with('case-studies-anchor-p2', () => dioramaOwnPolarAngleMultWhenSmall)
+				.with('case-studies-anchor-p3', () => dioramaOwnPolarAngleMultWhenSmall)
+				.with('case-study-a303', () => dioramaOwnPolarAngleMultWhenSmall)
+				.with('case-study-p2', () => dioramaOwnPolarAngleMultWhenSmall)
+				.with('case-study-p3', () => dioramaOwnPolarAngleMultWhenSmall)
+				.otherwise(() => 1)
+		)
 	};
 
 	let logs: Array<string> = [];
@@ -127,16 +155,18 @@
 		const storeUnsubscribers: Array<Unsubscriber> = [];
 
 		// A store that can be updated every frame when there is a continuous rotation.
-		const railCircumferencePolarAngleRadTarget = writable(
-			match(get(sceneSettings.railCircumference.polarAngleDeg))
-				.with('KeepRotating', () => 0)
+		const railCircumferencePolarAngleDegAnimatedClockwiseTarget = writable(
+			match(get(sceneSettings.railCircumference.polarAngleDegAnimatedClockwise))
+				// Use this value as a starting one so that it less likely that you'll have to make a
+				// full circle animation when navigating to the case studies page.
+				.with('KeepRotating', () => 180)
 				.with({ At: P.select() }, (to) => to)
 				.exhaustive()
 		);
 		storeUnsubscribers.push(
-			sceneSettings.railCircumference.polarAngleDeg.subscribe((v) => {
-				railCircumferencePolarAngleRadTarget.update((currentAngle) =>
-					match(get(sceneSettings.railCircumference.polarAngleDeg))
+			sceneSettings.railCircumference.polarAngleDegAnimatedClockwise.subscribe((v) => {
+				railCircumferencePolarAngleDegAnimatedClockwiseTarget.update((currentAngle) =>
+					match(get(sceneSettings.railCircumference.polarAngleDegAnimatedClockwise))
 						.with('KeepRotating', () => currentAngle)
 						.with({ At: P.select() }, (to) => to)
 						.exhaustive()
@@ -170,8 +200,21 @@
 				radius: spring(get(sceneSettings.railCircumference.radius), {
 					stiffness: 0.001,
 					damping: 0.2
-				})
-			}
+				}),
+				polarAngleDegAnimatedToClosest: spring(
+					get(sceneSettings.railCircumference.polarAngleDegAnimatedToClosest),
+					{
+						stiffness: 0.003,
+						damping: 0.2,
+						precision: 0.001
+					}
+				)
+			},
+			dioramasOwnPolarAngleMult: spring(get(sceneSettings.dioramasOwnPolarAngleMult), {
+				stiffness: 0.003,
+				damping: 0.2,
+				precision: 0.001
+			})
 		};
 
 		// Update every spring store when its associated raw value changes.
@@ -197,6 +240,16 @@
 		storeUnsubscribers.push(
 			sceneSettings.railCircumference.radius.subscribe((v) =>
 				springs.railCircumference.radius.set(v)
+			)
+		);
+		storeUnsubscribers.push(
+			sceneSettings.railCircumference.polarAngleDegAnimatedToClosest.subscribe((v) =>
+				springs.railCircumference.polarAngleDegAnimatedToClosest.set(v)
+			)
+		);
+		storeUnsubscribers.push(
+			sceneSettings.dioramasOwnPolarAngleMult.subscribe((v) =>
+				springs.dioramasOwnPolarAngleMult.set(v)
 			)
 		);
 
@@ -247,7 +300,10 @@
 		const railCircumference = {
 			center: new THREE.Vector3(0, 0, 0),
 			radius: 4,
-			polarAngleDeg: rotationAnimation(get(railCircumferencePolarAngleRadTarget), true)
+			polarAngleDeg: rotationAnimation(
+				get(railCircumferencePolarAngleDegAnimatedClockwiseTarget),
+				true
+			)
 		};
 		const positionInCircumference = (circumference: {
 			center: THREE.Vector3;
@@ -315,10 +371,15 @@
 			}
 
 			// Rotation.
-			match(get(sceneSettings.railCircumference.polarAngleDeg)).with('KeepRotating', () => {
-				railCircumferencePolarAngleRadTarget.update((v) => v + 0.01 * dt);
-			});
-			railCircumference.polarAngleDeg.setTargetRotation(get(railCircumferencePolarAngleRadTarget));
+			match(get(sceneSettings.railCircumference.polarAngleDegAnimatedClockwise)).with(
+				'KeepRotating',
+				() => {
+					railCircumferencePolarAngleDegAnimatedClockwiseTarget.update((v) => v + 0.01 * dt);
+				}
+			);
+			railCircumference.polarAngleDeg.setTargetRotation(
+				get(railCircumferencePolarAngleDegAnimatedClockwiseTarget)
+			);
 			railCircumference.polarAngleDeg.tick(dt);
 
 			applySpringValues(camera, railCircumference, colorPalette);
@@ -326,7 +387,10 @@
 				const pos = positionInCircumference({
 					center: railCircumference.center,
 					radius: railCircumference.radius,
-					polarAngleDeg: railCircumference.polarAngleDeg.rotation - ownPolarAngleDeg
+					polarAngleDeg:
+						railCircumference.polarAngleDeg.rotation -
+						ownPolarAngleDeg * get(springs.dioramasOwnPolarAngleMult) +
+						get(springs.railCircumference.polarAngleDegAnimatedToClosest)
 				});
 				mesh.position.x = pos.x;
 				mesh.position.z = pos.z;
