@@ -1,4 +1,9 @@
-export function rotationAnimation(initialRotationDeg: number, clockwise: boolean) {
+// `maxRotationDelta`: maximum rotation change per second.
+export function rotationAnimation(
+	initialRotationDeg: number,
+	clockwise: boolean,
+	maxRotationDelta: number
+) {
 	let currentRotation = initialRotationDeg;
 	let targetRotation = initialRotationDeg;
 
@@ -8,7 +13,6 @@ export function rotationAnimation(initialRotationDeg: number, clockwise: boolean
 			shortestAngle -= 360;
 		}
 		const direction = clockwise ? 1 : -1;
-		const maxRotationDelta = 500; // Maximum rotation change per second.
 		const rotationDelta =
 			Math.min(maxRotationDelta * dt * 0.01, Math.abs(shortestAngle)) * direction;
 		const dampFactor = 0.1;

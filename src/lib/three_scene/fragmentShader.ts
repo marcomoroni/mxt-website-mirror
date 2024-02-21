@@ -1,4 +1,6 @@
 export const fragmentShader = `
+    uniform vec3 backgroundColor;
+    uniform float blendWithBackground;
     uniform vec3 baseColor;
     uniform vec3 baseColorShadow;
     uniform vec3 accentColor1; 
@@ -25,6 +27,8 @@ export const fragmentShader = `
 
         // Map the ambient occlusion to colours: the light colour is 'baseColour' and the dark colour is 'tintedShadow'.
         vec3 finalColor = tintedShadowZ; // ...todo
+
+        finalColor = mix(finalColor, backgroundColor, blendWithBackground);
         
         gl_FragColor = vec4(finalColor, 1.0);
 

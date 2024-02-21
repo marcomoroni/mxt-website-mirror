@@ -13,32 +13,14 @@
 		accentColor3,
 		accentColor4,
 		accentColor5,
-		accentColor6
-	} from '$lib/accentColors';
+		accentColor6,
+		backgroundColor
+	} from '$lib/cssValues';
 	import { lerp } from '$lib/lerp';
 	import { toRadians } from '$lib/angleConversions';
 	import { rotationAnimation } from './rotationAnimation';
 
 	const DEV_debugLog = false;
-
-	const dioramasData = [
-		{
-			geometry: () => new THREE.SphereGeometry(1)
-		},
-		{
-			geometry: () => new THREE.BoxGeometry(1, 1, 1)
-		},
-		{
-			geometry: () => new THREE.TorusKnotGeometry(1, 0.2, 300, 8, 5, 11)
-		}
-	];
-	const colorPalettes = [
-		{ accentColor1: accentColor2, accentColor2: accentColor3, accentColor3: accentColor1 },
-		{ accentColor1: accentColor4, accentColor2: '#DCDAC3', accentColor3: '#BDD2D5' },
-		{ accentColor1: '#CAA98B', accentColor2: '#6B796A', accentColor3: accentColor5 },
-		{ accentColor1: '#CDD9C5', accentColor2: accentColor6, accentColor3: '#FFE8B0' }
-	];
-	const dioramaOwnPolarAngleMultWhenSmall = 0.3;
 
 	export let state:
 		| 'home'
@@ -69,7 +51,89 @@
 	$: {
 		stateStore.set(state);
 	}
-	// --- todo: proxy this state as a delayed state
+
+	const radDisplWhenAway = 5;
+	const dioramasData = [
+		{
+			geometry: () => new THREE.SphereGeometry(1),
+			sceneSettings: {
+				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
+					match($s)
+						.returnType<'KeepRotating' | { At: number }>()
+						.with('case-studies-anchor-a303', () => ({ At: 0 }))
+						.with('case-study-a303', () => ({ At: 0 }))
+						.otherwise(() => 'KeepRotating')
+				),
+				radiusDispl: derived(stateStore, ($s) =>
+					match($s)
+						.with('case-study-p2', () => radDisplWhenAway)
+						.with('case-study-p3', () => radDisplWhenAway)
+						.otherwise(() => 0)
+				),
+				blendWithBackground: derived(stateStore, ($s) =>
+					match($s)
+						.with('case-study-p2', () => 1)
+						.with('case-study-p3', () => 1)
+						.otherwise(() => 0)
+				)
+			}
+		},
+		{
+			geometry: () => new THREE.BoxGeometry(1, 1, 1),
+			sceneSettings: {
+				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
+					match($s)
+						.returnType<'KeepRotating' | { At: number }>()
+						.with('case-studies-anchor-p2', () => ({ At: 0 }))
+						.with('case-study-p2', () => ({ At: 0 }))
+						.otherwise(() => 'KeepRotating')
+				),
+				radiusDispl: derived(stateStore, ($s) =>
+					match($s)
+						.with('case-study-a303', () => radDisplWhenAway)
+						.with('case-study-p3', () => radDisplWhenAway)
+						.otherwise(() => 0)
+				),
+				blendWithBackground: derived(stateStore, ($s) =>
+					match($s)
+						.with('case-study-a303', () => 1)
+						.with('case-study-p3', () => 1)
+						.otherwise(() => 0)
+				)
+			}
+		},
+		{
+			geometry: () => new THREE.TorusKnotGeometry(1, 0.2, 300, 8, 5, 11),
+			sceneSettings: {
+				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
+					match($s)
+						.returnType<'KeepRotating' | { At: number }>()
+						.with('case-studies-anchor-p3', () => ({ At: 0 }))
+						.with('case-study-p3', () => ({ At: 0 }))
+						.otherwise(() => 'KeepRotating')
+				),
+				radiusDispl: derived(stateStore, ($s) =>
+					match($s)
+						.with('case-study-p2', () => radDisplWhenAway)
+						.with('case-study-a303', () => radDisplWhenAway)
+						.otherwise(() => 0)
+				),
+				blendWithBackground: derived(stateStore, ($s) =>
+					match($s)
+						.with('case-study-p2', () => 1)
+						.with('case-study-a303', () => 1)
+						.otherwise(() => 0)
+				)
+			}
+		}
+	];
+	const colorPalettes = [
+		{ accentColor1: accentColor2, accentColor2: accentColor3, accentColor3: accentColor1 },
+		{ accentColor1: accentColor4, accentColor2: '#DCDAC3', accentColor3: '#BDD2D5' },
+		{ accentColor1: '#CAA98B', accentColor2: '#6B796A', accentColor3: accentColor5 },
+		{ accentColor1: '#CDD9C5', accentColor2: accentColor6, accentColor3: '#FFE8B0' }
+	];
+	const dioramaOwnPolarAngleMultWhenSmall = 0.3;
 
 	// Given a state, calculate all values in the 3D scene.
 	// Note that I can only use simple numbers as the stores values and not objects otherwise reactivity
@@ -96,7 +160,7 @@
 				x: derived(stateStore, ($s) =>
 					$s.includes('anchor') || $s.includes('case-study-') ? -3 : 0
 				),
-				z: derived(stateStore, ($s) => 0)
+				z: derived(stateStore, ($s) => ($s === 'contacts' ? 11 : 0))
 			},
 			radius: derived(stateStore, ($s) => ($s === 'studio' ? 2 : 4)),
 			// An angle animated always clockwise.
@@ -166,7 +230,7 @@
 		storeUnsubscribers.push(
 			sceneSettings.railCircumference.polarAngleDegAnimatedClockwise.subscribe((v) => {
 				railCircumferencePolarAngleDegAnimatedClockwiseTarget.update((currentAngle) =>
-					match(get(sceneSettings.railCircumference.polarAngleDegAnimatedClockwise))
+					match(v)
 						.with('KeepRotating', () => currentAngle)
 						.with({ At: P.select() }, (to) => to)
 						.exhaustive()
@@ -302,7 +366,8 @@
 			radius: 4,
 			polarAngleDeg: rotationAnimation(
 				get(railCircumferencePolarAngleDegAnimatedClockwiseTarget),
-				true
+				true,
+				500
 			)
 		};
 		const positionInCircumference = (circumference: {
@@ -323,12 +388,16 @@
 		const colorPalette = { ...colorPalettes[0] };
 
 		const dioramaInstances = dioramasData.map((dioramaData, i, array) => {
+			const storeUnsubscribers: Array<Unsubscriber> = [];
+
 			const geometry = dioramaData.geometry();
 			// --- todo: make only one instance of the material
 			const material = new THREE.ShaderMaterial({
 				vertexShader: vertexShader,
 				fragmentShader: fragmentShader,
 				uniforms: {
+					backgroundColor: { value: new THREE.Color(backgroundColor) },
+					blendWithBackground: { value: 0 },
 					baseColor: { value: new THREE.Color('white') },
 					baseColorShadow: { value: new THREE.Color('#C0BBB1') },
 					accentColor1: { value: new THREE.Color(colorPalette.accentColor1) },
@@ -340,12 +409,69 @@
 			});
 			const mesh = new THREE.Mesh(geometry, material);
 			const ownPolarAngleDeg = lerp(0, 360, i / array.length);
+
+			// A store that can be updated every frame when there is a continuous rotation.
+			const rotDegAnimatedClockwiseTarget = writable(
+				match(get(dioramaData.sceneSettings.polarAngleDegAnimatedClockwise))
+					.with('KeepRotating', () => 0)
+					.with({ At: P.select() }, (to) => to)
+					.exhaustive()
+			);
+			storeUnsubscribers.push(
+				dioramaData.sceneSettings.polarAngleDegAnimatedClockwise.subscribe((v) => {
+					rotDegAnimatedClockwiseTarget.update((currentAngle) =>
+						match(v)
+							.with('KeepRotating', () => currentAngle)
+							.with({ At: P.select() }, (to) => to)
+							.exhaustive()
+					);
+				})
+			);
+			const rotDegAnimatedClockwiseAnim = rotationAnimation(
+				get(rotDegAnimatedClockwiseTarget),
+				false,
+				200
+			);
+
+			const springs = {
+				radiusDispl: spring(get(dioramaData.sceneSettings.radiusDispl), {
+					stiffness: 0.001,
+					damping: 0.2
+				}),
+				blendWithBackground: spring(get(dioramaData.sceneSettings.blendWithBackground), {
+					stiffness: 0.006,
+					damping: 0.2,
+					precision: 0.001
+				})
+			};
+			storeUnsubscribers.push(
+				dioramaData.sceneSettings.radiusDispl.subscribe((v) => springs.radiusDispl.set(v))
+			);
+			storeUnsubscribers.push(
+				dioramaData.sceneSettings.blendWithBackground.subscribe((v) =>
+					springs.blendWithBackground.set(v)
+				)
+			);
+
+			storeUnsubscribers.push(
+				springs.blendWithBackground.subscribe((v) => {
+					material.uniforms.blendWithBackground.value = v;
+				})
+			);
+
 			return {
 				mesh,
 				ownPolarAngleDeg,
+				rotDegAnimatedClockwiseTarget,
+				rotDegAnimatedClockwiseAnim,
+				sceneSettings: dioramaData.sceneSettings,
+				get radiusDispl() {
+					return get(springs.radiusDispl);
+				},
 				dispose: () => {
 					geometry.dispose();
 					material.dispose();
+					storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
 				}
 			};
 		});
@@ -383,22 +509,39 @@
 			railCircumference.polarAngleDeg.tick(dt);
 
 			applySpringValues(camera, railCircumference, colorPalette);
-			dioramaInstances.forEach(({ mesh, ownPolarAngleDeg }) => {
-				const pos = positionInCircumference({
-					center: railCircumference.center,
-					radius: railCircumference.radius,
-					polarAngleDeg:
-						railCircumference.polarAngleDeg.rotation -
-						ownPolarAngleDeg * get(springs.dioramasOwnPolarAngleMult) +
-						get(springs.railCircumference.polarAngleDegAnimatedToClosest)
-				});
-				mesh.position.x = pos.x;
-				mesh.position.z = pos.z;
-				// mesh.rotation.y += 0.0007 * dt;
-				mesh.material.uniforms.accentColor1.value = new THREE.Color(colorPalette.accentColor1);
-				mesh.material.uniforms.accentColor2.value = new THREE.Color(colorPalette.accentColor2);
-				mesh.material.uniforms.accentColor3.value = new THREE.Color(colorPalette.accentColor3);
-			});
+			dioramaInstances.forEach(
+				({
+					mesh,
+					ownPolarAngleDeg,
+					rotDegAnimatedClockwiseTarget,
+					rotDegAnimatedClockwiseAnim,
+					radiusDispl,
+					sceneSettings: dioramaSceneSettings
+				}) => {
+					match(get(dioramaSceneSettings.polarAngleDegAnimatedClockwise)).with(
+						'KeepRotating',
+						() => {
+							rotDegAnimatedClockwiseTarget.update((v) => v - 0.01 * dt);
+						}
+					);
+					rotDegAnimatedClockwiseAnim.setTargetRotation(get(rotDegAnimatedClockwiseTarget));
+					rotDegAnimatedClockwiseAnim.tick(dt);
+					const pos = positionInCircumference({
+						center: railCircumference.center,
+						radius: railCircumference.radius + radiusDispl,
+						polarAngleDeg:
+							railCircumference.polarAngleDeg.rotation -
+							ownPolarAngleDeg * get(springs.dioramasOwnPolarAngleMult) +
+							get(springs.railCircumference.polarAngleDegAnimatedToClosest)
+					});
+					mesh.position.x = pos.x;
+					mesh.position.z = pos.z;
+					mesh.rotation.y = toRadians(rotDegAnimatedClockwiseAnim.rotation);
+					mesh.material.uniforms.accentColor1.value = new THREE.Color(colorPalette.accentColor1);
+					mesh.material.uniforms.accentColor2.value = new THREE.Color(colorPalette.accentColor2);
+					mesh.material.uniforms.accentColor3.value = new THREE.Color(colorPalette.accentColor3);
+				}
+			);
 			camera.lookAt(0, 0, 0);
 
 			renderer.render(scene, camera);
