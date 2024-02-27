@@ -117,14 +117,14 @@
 	<div class="gameplay-illustration-4" />
 </div>
 <div class="section-spacer" />
-<div class="section-results">
-	<div class="results-type">
+<div class="section-events">
+	<div class="events-type">
 		The coordinated efforts to marry scheme traffic and environmental data were described as
 		remarkable by the joint world heritage centre and ICOMOS advisory mission and represents a first
 		for a UK Government sponsored infrastructure project.
 	</div>
-	<div class="results-img-1" />
-	<div class="results-img-2" />
+	<div class="events-img-1" />
+	<div class="events-img-2" />
 </div>
 <div class="bottom-page-spacer" />
 
@@ -208,7 +208,7 @@
 	}
 
 	.type-results {
-		grid-column: 3 / 9;
+		grid-column: 4 / 8;
 		grid-row: 1;
 	}
 
@@ -279,7 +279,7 @@
 	}
 
 	.map-layer-img {
-		grid-column: 2 / 8;
+		grid-column: 1 / 8;
 		grid-row: 1;
 		border: 10px solid rgba(124, 104, 238, 0.365);
 		border-radius: 20px;
@@ -348,7 +348,7 @@
 		aspect-ratio: 16 / 9;
 	}
 
-	.section-results {
+	.section-events {
 		display: grid;
 		grid-template-columns: repeat(10, 1fr);
 		gap: var(--case-study-margin);
@@ -356,7 +356,7 @@
 		margin-right: var(--case-study-margin);
 	}
 
-	.results-type {
+	.events-type {
 		grid-column: 2 / 5;
 		grid-row: 1 / 2;
 		position: sticky;
@@ -364,14 +364,14 @@
 		align-self: start;
 	}
 
-	.results-img-1 {
+	.events-img-1 {
 		grid-column: 5 / 11;
 		grid-row: 1;
 		border: 10px solid rgba(124, 104, 238, 0.365);
 		aspect-ratio: 16 / 9;
 	}
 
-	.results-img-2 {
+	.events-img-2 {
 		grid-column: 5 / 11;
 		grid-row: 2;
 		border: 10px solid rgba(124, 104, 238, 0.365);
