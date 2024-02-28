@@ -9,46 +9,59 @@
 		{
 			img: '/images/A303Satellite.png',
 			fixedImg: false,
-			type: 'Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK.'
+			wideType: true,
+			type: [
+				{ h2: 'Data acquisition and usage' },
+				{
+					p: 'Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK.'
+				}
+			]
 		},
 		{
 			img: '/images/A303Elevation_Alpha.png',
 			fixedImg: true,
-			type: 'Elevation...'
+			wideType: false,
+			type: [{ p: 'Elevation...' }]
 		},
 		{
 			img: '/images/A303Roads_BW.png',
 			fixedImg: true,
-			type: 'Roads...'
+			wideType: false,
+			type: [{ p: 'Roads...' }]
 		},
 		{
 			img: '/images/A303NewRoads_BW.png',
 			fixedImg: true,
-			type: 'New roads...'
+			wideType: false,
+			type: [{ p: 'New roads...' }]
 		},
 		{
 			img: '/images/A303LandUse.png',
 			fixedImg: true,
-			type: 'Land use...'
+			wideType: false,
+			type: [{ p: 'Land use...' }]
 		},
 		{
 			img: '/images/A303Trees_BW.png',
 			fixedImg: true,
-			type: 'Trees...'
+			wideType: false,
+			type: [{ p: 'Trees...' }]
 		}
 	];
 </script>
 
 <CaseStudyLanding title={caseStudyData.title} leadParagraph={caseStudyData.leadParagraph} />
 <div class="landing-spacer" />
-<div class="intro-container">
+<section class="intro-container">
 	<div class="img-stonehenge" />
 	<div class="intro">
-		Stonehenge, one of the world's most iconic prehistoric landscapes, has been the focus of over 50
-		design iterations since 1991 to alleviate traffic congestion and enhance visitor experiences.
-		The A303 Amesbury to Berwick Down (Stonehenge) Road Scheme presents a generational opportunity
-		to remove much of the traffic from this iconic landscape and restore Stonehenge to something
-		like its original setting.
+		<p>
+			Stonehenge, one of the world's most iconic prehistoric landscapes, has been the focus of over
+			50 design iterations since 1991 to alleviate traffic congestion and enhance visitor
+			experiences. The A303 Amesbury to Berwick Down (Stonehenge) Road Scheme presents a
+			generational opportunity to remove much of the traffic from this iconic landscape and restore
+			Stonehenge to something like its original setting.
+		</p>
 	</div>
 	<div class="map-container">
 		<!-- Same size as the svg -->
@@ -56,23 +69,27 @@
 			<StonehengeInUk />
 		</FillAspectRatio>
 	</div>
-</div>
+</section>
 <div class="section-spacer" />
-<div class="section-2-container">
+<section class="section-2-container">
 	<div class="type-2">
-		Significant infrastructural interventions within a UNESCO world heritage site produce a complex
-		communication challenge. With the responsibility of informing and assuring various stakeholders
-		about the impact of the proposed tunnel, National Highways felt a method beyond traditional
-		presentations and illustrations was needed.
+		<p>
+			Significant infrastructural interventions within a UNESCO world heritage site produce a
+			complex communication challenge. With the responsibility of informing and assuring various
+			stakeholders about the impact of the proposed tunnel, National Highways felt a method beyond
+			traditional presentations and illustrations was needed.
+		</p>
 	</div>
 	<div class="img-road" />
-</div>
+</section>
 <div class="section-spacer" />
-<div class="section-results">
+<section class="section-results">
 	<div class="type-results">
-		A collaboration between National Highways, their technical partner AmW (AECOM, Mace and WSP),
-		and the human experience design company MXT, led to the production of an immersive Virtual
-		Reality (VR) experience. This VR experience was designed with two core principles:
+		<p>
+			A collaboration between National Highways, their technical partner AmW (AECOM, Mace and WSP),
+			and the human experience design company MXT, led to the production of an immersive Virtual
+			Reality (VR) experience. This VR experience was designed with two core principles:
+		</p>
 		<ul>
 			<li>
 				Freedom: Users should be able to explore the entire World Heritage Site, getting a
@@ -82,23 +99,28 @@
 				Accuracy: Every aspect of the virtual environment had to be supported by real-world data.
 			</li>
 		</ul>
-		The result was a x km2 interactive environment synthesising a y of data to produce a digital mirror
-		of Stonehenge and its surroundings accessible in virtual reality, desktop and shared immersive spaces.
+		<p>
+			The result was a x km2 interactive environment synthesising a y of data to produce a digital
+			mirror of Stonehenge and its surroundings accessible in virtual reality, desktop and shared
+			immersive spaces.
+		</p>
 	</div>
 	<div class="img-results-1" />
 	<div class="img-results-2" />
 	<div class="img-results-3" />
-</div>
+</section>
 <div class="section-spacer" />
-<div class="section-development">
+<section class="section-development">
 	<div class="type-development">
-		The development phase spanned an initial three months, during which a data-driven and
-		human-centered approach was adopted to create an immersive experience that respects the unique
-		requirements and sensitivities of the Stonehenge landscape.
+		<p>
+			The development phase spanned an initial three months, during which a data-driven and
+			human-centered approach was adopted to create an immersive experience that respects the unique
+			requirements and sensitivities of the Stonehenge landscape.
+		</p>
 	</div>
-</div>
+</section>
 <div class="section-spacer" />
-<div class="section-data-sources">
+<section class="section-data-sources">
 	<!-- Make two copied overlapping elements -->
 	<div class="map-layers-images">
 		<div class="hide-behind-top-margin-container">
@@ -116,7 +138,16 @@
 						/>
 					</div>
 				</div>
-				<div class="map-layer-type" aria-hidden="true">{dataSource.type}</div>
+				<div class="map-layer-type" class:wide={dataSource.wideType}>
+					{dataSource.type} aria-hidden="true">
+					{#each dataSource.type as t}
+						{#if 'h2' in t}
+							<h2 class="case-study-section-header">{t.h2}</h2>
+						{:else if 'p' in t}
+							<p>{t.p}</p>
+						{/if}
+					{/each}
+				</div>
 			</div>
 		{/each}
 	</div>
@@ -127,44 +158,75 @@
 				<div class="map-layer-img-mask" class:fixed={dataSource.fixedImg}>
 					<!-- no need for the rest of the content -->
 				</div>
-				<div class="map-layer-type">{dataSource.type}</div>
+				<div class="map-layer-type" class:wide={dataSource.wideType}>
+					{#each dataSource.type as t}
+						{#if 'h2' in t}
+							<h2 class="case-study-section-header">{t.h2}</h2>
+						{:else if 'p' in t}
+							<p>{t.p}</p>
+						{/if}
+					{/each}
+				</div>
 			</div>
 		{/each}
 	</div>
-</div>
+</section>
 <div class="section-spacer" />
-<div class="section-gameplay">
+<section class="section-gameplay">
 	<div class="gameplay-type">
-		Early and continuing input from AmW’s heritage team and consistent two-weekly delivery of
-		software changes to National Highways ensures new ideas could be tried and course corrections
-		were small. Interactive workshops were convened early and often with external heritage
-		professionals with working knowledge of the WHS landscape, and with audiences that had no
-		heritage background or site-specific knowledge to ensure the truthfulness of the experience was
-		accessible to all users. Various gameplay features were introduced as a result of their feedback
-		including: Presentation Modes: Both desktop and VR presentations were developed, accommodating
-		users who sought immersive experiences in VR as well as those who preferred collaborative
-		settings by way of large touchscreens and immersive domes. Time Transition: The users ability to
-		alter the time of day. This showcased the visual relationships the heritage monuments share with
-		the skies and astronomical events, enhancing the historical context. Aerial Perspective:
-		Recognizing that some users are more familiar with the landscape topologically, an aerial view
-		mode was added. This catered to users who preferred understanding the landscape akin to
-		traditional maps.
+		<h2 class="case-study-section-header">Human-centered design approach</h2>
+		<ul>
+			<li>
+				Early and continuing input from AmW’s heritage team and consistent two-weekly delivery of
+				software changes to National Highways ensures new ideas could be tried and course
+				corrections were small.
+			</li>
+			<li>
+				Interactive workshops were convened early and often with external heritage professionals
+				with working knowledge of the WHS landscape, and with audiences that had no heritage
+				background or site-specific knowledge to ensure the truthfulness of the experience was
+				accessible to all users.
+			</li>
+			<li>
+				Various gameplay features were introduced as a result of their feedback including:
+				<ul>
+					<li>
+						Presentation Modes: Both desktop and VR presentations were developed, accommodating
+						users who sought immersive experiences in VR as well as those who preferred
+						collaborative settings by way of large touchscreens and immersive domes.
+					</li>
+					<li>
+						Time Transition: The users ability to alter the time of day. This showcased the visual
+						relationships the heritage monuments share with the skies and astronomical events,
+						enhancing the historical context.
+					</li>
+					<li>
+						Aerial Perspective: Recognizing that some users are more familiar with the landscape
+						topologically, an aerial view mode was added. This catered to users who preferred
+						understanding the landscape akin to traditional maps.
+					</li>
+				</ul>
+			</li>
+		</ul>
 	</div>
 	<div class="gameplay-illustration-1 thin-border" />
 	<div class="gameplay-illustration-2 thin-border" />
 	<div class="gameplay-illustration-3" />
 	<div class="gameplay-illustration-4" />
-</div>
+</section>
 <div class="section-spacer" />
-<div class="section-events">
+<section class="section-events">
 	<div class="events-type">
-		The coordinated efforts to marry scheme traffic and environmental data were described as
-		remarkable by the joint world heritage centre and ICOMOS advisory mission and represents a first
-		for a UK Government sponsored infrastructure project.
+		<h2 class="case-study-section-header">Results and impact</h2>
+		<p>
+			The coordinated efforts to marry scheme traffic and environmental data were described as
+			remarkable by the joint world heritage centre and ICOMOS advisory mission and represents a
+			first for a UK Government sponsored infrastructure project.
+		</p>
 	</div>
 	<div class="events-img-1" />
 	<div class="events-img-2" />
-</div>
+</section>
 <div class="bottom-page-spacer" />
 
 <style>
@@ -360,6 +422,10 @@
 		grid-row: 1;
 		min-height: max(500px, calc(100dvh - (var(--case-study-margin) * 2)));
 		z-index: 2;
+	}
+
+	.map-layer-type.wide {
+		grid-column: 8 / 11;
 	}
 
 	.solid-gap {
