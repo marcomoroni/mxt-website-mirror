@@ -84,6 +84,9 @@
 <div class="section-data-sources">
 	<!-- Make two copied overlapping elements -->
 	<div class="map-layers-images">
+		<div class="hide-behind-top-margin-container">
+			<div class="hide-behind-top-margin" />
+		</div>
 		{#each dataSources as dataSource}
 			<div class="map-layer">
 				<div class="solid-gap" />
@@ -346,7 +349,7 @@
 		grid-column: 8 / 10;
 		grid-row: 1;
 		min-height: max(500px, calc(100dvh - (var(--case-study-margin) * 2)));
-		z-index: 1;
+		z-index: 2;
 	}
 
 	.solid-gap {
@@ -354,6 +357,24 @@
 		top: calc(var(--case-study-margin) * -1);
 		height: var(--case-study-margin);
 		width: 100%;
+		background-color: var(--color-background);
+	}
+
+	.hide-behind-top-margin-container {
+		position: absolute;
+		top: calc(var(--case-study-margin) * -1);
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 1;
+	}
+
+	.hide-behind-top-margin {
+		position: sticky;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: var(--case-study-margin);
 		background-color: var(--color-background);
 	}
 
