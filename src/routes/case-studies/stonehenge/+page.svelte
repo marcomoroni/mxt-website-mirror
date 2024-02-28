@@ -6,19 +6,34 @@
 	const caseStudyData = caseStudiesData[0];
 	const dataSources = [
 		{
-			img: '/images/A303Base_BW.png',
+			img: '/images/A303Satellite.png',
 			fixedImg: false,
 			type: 'Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK.'
 		},
 		{
+			img: '/images/A303Elevation_Alpha.png',
+			fixedImg: true,
+			type: 'Elevation...'
+		},
+		{
 			img: '/images/A303Roads_BW.png',
 			fixedImg: true,
-			type: 'Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK. Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK. Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK. Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK. Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK. Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK.'
+			type: 'Roads...'
+		},
+		{
+			img: '/images/A303NewRoads_BW.png',
+			fixedImg: true,
+			type: 'New roads...'
+		},
+		{
+			img: '/images/A303LandUse.png',
+			fixedImg: true,
+			type: 'Land use...'
 		},
 		{
 			img: '/images/A303Trees_BW.png',
 			fixedImg: true,
-			type: 'Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK.'
+			type: 'Trees...'
 		}
 	];
 </script>
