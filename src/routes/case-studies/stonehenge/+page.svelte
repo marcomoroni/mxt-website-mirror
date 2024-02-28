@@ -6,7 +6,7 @@
 	const caseStudyData = caseStudiesData[0];
 	const dataSources = [
 		{
-			img: '/images/stonehenge.jpg',
+			img: '/images/A303Base_BW.png',
 			fixedImg: false,
 			type: 'Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK.'
 		},
@@ -82,9 +82,11 @@
 </div>
 <div class="section-spacer" />
 <div class="section-data-sources">
+	<!-- Make two copied overlapping elements -->
 	<div class="map-layers-images">
 		{#each dataSources as dataSource}
 			<div class="map-layer">
+				<div class="solid-gap" />
 				<div class="map-layer-img-mask" class:fixed={dataSource.fixedImg}>
 					<div class="map-layer-img-scaffold">
 						<div class="map-layer-img" style:background-image={`url(${dataSource.img})`} />
@@ -97,14 +99,9 @@
 	<div class="map-layers-type">
 		{#each dataSources as dataSource}
 			<div class="map-layer">
+				<div class="solid-gap" />
 				<div class="map-layer-img-mask" class:fixed={dataSource.fixedImg}>
-					<div class="map-layer-img-scaffold">
-						<div
-							class="map-layer-img"
-							style:background-image={`url(${dataSource.img})`}
-							aria-hidden="true"
-						/>
-					</div>
+					<!-- no need for the rest of the content -->
 				</div>
 				<div class="map-layer-type">{dataSource.type}</div>
 			</div>
@@ -340,6 +337,15 @@
 		grid-column: 8 / 10;
 		grid-row: 1;
 		min-height: max(500px, calc(100dvh - (var(--case-study-margin) * 2)));
+		z-index: 1;
+	}
+
+	.solid-gap {
+		position: absolute;
+		top: calc(var(--case-study-margin) * -1);
+		height: var(--case-study-margin);
+		width: 100%;
+		background-color: var(--color-background);
 	}
 
 	.map-layers-images .map-layer-type {
