@@ -89,7 +89,11 @@
 				<div class="solid-gap" />
 				<div class="map-layer-img-mask" class:fixed={dataSource.fixedImg}>
 					<div class="map-layer-img-scaffold">
-						<div class="map-layer-img" style:background-image={`url(${dataSource.img})`} />
+						<div
+							class="map-layer-img"
+							style:background-image={`url(${dataSource.img})`}
+							class:add-small-right-inset-margin={dataSource.fixedImg}
+						/>
 					</div>
 				</div>
 				<div class="map-layer-type" aria-hidden="true">{dataSource.type}</div>
@@ -331,6 +335,11 @@
 
 	.map-layers-type .map-layer-img-mask {
 		opacity: 0;
+	}
+
+	/* To fix a small visual errors where you can see part of the first image behind a subsequent one. */
+	.add-small-right-inset-margin {
+		margin-right: -1px;
 	}
 
 	.map-layer-type {
