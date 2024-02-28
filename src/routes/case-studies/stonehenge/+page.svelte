@@ -6,12 +6,18 @@
 	const caseStudyData = caseStudiesData[0];
 	const dataSources = [
 		{
+			img: '/images/stonehenge.jpg',
+			fixedImg: false,
 			type: 'Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK.'
 		},
 		{
+			img: '/images/A303Roads_BW.png',
+			fixedImg: true,
 			type: 'Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK. Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK. Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK. Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK. Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK. Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK.'
 		},
 		{
+			img: '/images/A303Trees_BW.png',
+			fixedImg: true,
 			type: 'Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK.'
 		}
 	];
@@ -76,19 +82,31 @@
 </div>
 <div class="section-spacer" />
 <div class="section-data-sources">
-	<div class="map-layers-type">
-		{#each dataSources as dataSource}
-			<div class="map-layer">
-				<div class="map-layer-img" aria-hidden="true" />
-				<div class="map-layer-type">{dataSource.type}</div>
-			</div>
-		{/each}
-	</div>
 	<div class="map-layers-images">
 		{#each dataSources as dataSource}
 			<div class="map-layer">
-				<div class="map-layer-img" />
+				<div class="map-layer-img-mask" class:fixed={dataSource.fixedImg}>
+					<div class="map-layer-img-scaffold">
+						<div class="map-layer-img" style:background-image={`url(${dataSource.img})`} />
+					</div>
+				</div>
 				<div class="map-layer-type" aria-hidden="true">{dataSource.type}</div>
+			</div>
+		{/each}
+	</div>
+	<div class="map-layers-type">
+		{#each dataSources as dataSource}
+			<div class="map-layer">
+				<div class="map-layer-img-mask" class:fixed={dataSource.fixedImg}>
+					<div class="map-layer-img-scaffold">
+						<div
+							class="map-layer-img"
+							style:background-image={`url(${dataSource.img})`}
+							aria-hidden="true"
+						/>
+					</div>
+				</div>
+				<div class="map-layer-type">{dataSource.type}</div>
 			</div>
 		{/each}
 	</div>
@@ -220,14 +238,14 @@
 	}
 
 	.img-results-2 {
-		grid-column: 1 / 11;
+		grid-column: 2 / 10;
 		grid-row: 3;
 		border: 10px solid rebeccapurple;
 		aspect-ratio: 16 / 9;
 	}
 
 	.img-results-3 {
-		grid-column: 1 / 11;
+		grid-column: 2 / 10;
 		grid-row: 4;
 		border: 10px solid aquamarine;
 		aspect-ratio: 16 / 9;
@@ -250,7 +268,6 @@
 		position: relative;
 		margin-left: var(--case-study-margin);
 		margin-right: var(--case-study-margin);
-		border: 2px solid blue;
 	}
 
 	.map-layers-type,
@@ -278,19 +295,44 @@
 		top: var(--case-study-margin);
 	}
 
-	.map-layer-img {
-		grid-column: 1 / 8;
+	.map-layer-img-mask {
+		grid-column: 1 / 11;
 		grid-row: 1;
-		border: 10px solid rgba(124, 104, 238, 0.365);
-		border-radius: 20px;
 		height: max(500px, calc(100dvh - (var(--case-study-margin) * 2)));
-
 		position: sticky;
 		top: var(--case-study-margin);
 		align-self: start;
+		clip-path: inset(0);
 	}
 
-	.map-layers-type .map-layer-img {
+	.map-layer-img-scaffold {
+		position: fixed;
+		top: var(--case-study-margin);
+		left: var(--case-study-margin);
+		width: calc(100% - (var(--case-study-margin) * 2));
+		height: max(500px, calc(100dvh - (var(--case-study-margin) * 2)));
+		display: grid;
+		grid-template-columns: repeat(10, 1fr);
+		gap: var(--case-study-margin);
+	}
+
+	.map-layer-img-mask:not(.fixed) .map-layer-img-scaffold {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+	}
+
+	.map-layer-img {
+		background-color: var(--color-background);
+		grid-column: 1 / 8;
+		grid-row: 1;
+		background-size: cover;
+		background-position: center center;
+	}
+
+	.map-layers-type .map-layer-img-mask {
 		opacity: 0;
 	}
 
