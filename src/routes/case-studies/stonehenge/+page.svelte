@@ -1,6 +1,7 @@
 <script lang="ts">
 	import CaseStudyLanding from '$lib/CaseStudyLanding.svelte';
 	import FillAspectRatio from '$lib/FillAspectRatio.svelte';
+	import StonehengeInUk from '$lib/StonehengeInUk.svelte';
 	import { caseStudiesData } from '$lib/caseStudiesData';
 
 	const caseStudyData = caseStudiesData[0];
@@ -49,9 +50,10 @@
 		to remove much of the traffic from this iconic landscape and restore Stonehenge to something
 		like its original setting.
 	</div>
-	<div class="map-container thin-border">
-		<FillAspectRatio aspectRatio={{ x: 3, y: 4 }}>
-			<div class="map" />
+	<div class="map-container">
+		<!-- Same size as the svg -->
+		<FillAspectRatio aspectRatio={{ x: 196, y: 304 }}>
+			<StonehengeInUk />
 		</FillAspectRatio>
 	</div>
 </div>
@@ -207,12 +209,6 @@
 		grid-column: 7 / 11;
 		grid-row: 2;
 		min-height: max(500px, calc(100dvh - (var(--case-study-margin) * 2)));
-	}
-
-	.map {
-		border: 10px solid firebrick;
-		width: 100%;
-		height: 100%;
 	}
 
 	.section-2-container {
