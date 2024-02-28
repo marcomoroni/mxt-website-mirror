@@ -49,7 +49,7 @@
 		to remove much of the traffic from this iconic landscape and restore Stonehenge to something
 		like its original setting.
 	</div>
-	<div class="map-container">
+	<div class="map-container thin-border">
 		<FillAspectRatio aspectRatio={{ x: 3, y: 4 }}>
 			<div class="map" />
 		</FillAspectRatio>
@@ -148,8 +148,8 @@
 		mode was added. This catered to users who preferred understanding the landscape akin to
 		traditional maps.
 	</div>
-	<div class="gameplay-illustration-1" />
-	<div class="gameplay-illustration-2" />
+	<div class="gameplay-illustration-1 thin-border" />
+	<div class="gameplay-illustration-2 thin-border" />
 	<div class="gameplay-illustration-3" />
 	<div class="gameplay-illustration-4" />
 </div>
@@ -206,7 +206,6 @@
 	.map-container {
 		grid-column: 7 / 11;
 		grid-row: 2;
-		border: 10px solid salmon;
 		min-height: max(500px, calc(100dvh - (var(--case-study-margin) * 2)));
 	}
 
@@ -413,13 +412,11 @@
 	.gameplay-illustration-1 {
 		grid-column: 2 / 6;
 		grid-row: 2;
-		border: 10px solid rgba(124, 104, 238, 0.365);
 	}
 
 	.gameplay-illustration-2 {
 		grid-column: 6 / 10;
 		grid-row: 2;
-		border: 10px solid rgba(124, 104, 238, 0.365);
 	}
 
 	.gameplay-illustration-1,
