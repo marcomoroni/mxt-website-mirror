@@ -53,6 +53,11 @@ sup {
 	font-size: 70%;
 }
 
+ul {
+	list-style-type: disc;
+	margin-left: 25px;
+}
+
 .case-study-section-header {
 	font-size: 20px;
 	margin-bottom: 40px;
