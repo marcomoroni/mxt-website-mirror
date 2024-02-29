@@ -34,7 +34,7 @@ export const fragmentShader = `
         vec3 tintedShadow = tintedShadowZ;
 
         // Map the ambient occlusion to colours: the light colour is 'baseColour' and the dark colour is 'tintedShadow'.
-        float adjustedFinalColorBlend = uvTex.r;
+        float adjustedFinalColorBlend = clamp(uvTex.r * 1.8, 0.0, 1.0);
         vec3 finalColor = mix(tintedShadow, baseColor, uvTex.r);
 
         finalColor = mix(finalColor, backgroundColor, blendWithBackground);
