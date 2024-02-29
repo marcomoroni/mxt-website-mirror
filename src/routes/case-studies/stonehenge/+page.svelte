@@ -100,8 +100,8 @@
 			</li>
 		</ul>
 		<p>
-			The result was a x km2 interactive environment synthesising a y of data to produce a digital
-			mirror of Stonehenge and its surroundings accessible in virtual reality, desktop and shared
+			The result was a x km<sup>2</sup> interactive environment synthesising a y of data to produce a
+			digital mirror of Stonehenge and its surroundings accessible in virtual reality, desktop and shared
 			immersive spaces.
 		</p>
 	</div>

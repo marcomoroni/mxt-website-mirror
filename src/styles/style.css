@@ -48,6 +48,11 @@ svg {
 	display: block;
 }
 
+sup {
+	vertical-align: super;
+	font-size: 70%;
+}
+
 .case-study-section-header {
 	font-size: 20px;
 	margin-bottom: 40px;
