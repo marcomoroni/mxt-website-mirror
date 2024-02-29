@@ -20,6 +20,8 @@
 	import { toRadians } from '$lib/angleConversions';
 	import { rotationAnimation } from './rotationAnimation';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+	import { FontLoader, TextGeometry } from 'three/examples/jsm/Addons.js';
+	import { newTextMaterial } from './textMaterial';
 
 	const DEV_debugLog = false;
 
@@ -53,6 +55,20 @@
 		stateStore.set(state);
 	}
 
+	const headersData = [
+		{
+			content: 'Case studies',
+			scale: 0.2
+		},
+		{
+			content: 'Studio',
+			scale: 0.2
+		},
+		{
+			content: 'Contacts',
+			scale: 0.2
+		}
+	];
 	const radDisplWhenAway = 5;
 	const dioramasData = [
 		{
@@ -552,6 +568,45 @@
 			};
 		});
 
+		// Type.
+		let headerInstances:
+			| undefined
+			| Array<{ dispose: () => void; setColor: (color: string) => void }> = undefined;
+		new FontLoader().load('/fontsJson/Figtree_Freeze.json', function (font) {
+			headersData.forEach((headerData) => {
+				const {
+					material,
+					dispose: disposeMaterial,
+					setColor: setMaterialColor
+				} = newTextMaterial();
+				const textGeometry = new TextGeometry(headerData.content, {
+					font: font,
+					size: 4,
+					height: 0.2
+				});
+				const textMesh = new THREE.Mesh(textGeometry, [
+					material, // Front.
+					material // Side.
+				]);
+				textMesh.scale.set(headerData.scale, headerData.scale, headerData.scale);
+				textGeometry.computeBoundingBox();
+				const centerOffset =
+					-0.5 * (textGeometry.boundingBox!.max.x - textGeometry.boundingBox!.min.x);
+				textMesh.position.x = centerOffset * headerData.scale;
+				scene.add(textMesh);
+
+				const instance = {
+					dispose: disposeMaterial,
+					setColor: setMaterialColor
+				};
+				if (headerInstances) {
+					headerInstances.push(instance);
+				} else {
+					headerInstances = [instance];
+				}
+			});
+		});
+
 		const resize = () => {
 			// --- should I use a resize observer?
 			renderer.setSize(window.innerWidth, window.innerHeight);
@@ -632,9 +687,8 @@
 			destroy() {
 				shouldRequestNewAnimationFrame = false;
 				storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
-				dioramaInstances.forEach(({ dispose }) => {
-					dispose();
-				});
+				dioramaInstances.forEach(({ dispose }) => dispose());
+				headerInstances?.forEach(({ dispose }) => dispose());
 				renderer.dispose();
 				renderer.forceContextLoss();
 			}
