@@ -1,4 +1,5 @@
 <script lang="ts">
+	import AccessibleHiddenHeader from '$lib/AccessibleHiddenHeader.svelte';
 	import CaseStudyTitleBox from '$lib/CaseStudyTitleBox.svelte';
 	import { caseStudiesData } from '$lib/caseStudiesData';
 	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
@@ -67,6 +68,8 @@
 </script>
 
 <svelte:window bind:scrollY bind:innerHeight={windowHeight} />
+
+<AccessibleHiddenHeader text="Case studies" />
 
 <div class="landing">Case studies</div>
 

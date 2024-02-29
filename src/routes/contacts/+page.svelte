@@ -1,3 +1,9 @@
+<script lang="ts">
+	import AccessibleHiddenHeader from '$lib/AccessibleHiddenHeader.svelte';
+</script>
+
+<AccessibleHiddenHeader text="Contacts" />
+
 <div class="full-page-container">
 	<div class="vertical-margin" />
 	<div class="inner">
