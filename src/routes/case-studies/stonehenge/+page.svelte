@@ -90,7 +90,7 @@
 			and the human experience design company MXT, led to the production of an immersive Virtual
 			Reality (VR) experience. This VR experience was designed with two core principles:
 		</p>
-		<ul>
+		<ul class="with-disc">
 			<li>
 				Freedom: Users should be able to explore the entire World Heritage Site, getting a
 				before-and-after view of the infrastructural changes.
@@ -191,7 +191,7 @@
 <section class="section-gameplay">
 	<div class="gameplay-type">
 		<h2 class="case-study-section-header">Human-centered design approach</h2>
-		<ul>
+		<ul class="with-disc">
 			<li>
 				Early and continuing input from AmW’s heritage team and consistent two-weekly delivery of
 				software changes to National Highways ensures new ideas could be tried and course
@@ -205,7 +205,7 @@
 			</li>
 			<li>
 				Various gameplay features were introduced as a result of their feedback including:
-				<ul>
+				<ul class="with-disc">
 					<li>
 						Presentation Modes: Both desktop and VR presentations were developed, accommodating
 						users who sought immersive experiences in VR as well as those who preferred

@@ -14,12 +14,16 @@
 		accentColor4,
 		accentColor5,
 		accentColor6,
-		backgroundColor
+		backgroundColor,
+		primaryColor
 	} from '$lib/cssValues';
 	import { lerp } from '$lib/lerp';
 	import { toRadians } from '$lib/angleConversions';
 	import { rotationAnimation } from './rotationAnimation';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+	import { FontLoader, TextGeometry } from 'three/examples/jsm/Addons.js';
+	import { newTextMaterial } from './textMaterial';
+	import { smoothDamp } from '$lib/smoothDamp';
 
 	const DEV_debugLog = false;
 
@@ -53,6 +57,26 @@
 		stateStore.set(state);
 	}
 
+	const headersData = [
+		{
+			content: 'Case studies',
+			position: { x: 0, y: 0.002, z: 20 },
+			rotation: { x: -Math.PI / 2 + 0.2, y: 0, z: 0 },
+			scale: 0.21
+		},
+		{
+			content: 'Studio',
+			position: { x: 0, y: 3, z: 0 },
+			rotation: { x: -Math.PI / 2, y: 0, z: 0 },
+			scale: 0.2
+		},
+		{
+			content: 'Contacts',
+			position: { x: 0, y: 0, z: 0 },
+			rotation: { x: 0, y: 0, z: 0 },
+			scale: 0.2
+		}
+	];
 	const radDisplWhenAway = 5;
 	const dioramasData = [
 		{
@@ -257,6 +281,14 @@
 				.with('case-study-p2', () => dioramaOwnPolarAngleMultWhenSmall)
 				.with('case-study-p3', () => dioramaOwnPolarAngleMultWhenSmall)
 				.otherwise(() => 1)
+		),
+		// Header by index.
+		headerVisibility: derived(stateStore, ($s) =>
+			match($s)
+				.with('case-studies', () => [true, false, false])
+				.with('studio', () => [false, true, false])
+				.with('contacts', () => [false, false, true])
+				.otherwise(() => [false, false, false])
 		)
 	};
 
@@ -552,6 +584,78 @@
 			};
 		});
 
+		let headerInstances: undefined | Array<{ dispose: () => void; tick: (dt: number) => void }> =
+			undefined;
+		new FontLoader().load('/fontsJson/Figtree_Freeze.json', function (font) {
+			headersData.forEach((headerData, i) => {
+				const {
+					material,
+					dispose: disposeMaterial,
+					setColor: setMaterialColor
+				} = newTextMaterial();
+				const textGeometry = new TextGeometry(headerData.content, {
+					font: font,
+					size: 4,
+					height: 0.2
+				});
+				const textMesh = new THREE.Mesh(textGeometry, [
+					material, // Front.
+					material // Side.
+				]);
+				textMesh.scale.set(headerData.scale, headerData.scale, headerData.scale);
+				textGeometry.computeBoundingBox();
+				const centerOffset =
+					-0.5 * (textGeometry.boundingBox!.max.x - textGeometry.boundingBox!.min.x);
+				textMesh.position.x = headerData.position.x + centerOffset * headerData.scale;
+				textMesh.position.y = headerData.position.y;
+				textMesh.position.z = headerData.position.z;
+				textMesh.rotation.x = headerData.rotation.x;
+				textMesh.rotation.y = headerData.rotation.y;
+				textMesh.rotation.z = headerData.rotation.z;
+				scene.add(textMesh);
+
+				const initialVisibility = get(sceneSettings.headerVisibility)[i] ? 1 : 0;
+				const visibilityAnimation = {
+					target: initialVisibility,
+					current: initialVisibility,
+					velocity: 0
+				};
+				storeUnsubscribers.push(
+					sceneSettings.headerVisibility.subscribe((v) => {
+						visibilityAnimation.target = v[i] ? 1 : 0;
+					})
+				);
+
+				const tick = (dt: number) => {
+					const smoothDampResult = smoothDamp(
+						visibilityAnimation.current,
+						visibilityAnimation.target,
+						visibilityAnimation.velocity,
+						0.3,
+						dt
+					);
+					visibilityAnimation.velocity = smoothDampResult.currentVelocity;
+					visibilityAnimation.current = smoothDampResult.output;
+					const color = d3.interpolateRgb(
+						backgroundColor,
+						primaryColor
+					)(visibilityAnimation.current);
+					setMaterialColor(color);
+				};
+
+				const instance = {
+					dispose: disposeMaterial,
+					setColor: setMaterialColor,
+					tick
+				};
+				if (headerInstances) {
+					headerInstances.push(instance);
+				} else {
+					headerInstances = [instance];
+				}
+			});
+		});
+
 		const resize = () => {
 			// --- should I use a resize observer?
 			renderer.setSize(window.innerWidth, window.innerHeight);
@@ -618,6 +722,7 @@
 					material.uniforms.accentColor3.value = new THREE.Color(colorPalette.accentColor3);
 				}
 			);
+			headerInstances?.forEach(({ tick }) => tick(dt * 0.001));
 			camera.lookAt(0, 0, 0);
 
 			renderer.render(scene, camera);
@@ -632,9 +737,8 @@
 			destroy() {
 				shouldRequestNewAnimationFrame = false;
 				storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
-				dioramaInstances.forEach(({ dispose }) => {
-					dispose();
-				});
+				dioramaInstances.forEach(({ dispose }) => dispose());
+				headerInstances?.forEach(({ dispose }) => dispose());
 				renderer.dispose();
 				renderer.forceContextLoss();
 			}
