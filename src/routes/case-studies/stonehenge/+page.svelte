@@ -171,6 +171,22 @@
 		{/each}
 	</div>
 </section>
+<section class="m-section-data-sources">
+	{#each dataSources as dataSource}
+		<div class="m-map-layer">
+			<div class="m-map-layer-img" style:background-image={`url(${dataSource.img})`} />
+			<div class="m-map-layer-type" class:wide={dataSource.wideType}>
+				{#each dataSource.type as t}
+					{#if 'h2' in t}
+						<h2 class="case-study-section-header">{t.h2}</h2>
+					{:else if 'p' in t}
+						<p>{t.p}</p>
+					{/if}
+				{/each}
+			</div>
+		</div>
+	{/each}
+</section>
 <div class="section-spacer" />
 <section class="section-gameplay">
 	<div class="gameplay-type">
@@ -528,5 +544,164 @@
 		grid-row: 2;
 		border: 10px solid rgba(124, 104, 238, 0.365);
 		aspect-ratio: 16 / 9;
+	}
+
+	.m-section-data-sources {
+		display: none;
+	}
+
+	@media (max-width: 900px) {
+		.intro-container {
+			grid-template-columns: unset;
+			grid-auto-flow: row;
+		}
+
+		.img-stonehenge {
+			grid-column: unset;
+			grid-row: 1;
+			position: relative;
+			top: 0;
+		}
+
+		.intro {
+			grid-column: unset;
+			grid-row: 2;
+		}
+
+		.map-container {
+			grid-column: unset;
+			grid-row: 3;
+		}
+
+		.section-2-container {
+			grid-template-columns: unset;
+			grid-auto-flow: row;
+		}
+
+		.type-2 {
+			grid-column: unset;
+			grid-row: 1;
+		}
+
+		.img-road {
+			grid-column: unset;
+			grid-row: 2;
+		}
+
+		.section-results {
+			grid-template-columns: unset;
+			grid-auto-flow: row;
+		}
+
+		.type-results {
+			grid-column: unset;
+			grid-row: 1;
+		}
+
+		.img-results-1 {
+			grid-column: unset;
+			grid-row: 2;
+		}
+
+		.img-results-2 {
+			grid-column: unset;
+			grid-row: 3;
+		}
+
+		.img-results-3 {
+			grid-column: unset;
+			grid-row: 4;
+		}
+
+		.section-development {
+			grid-template-columns: unset;
+			grid-auto-flow: row;
+		}
+
+		.type-development {
+			grid-column: unset;
+			grid-row: 1;
+		}
+
+		.section-data-sources {
+			display: none;
+		}
+
+		.m-section-data-sources {
+			display: unset;
+			display: grid;
+			grid-auto-flow: row;
+			gap: var(--case-study-margin);
+			margin-left: var(--case-study-margin);
+			margin-right: var(--case-study-margin);
+		}
+
+		.m-map-layer {
+			display: grid;
+			grid-auto-flow: row;
+			gap: var(--case-study-margin);
+		}
+
+		.m-map-layer-img {
+			aspect-ratio: 16 / 9;
+			background-size: cover;
+			background-position: center center;
+			position: sticky;
+			top: var(--case-study-margin);
+			align-self: start;
+			background-color: var(--color-background);
+		}
+
+		.section-gameplay {
+			grid-template-columns: unset;
+			grid-auto-flow: row;
+		}
+
+		.gameplay-type {
+			grid-column: unset;
+			grid-row: 1;
+		}
+
+		.gameplay-illustration-1 {
+			grid-column: unset;
+			grid-row: 2;
+		}
+
+		.gameplay-illustration-2 {
+			grid-column: unset;
+			grid-row: 3;
+		}
+
+		.gameplay-illustration-3 {
+			grid-column: unset;
+			grid-row: 4;
+		}
+
+		.gameplay-illustration-4 {
+			grid-column: unset;
+			grid-row: 5;
+		}
+
+		.section-events {
+			grid-template-columns: unset;
+			grid-auto-flow: row;
+		}
+
+		.events-type {
+			grid-column: unset;
+			grid-row: 1;
+			position: relative;
+			top: 0;
+		}
+
+		.events-img-1 {
+			grid-column: unset;
+			grid-row: 2;
+		}
+
+		.events-img-2 {
+			grid-column: unset;
+			grid-row: 3;
+		}
 	}
 </style>
