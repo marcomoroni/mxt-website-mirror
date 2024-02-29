@@ -71,7 +71,7 @@
 
 <AccessibleHiddenHeader text="Case studies" />
 
-<div class="landing">Case studies</div>
+<div class="landing" />
 
 <ul class="case-studies-list">
 	{#each caseStudiesData as caseStudy}
