@@ -14,7 +14,8 @@
 		accentColor4,
 		accentColor5,
 		accentColor6,
-		backgroundColor
+		backgroundColor,
+		primaryColor
 	} from '$lib/cssValues';
 	import { lerp } from '$lib/lerp';
 	import { toRadians } from '$lib/angleConversions';
@@ -22,6 +23,7 @@
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 	import { FontLoader, TextGeometry } from 'three/examples/jsm/Addons.js';
 	import { newTextMaterial } from './textMaterial';
+	import { smoothDamp } from '$lib/smoothDamp';
 
 	const DEV_debugLog = false;
 
@@ -273,6 +275,14 @@
 				.with('case-study-p2', () => dioramaOwnPolarAngleMultWhenSmall)
 				.with('case-study-p3', () => dioramaOwnPolarAngleMultWhenSmall)
 				.otherwise(() => 1)
+		),
+		// Header by index.
+		headerVisibility: derived(stateStore, ($s) =>
+			match($s)
+				.with('case-studies', () => [true, false, false])
+				.with('studio', () => [false, true, false])
+				.with('contacts', () => [false, false, true])
+				.otherwise(() => [false, false, false])
 		)
 	};
 
@@ -568,12 +578,10 @@
 			};
 		});
 
-		// Type.
-		let headerInstances:
-			| undefined
-			| Array<{ dispose: () => void; setColor: (color: string) => void }> = undefined;
+		let headerInstances: undefined | Array<{ dispose: () => void; tick: (dt: number) => void }> =
+			undefined;
 		new FontLoader().load('/fontsJson/Figtree_Freeze.json', function (font) {
-			headersData.forEach((headerData) => {
+			headersData.forEach((headerData, i) => {
 				const {
 					material,
 					dispose: disposeMaterial,
@@ -595,9 +603,36 @@
 				textMesh.position.x = centerOffset * headerData.scale;
 				scene.add(textMesh);
 
+				const initialVisibility = get(sceneSettings.headerVisibility)[i] ? 1 : 0;
+				const visibility = {
+					target: initialVisibility,
+					current: initialVisibility,
+					velocity: 0
+				};
+				storeUnsubscribers.push(
+					sceneSettings.headerVisibility.subscribe((v) => {
+						visibility.target = v[i] ? 1 : 0;
+					})
+				);
+
+				const tick = (dt: number) => {
+					const smoothDampResult = smoothDamp(
+						visibility.current,
+						visibility.target,
+						visibility.velocity,
+						0.3,
+						dt
+					);
+					visibility.velocity = smoothDampResult.currentVelocity;
+					visibility.current = smoothDampResult.output;
+					const color = d3.interpolateRgb(backgroundColor, primaryColor)(visibility.current);
+					setMaterialColor(color);
+				};
+
 				const instance = {
 					dispose: disposeMaterial,
-					setColor: setMaterialColor
+					setColor: setMaterialColor,
+					tick
 				};
 				if (headerInstances) {
 					headerInstances.push(instance);
@@ -673,6 +708,7 @@
 					material.uniforms.accentColor3.value = new THREE.Color(colorPalette.accentColor3);
 				}
 			);
+			headerInstances?.forEach(({ tick }) => tick(dt * 0.001));
 			camera.lookAt(0, 0, 0);
 
 			renderer.render(scene, camera);
