@@ -60,14 +60,20 @@
 	const headersData = [
 		{
 			content: 'Case studies',
-			scale: 0.2
+			position: { x: 0, y: 0.002, z: 20 },
+			rotation: { x: -Math.PI / 2 + 0.2, y: 0, z: 0 },
+			scale: 0.21
 		},
 		{
 			content: 'Studio',
+			position: { x: 0, y: 3, z: 0 },
+			rotation: { x: -Math.PI / 2, y: 0, z: 0 },
 			scale: 0.2
 		},
 		{
 			content: 'Contacts',
+			position: { x: 0, y: 0, z: 0 },
+			rotation: { x: 0, y: 0, z: 0 },
 			scale: 0.2
 		}
 	];
@@ -600,32 +606,40 @@
 				textGeometry.computeBoundingBox();
 				const centerOffset =
 					-0.5 * (textGeometry.boundingBox!.max.x - textGeometry.boundingBox!.min.x);
-				textMesh.position.x = centerOffset * headerData.scale;
+				textMesh.position.x = headerData.position.x + centerOffset * headerData.scale;
+				textMesh.position.y = headerData.position.y;
+				textMesh.position.z = headerData.position.z;
+				textMesh.rotation.x = headerData.rotation.x;
+				textMesh.rotation.y = headerData.rotation.y;
+				textMesh.rotation.z = headerData.rotation.z;
 				scene.add(textMesh);
 
 				const initialVisibility = get(sceneSettings.headerVisibility)[i] ? 1 : 0;
-				const visibility = {
+				const visibilityAnimation = {
 					target: initialVisibility,
 					current: initialVisibility,
 					velocity: 0
 				};
 				storeUnsubscribers.push(
 					sceneSettings.headerVisibility.subscribe((v) => {
-						visibility.target = v[i] ? 1 : 0;
+						visibilityAnimation.target = v[i] ? 1 : 0;
 					})
 				);
 
 				const tick = (dt: number) => {
 					const smoothDampResult = smoothDamp(
-						visibility.current,
-						visibility.target,
-						visibility.velocity,
+						visibilityAnimation.current,
+						visibilityAnimation.target,
+						visibilityAnimation.velocity,
 						0.3,
 						dt
 					);
-					visibility.velocity = smoothDampResult.currentVelocity;
-					visibility.current = smoothDampResult.output;
-					const color = d3.interpolateRgb(backgroundColor, primaryColor)(visibility.current);
+					visibilityAnimation.velocity = smoothDampResult.currentVelocity;
+					visibilityAnimation.current = smoothDampResult.output;
+					const color = d3.interpolateRgb(
+						backgroundColor,
+						primaryColor
+					)(visibilityAnimation.current);
 					setMaterialColor(color);
 				};
 
