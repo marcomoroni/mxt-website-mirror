@@ -22,7 +22,7 @@ html {
 	--color-accent-5: #f5dee4;
 	--color-accent-6: #edbd6b;
 	--nav-bar-height: 100px;
-	--case-study-margin: 20px;
+	--case-study-margin: 30px;
 }
 
 body {
@@ -46,4 +46,23 @@ a {
 
 svg {
 	display: block;
+}
+
+sup {
+	vertical-align: super;
+	font-size: 70%;
+}
+
+ul {
+	list-style-type: disc;
+	margin-left: 25px;
+}
+
+.case-study-section-header {
+	font-size: 20px;
+	margin-bottom: 40px;
+}
+
+.thin-border {
+	border: 1px solid #d6d1cd;
 }
