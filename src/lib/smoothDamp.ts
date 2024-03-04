@@ -8,9 +8,11 @@ export function smoothDamp(
 	target: number,
 	currentVelocity: number,
 	smoothTime: number,
-	deltaTime: number,
+	deltaTime: DOMHighResTimeStamp,
 	maxSpeed?: undefined | number
 ) {
+	deltaTime *= 0.001;
+
 	// Based on Game Programming Gems 4 Chapter 1.10
 	smoothTime = Math.max(0.0001, smoothTime);
 	const omega = 2.0 / smoothTime;
@@ -37,4 +39,29 @@ export function smoothDamp(
 	}
 
 	return { output, currentVelocity };
+}
+
+export function smoothDampAnimation(
+	initialValue: number,
+	smoothTime: number,
+	maxSpeed?: undefined | number
+) {
+	let current = initialValue;
+	let target = initialValue;
+	let velocity = 0;
+	const tick = (deltaTime: DOMHighResTimeStamp) => {
+		const smoothDampResult = smoothDamp(current, target, velocity, smoothTime, deltaTime, maxSpeed);
+		velocity = smoothDampResult.currentVelocity;
+		current = smoothDampResult.output;
+	};
+
+	return {
+		set target(value: number) {
+			target = value;
+		},
+		get current() {
+			return current;
+		},
+		tick
+	};
 }

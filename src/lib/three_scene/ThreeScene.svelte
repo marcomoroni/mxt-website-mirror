@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 	import * as THREE from 'three';
 	import * as d3 from 'd3';
-	import { spring } from 'svelte/motion';
 	import { derived, get, writable, type Unsubscriber } from 'svelte/store';
 	import { vertexShader } from './vertexShader';
 	import { fragmentShader } from './fragmentShader';
@@ -23,7 +22,7 @@
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 	import { FontLoader, TextGeometry } from 'three/examples/jsm/Addons.js';
 	import { newTextMaterial } from './textMaterial';
-	import { smoothDamp } from '$lib/smoothDamp';
+	import { smoothDampAnimation } from '$lib/smoothDamp';
 
 	const DEV_debugLog = false;
 
@@ -328,82 +327,64 @@
 			})
 		);
 
-		const springs = {
+		const animations = {
 			camera: {
 				pos: {
-					y: spring(get(sceneSettings.camera.pos.y), { stiffness: 0.003, damping: 0.2 }),
-					z: spring(get(sceneSettings.camera.pos.z), { stiffness: 0.003, damping: 0.2 })
+					y: smoothDampAnimation(get(sceneSettings.camera.pos.y), 1.1),
+					z: smoothDampAnimation(get(sceneSettings.camera.pos.z), 1.1)
 				}
 			},
-			colorPaletteIndex: spring(get(sceneSettings.colorPaletteIndex), {
-				stiffness: 0.003,
-				damping: 0.2,
-				precision: 0.001
-			}),
+			colorPaletteIndex: smoothDampAnimation(get(sceneSettings.colorPaletteIndex), 0.3),
 			railCircumference: {
 				center: {
-					x: spring(get(sceneSettings.railCircumference.center.x), {
-						stiffness: 0.003,
-						damping: 0.2
-					}),
-					z: spring(get(sceneSettings.railCircumference.center.z), {
-						stiffness: 0.003,
-						damping: 0.2
-					})
+					x: smoothDampAnimation(get(sceneSettings.railCircumference.center.x), 0.9),
+					z: smoothDampAnimation(get(sceneSettings.railCircumference.center.z), 0.9)
 				},
-				radius: spring(get(sceneSettings.railCircumference.radius), {
-					stiffness: 0.001,
-					damping: 0.2
-				}),
-				polarAngleDegAnimatedToClosest: spring(
+				radius: smoothDampAnimation(get(sceneSettings.railCircumference.radius), 0.6),
+				polarAngleDegAnimatedToClosest: smoothDampAnimation(
 					get(sceneSettings.railCircumference.polarAngleDegAnimatedToClosest),
-					{
-						stiffness: 0.003,
-						damping: 0.2,
-						precision: 0.001
-					}
+					0.9
 				)
 			},
-			dioramasOwnPolarAngleMult: spring(get(sceneSettings.dioramasOwnPolarAngleMult), {
-				stiffness: 0.003,
-				damping: 0.2,
-				precision: 0.001
-			})
+			dioramasOwnPolarAngleMult: smoothDampAnimation(
+				get(sceneSettings.dioramasOwnPolarAngleMult),
+				0.9
+			)
 		};
 
 		// Update every spring store when its associated raw value changes.
 		storeUnsubscribers.push(
-			sceneSettings.camera.pos.y.subscribe((v) => springs.camera.pos.y.set(v))
+			sceneSettings.camera.pos.y.subscribe((v) => (animations.camera.pos.y.target = v))
 		);
 		storeUnsubscribers.push(
-			sceneSettings.camera.pos.z.subscribe((v) => springs.camera.pos.z.set(v))
+			sceneSettings.camera.pos.z.subscribe((v) => (animations.camera.pos.z.target = v))
 		);
 		storeUnsubscribers.push(
-			sceneSettings.colorPaletteIndex.subscribe((v) => springs.colorPaletteIndex.set(v))
+			sceneSettings.colorPaletteIndex.subscribe((v) => (animations.colorPaletteIndex.target = v))
 		);
 		storeUnsubscribers.push(
-			sceneSettings.railCircumference.center.x.subscribe((v) =>
-				springs.railCircumference.center.x.set(v)
+			sceneSettings.railCircumference.center.x.subscribe(
+				(v) => (animations.railCircumference.center.x.target = v)
 			)
 		);
 		storeUnsubscribers.push(
-			sceneSettings.railCircumference.center.z.subscribe((v) =>
-				springs.railCircumference.center.z.set(v)
+			sceneSettings.railCircumference.center.z.subscribe(
+				(v) => (animations.railCircumference.center.z.target = v)
 			)
 		);
 		storeUnsubscribers.push(
-			sceneSettings.railCircumference.radius.subscribe((v) =>
-				springs.railCircumference.radius.set(v)
+			sceneSettings.railCircumference.radius.subscribe(
+				(v) => (animations.railCircumference.radius.target = v)
 			)
 		);
 		storeUnsubscribers.push(
-			sceneSettings.railCircumference.polarAngleDegAnimatedToClosest.subscribe((v) =>
-				springs.railCircumference.polarAngleDegAnimatedToClosest.set(v)
+			sceneSettings.railCircumference.polarAngleDegAnimatedToClosest.subscribe(
+				(v) => (animations.railCircumference.polarAngleDegAnimatedToClosest.target = v)
 			)
 		);
 		storeUnsubscribers.push(
-			sceneSettings.dioramasOwnPolarAngleMult.subscribe((v) =>
-				springs.dioramasOwnPolarAngleMult.set(v)
+			sceneSettings.dioramasOwnPolarAngleMult.subscribe(
+				(v) => (animations.dioramasOwnPolarAngleMult.target = v)
 			)
 		);
 
@@ -414,17 +395,17 @@
 			railCircumference: { center: THREE.Vector3; radius: number },
 			colorPalette: { accentColor1: string; accentColor2: string; accentColor3: string }
 		) => {
-			camera.position.y = get(springs.camera.pos.y);
-			camera.position.z = get(springs.camera.pos.z);
+			camera.position.y = animations.camera.pos.y.current;
+			camera.position.z = animations.camera.pos.z.current;
 
 			railCircumference.center = new THREE.Vector3(
-				get(springs.railCircumference.center.x),
+				animations.railCircumference.center.x.current,
 				0,
-				get(springs.railCircumference.center.z)
+				animations.railCircumference.center.z.current
 			);
-			railCircumference.radius = get(springs.railCircumference.radius);
+			railCircumference.radius = animations.railCircumference.radius.current;
 
-			const colorPaletteI = get(springs.colorPaletteIndex) / (colorPalettes.length - 1);
+			const colorPaletteI = animations.colorPaletteIndex.current / (colorPalettes.length - 1);
 			colorPalette.accentColor1 = d3.piecewise(
 				d3.interpolateRgb.gamma(2.2),
 				colorPalettes.map((p) => p.accentColor1)
@@ -539,31 +520,27 @@
 				200
 			);
 
-			const springs = {
-				radiusDispl: spring(get(dioramaData.sceneSettings.radiusDispl), {
-					stiffness: 0.001,
-					damping: 0.2
-				}),
-				blendWithBackground: spring(get(dioramaData.sceneSettings.blendWithBackground), {
-					stiffness: 0.006,
-					damping: 0.2,
-					precision: 0.001
-				})
+			const animations = {
+				radiusDispl: smoothDampAnimation(get(dioramaData.sceneSettings.radiusDispl), 1.1),
+				blendWithBackground: smoothDampAnimation(
+					get(dioramaData.sceneSettings.blendWithBackground),
+					0.8
+				)
 			};
 			storeUnsubscribers.push(
-				dioramaData.sceneSettings.radiusDispl.subscribe((v) => springs.radiusDispl.set(v))
+				dioramaData.sceneSettings.radiusDispl.subscribe((v) => (animations.radiusDispl.target = v))
 			);
 			storeUnsubscribers.push(
-				dioramaData.sceneSettings.blendWithBackground.subscribe((v) =>
-					springs.blendWithBackground.set(v)
+				dioramaData.sceneSettings.blendWithBackground.subscribe(
+					(v) => (animations.blendWithBackground.target = v)
 				)
 			);
 
-			storeUnsubscribers.push(
-				springs.blendWithBackground.subscribe((v) => {
-					material.uniforms.blendWithBackground.value = v;
-				})
-			);
+			const tick = (dt: DOMHighResTimeStamp) => {
+				animations.radiusDispl.tick(dt);
+				animations.blendWithBackground.tick(dt);
+				material.uniforms.blendWithBackground.value = animations.blendWithBackground.current;
+			};
 
 			return {
 				get mesh() {
@@ -575,8 +552,9 @@
 				rotDegAnimatedClockwiseAnim,
 				sceneSettings: dioramaData.sceneSettings,
 				get radiusDispl() {
-					return get(springs.radiusDispl);
+					return animations.radiusDispl.current;
 				},
+				tick,
 				dispose: () => {
 					material.dispose();
 					storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
@@ -615,27 +593,14 @@
 				scene.add(textMesh);
 
 				const initialVisibility = get(sceneSettings.headerVisibility)[i] ? 1 : 0;
-				const visibilityAnimation = {
-					target: initialVisibility,
-					current: initialVisibility,
-					velocity: 0
-				};
+				const visibilityAnimation = smoothDampAnimation(initialVisibility, 0.3);
 				storeUnsubscribers.push(
 					sceneSettings.headerVisibility.subscribe((v) => {
 						visibilityAnimation.target = v[i] ? 1 : 0;
 					})
 				);
-
 				const tick = (dt: number) => {
-					const smoothDampResult = smoothDamp(
-						visibilityAnimation.current,
-						visibilityAnimation.target,
-						visibilityAnimation.velocity,
-						0.3,
-						dt
-					);
-					visibilityAnimation.velocity = smoothDampResult.currentVelocity;
-					visibilityAnimation.current = smoothDampResult.output;
+					visibilityAnimation.tick(dt);
 					const color = d3.interpolateRgb(
 						backgroundColor,
 						primaryColor
@@ -673,6 +638,15 @@
 				requestAnimationFrame(animate);
 			}
 
+			animations.camera.pos.y.tick(dt);
+			animations.camera.pos.z.tick(dt);
+			animations.colorPaletteIndex.tick(dt);
+			animations.railCircumference.center.x.tick(dt);
+			animations.railCircumference.center.z.tick(dt);
+			animations.railCircumference.radius.tick(dt);
+			animations.railCircumference.polarAngleDegAnimatedToClosest.tick(dt);
+			animations.dioramasOwnPolarAngleMult.tick(dt);
+
 			// Rotation.
 			match(get(sceneSettings.railCircumference.polarAngleDegAnimatedClockwise)).with(
 				'KeepRotating',
@@ -688,6 +662,7 @@
 			applySpringValues(camera, railCircumference, colorPalette);
 			dioramaInstances.forEach(
 				({
+					tick,
 					mesh,
 					material,
 					ownPolarAngleDeg,
@@ -696,6 +671,8 @@
 					radiusDispl,
 					sceneSettings: dioramaSceneSettings
 				}) => {
+					tick(dt);
+
 					match(get(dioramaSceneSettings.polarAngleDegAnimatedClockwise)).with(
 						'KeepRotating',
 						() => {
@@ -709,8 +686,8 @@
 						radius: railCircumference.radius + radiusDispl,
 						polarAngleDeg:
 							railCircumference.polarAngleDeg.rotation -
-							ownPolarAngleDeg * get(springs.dioramasOwnPolarAngleMult) +
-							get(springs.railCircumference.polarAngleDegAnimatedToClosest)
+							ownPolarAngleDeg * animations.dioramasOwnPolarAngleMult.current +
+							animations.railCircumference.polarAngleDegAnimatedToClosest.current
 					});
 					if (mesh) {
 						mesh.position.x = pos.x;
@@ -722,7 +699,7 @@
 					material.uniforms.accentColor3.value = new THREE.Color(colorPalette.accentColor3);
 				}
 			);
-			headerInstances?.forEach(({ tick }) => tick(dt * 0.001));
+			headerInstances?.forEach(({ tick }) => tick(dt));
 			camera.lookAt(0, 0, 0);
 
 			renderer.render(scene, camera);
