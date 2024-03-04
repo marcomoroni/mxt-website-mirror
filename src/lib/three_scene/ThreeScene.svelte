@@ -569,8 +569,8 @@
 				const {
 					material,
 					dispose: disposeMaterial,
-					setColor: setMaterialColor
-				} = newTextMaterial();
+					setOpacity: setMaterialOpacity
+				} = newTextMaterial(new THREE.Color(primaryColor));
 				const textGeometry = new TextGeometry(headerData.content, {
 					font: font,
 					size: 4,
@@ -601,16 +601,11 @@
 				);
 				const tick = (dt: number) => {
 					visibilityAnimation.tick(dt);
-					const color = d3.interpolateRgb(
-						backgroundColor,
-						primaryColor
-					)(visibilityAnimation.current);
-					setMaterialColor(color);
+					setMaterialOpacity(visibilityAnimation.current);
 				};
 
 				const instance = {
 					dispose: disposeMaterial,
-					setColor: setMaterialColor,
 					tick
 				};
 				if (headerInstances) {
