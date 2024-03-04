@@ -3,8 +3,6 @@
 	import * as THREE from 'three';
 	import * as d3 from 'd3';
 	import { derived, get, writable, type Unsubscriber } from 'svelte/store';
-	import { vertexShader } from './vertexShader';
-	import { fragmentShader } from './fragmentShader';
 	import { P, match } from 'ts-pattern';
 	import {
 		accentColor1,
@@ -23,6 +21,7 @@
 	import { FontLoader, TextGeometry } from 'three/examples/jsm/Addons.js';
 	import { newTextMaterial } from './textMaterial';
 	import { smoothDampAnimation } from '$lib/smoothDamp';
+	import { newDioramaMaterial } from './dioramaMaterial';
 
 	const DEV_debugLog = false;
 
@@ -461,24 +460,13 @@
 		const dioramaInstances = dioramasData.map((dioramaData, i, array) => {
 			const storeUnsubscribers: Array<Unsubscriber> = [];
 
-			const material = new THREE.ShaderMaterial({
-				vertexShader: vertexShader,
-				fragmentShader: fragmentShader,
-				uniforms: {
-					backgroundColor: { value: new THREE.Color(backgroundColor) },
-					blendWithBackground: { value: 0 },
-					baseColor: { value: new THREE.Color(backgroundColor) },
-					baseColorShadow: { value: new THREE.Color('#C0BBB1') },
-					accentColor1: { value: new THREE.Color(colorPalette.accentColor1) },
-					accentColor2: { value: new THREE.Color(colorPalette.accentColor2) },
-					accentColor3: { value: new THREE.Color(colorPalette.accentColor3) },
-					tAmbientOcclusion: {
-						value: new THREE.TextureLoader().load(dioramaData.ambientOcclusionTexture)
-					}
-				},
-				// `toneMapped: false` makes the colours match the ones in the HTML.
-				toneMapped: false
-			});
+			const material = newDioramaMaterial(dioramaData.ambientOcclusionTexture);
+			material.setBackgroundColor(new THREE.Color(backgroundColor));
+			material.setBaseColor(new THREE.Color(backgroundColor));
+			material.setBaseColorShadow(new THREE.Color('#C0BBB1'));
+			material.setAccentColor1(new THREE.Color(colorPalette.accentColor1));
+			material.setAccentColor2(new THREE.Color(colorPalette.accentColor2));
+			material.setAccentColor3(new THREE.Color(colorPalette.accentColor3));
 			let mesh: undefined | THREE.Mesh = undefined;
 			const ownPolarAngleDeg = lerp(0, 360, i / array.length);
 
@@ -489,7 +477,7 @@
 						if (child instanceof THREE.Mesh) {
 							mesh = child;
 							mesh.scale.set(gltfScaleMult, gltfScaleMult, gltfScaleMult);
-							child.material = material;
+							child.material = material.material;
 						}
 
 						scene.add(child);
@@ -539,14 +527,18 @@
 			const tick = (dt: DOMHighResTimeStamp) => {
 				animations.radiusDispl.tick(dt);
 				animations.blendWithBackground.tick(dt);
-				material.uniforms.blendWithBackground.value = animations.blendWithBackground.current;
+				material.setBlendWithBackground(animations.blendWithBackground.current);
 			};
 
 			return {
 				get mesh() {
 					return mesh;
 				},
-				material,
+				material: {
+					setAccentColor1: material.setAccentColor1,
+					setAccentColor2: material.setAccentColor2,
+					setAccentColor3: material.setAccentColor3
+				},
 				ownPolarAngleDeg,
 				rotDegAnimatedClockwiseTarget,
 				rotDegAnimatedClockwiseAnim,
@@ -689,9 +681,9 @@
 						mesh.position.z = pos.z;
 						mesh.rotation.y = toRadians(rotDegAnimatedClockwiseAnim.rotation);
 					}
-					material.uniforms.accentColor1.value = new THREE.Color(colorPalette.accentColor1);
-					material.uniforms.accentColor2.value = new THREE.Color(colorPalette.accentColor2);
-					material.uniforms.accentColor3.value = new THREE.Color(colorPalette.accentColor3);
+					material.setAccentColor1(new THREE.Color(colorPalette.accentColor1));
+					material.setAccentColor2(new THREE.Color(colorPalette.accentColor2));
+					material.setAccentColor3(new THREE.Color(colorPalette.accentColor3));
 				}
 			);
 			headerInstances?.forEach(({ tick }) => tick(dt));
