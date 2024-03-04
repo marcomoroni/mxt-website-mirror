@@ -387,9 +387,9 @@
 			)
 		);
 
-		// The values of the springs are not applied by the stores themselves. Instead, this function
+		// The values of the animations are not applied by the stores themselves. Instead, this function
 		// is called every frame and it manually reads values from the stores.
-		const applySpringValues = (
+		const applyAnimationValues = (
 			camera: THREE.PerspectiveCamera,
 			railCircumference: { center: THREE.Vector3; radius: number },
 			colorPalette: { accentColor1: string; accentColor2: string; accentColor3: string }
@@ -646,7 +646,7 @@
 			);
 			railCircumference.polarAngleDeg.tick(dt);
 
-			applySpringValues(camera, railCircumference, colorPalette);
+			applyAnimationValues(camera, railCircumference, colorPalette);
 			dioramaInstances.forEach(
 				({
 					tick,
