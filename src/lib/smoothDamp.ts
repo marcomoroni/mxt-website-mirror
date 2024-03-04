@@ -41,6 +41,8 @@ export function smoothDamp(
 	return { output, currentVelocity };
 }
 
+// Managed state for a smoothdamp animation.
+// Call `tick()` at every frame.
 export function smoothDampAnimation(
 	initialValue: number,
 	smoothTime: number,
