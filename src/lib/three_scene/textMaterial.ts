@@ -20,7 +20,8 @@ export function newTextMaterial() {
         `,
 		uniforms: {
 			baseColor: { value: new THREE.Color('cyan') }
-		}
+		},
+		toneMapped: false
 	});
 
 	return {
