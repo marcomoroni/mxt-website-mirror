@@ -7,8 +7,6 @@
 	import ThreeScene from '$lib/three_scene/ThreeScene.svelte';
 	import { P, match } from 'ts-pattern';
 	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
-	import { onMount } from 'svelte';
-	import { spring } from 'svelte/motion';
 
 	let hoveringHomeLink = false;
 
@@ -47,8 +45,7 @@
 		atTopOfWindow
 	})
 		.returnType<boolean>()
-		.with({ path: '/' }, () => false)
-		.with({ path: '/case-studies/' }, () => false)
+		.with({ path: '/contacts/' }, () => true)
 		.with(
 			{ path: '/case-studies/stonehenge/', atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
@@ -63,10 +60,7 @@
 		)
 		.with({ path: '/studio/', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
 		.otherwise(() => false);
-	const threeSceneOpacity = spring(threeHidden ? 0 : 1, { stiffness: 0.1, damping: 0.8 });
-	$: {
-		threeSceneOpacity.set(threeHidden ? 0 : 1);
-	}
+	$: auroraHidden = $page.url.pathname !== '/contacts/';
 
 	function initialScroll(el: HTMLElement) {
 		let w = el.getElementsByClassName('home-link')[0]!.clientWidth;
@@ -91,10 +85,10 @@
 </svelte:head>
 
 <div class="aurora-container">
-	<Aurora visible={$page.url.pathname === '/contacts/'} />
+	<Aurora visible={!auroraHidden} />
 </div>
 
-<div class="three-container" style:opacity={$threeSceneOpacity}>
+<div class="three-container" class:visible={!threeHidden}>
 	<ThreeScene state={threeState} />
 </div>
 
@@ -148,6 +142,18 @@
 		position: fixed;
 		width: 100%;
 		height: 100dvh;
+	}
+
+	.three-container {
+		transition: opacity 3s var(--ease);
+	}
+
+	.three-container.visible {
+		transition-delay: 5s;
+	}
+
+	.three-container:not(.visible) {
+		opacity: 0;
 	}
 
 	.top-bar {

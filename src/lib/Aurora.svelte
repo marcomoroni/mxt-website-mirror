@@ -213,7 +213,7 @@
 
 	/* Hide this as well for better performance. */
 	.blur:not(.visible) {
-		transition-delay: 6.5s;
+		transition-delay: 6s;
 		opacity: 0;
 	}
 </style>

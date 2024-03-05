@@ -178,7 +178,7 @@
 					} else if ($s.startsWith('case-study')) {
 						return 1;
 					} else if ($s === 'contacts') {
-						return 0.5;
+						return 13;
 					} else {
 						return 0.3;
 					}
@@ -193,7 +193,7 @@
 					} else if ($s.startsWith('case-study')) {
 						return 8;
 					} else if ($s === 'contacts') {
-						return 0.1;
+						return 18;
 					} else {
 						return 9;
 					}
@@ -401,13 +401,14 @@
 		};
 
 		const scene = new THREE.Scene();
+		scene.background = new THREE.Color(backgroundColor);
 		const camera = new THREE.PerspectiveCamera(
 			30,
 			window.innerWidth / window.innerHeight,
 			0.1,
 			1000
 		);
-		const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvasEl, alpha: true });
+		const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvasEl });
 
 		// Dioramas are placed in a circumference at equal distances.
 		// To create the illusion of them moving around diverse dispositions animate the control points
