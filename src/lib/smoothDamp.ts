@@ -38,6 +38,11 @@ export function smoothDamp(
 		currentVelocity = (output - originalTo) / deltaTime;
 	}
 
+	// In case deltaTime is 0.
+	if (Number.isNaN(currentVelocity)) {
+		currentVelocity = 0;
+	}
+
 	return { output, currentVelocity };
 }
 
