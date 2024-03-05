@@ -19,11 +19,7 @@
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 	import { FontLoader, TextGeometry } from 'three/examples/jsm/Addons.js';
 	import { newTextMaterial } from './textMaterial';
-	import {
-		perpetualSmoothDampAngleAnimation,
-		smoothDampAngleAnimation,
-		smoothDampAnimation
-	} from '$lib/smoothDamp';
+	import { perpetualSmoothDampAngleAnimation, smoothDampAnimation } from '$lib/smoothDamp';
 	import { newDioramaMaterial } from './dioramaMaterial';
 
 	const DEV_debugLog = false;
@@ -309,26 +305,6 @@
 	function initThreeScene(canvasEl: HTMLCanvasElement) {
 		const storeUnsubscribers: Array<Unsubscriber> = [];
 
-		// A store that can be updated every frame when there is a continuous rotation.
-		const railCircumferencePolarAngleDegAnimatedClockwiseTarget = writable(
-			match(get(sceneSettings.railCircumference.polarAngleDegAnimatedClockwise))
-				// Use this value as a starting one so that it less likely that you'll have to make a
-				// full circle animation when navigating to the case studies page.
-				.with('KeepRotating', () => 180)
-				.with({ At: P.select() }, (to) => to)
-				.exhaustive()
-		);
-		storeUnsubscribers.push(
-			sceneSettings.railCircumference.polarAngleDegAnimatedClockwise.subscribe((v) => {
-				railCircumferencePolarAngleDegAnimatedClockwiseTarget.update((currentAngle) =>
-					match(v)
-						.with('KeepRotating', () => currentAngle)
-						.with({ At: P.select() }, (to) => to)
-						.exhaustive()
-				);
-			})
-		);
-
 		const animations = {
 			camera: {
 				pos: {
@@ -434,16 +410,37 @@
 		// Dioramas are placed in a circumference at equal distances.
 		// To create the illusion of them moving around diverse dispositions animate the control points
 		// of this circumference, along with the camera.
+		const railCircumferencePolarAngleDegPerpetualRotationDelta = 0.009;
 		const railCircumference = {
 			center: new THREE.Vector3(0, 0, 0),
 			radius: 4,
-			polarAngleDeg: smoothDampAngleAnimation(
-				get(railCircumferencePolarAngleDegAnimatedClockwiseTarget),
-				4,
+			polarAngleDeg: perpetualSmoothDampAngleAnimation(
+				match(get(sceneSettings.railCircumference.polarAngleDegAnimatedClockwise))
+					.with('KeepRotating', () => ({
+						keepRotating: {
+							by: railCircumferencePolarAngleDegPerpetualRotationDelta,
+							// Use this value as a starting one so that it less likely that you'll have to make a
+							// full circle animation when navigating to the case studies page.
+							initialValue: 90
+						}
+					}))
+					.with({ At: P.select() }, (to) => ({ fixedTarget: to }))
+					.exhaustive(),
+				3,
 				'clockwise',
 				true
 			)
 		};
+		storeUnsubscribers.push(
+			sceneSettings.railCircumference.polarAngleDegAnimatedClockwise.subscribe((v) => {
+				railCircumference.polarAngleDeg.state = match(v)
+					.with('KeepRotating', () => ({
+						keepRotatingBy: railCircumferencePolarAngleDegPerpetualRotationDelta
+					}))
+					.with({ At: P.select() }, (at) => ({ fixedTarget: at }))
+					.exhaustive();
+			})
+		);
 		const positionInCircumference = (circumference: {
 			center: THREE.Vector3;
 			radius: number;
@@ -638,17 +635,6 @@
 			animations.railCircumference.radius.tick(dt);
 			animations.railCircumference.polarAngleDegAnimatedToClosest.tick(dt);
 			animations.dioramasOwnPolarAngleMult.tick(dt);
-
-			// Rotation.
-			match(get(sceneSettings.railCircumference.polarAngleDegAnimatedClockwise)).with(
-				'KeepRotating',
-				() => {
-					railCircumferencePolarAngleDegAnimatedClockwiseTarget.update((v) => v + 0.01 * dt);
-				}
-			);
-			railCircumference.polarAngleDeg.target = get(
-				railCircumferencePolarAngleDegAnimatedClockwiseTarget
-			);
 			railCircumference.polarAngleDeg.tick(dt);
 
 			applyAnimationValues(camera, railCircumference, colorPalette);
