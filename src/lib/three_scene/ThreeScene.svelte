@@ -98,6 +98,14 @@
 						.with('case-study-p2', () => 1)
 						.with('case-study-p3', () => 1)
 						.otherwise(() => 0)
+				),
+				dimAccentColor: derived(stateStore, ($s) =>
+					[
+						'case-studies-anchor-p2',
+						'case-studies-anchor-p3',
+						'case-study-p2',
+						'case-study-p3'
+					].includes($s)
 				)
 			}
 		},
@@ -123,6 +131,14 @@
 						.with('case-study-a303', () => 1)
 						.with('case-study-p3', () => 1)
 						.otherwise(() => 0)
+				),
+				dimAccentColor: derived(stateStore, ($s) =>
+					[
+						'case-studies-anchor-a303',
+						'case-studies-anchor-p3',
+						'case-study-a303',
+						'case-study-p3'
+					].includes($s)
 				)
 			}
 		},
@@ -149,6 +165,14 @@
 						.with('case-study-p2', () => 1)
 						.with('case-study-a303', () => 1)
 						.otherwise(() => 0)
+				),
+				dimAccentColor: derived(stateStore, ($s) =>
+					[
+						'case-studies-anchor-a303',
+						'case-studies-anchor-p2',
+						'case-study-a303',
+						'case-study-p2'
+					].includes($s)
 				)
 			}
 		}
@@ -159,6 +183,7 @@
 		{ accentColor1: '#CAA98B', accentColor2: '#6B796A', accentColor3: accentColor5 },
 		{ accentColor1: '#CDD9C5', accentColor2: accentColor6, accentColor3: '#FFE8B0' }
 	];
+	const accentColorDim = '#cfcac0';
 	const dioramaOwnPolarAngleMultWhenSmall = 0.28;
 	const gltfScaleMult = 0.01;
 
@@ -471,6 +496,7 @@
 			material.setAccentColor1(new THREE.Color(colorPalette.accentColor1));
 			material.setAccentColor2(new THREE.Color(colorPalette.accentColor2));
 			material.setAccentColor3(new THREE.Color(colorPalette.accentColor3));
+			material.setAccentColorDim(new THREE.Color(accentColorDim));
 			let mesh: undefined | THREE.Mesh = undefined;
 			const ownPolarAngleDeg = lerp(0, 360, i / array.length);
 
@@ -516,6 +542,10 @@
 				blendWithBackground: smoothDampAnimation(
 					get(dioramaData.sceneSettings.blendWithBackground),
 					0.8
+				),
+				dimAccentColor: smoothDampAnimation(
+					get(dioramaData.sceneSettings.dimAccentColor) ? 1 : 0,
+					0.8
 				)
 			};
 			storeUnsubscribers.push(
@@ -526,11 +556,18 @@
 					(v) => (animations.blendWithBackground.target = v)
 				)
 			);
+			storeUnsubscribers.push(
+				dioramaData.sceneSettings.dimAccentColor.subscribe(
+					(v) => (animations.dimAccentColor.target = v ? 1 : 0)
+				)
+			);
 
 			const tick = (dt: DOMHighResTimeStamp) => {
 				animations.radiusDispl.tick(dt);
 				animations.blendWithBackground.tick(dt);
+				animations.dimAccentColor.tick(dt);
 				material.setBlendWithBackground(animations.blendWithBackground.current);
+				material.setAccentColorDimVisibility(animations.dimAccentColor.current);
 				rotDegAnimatedClockwiseAnim.tick(dt);
 			};
 
