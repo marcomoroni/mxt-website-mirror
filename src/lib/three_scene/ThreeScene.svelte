@@ -180,7 +180,7 @@
 					} else if ($s === 'contacts') {
 						return 0.5;
 					} else {
-						return 13;
+						return 0.3;
 					}
 				}),
 				z: derived(stateStore, ($s) => {
@@ -195,7 +195,7 @@
 					} else if ($s === 'contacts') {
 						return 0.1;
 					} else {
-						return 18;
+						return 9;
 					}
 				})
 			}
@@ -217,6 +217,8 @@
 						return 16;
 					} else if ($s.startsWith('case-study')) {
 						return 15;
+					} else if ($s === 'home') {
+						return -3;
 					} else {
 						return 0;
 					}
@@ -239,7 +241,7 @@
 				} else if ($s.startsWith('case-st')) {
 					return 14;
 				} else {
-					return 6;
+					return 5.5;
 				}
 			}),
 			// An angle animated always clockwise.
@@ -410,7 +412,7 @@
 		// Dioramas are placed in a circumference at equal distances.
 		// To create the illusion of them moving around diverse dispositions animate the control points
 		// of this circumference, along with the camera.
-		const railCircumferencePolarAngleDegPerpetualRotationDelta = 0.009;
+		const railCircumferencePolarAngleDegPerpetualRotationDelta = 0.005;
 		const railCircumference = {
 			center: new THREE.Vector3(0, 0, 0),
 			radius: 4,
@@ -421,7 +423,7 @@
 							by: railCircumferencePolarAngleDegPerpetualRotationDelta,
 							// Use this value as a starting one so that it less likely that you'll have to make a
 							// full circle animation when navigating to the case studies page.
-							initialValue: 90
+							initialValue: 285
 						}
 					}))
 					.with({ At: P.select() }, (to) => ({ fixedTarget: to }))
@@ -486,11 +488,12 @@
 				}
 			});
 
-			const perpetualRotationDelta = 0.012;
+			// const perpetualRotationDelta = 0.012;
+			const perpetualRotationDelta = 0.004;
 			const rotDegAnimatedClockwiseAnim = perpetualSmoothDampAngleAnimation(
 				match(get(dioramaData.sceneSettings.polarAngleDegAnimatedClockwise))
 					.with('KeepRotating', () => ({
-						keepRotating: { by: perpetualRotationDelta, initialValue: 0 }
+						keepRotating: { by: perpetualRotationDelta, initialValue: 225 }
 					}))
 					.with({ At: P.select() }, (to) => ({ fixedTarget: to }))
 					.exhaustive(),
