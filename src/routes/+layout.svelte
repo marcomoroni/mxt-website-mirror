@@ -107,7 +107,12 @@
 			</div>
 		</a>
 	</div>
-	<div class="central">
+	<div
+		class="central"
+		class:one-is-selected={$page.url.pathname.startsWith('/case-studies/') ||
+			$page.url.pathname === '/studio/' ||
+			$page.url.pathname === '/contacts/'}
+	>
 		<a
 			href="/case-studies"
 			class="page-link"
@@ -192,6 +197,11 @@
 		text-decoration: none;
 		font-weight: 500;
 		white-space: nowrap;
+		transition: color 0.5s var(--ease);
+	}
+
+	.one-is-selected .page-link:not(.current-page) {
+		color: color-mix(in oklab, var(--color-primary), transparent 30%);
 	}
 
 	.page-link.current-page {
