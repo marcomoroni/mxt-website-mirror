@@ -424,7 +424,7 @@
 							by: railCircumferencePolarAngleDegPerpetualRotationDelta,
 							// Use this value as a starting one so that it less likely that you'll have to make a
 							// full circle animation when navigating to the case studies page.
-							initialValue: 285
+							initialValue: 165
 						}
 					}))
 					.with({ At: P.select() }, (to) => ({ fixedTarget: to }))
