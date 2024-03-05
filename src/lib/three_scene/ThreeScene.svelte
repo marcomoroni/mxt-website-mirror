@@ -16,11 +16,14 @@
 	} from '$lib/cssValues';
 	import { lerp } from '$lib/lerp';
 	import { toRadians } from '$lib/angleConversions';
-	import { rotationAnimation } from './rotationAnimation';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 	import { FontLoader, TextGeometry } from 'three/examples/jsm/Addons.js';
 	import { newTextMaterial } from './textMaterial';
-	import { smoothDampAnimation } from '$lib/smoothDamp';
+	import {
+		perpetualSmoothDampAngleAnimation,
+		smoothDampAngleAnimation,
+		smoothDampAnimation
+	} from '$lib/smoothDamp';
 	import { newDioramaMaterial } from './dioramaMaterial';
 
 	const DEV_debugLog = false;
@@ -434,10 +437,11 @@
 		const railCircumference = {
 			center: new THREE.Vector3(0, 0, 0),
 			radius: 4,
-			polarAngleDeg: rotationAnimation(
+			polarAngleDeg: smoothDampAngleAnimation(
 				get(railCircumferencePolarAngleDegAnimatedClockwiseTarget),
-				true,
-				500
+				4,
+				'clockwise',
+				true
 			)
 		};
 		const positionInCircumference = (circumference: {
@@ -485,27 +489,25 @@
 				}
 			});
 
-			// A store that can be updated every frame when there is a continuous rotation.
-			const rotDegAnimatedClockwiseTarget = writable(
+			const perpetualRotationDelta = 0.012;
+			const rotDegAnimatedClockwiseAnim = perpetualSmoothDampAngleAnimation(
 				match(get(dioramaData.sceneSettings.polarAngleDegAnimatedClockwise))
-					.with('KeepRotating', () => 0)
-					.with({ At: P.select() }, (to) => to)
-					.exhaustive()
+					.with('KeepRotating', () => ({
+						keepRotating: { by: perpetualRotationDelta, initialValue: 0 }
+					}))
+					.with({ At: P.select() }, (to) => ({ fixedTarget: to }))
+					.exhaustive(),
+				1.6,
+				'anticlockwise',
+				true
 			);
 			storeUnsubscribers.push(
 				dioramaData.sceneSettings.polarAngleDegAnimatedClockwise.subscribe((v) => {
-					rotDegAnimatedClockwiseTarget.update((currentAngle) =>
-						match(v)
-							.with('KeepRotating', () => currentAngle)
-							.with({ At: P.select() }, (to) => to)
-							.exhaustive()
-					);
+					rotDegAnimatedClockwiseAnim.state = match(v)
+						.with('KeepRotating', () => ({ keepRotatingBy: perpetualRotationDelta }))
+						.with({ At: P.select() }, (at) => ({ fixedTarget: at }))
+						.exhaustive();
 				})
-			);
-			const rotDegAnimatedClockwiseAnim = rotationAnimation(
-				get(rotDegAnimatedClockwiseTarget),
-				false,
-				200
 			);
 
 			const animations = {
@@ -528,6 +530,7 @@
 				animations.radiusDispl.tick(dt);
 				animations.blendWithBackground.tick(dt);
 				material.setBlendWithBackground(animations.blendWithBackground.current);
+				rotDegAnimatedClockwiseAnim.tick(dt);
 			};
 
 			return {
@@ -540,9 +543,11 @@
 					setAccentColor3: material.setAccentColor3
 				},
 				ownPolarAngleDeg,
-				rotDegAnimatedClockwiseTarget,
-				rotDegAnimatedClockwiseAnim,
-				sceneSettings: dioramaData.sceneSettings,
+				rotDegAnimatedClockwiseAnim: {
+					get current() {
+						return rotDegAnimatedClockwiseAnim.current;
+					}
+				},
 				get radiusDispl() {
 					return animations.radiusDispl.current;
 				},
@@ -641,45 +646,28 @@
 					railCircumferencePolarAngleDegAnimatedClockwiseTarget.update((v) => v + 0.01 * dt);
 				}
 			);
-			railCircumference.polarAngleDeg.setTargetRotation(
-				get(railCircumferencePolarAngleDegAnimatedClockwiseTarget)
+			railCircumference.polarAngleDeg.target = get(
+				railCircumferencePolarAngleDegAnimatedClockwiseTarget
 			);
 			railCircumference.polarAngleDeg.tick(dt);
 
 			applyAnimationValues(camera, railCircumference, colorPalette);
 			dioramaInstances.forEach(
-				({
-					tick,
-					mesh,
-					material,
-					ownPolarAngleDeg,
-					rotDegAnimatedClockwiseTarget,
-					rotDegAnimatedClockwiseAnim,
-					radiusDispl,
-					sceneSettings: dioramaSceneSettings
-				}) => {
+				({ tick, mesh, material, ownPolarAngleDeg, rotDegAnimatedClockwiseAnim, radiusDispl }) => {
 					tick(dt);
 
-					match(get(dioramaSceneSettings.polarAngleDegAnimatedClockwise)).with(
-						'KeepRotating',
-						() => {
-							rotDegAnimatedClockwiseTarget.update((v) => v - 0.012 * dt);
-						}
-					);
-					rotDegAnimatedClockwiseAnim.setTargetRotation(get(rotDegAnimatedClockwiseTarget));
-					rotDegAnimatedClockwiseAnim.tick(dt);
 					const pos = positionInCircumference({
 						center: railCircumference.center,
 						radius: railCircumference.radius + radiusDispl,
 						polarAngleDeg:
-							railCircumference.polarAngleDeg.rotation -
+							railCircumference.polarAngleDeg.current -
 							ownPolarAngleDeg * animations.dioramasOwnPolarAngleMult.current +
 							animations.railCircumference.polarAngleDegAnimatedToClosest.current
 					});
 					if (mesh) {
 						mesh.position.x = pos.x;
 						mesh.position.z = pos.z;
-						mesh.rotation.y = toRadians(rotDegAnimatedClockwiseAnim.rotation);
+						mesh.rotation.y = toRadians(rotDegAnimatedClockwiseAnim.current);
 					}
 					material.setAccentColor1(new THREE.Color(colorPalette.accentColor1));
 					material.setAccentColor2(new THREE.Color(colorPalette.accentColor2));
