@@ -200,7 +200,7 @@
 					if ($s === 'studio') {
 						return 30;
 					} else if ($s === 'case-studies') {
-						return 5;
+						return 8;
 					} else if ($s.includes('anchor')) {
 						return 5;
 					} else if ($s.startsWith('case-study')) {
@@ -215,7 +215,7 @@
 					if ($s === 'studio') {
 						return 0.1;
 					} else if ($s === 'case-studies') {
-						return 40;
+						return 38;
 					} else if ($s.includes('anchor')) {
 						return 20;
 					} else if ($s.startsWith('case-study')) {
