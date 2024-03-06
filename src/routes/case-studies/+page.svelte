@@ -102,7 +102,7 @@
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		border: 3px solid white;
+		border: 2px solid var(--color-primary);
 	}
 
 	.box {
