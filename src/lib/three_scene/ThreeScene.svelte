@@ -23,6 +23,7 @@
 	import { newDioramaMaterial } from './dioramaMaterial';
 
 	const DEV_debugLog = false;
+	const FLAG_useHeaders = false;
 
 	export let state:
 		| 'home'
@@ -54,26 +55,28 @@
 		stateStore.set(state);
 	}
 
-	const headersData = [
-		{
-			content: 'Case studies',
-			position: { x: 0, y: 0.002, z: 20 },
-			rotation: { x: -Math.PI / 2 + 0.2, y: 0, z: 0 },
-			scale: 0.21
-		},
-		{
-			content: 'Studio',
-			position: { x: 0, y: 3, z: 0 },
-			rotation: { x: -Math.PI / 2, y: 0, z: 0 },
-			scale: 0.2
-		},
-		{
-			content: 'Contacts',
-			position: { x: 0, y: 0, z: 0 },
-			rotation: { x: 0, y: 0, z: 0 },
-			scale: 0.2
-		}
-	];
+	const headersData = FLAG_useHeaders
+		? [
+				{
+					content: 'Case studies',
+					position: { x: 0, y: 0.002, z: 20 },
+					rotation: { x: -Math.PI / 2 + 0.2, y: 0, z: 0 },
+					scale: 0.21
+				},
+				{
+					content: 'Studio',
+					position: { x: 0, y: 3, z: 0 },
+					rotation: { x: -Math.PI / 2, y: 0, z: 0 },
+					scale: 0.2
+				},
+				{
+					content: 'Contacts',
+					position: { x: 0, y: 0, z: 0 },
+					rotation: { x: 0, y: 0, z: 0 },
+					scale: 0.2
+				}
+		  ]
+		: [];
 	const radDisplWhenAway = 5;
 	const dioramasData = [
 		{
@@ -308,11 +311,13 @@
 		),
 		// Header by index.
 		headerVisibility: derived(stateStore, ($s) =>
-			match($s)
-				.with('case-studies', () => [true, false, false])
-				.with('studio', () => [false, true, false])
-				.with('contacts', () => [false, false, true])
-				.otherwise(() => [false, false, false])
+			FLAG_useHeaders
+				? match($s)
+						.with('case-studies', () => [true, false, false])
+						.with('studio', () => [false, true, false])
+						.with('contacts', () => [false, false, true])
+						.otherwise(() => [false, false, false])
+				: []
 		)
 	};
 
