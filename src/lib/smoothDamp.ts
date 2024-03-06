@@ -1,6 +1,6 @@
 // Based on https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Math/Mathf.cs.
 
-import { clamp } from '$lib/clamp';
+import { P, match } from 'ts-pattern';
 
 // Gradually changes a value towards a desired goal over time.
 export function smoothDamp(
@@ -8,9 +8,11 @@ export function smoothDamp(
 	target: number,
 	currentVelocity: number,
 	smoothTime: number,
-	deltaTime: number,
+	deltaTime: DOMHighResTimeStamp,
 	maxSpeed?: undefined | number
 ) {
+	deltaTime *= 0.001;
+
 	// Based on Game Programming Gems 4 Chapter 1.10
 	smoothTime = Math.max(0.0001, smoothTime);
 	const omega = 2.0 / smoothTime;
@@ -36,5 +38,193 @@ export function smoothDamp(
 		currentVelocity = (output - originalTo) / deltaTime;
 	}
 
+	// In case deltaTime is 0.
+	if (Number.isNaN(currentVelocity)) {
+		currentVelocity = 0;
+	}
+
 	return { output, currentVelocity };
+}
+
+export function smoothDampAngle(
+	current: number,
+	target: number,
+	currentVelocity: number,
+	smoothTime: number,
+	deltaTime: DOMHighResTimeStamp,
+	direction: 'shortest' | 'clockwise' | 'anticlockwise',
+	maxSpeed?: undefined | number
+) {
+	target = current + deltaAngle(current, target, direction);
+	return smoothDamp(current, target, currentVelocity, smoothTime, deltaTime, maxSpeed);
+}
+
+// Managed state for a smoothdamp animation.
+// Call `tick()` at every frame.
+export function smoothDampAnimation(
+	initialValue: number,
+	smoothTime: number,
+	maxSpeed?: undefined | number
+) {
+	let current = initialValue;
+	let target = initialValue;
+	let velocity = 0;
+	const tick = (deltaTime: DOMHighResTimeStamp) => {
+		const smoothDampResult = smoothDamp(current, target, velocity, smoothTime, deltaTime, maxSpeed);
+		velocity = smoothDampResult.currentVelocity;
+		current = smoothDampResult.output;
+	};
+
+	return {
+		set target(value: number) {
+			target = value;
+		},
+		get current() {
+			return current;
+		},
+		tick
+	};
+}
+
+export function smoothDampAngleAnimation(
+	initialValue: number,
+	smoothTime: number,
+	direction: 'shortest' | 'clockwise' | 'anticlockwise',
+	keepInRangeFrom0To360: boolean,
+	maxSpeed?: undefined | number
+) {
+	let current = initialValue;
+	let target = initialValue;
+	let velocity = 0;
+	const tick = (deltaTime: DOMHighResTimeStamp) => {
+		const smoothDampResult = smoothDampAngle(
+			current,
+			target,
+			velocity,
+			smoothTime,
+			deltaTime,
+			direction,
+			maxSpeed
+		);
+		velocity = smoothDampResult.currentVelocity;
+		current = smoothDampResult.output;
+		if (keepInRangeFrom0To360) {
+			current = repeat(current, 360);
+		}
+	};
+
+	return {
+		set target(value: number) {
+			target = value;
+		},
+		get current() {
+			return current;
+		},
+		tick
+	};
+}
+
+export function perpetualSmoothDampAngleAnimation(
+	initialState: { keepRotating: { by: number; initialValue: number } } | { fixedTarget: number },
+	smoothTime: number,
+	direction: 'clockwise' | 'anticlockwise',
+	keepInRangeFrom0To360: boolean,
+	maxSpeed?: undefined | number
+) {
+	const initialValue = match(initialState)
+		.with({ keepRotating: { initialValue: P.select() } }, (v) => v)
+		.with({ fixedTarget: P.select() }, (v) => v)
+		.exhaustive();
+	let current = initialValue;
+	let target = initialValue;
+	let velocity = 0;
+	let state = match(initialState)
+		.with({ keepRotating: { by: P.select() } }, (by) => ({ keepRotatingBy: by }))
+		.with({ fixedTarget: P.select() }, (v) => ({ fixedTarget: v }))
+		.exhaustive();
+	const tick = (deltaTime: DOMHighResTimeStamp) => {
+		match(state).with({ keepRotatingBy: P.select() }, (by) => {
+			if (direction === 'anticlockwise') {
+				by *= -1;
+			}
+			target += by * deltaTime;
+		});
+		const smoothDampResult = smoothDampAngle(
+			current,
+			target,
+			velocity,
+			smoothTime,
+			deltaTime,
+			direction,
+			maxSpeed
+		);
+		velocity = smoothDampResult.currentVelocity;
+		current = smoothDampResult.output;
+		if (keepInRangeFrom0To360) {
+			current = repeat(current, 360);
+		}
+	};
+
+	return {
+		get current() {
+			return current;
+		},
+		set state(value: { keepRotatingBy: number } | { fixedTarget: number }) {
+			state = value;
+			match(value)
+				.with({ keepRotatingBy: P.select() }, () => {
+					let approximateProjectedTarget = current + velocity * 0.45;
+					target = approximateProjectedTarget;
+				})
+				.with({ fixedTarget: P.select() }, (t) => {
+					target = t;
+				});
+		},
+		tick
+	};
+}
+
+// Calculates the shortest difference between two given angles.
+function deltaAngle(
+	current: number,
+	target: number,
+	direction: 'shortest' | 'clockwise' | 'anticlockwise'
+) {
+	let delta = repeat(target - current, 360);
+	if (delta > 180) {
+		delta -= 360;
+	}
+
+	return match(direction)
+		.with('shortest', () => delta)
+		.with('clockwise', () => {
+			if (delta < 0) {
+				return delta + 360;
+			} else {
+				return delta;
+			}
+		})
+		.with('anticlockwise', () => {
+			if (delta > 0) {
+				return delta - 360;
+			} else {
+				return delta;
+			}
+		})
+		.exhaustive();
+}
+
+// Loops the value t, so that it is never larger than max and never smaller than 0.
+function repeat(t: number, max: number) {
+	return clamp(t - Math.floor(t / max) * max, 0, max);
+}
+
+// Clamps a value between a minimum float and maximum float value.
+function clamp(value: number, min: number, max: number) {
+	if (value < min) {
+		value = min;
+	} else if (value > max) {
+		value = max;
+	}
+	return value;
 }
