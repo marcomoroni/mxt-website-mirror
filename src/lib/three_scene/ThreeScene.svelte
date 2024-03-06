@@ -183,7 +183,7 @@
 		{ accentColor1: '#CAA98B', accentColor2: '#6B796A', accentColor3: accentColor5 },
 		{ accentColor1: '#CDD9C5', accentColor2: accentColor6, accentColor3: '#FFE8B0' }
 	];
-	const accentColorDim = '#cfcac0';
+	const accentColorDim = '#DEDAD2';
 	const dioramaOwnPolarAngleMultWhenSmall = 0.28;
 	const gltfScaleMult = 0.01;
 
@@ -205,7 +205,7 @@
 					} else if ($s === 'contacts') {
 						return 13;
 					} else {
-						return 0.3;
+						return 0.2;
 					}
 				}),
 				z: derived(stateStore, ($s) => {
@@ -492,10 +492,11 @@
 			const material = newDioramaMaterial(dioramaData.ambientOcclusionTexture);
 			material.setBackgroundColor(new THREE.Color(backgroundColor));
 			material.setBaseColor(new THREE.Color(backgroundColor));
-			material.setBaseColorShadow(new THREE.Color('#C0BBB1'));
+			material.setBaseColorShadow(new THREE.Color('black'));
 			material.setAccentColor1(new THREE.Color(colorPalette.accentColor1));
 			material.setAccentColor2(new THREE.Color(colorPalette.accentColor2));
 			material.setAccentColor3(new THREE.Color(colorPalette.accentColor3));
+			material.setAccentColor4(new THREE.Color('#C0BBB1'));
 			material.setAccentColorDim(new THREE.Color(accentColorDim));
 			let mesh: undefined | THREE.Mesh = undefined;
 			const ownPolarAngleDeg = lerp(0, 360, i / array.length);
