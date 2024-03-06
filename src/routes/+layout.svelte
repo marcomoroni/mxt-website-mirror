@@ -150,11 +150,7 @@
 	}
 
 	.three-container {
-		transition: opacity 3s var(--ease);
-	}
-
-	.three-container.visible {
-		transition-delay: 5s;
+		transition: opacity 0.5s var(--ease);
 	}
 
 	.three-container:not(.visible) {
