@@ -2,10 +2,7 @@
 	import { onMount } from 'svelte';
 	import * as THREE from 'three';
 	import * as d3 from 'd3';
-	import { spring } from 'svelte/motion';
 	import { derived, get, writable, type Unsubscriber } from 'svelte/store';
-	import { vertexShader } from './vertexShader';
-	import { fragmentShader } from './fragmentShader';
 	import { P, match } from 'ts-pattern';
 	import {
 		accentColor1,
@@ -19,13 +16,14 @@
 	} from '$lib/cssValues';
 	import { lerp } from '$lib/lerp';
 	import { toRadians } from '$lib/angleConversions';
-	import { rotationAnimation } from './rotationAnimation';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 	import { FontLoader, TextGeometry } from 'three/examples/jsm/Addons.js';
 	import { newTextMaterial } from './textMaterial';
-	import { smoothDamp } from '$lib/smoothDamp';
+	import { perpetualSmoothDampAngleAnimation, smoothDampAnimation } from '$lib/smoothDamp';
+	import { newDioramaMaterial } from './dioramaMaterial';
 
 	const DEV_debugLog = false;
+	const FLAG_useHeaders = false;
 
 	export let state:
 		| 'home'
@@ -57,26 +55,28 @@
 		stateStore.set(state);
 	}
 
-	const headersData = [
-		{
-			content: 'Case studies',
-			position: { x: 0, y: 0.002, z: 20 },
-			rotation: { x: -Math.PI / 2 + 0.2, y: 0, z: 0 },
-			scale: 0.21
-		},
-		{
-			content: 'Studio',
-			position: { x: 0, y: 3, z: 0 },
-			rotation: { x: -Math.PI / 2, y: 0, z: 0 },
-			scale: 0.2
-		},
-		{
-			content: 'Contacts',
-			position: { x: 0, y: 0, z: 0 },
-			rotation: { x: 0, y: 0, z: 0 },
-			scale: 0.2
-		}
-	];
+	const headersData = FLAG_useHeaders
+		? [
+				{
+					content: 'Case studies',
+					position: { x: 0, y: 0.002, z: 20 },
+					rotation: { x: -Math.PI / 2 + 0.2, y: 0, z: 0 },
+					scale: 0.21
+				},
+				{
+					content: 'Studio',
+					position: { x: 0, y: 3, z: 0 },
+					rotation: { x: -Math.PI / 2, y: 0, z: 0 },
+					scale: 0.2
+				},
+				{
+					content: 'Contacts',
+					position: { x: 0, y: 0, z: 0 },
+					rotation: { x: 0, y: 0, z: 0 },
+					scale: 0.2
+				}
+		  ]
+		: [];
 	const radDisplWhenAway = 5;
 	const dioramasData = [
 		{
@@ -101,6 +101,14 @@
 						.with('case-study-p2', () => 1)
 						.with('case-study-p3', () => 1)
 						.otherwise(() => 0)
+				),
+				dimAccentColor: derived(stateStore, ($s) =>
+					[
+						'case-studies-anchor-p2',
+						'case-studies-anchor-p3',
+						'case-study-p2',
+						'case-study-p3'
+					].includes($s)
 				)
 			}
 		},
@@ -126,6 +134,14 @@
 						.with('case-study-a303', () => 1)
 						.with('case-study-p3', () => 1)
 						.otherwise(() => 0)
+				),
+				dimAccentColor: derived(stateStore, ($s) =>
+					[
+						'case-studies-anchor-a303',
+						'case-studies-anchor-p3',
+						'case-study-a303',
+						'case-study-p3'
+					].includes($s)
 				)
 			}
 		},
@@ -152,6 +168,14 @@
 						.with('case-study-p2', () => 1)
 						.with('case-study-a303', () => 1)
 						.otherwise(() => 0)
+				),
+				dimAccentColor: derived(stateStore, ($s) =>
+					[
+						'case-studies-anchor-a303',
+						'case-studies-anchor-p2',
+						'case-study-a303',
+						'case-study-p2'
+					].includes($s)
 				)
 			}
 		}
@@ -162,6 +186,7 @@
 		{ accentColor1: '#CAA98B', accentColor2: '#6B796A', accentColor3: accentColor5 },
 		{ accentColor1: '#CDD9C5', accentColor2: accentColor6, accentColor3: '#FFE8B0' }
 	];
+	const accentColorDim = '#D9D6CE';
 	const dioramaOwnPolarAngleMultWhenSmall = 0.28;
 	const gltfScaleMult = 0.01;
 
@@ -175,30 +200,30 @@
 					if ($s === 'studio') {
 						return 30;
 					} else if ($s === 'case-studies') {
-						return 5;
+						return 8;
 					} else if ($s.includes('anchor')) {
 						return 5;
 					} else if ($s.startsWith('case-study')) {
 						return 1;
 					} else if ($s === 'contacts') {
-						return 0.5;
-					} else {
 						return 13;
+					} else {
+						return 0.2;
 					}
 				}),
 				z: derived(stateStore, ($s) => {
 					if ($s === 'studio') {
 						return 0.1;
 					} else if ($s === 'case-studies') {
-						return 40;
+						return 38;
 					} else if ($s.includes('anchor')) {
 						return 20;
 					} else if ($s.startsWith('case-study')) {
 						return 8;
 					} else if ($s === 'contacts') {
-						return 0.1;
-					} else {
 						return 18;
+					} else {
+						return 9;
 					}
 				})
 			}
@@ -220,6 +245,8 @@
 						return 16;
 					} else if ($s.startsWith('case-study')) {
 						return 15;
+					} else if ($s === 'home') {
+						return -3;
 					} else {
 						return 0;
 					}
@@ -242,7 +269,7 @@
 				} else if ($s.startsWith('case-st')) {
 					return 14;
 				} else {
-					return 6;
+					return 5.5;
 				}
 			}),
 			// An angle animated always clockwise.
@@ -284,11 +311,13 @@
 		),
 		// Header by index.
 		headerVisibility: derived(stateStore, ($s) =>
-			match($s)
-				.with('case-studies', () => [true, false, false])
-				.with('studio', () => [false, true, false])
-				.with('contacts', () => [false, false, true])
-				.otherwise(() => [false, false, false])
+			FLAG_useHeaders
+				? match($s)
+						.with('case-studies', () => [true, false, false])
+						.with('studio', () => [false, true, false])
+						.with('contacts', () => [false, false, true])
+						.otherwise(() => [false, false, false])
+				: []
 		)
 	};
 
@@ -308,123 +337,85 @@
 	function initThreeScene(canvasEl: HTMLCanvasElement) {
 		const storeUnsubscribers: Array<Unsubscriber> = [];
 
-		// A store that can be updated every frame when there is a continuous rotation.
-		const railCircumferencePolarAngleDegAnimatedClockwiseTarget = writable(
-			match(get(sceneSettings.railCircumference.polarAngleDegAnimatedClockwise))
-				// Use this value as a starting one so that it less likely that you'll have to make a
-				// full circle animation when navigating to the case studies page.
-				.with('KeepRotating', () => 180)
-				.with({ At: P.select() }, (to) => to)
-				.exhaustive()
-		);
-		storeUnsubscribers.push(
-			sceneSettings.railCircumference.polarAngleDegAnimatedClockwise.subscribe((v) => {
-				railCircumferencePolarAngleDegAnimatedClockwiseTarget.update((currentAngle) =>
-					match(v)
-						.with('KeepRotating', () => currentAngle)
-						.with({ At: P.select() }, (to) => to)
-						.exhaustive()
-				);
-			})
-		);
-
-		const springs = {
+		const animations = {
 			camera: {
 				pos: {
-					y: spring(get(sceneSettings.camera.pos.y), { stiffness: 0.003, damping: 0.2 }),
-					z: spring(get(sceneSettings.camera.pos.z), { stiffness: 0.003, damping: 0.2 })
+					y: smoothDampAnimation(get(sceneSettings.camera.pos.y), 1.1),
+					z: smoothDampAnimation(get(sceneSettings.camera.pos.z), 1.1)
 				}
 			},
-			colorPaletteIndex: spring(get(sceneSettings.colorPaletteIndex), {
-				stiffness: 0.003,
-				damping: 0.2,
-				precision: 0.001
-			}),
+			colorPaletteIndex: smoothDampAnimation(get(sceneSettings.colorPaletteIndex), 0.3),
 			railCircumference: {
 				center: {
-					x: spring(get(sceneSettings.railCircumference.center.x), {
-						stiffness: 0.003,
-						damping: 0.2
-					}),
-					z: spring(get(sceneSettings.railCircumference.center.z), {
-						stiffness: 0.003,
-						damping: 0.2
-					})
+					x: smoothDampAnimation(get(sceneSettings.railCircumference.center.x), 0.9),
+					z: smoothDampAnimation(get(sceneSettings.railCircumference.center.z), 0.9)
 				},
-				radius: spring(get(sceneSettings.railCircumference.radius), {
-					stiffness: 0.001,
-					damping: 0.2
-				}),
-				polarAngleDegAnimatedToClosest: spring(
+				radius: smoothDampAnimation(get(sceneSettings.railCircumference.radius), 0.6),
+				polarAngleDegAnimatedToClosest: smoothDampAnimation(
 					get(sceneSettings.railCircumference.polarAngleDegAnimatedToClosest),
-					{
-						stiffness: 0.003,
-						damping: 0.2,
-						precision: 0.001
-					}
+					0.9
 				)
 			},
-			dioramasOwnPolarAngleMult: spring(get(sceneSettings.dioramasOwnPolarAngleMult), {
-				stiffness: 0.003,
-				damping: 0.2,
-				precision: 0.001
-			})
+			dioramasOwnPolarAngleMult: smoothDampAnimation(
+				get(sceneSettings.dioramasOwnPolarAngleMult),
+				0.9
+			)
 		};
 
 		// Update every spring store when its associated raw value changes.
 		storeUnsubscribers.push(
-			sceneSettings.camera.pos.y.subscribe((v) => springs.camera.pos.y.set(v))
+			sceneSettings.camera.pos.y.subscribe((v) => (animations.camera.pos.y.target = v))
 		);
 		storeUnsubscribers.push(
-			sceneSettings.camera.pos.z.subscribe((v) => springs.camera.pos.z.set(v))
+			sceneSettings.camera.pos.z.subscribe((v) => (animations.camera.pos.z.target = v))
 		);
 		storeUnsubscribers.push(
-			sceneSettings.colorPaletteIndex.subscribe((v) => springs.colorPaletteIndex.set(v))
+			sceneSettings.colorPaletteIndex.subscribe((v) => (animations.colorPaletteIndex.target = v))
 		);
 		storeUnsubscribers.push(
-			sceneSettings.railCircumference.center.x.subscribe((v) =>
-				springs.railCircumference.center.x.set(v)
+			sceneSettings.railCircumference.center.x.subscribe(
+				(v) => (animations.railCircumference.center.x.target = v)
 			)
 		);
 		storeUnsubscribers.push(
-			sceneSettings.railCircumference.center.z.subscribe((v) =>
-				springs.railCircumference.center.z.set(v)
+			sceneSettings.railCircumference.center.z.subscribe(
+				(v) => (animations.railCircumference.center.z.target = v)
 			)
 		);
 		storeUnsubscribers.push(
-			sceneSettings.railCircumference.radius.subscribe((v) =>
-				springs.railCircumference.radius.set(v)
+			sceneSettings.railCircumference.radius.subscribe(
+				(v) => (animations.railCircumference.radius.target = v)
 			)
 		);
 		storeUnsubscribers.push(
-			sceneSettings.railCircumference.polarAngleDegAnimatedToClosest.subscribe((v) =>
-				springs.railCircumference.polarAngleDegAnimatedToClosest.set(v)
+			sceneSettings.railCircumference.polarAngleDegAnimatedToClosest.subscribe(
+				(v) => (animations.railCircumference.polarAngleDegAnimatedToClosest.target = v)
 			)
 		);
 		storeUnsubscribers.push(
-			sceneSettings.dioramasOwnPolarAngleMult.subscribe((v) =>
-				springs.dioramasOwnPolarAngleMult.set(v)
+			sceneSettings.dioramasOwnPolarAngleMult.subscribe(
+				(v) => (animations.dioramasOwnPolarAngleMult.target = v)
 			)
 		);
 
-		// The values of the springs are not applied by the stores themselves. Instead, this function
+		// The values of the animations are not applied by the stores themselves. Instead, this function
 		// is called every frame and it manually reads values from the stores.
-		const applySpringValues = (
+		const applyAnimationValues = (
 			camera: THREE.PerspectiveCamera,
 			railCircumference: { center: THREE.Vector3; radius: number },
 			colorPalette: { accentColor1: string; accentColor2: string; accentColor3: string }
 		) => {
-			camera.position.y = get(springs.camera.pos.y);
-			camera.position.z = get(springs.camera.pos.z);
+			camera.position.y = animations.camera.pos.y.current;
+			camera.position.z = animations.camera.pos.z.current;
 
 			railCircumference.center = new THREE.Vector3(
-				get(springs.railCircumference.center.x),
+				animations.railCircumference.center.x.current,
 				0,
-				get(springs.railCircumference.center.z)
+				animations.railCircumference.center.z.current
 			);
-			railCircumference.radius = get(springs.railCircumference.radius);
+			railCircumference.radius = animations.railCircumference.radius.current;
 
-			const colorPaletteI = get(springs.colorPaletteIndex) / (colorPalettes.length - 1);
+			const colorPaletteI = animations.colorPaletteIndex.current / (colorPalettes.length - 1);
 			colorPalette.accentColor1 = d3.piecewise(
 				d3.interpolateRgb.gamma(2.2),
 				colorPalettes.map((p) => p.accentColor1)
@@ -440,26 +431,49 @@
 		};
 
 		const scene = new THREE.Scene();
+		scene.background = new THREE.Color(backgroundColor);
 		const camera = new THREE.PerspectiveCamera(
 			30,
 			window.innerWidth / window.innerHeight,
 			0.1,
 			1000
 		);
-		const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvasEl, alpha: true });
+		const renderer = new THREE.WebGLRenderer({ antialias: true, canvas: canvasEl });
 
 		// Dioramas are placed in a circumference at equal distances.
 		// To create the illusion of them moving around diverse dispositions animate the control points
 		// of this circumference, along with the camera.
+		const railCircumferencePolarAngleDegPerpetualRotationDelta = 0.005;
 		const railCircumference = {
 			center: new THREE.Vector3(0, 0, 0),
 			radius: 4,
-			polarAngleDeg: rotationAnimation(
-				get(railCircumferencePolarAngleDegAnimatedClockwiseTarget),
-				true,
-				500
+			polarAngleDeg: perpetualSmoothDampAngleAnimation(
+				match(get(sceneSettings.railCircumference.polarAngleDegAnimatedClockwise))
+					.with('KeepRotating', () => ({
+						keepRotating: {
+							by: railCircumferencePolarAngleDegPerpetualRotationDelta,
+							// Use this value as a starting one so that it less likely that you'll have to make a
+							// full circle animation when navigating to the case studies page.
+							initialValue: 165
+						}
+					}))
+					.with({ At: P.select() }, (to) => ({ fixedTarget: to }))
+					.exhaustive(),
+				3,
+				'clockwise',
+				true
 			)
 		};
+		storeUnsubscribers.push(
+			sceneSettings.railCircumference.polarAngleDegAnimatedClockwise.subscribe((v) => {
+				railCircumference.polarAngleDeg.state = match(v)
+					.with('KeepRotating', () => ({
+						keepRotatingBy: railCircumferencePolarAngleDegPerpetualRotationDelta
+					}))
+					.with({ At: P.select() }, (at) => ({ fixedTarget: at }))
+					.exhaustive();
+			})
+		);
 		const positionInCircumference = (circumference: {
 			center: THREE.Vector3;
 			radius: number;
@@ -480,24 +494,15 @@
 		const dioramaInstances = dioramasData.map((dioramaData, i, array) => {
 			const storeUnsubscribers: Array<Unsubscriber> = [];
 
-			const material = new THREE.ShaderMaterial({
-				vertexShader: vertexShader,
-				fragmentShader: fragmentShader,
-				uniforms: {
-					backgroundColor: { value: new THREE.Color(backgroundColor) },
-					blendWithBackground: { value: 0 },
-					baseColor: { value: new THREE.Color(backgroundColor) },
-					baseColorShadow: { value: new THREE.Color('#C0BBB1') },
-					accentColor1: { value: new THREE.Color(colorPalette.accentColor1) },
-					accentColor2: { value: new THREE.Color(colorPalette.accentColor2) },
-					accentColor3: { value: new THREE.Color(colorPalette.accentColor3) },
-					tAmbientOcclusion: {
-						value: new THREE.TextureLoader().load(dioramaData.ambientOcclusionTexture)
-					}
-				},
-				// `toneMapped: false` makes the colours match the ones in the HTML.
-				toneMapped: false
-			});
+			const material = newDioramaMaterial(dioramaData.ambientOcclusionTexture);
+			material.setBackgroundColor(new THREE.Color(backgroundColor));
+			material.setBaseColor(new THREE.Color(backgroundColor));
+			material.setBaseColorShadow(new THREE.Color('black'));
+			material.setAccentColor1(new THREE.Color(colorPalette.accentColor1));
+			material.setAccentColor2(new THREE.Color(colorPalette.accentColor2));
+			material.setAccentColor3(new THREE.Color(colorPalette.accentColor3));
+			material.setAccentColor4(new THREE.Color('#C0BBB1'));
+			material.setAccentColorDim(new THREE.Color(accentColorDim));
 			let mesh: undefined | THREE.Mesh = undefined;
 			const ownPolarAngleDeg = lerp(0, 360, i / array.length);
 
@@ -508,7 +513,7 @@
 						if (child instanceof THREE.Mesh) {
 							mesh = child;
 							mesh.scale.set(gltfScaleMult, gltfScaleMult, gltfScaleMult);
-							child.material = material;
+							child.material = material.material;
 						}
 
 						scene.add(child);
@@ -516,67 +521,81 @@
 				}
 			});
 
-			// A store that can be updated every frame when there is a continuous rotation.
-			const rotDegAnimatedClockwiseTarget = writable(
+			// const perpetualRotationDelta = 0.012;
+			const perpetualRotationDelta = 0.004;
+			const rotDegAnimatedClockwiseAnim = perpetualSmoothDampAngleAnimation(
 				match(get(dioramaData.sceneSettings.polarAngleDegAnimatedClockwise))
-					.with('KeepRotating', () => 0)
-					.with({ At: P.select() }, (to) => to)
-					.exhaustive()
+					.with('KeepRotating', () => ({
+						keepRotating: { by: perpetualRotationDelta, initialValue: 225 }
+					}))
+					.with({ At: P.select() }, (to) => ({ fixedTarget: to }))
+					.exhaustive(),
+				1.6,
+				'anticlockwise',
+				true
 			);
 			storeUnsubscribers.push(
 				dioramaData.sceneSettings.polarAngleDegAnimatedClockwise.subscribe((v) => {
-					rotDegAnimatedClockwiseTarget.update((currentAngle) =>
-						match(v)
-							.with('KeepRotating', () => currentAngle)
-							.with({ At: P.select() }, (to) => to)
-							.exhaustive()
-					);
+					rotDegAnimatedClockwiseAnim.state = match(v)
+						.with('KeepRotating', () => ({ keepRotatingBy: perpetualRotationDelta }))
+						.with({ At: P.select() }, (at) => ({ fixedTarget: at }))
+						.exhaustive();
 				})
-			);
-			const rotDegAnimatedClockwiseAnim = rotationAnimation(
-				get(rotDegAnimatedClockwiseTarget),
-				false,
-				200
 			);
 
-			const springs = {
-				radiusDispl: spring(get(dioramaData.sceneSettings.radiusDispl), {
-					stiffness: 0.001,
-					damping: 0.2
-				}),
-				blendWithBackground: spring(get(dioramaData.sceneSettings.blendWithBackground), {
-					stiffness: 0.006,
-					damping: 0.2,
-					precision: 0.001
-				})
+			const animations = {
+				radiusDispl: smoothDampAnimation(get(dioramaData.sceneSettings.radiusDispl), 1.1),
+				blendWithBackground: smoothDampAnimation(
+					get(dioramaData.sceneSettings.blendWithBackground),
+					0.8
+				),
+				dimAccentColor: smoothDampAnimation(
+					get(dioramaData.sceneSettings.dimAccentColor) ? 1 : 0,
+					0.8
+				)
 			};
 			storeUnsubscribers.push(
-				dioramaData.sceneSettings.radiusDispl.subscribe((v) => springs.radiusDispl.set(v))
+				dioramaData.sceneSettings.radiusDispl.subscribe((v) => (animations.radiusDispl.target = v))
 			);
 			storeUnsubscribers.push(
-				dioramaData.sceneSettings.blendWithBackground.subscribe((v) =>
-					springs.blendWithBackground.set(v)
+				dioramaData.sceneSettings.blendWithBackground.subscribe(
+					(v) => (animations.blendWithBackground.target = v)
+				)
+			);
+			storeUnsubscribers.push(
+				dioramaData.sceneSettings.dimAccentColor.subscribe(
+					(v) => (animations.dimAccentColor.target = v ? 1 : 0)
 				)
 			);
 
-			storeUnsubscribers.push(
-				springs.blendWithBackground.subscribe((v) => {
-					material.uniforms.blendWithBackground.value = v;
-				})
-			);
+			const tick = (dt: DOMHighResTimeStamp) => {
+				animations.radiusDispl.tick(dt);
+				animations.blendWithBackground.tick(dt);
+				animations.dimAccentColor.tick(dt);
+				material.setBlendWithBackground(animations.blendWithBackground.current);
+				material.setAccentColorDimVisibility(animations.dimAccentColor.current);
+				rotDegAnimatedClockwiseAnim.tick(dt);
+			};
 
 			return {
 				get mesh() {
 					return mesh;
 				},
-				material,
-				ownPolarAngleDeg,
-				rotDegAnimatedClockwiseTarget,
-				rotDegAnimatedClockwiseAnim,
-				sceneSettings: dioramaData.sceneSettings,
-				get radiusDispl() {
-					return get(springs.radiusDispl);
+				material: {
+					setAccentColor1: material.setAccentColor1,
+					setAccentColor2: material.setAccentColor2,
+					setAccentColor3: material.setAccentColor3
 				},
+				ownPolarAngleDeg,
+				rotDegAnimatedClockwiseAnim: {
+					get current() {
+						return rotDegAnimatedClockwiseAnim.current;
+					}
+				},
+				get radiusDispl() {
+					return animations.radiusDispl.current;
+				},
+				tick,
 				dispose: () => {
 					material.dispose();
 					storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
@@ -591,8 +610,8 @@
 				const {
 					material,
 					dispose: disposeMaterial,
-					setColor: setMaterialColor
-				} = newTextMaterial();
+					setOpacity: setMaterialOpacity
+				} = newTextMaterial(new THREE.Color(primaryColor));
 				const textGeometry = new TextGeometry(headerData.content, {
 					font: font,
 					size: 4,
@@ -615,37 +634,19 @@
 				scene.add(textMesh);
 
 				const initialVisibility = get(sceneSettings.headerVisibility)[i] ? 1 : 0;
-				const visibilityAnimation = {
-					target: initialVisibility,
-					current: initialVisibility,
-					velocity: 0
-				};
+				const visibilityAnimation = smoothDampAnimation(initialVisibility, 0.3);
 				storeUnsubscribers.push(
 					sceneSettings.headerVisibility.subscribe((v) => {
 						visibilityAnimation.target = v[i] ? 1 : 0;
 					})
 				);
-
 				const tick = (dt: number) => {
-					const smoothDampResult = smoothDamp(
-						visibilityAnimation.current,
-						visibilityAnimation.target,
-						visibilityAnimation.velocity,
-						0.3,
-						dt
-					);
-					visibilityAnimation.velocity = smoothDampResult.currentVelocity;
-					visibilityAnimation.current = smoothDampResult.output;
-					const color = d3.interpolateRgb(
-						backgroundColor,
-						primaryColor
-					)(visibilityAnimation.current);
-					setMaterialColor(color);
+					visibilityAnimation.tick(dt);
+					setMaterialOpacity(visibilityAnimation.current);
 				};
 
 				const instance = {
 					dispose: disposeMaterial,
-					setColor: setMaterialColor,
 					tick
 				};
 				if (headerInstances) {
@@ -673,56 +674,40 @@
 				requestAnimationFrame(animate);
 			}
 
-			// Rotation.
-			match(get(sceneSettings.railCircumference.polarAngleDegAnimatedClockwise)).with(
-				'KeepRotating',
-				() => {
-					railCircumferencePolarAngleDegAnimatedClockwiseTarget.update((v) => v + 0.01 * dt);
-				}
-			);
-			railCircumference.polarAngleDeg.setTargetRotation(
-				get(railCircumferencePolarAngleDegAnimatedClockwiseTarget)
-			);
+			animations.camera.pos.y.tick(dt);
+			animations.camera.pos.z.tick(dt);
+			animations.colorPaletteIndex.tick(dt);
+			animations.railCircumference.center.x.tick(dt);
+			animations.railCircumference.center.z.tick(dt);
+			animations.railCircumference.radius.tick(dt);
+			animations.railCircumference.polarAngleDegAnimatedToClosest.tick(dt);
+			animations.dioramasOwnPolarAngleMult.tick(dt);
 			railCircumference.polarAngleDeg.tick(dt);
 
-			applySpringValues(camera, railCircumference, colorPalette);
+			applyAnimationValues(camera, railCircumference, colorPalette);
 			dioramaInstances.forEach(
-				({
-					mesh,
-					material,
-					ownPolarAngleDeg,
-					rotDegAnimatedClockwiseTarget,
-					rotDegAnimatedClockwiseAnim,
-					radiusDispl,
-					sceneSettings: dioramaSceneSettings
-				}) => {
-					match(get(dioramaSceneSettings.polarAngleDegAnimatedClockwise)).with(
-						'KeepRotating',
-						() => {
-							rotDegAnimatedClockwiseTarget.update((v) => v - 0.012 * dt);
-						}
-					);
-					rotDegAnimatedClockwiseAnim.setTargetRotation(get(rotDegAnimatedClockwiseTarget));
-					rotDegAnimatedClockwiseAnim.tick(dt);
+				({ tick, mesh, material, ownPolarAngleDeg, rotDegAnimatedClockwiseAnim, radiusDispl }) => {
+					tick(dt);
+
 					const pos = positionInCircumference({
 						center: railCircumference.center,
 						radius: railCircumference.radius + radiusDispl,
 						polarAngleDeg:
-							railCircumference.polarAngleDeg.rotation -
-							ownPolarAngleDeg * get(springs.dioramasOwnPolarAngleMult) +
-							get(springs.railCircumference.polarAngleDegAnimatedToClosest)
+							railCircumference.polarAngleDeg.current -
+							ownPolarAngleDeg * animations.dioramasOwnPolarAngleMult.current +
+							animations.railCircumference.polarAngleDegAnimatedToClosest.current
 					});
 					if (mesh) {
 						mesh.position.x = pos.x;
 						mesh.position.z = pos.z;
-						mesh.rotation.y = toRadians(rotDegAnimatedClockwiseAnim.rotation);
+						mesh.rotation.y = toRadians(rotDegAnimatedClockwiseAnim.current);
 					}
-					material.uniforms.accentColor1.value = new THREE.Color(colorPalette.accentColor1);
-					material.uniforms.accentColor2.value = new THREE.Color(colorPalette.accentColor2);
-					material.uniforms.accentColor3.value = new THREE.Color(colorPalette.accentColor3);
+					material.setAccentColor1(new THREE.Color(colorPalette.accentColor1));
+					material.setAccentColor2(new THREE.Color(colorPalette.accentColor2));
+					material.setAccentColor3(new THREE.Color(colorPalette.accentColor3));
 				}
 			);
-			headerInstances?.forEach(({ tick }) => tick(dt * 0.001));
+			headerInstances?.forEach(({ tick }) => tick(dt));
 			camera.lookAt(0, 0, 0);
 
 			renderer.render(scene, camera);

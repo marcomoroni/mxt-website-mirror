@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-export function newTextMaterial() {
+export function newTextMaterial(color: THREE.Color) {
 	const material = new THREE.ShaderMaterial({
 		vertexShader: `
         void main() {
@@ -10,23 +10,27 @@ export function newTextMaterial() {
         `,
 		fragmentShader: `
         uniform vec3 baseColor;
+		uniform float opacity;
 
         void main() {
-            gl_FragColor = vec4(baseColor, 1.0);
+            gl_FragColor = vec4(baseColor, opacity);
 
             #include <tonemapping_fragment>
             #include <colorspace_fragment>
         }
         `,
 		uniforms: {
-			baseColor: { value: new THREE.Color('cyan') }
-		}
+			baseColor: { value: color },
+			opacity: { value: 1 }
+		},
+		toneMapped: false,
+		transparent: true
 	});
 
 	return {
 		material,
-		setColor: (color: string) => {
-			material.uniforms.baseColor.value = new THREE.Color(color);
+		setOpacity: (opacity: number) => {
+			material.uniforms.opacity.value = opacity;
 		},
 		dispose: () => {
 			material.dispose();
