@@ -186,7 +186,7 @@
 		{ accentColor1: '#CAA98B', accentColor2: '#6B796A', accentColor3: accentColor5 },
 		{ accentColor1: '#CDD9C5', accentColor2: accentColor6, accentColor3: '#FFE8B0' }
 	];
-	const accentColorDim = '#DEDAD2';
+	const accentColorDim = '#D9D6CE';
 	const dioramaOwnPolarAngleMultWhenSmall = 0.28;
 	const gltfScaleMult = 0.01;
 
