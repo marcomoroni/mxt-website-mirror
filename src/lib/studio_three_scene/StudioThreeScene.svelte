@@ -1,16 +1,23 @@
 <script lang="ts">
+	import { smoothDampAnimation } from '$lib/smoothDamp';
 	import { newTextMaterial } from '$lib/three_scene/textMaterial';
 	import * as THREE from 'three';
+
+	let scrollY: number;
 
 	function createObject() {
 		const geometry = new THREE.TorusKnotGeometry(1, 0.1, 300, 8, 5, 11);
 		const material = newTextMaterial(new THREE.Color('red'));
 		const mesh = new THREE.Mesh(geometry, material.material);
+		const targetRotation = () => scrollY * 0.003;
+		const rotationAnimation = smoothDampAnimation(targetRotation(), 0.08);
 
 		return {
 			mesh,
 			tick(deltaTime: DOMHighResTimeStamp) {
-				mesh.rotation.y += 0.0004 * deltaTime;
+				rotationAnimation.target = targetRotation();
+				rotationAnimation.tick(deltaTime);
+				mesh.rotation.y = rotationAnimation.current;
 			},
 			dispose() {
 				material.dispose();
@@ -18,6 +25,7 @@
 		};
 	}
 
+	// ---- rotatin relative to scroll position??
 	function initThreeScene(canvasEl: HTMLCanvasElement) {
 		const parentEl = canvasEl.parentElement!;
 
@@ -74,6 +82,8 @@
 		};
 	}
 </script>
+
+<svelte:window bind:scrollY />
 
 <canvas use:initThreeScene />
 
