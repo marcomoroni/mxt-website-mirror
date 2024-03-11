@@ -168,4 +168,25 @@
 	.bottom-page-spacer {
 		height: 100px;
 	}
+
+	@media (max-width: 900px) {
+		.section {
+			grid-template-columns: unset;
+			grid-auto-flow: row;
+		}
+
+		.illustration {
+			grid-column: unset;
+			grid-row: 1;
+			width: 100%;
+			height: unset;
+			aspect-ratio: 1 / 1;
+			position: relative;
+		}
+
+		.type {
+			grid-column: unset;
+			grid-row: 2;
+		}
+	}
 </style>
