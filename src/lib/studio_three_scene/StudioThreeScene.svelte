@@ -19,10 +19,12 @@
 	}
 
 	function initThreeScene(canvasEl: HTMLCanvasElement) {
+		const parentEl = canvasEl.parentElement!;
+
 		const scene = new THREE.Scene();
 		const camera = new THREE.PerspectiveCamera(
 			30,
-			canvasEl.clientWidth / canvasEl.clientHeight,
+			parentEl.clientWidth / parentEl.clientHeight,
 			0.1,
 			1000
 		);
@@ -35,8 +37,8 @@
 		scene.add(object.mesh);
 
 		const resize = () => {
-			renderer.setSize(canvasEl.clientWidth, canvasEl.clientHeight);
-			camera.aspect = canvasEl.clientWidth / canvasEl.clientHeight;
+			renderer.setSize(parentEl.clientWidth, parentEl.clientHeight);
+			camera.aspect = parentEl.clientWidth / parentEl.clientHeight;
 			camera.updateProjectionMatrix();
 		};
 
