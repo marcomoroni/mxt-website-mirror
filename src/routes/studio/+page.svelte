@@ -159,6 +159,7 @@
 	}
 
 	.studio-page-h4 {
+		font-size: 17px;
 		font-weight: 650;
 		margin-top: 22px;
 		margin-bottom: 12px;
