@@ -226,6 +226,9 @@
 						return 9;
 					}
 				})
+			},
+			lookAt: {
+				y: derived(stateStore, ($s) => ($s === 'home' ? 0.7 : 0))
 			}
 		},
 		colorPaletteIndex: derived(stateStore, ($s) =>
@@ -342,6 +345,9 @@
 				pos: {
 					y: smoothDampAnimation(get(sceneSettings.camera.pos.y), 1.1),
 					z: smoothDampAnimation(get(sceneSettings.camera.pos.z), 1.1)
+				},
+				lookAt: {
+					y: smoothDampAnimation(get(sceneSettings.camera.lookAt.y), 1.1)
 				}
 			},
 			colorPaletteIndex: smoothDampAnimation(get(sceneSettings.colorPaletteIndex), 0.3),
@@ -368,6 +374,9 @@
 		);
 		storeUnsubscribers.push(
 			sceneSettings.camera.pos.z.subscribe((v) => (animations.camera.pos.z.target = v))
+		);
+		storeUnsubscribers.push(
+			sceneSettings.camera.lookAt.y.subscribe((v) => (animations.camera.lookAt.y.target = v))
 		);
 		storeUnsubscribers.push(
 			sceneSettings.colorPaletteIndex.subscribe((v) => (animations.colorPaletteIndex.target = v))
@@ -676,6 +685,7 @@
 
 			animations.camera.pos.y.tick(dt);
 			animations.camera.pos.z.tick(dt);
+			animations.camera.lookAt.y.tick(dt);
 			animations.colorPaletteIndex.tick(dt);
 			animations.railCircumference.center.x.tick(dt);
 			animations.railCircumference.center.z.tick(dt);
@@ -708,7 +718,7 @@
 				}
 			);
 			headerInstances?.forEach(({ tick }) => tick(dt));
-			camera.lookAt(0, 0, 0);
+			camera.lookAt(0, animations.camera.lookAt.y.current, 0);
 
 			renderer.render(scene, camera);
 		};
