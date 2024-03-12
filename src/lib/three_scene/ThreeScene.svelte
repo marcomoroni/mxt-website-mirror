@@ -215,7 +215,7 @@
 					if ($s === 'studio') {
 						return 0.1;
 					} else if ($s === 'case-studies') {
-						return 38;
+						return 37;
 					} else if ($s.includes('anchor')) {
 						return 20;
 					} else if ($s.startsWith('case-study')) {
@@ -256,7 +256,7 @@
 				}),
 				z: derived(stateStore, ($s) => {
 					if ($s == 'case-studies') {
-						return 21;
+						return 18;
 					} else if ($s.includes('anchor')) {
 						return 3;
 					} else if ($s.startsWith('case-study')) {
