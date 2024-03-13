@@ -26,7 +26,7 @@
 			| 'case-study-a303'
 			| 'case-study-p2'
 			| 'case-study-p3'
-			| 'studio'
+			| 'services'
 			| 'contacts'
 		>()
 		.with({ path: '/' }, () => 'home')
@@ -37,7 +37,7 @@
 		.with({ path: '/case-studies/stonehenge/' }, () => 'case-study-a303')
 		.with({ path: '/case-studies/p2/' }, () => 'case-study-p2')
 		.with({ path: '/case-studies/p3/' }, () => 'case-study-p3')
-		.with({ path: '/studio/' }, () => 'studio')
+		.with({ path: '/services/' }, () => 'services')
 		.otherwise(() => 'contacts');
 
 	$: threeHidden = match({
@@ -58,7 +58,7 @@
 			{ path: '/case-studies/p3/', atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
-		.with({ path: '/studio/', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
+		.with({ path: '/services/', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
 		.otherwise(() => false);
 	$: auroraHidden = $page.url.pathname !== '/contacts/';
 
@@ -110,7 +110,7 @@
 	<div
 		class="central"
 		class:one-is-selected={$page.url.pathname.startsWith('/case-studies/') ||
-			$page.url.pathname === '/studio/' ||
+			$page.url.pathname === '/services/' ||
 			$page.url.pathname === '/contacts/'}
 	>
 		<a
@@ -120,8 +120,8 @@
 		>
 			Case studies
 		</a>
-		<a href="/studio" class="page-link" class:current-page={$page.url.pathname === '/studio/'}>
-			Studio
+		<a href="/services" class="page-link" class:current-page={$page.url.pathname === '/services/'}>
+			Services
 		</a>
 		<a href="/contacts" class="page-link" class:current-page={$page.url.pathname === '/contacts/'}>
 			Contacts

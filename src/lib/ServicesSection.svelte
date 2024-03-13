@@ -1,5 +1,5 @@
 <script lang="ts">
-	import StudioThreeScene from './studio_three_scene/StudioThreeScene.svelte';
+	import ServicesThreeScene from './services_three_scene/ServicesThreeScene.svelte';
 
 	export let cssBackgroundColor: string;
 	let windowHeight: number;
@@ -47,7 +47,7 @@
 		</div>
 	</div>
 	<div class="illustration">
-		<StudioThreeScene />
+		<ServicesThreeScene />
 	</div>
 	<div class="vertical-margin left" />
 	<div class="vertical-margin right" />

@@ -34,7 +34,7 @@
 		| 'case-study-a303'
 		| 'case-study-p2'
 		| 'case-study-p3'
-		| 'studio'
+		| 'services'
 		| 'contacts';
 
 	// This is needed because I need some reactivity that I can't have with implicit Svelte
@@ -48,7 +48,7 @@
 		| 'case-study-a303'
 		| 'case-study-p2'
 		| 'case-study-p3'
-		| 'studio'
+		| 'services'
 		| 'contacts'
 	>(state);
 	$: {
@@ -64,7 +64,7 @@
 					scale: 0.21
 				},
 				{
-					content: 'Studio',
+					content: 'Services',
 					position: { x: 0, y: 3, z: 0 },
 					rotation: { x: -Math.PI / 2, y: 0, z: 0 },
 					scale: 0.2
@@ -197,7 +197,7 @@
 		camera: {
 			pos: {
 				y: derived(stateStore, ($s) => {
-					if ($s === 'studio') {
+					if ($s === 'services') {
 						return 30;
 					} else if ($s === 'case-studies') {
 						return 8;
@@ -212,7 +212,7 @@
 					}
 				}),
 				z: derived(stateStore, ($s) => {
-					if ($s === 'studio') {
+					if ($s === 'services') {
 						return 0.1;
 					} else if ($s === 'case-studies') {
 						return 37;
@@ -267,7 +267,7 @@
 				})
 			},
 			radius: derived(stateStore, ($s) => {
-				if ($s === 'studio') {
+				if ($s === 'services') {
 					return 4.5;
 				} else if ($s.startsWith('case-st')) {
 					return 14;
@@ -317,7 +317,7 @@
 			FLAG_useHeaders
 				? match($s)
 						.with('case-studies', () => [true, false, false])
-						.with('studio', () => [false, true, false])
+						.with('services', () => [false, true, false])
 						.with('contacts', () => [false, false, true])
 						.otherwise(() => [false, false, false])
 				: []
