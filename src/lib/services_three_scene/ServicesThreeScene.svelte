@@ -16,12 +16,12 @@
 		const storeUnsubscribers: Array<Unsubscriber> = [];
 
 		const geometry = new THREE.TorusKnotGeometry(2.1, 0.2, 300, 8, 5, 11);
-		const material = newTextMaterial(new THREE.Color('red'));
+		const material = newTextMaterial(new THREE.Color('#f5f1ef'));
 		const mesh = new THREE.Mesh(geometry, material.material);
 		const targetRotation = () => scrollY * 0.003;
 		const rotationAnimation = smoothDampAnimation(targetRotation(), 0.13);
 
-		const targetPosX = derived(moveAwayFromCameraStore, ($v) => ($v ? -7 : -2));
+		const targetPosX = derived(moveAwayFromCameraStore, ($v) => ($v ? -5 : -2));
 		const posXAnimation = smoothDampAnimation(get(targetPosX), 1.8);
 		storeUnsubscribers.push(targetPosX.subscribe((v) => (posXAnimation.target = v)));
 		mesh.position.x = posXAnimation.current;

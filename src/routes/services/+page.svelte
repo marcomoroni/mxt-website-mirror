@@ -103,7 +103,7 @@
 	.services-page-h2 {
 		font-size: 34px;
 		font-weight: 600;
-		margin-bottom: 43px;
+		margin-bottom: 60px;
 		text-align: center;
 	}
 
