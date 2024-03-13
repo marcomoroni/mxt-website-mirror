@@ -6,7 +6,7 @@
 	let scrollY: number;
 
 	function createObject() {
-		const geometry = new THREE.TorusKnotGeometry(1, 0.1, 300, 8, 5, 11);
+		const geometry = new THREE.TorusKnotGeometry(2.1, 0.2, 300, 8, 5, 11);
 		const material = newTextMaterial(new THREE.Color('red'));
 		const mesh = new THREE.Mesh(geometry, material.material);
 		const targetRotation = () => scrollY * 0.003;
@@ -43,6 +43,8 @@
 
 		const object = createObject();
 		scene.add(object.mesh);
+		object.mesh.position.x = -2;
+		object.mesh.position.y = -3;
 
 		const resize = () => {
 			renderer.setSize(parentEl.clientWidth, parentEl.clientHeight);

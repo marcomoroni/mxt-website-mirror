@@ -1,14 +1,14 @@
 <script lang="ts">
 	import AccessibleHiddenHeader from '$lib/AccessibleHiddenHeader.svelte';
-	import StudioThreeScene from '$lib/studio_three_scene/StudioThreeScene.svelte';
+	import StudioSection from '$lib/StudioSection.svelte';
 </script>
 
 <AccessibleHiddenHeader text="Studio" />
 
 <div class="landing" />
 
-<section class="section digital-infrastructure">
-	<div class="type">
+<StudioSection cssBackgroundColor={'var(--color-accent-1)'}>
+	<svelte:fragment slot="type">
 		<h2 class="studio-page-h2">Digital infrastructure</h2>
 		<p>
 			MXT produce interactive visualisations for Nationally Signficant Infrastructure Projects
@@ -78,29 +78,16 @@
 			and return believable, three-dimensional results; faithfully recreating the physics, graphics
 			and traffic management of real transport environments.
 		</p>
-	</div>
-	<div class="illustration polka">
-		<StudioThreeScene />
-	</div>
-</section>
+	</svelte:fragment>
+</StudioSection>
 <div class="section-gap" />
-<section class="section">
-	<div class="type">
-		<h2>...</h2>
-	</div>
-	<div class="illustration polka">
-		<StudioThreeScene />
-	</div>
-</section>
+<StudioSection cssBackgroundColor={'var(--color-accent-2)'}>
+	<svelte:fragment slot="type">...</svelte:fragment>
+</StudioSection>
 <div class="section-gap" />
-<section class="section">
-	<div class="type">
-		<h2>...</h2>
-	</div>
-	<div class="illustration polka">
-		<StudioThreeScene />
-	</div>
-</section>
+<StudioSection cssBackgroundColor={'var(--color-accent-3)'}>
+	<svelte:fragment slot="type">...</svelte:fragment>
+</StudioSection>
 <div class="bottom-page-spacer" />
 
 <style>
@@ -110,43 +97,12 @@
 	}
 
 	.section-gap {
-		height: var(--case-study-margin);
-	}
-
-	.section {
-		display: grid;
-		grid-template-columns: repeat(10, 1fr);
-		gap: var(--case-study-margin);
-		margin-left: var(--case-study-margin);
-		margin-right: var(--case-study-margin);
-	}
-
-	.type {
-		grid-column: 2 / 6;
-		grid-row: 1;
-	}
-
-	.illustration {
-		grid-column: 7 / 11;
-		grid-row: 1;
-		height: max(500px, calc(100dvh - (var(--case-study-margin) * 2)));
-		position: sticky;
-		top: var(--case-study-margin);
-		align-self: start;
-	}
-
-	.polka {
-		--polka-color-dots: #00000021;
-		--polka-tempo: 5px;
-		background-image: radial-gradient(var(--polka-color-dots) 12%, transparent 19.2%);
-		background-position: 0px 0px, var(--polka-tempo) var(--polka-tempo);
-		background-size: calc(var(--polka-tempo) * 2) calc(var(--polka-tempo) * 2);
+		height: 120px;
 	}
 
 	.studio-page-h2 {
 		font-size: 34px;
 		font-weight: 600;
-		margin-top: 50px;
 		margin-bottom: 43px;
 		text-align: center;
 	}
@@ -167,26 +123,5 @@
 
 	.bottom-page-spacer {
 		height: 100px;
-	}
-
-	@media (max-width: 900px) {
-		.section {
-			grid-template-columns: unset;
-			grid-auto-flow: row;
-		}
-
-		.illustration {
-			grid-column: unset;
-			grid-row: 1;
-			width: 100%;
-			height: unset;
-			aspect-ratio: 1 / 1;
-			position: relative;
-		}
-
-		.type {
-			grid-column: unset;
-			grid-row: 2;
-		}
 	}
 </style>
