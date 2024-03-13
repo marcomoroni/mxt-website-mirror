@@ -11,7 +11,7 @@
 	let hoveringHomeLink = false;
 
 	let scrollY: number;
-	$: atTopOfWindow = scrollY <= 40;
+	$: atTopOfWindow = scrollY <= 70;
 
 	$: threeState = match({
 		path: $page.url.pathname,
@@ -150,7 +150,7 @@
 	}
 
 	.three-container {
-		transition: opacity 0.5s var(--ease);
+		transition: opacity 2s var(--ease);
 	}
 
 	.three-container:not(.visible) {

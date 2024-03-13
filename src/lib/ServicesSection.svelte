@@ -47,7 +47,7 @@
 		</div>
 	</div>
 	<div class="illustration">
-		<ServicesThreeScene />
+		<ServicesThreeScene moveAwayFromCamera={withMargin} />
 	</div>
 	<div class="vertical-margin left" />
 	<div class="vertical-margin right" />
