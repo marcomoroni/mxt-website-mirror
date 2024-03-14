@@ -7,7 +7,7 @@
 
 <div class="landing" />
 
-<ServicesSection cssBackgroundColor={'var(--color-accent-1)'}>
+<ServicesSection cssBackgroundColor={'white'}>
 	<svelte:fragment slot="type">
 		<h2 class="services-page-h2">Digital infrastructure</h2>
 		<p>
@@ -81,11 +81,11 @@
 	</svelte:fragment>
 </ServicesSection>
 <div class="section-gap" />
-<ServicesSection cssBackgroundColor={'var(--color-accent-2)'}>
+<ServicesSection cssBackgroundColor={'white'}>
 	<svelte:fragment slot="type">...</svelte:fragment>
 </ServicesSection>
 <div class="section-gap" />
-<ServicesSection cssBackgroundColor={'var(--color-accent-3)'}>
+<ServicesSection cssBackgroundColor={'white'}>
 	<svelte:fragment slot="type">...</svelte:fragment>
 </ServicesSection>
 <div class="bottom-page-spacer" />
