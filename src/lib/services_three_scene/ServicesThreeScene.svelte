@@ -16,9 +16,11 @@
 		const storeUnsubscribers: Array<Unsubscriber> = [];
 
 		const geometry = new THREE.TorusKnotGeometry(2.1, 0.2, 300, 8, 5, 11);
-		const material = newTextMaterial(new THREE.Color('#f5f1ef'));
+		const material = newTextMaterial(new THREE.Color('tomato'));
 		const mesh = new THREE.Mesh(geometry, material.material);
-		const targetRotation = () => scrollY * 0.003;
+
+		let targetRotationDisplacement = 0;
+		const targetRotation = () => scrollY * 0.0015 + targetRotationDisplacement;
 		const rotationAnimation = smoothDampAnimation(targetRotation(), 0.13);
 
 		const targetPosX = derived(moveAwayFromCameraStore, ($v) => ($v ? -5 : -2));
@@ -30,12 +32,18 @@
 		return {
 			mesh,
 			tick(deltaTime: DOMHighResTimeStamp) {
-				rotationAnimation.target = targetRotation();
-				rotationAnimation.tick(deltaTime);
-				mesh.rotation.y = rotationAnimation.current;
+				const prevPosX = posXAnimation.current;
 
 				posXAnimation.tick(deltaTime);
 				mesh.position.x = posXAnimation.current;
+
+				// When moving the position, also rotate.
+				const posXDelta = posXAnimation.current - prevPosX;
+				targetRotationDisplacement += posXDelta * -0.9;
+
+				rotationAnimation.target = targetRotation();
+				rotationAnimation.tick(deltaTime);
+				mesh.rotation.y = rotationAnimation.current;
 			},
 			dispose() {
 				storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
