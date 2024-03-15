@@ -63,7 +63,7 @@
 	}> = [];
 
 	function checkNewZoom() {
-		let newZoom = 1;
+		let newZoom = layers.at(0)?.zoom ?? 1;
 		for (const layer of layers) {
 			const hasPassedHalfWindow = layer.el.getBoundingClientRect().y < windowHeight / 2;
 			if (hasPassedHalfWindow) {
