@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
 	const dataSources = [
 		{
 			img: '/images/A303Satellite.png',
@@ -48,7 +50,48 @@
 			scale: 1
 		}
 	];
+	const zoomPivot = { x: 0.8, y: 0.6 };
+
+	let scrollY: number;
+	let windowHeight: number;
+	let zoom = 1;
+
+	// Note that these are in order.
+	const layers: Array<{
+		el: HTMLElement;
+		zoom: number;
+	}> = [];
+
+	function checkNewZoom() {
+		let newZoom = 1;
+		for (const layer of layers) {
+			const hasPassedHalfWindow = layer.el.getBoundingClientRect().y < windowHeight / 2;
+			if (hasPassedHalfWindow) {
+				newZoom = layer.zoom;
+			} else {
+				break;
+			}
+		}
+
+		zoom = newZoom;
+	}
+
+	$: {
+		if (scrollY) {
+			checkNewZoom();
+		}
+	}
+
+	onMount(() => {
+		checkNewZoom();
+	});
+
+	function scrollObserve(el: HTMLElement, zoom: number) {
+		layers.push({ el, zoom });
+	}
 </script>
+
+<svelte:window bind:scrollY bind:innerHeight={windowHeight} />
 
 <section class="section-data-sources">
 	<!-- Make two copied overlapping elements -->
@@ -57,15 +100,19 @@
 			<div class="hide-behind-top-margin" />
 		</div>
 		{#each dataSources as dataSource}
-			<div class="map-layer">
+			<div class="map-layer" use:scrollObserve={dataSource.scale}>
 				<div class="solid-gap" />
 				<div class="map-layer-img-mask" class:fixed={dataSource.fixedImg}>
 					<div class="map-layer-img-scaffold">
-						<div
-							class="map-layer-img"
-							style:background-image={`url(${dataSource.img})`}
-							class:add-small-right-inset-margin={dataSource.fixedImg}
-						/>
+						<div class="map-layer-img-zoom-container">
+							<div
+								class="map-layer-img"
+								style:background-image={`url(${dataSource.img})`}
+								class:add-small-right-inset-margin={dataSource.fixedImg}
+								style:transform={`scale(${zoom})`}
+								style:transform-origin={`${zoomPivot.x * 100}% ${zoomPivot.y * 100}%`}
+							/>
+						</div>
 					</div>
 				</div>
 				<div class="map-layer-type" class:wide={dataSource.wideType}>
@@ -179,12 +226,20 @@
 		left: 0;
 	}
 
-	.map-layer-img {
+	.map-layer-img-zoom-container {
 		background-color: var(--color-background);
 		grid-column: 1 / 8;
 		grid-row: 1;
+		overflow: hidden;
+	}
+
+	.map-layer-img {
+		position: relative;
+		width: 100%;
+		height: 100%;
 		background-size: cover;
 		background-position: center center;
+		transition: transform 2.5s ease-in-out;
 	}
 
 	.map-layers-type .map-layer-img-mask {
