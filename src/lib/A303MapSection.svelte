@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
+	const defaultScale = 1;
 	const dataSources = [
 		{
 			img: '/images/A303Satellite.png',
@@ -12,28 +13,28 @@
 					p: 'Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK.'
 				}
 			],
-			scale: 1
+			scale: defaultScale
 		},
 		{
 			img: '/images/A303Elevation_Alpha.png',
 			fixedImg: true,
 			wideType: false,
 			type: [{ p: 'Elevation...' }],
-			scale: 1
+			scale: defaultScale
 		},
 		{
 			img: '/images/A303Roads_BW.png',
 			fixedImg: true,
 			wideType: false,
 			type: [{ p: 'Roads...' }],
-			scale: 1
+			scale: defaultScale
 		},
 		{
 			img: '/images/A303NewRoads_BW.png',
 			fixedImg: true,
 			wideType: false,
 			type: [{ p: 'New roads...' }],
-			scale: 1
+			scale: defaultScale
 		},
 		{
 			img: '/images/A303LandUse.png',
@@ -47,7 +48,7 @@
 			fixedImg: true,
 			wideType: false,
 			type: [{ p: 'Trees...' }],
-			scale: 1
+			scale: defaultScale
 		}
 	];
 	const zoomPivot = { x: 0.8, y: 0.6 };
@@ -151,7 +152,14 @@
 <section class="m-section-data-sources">
 	{#each dataSources as dataSource}
 		<div class="m-map-layer">
-			<div class="m-map-layer-img" style:background-image={`url(${dataSource.img})`} />
+			<div class="m-map-layer-img-zoom-container">
+				<div
+					class="m-map-layer-img"
+					style:background-image={`url(${dataSource.img})`}
+					style:transform={`scale(${dataSource.scale})`}
+					style:transform-origin={`${zoomPivot.x * 100}% ${zoomPivot.y * 100}%`}
+				/>
+			</div>
 			<div class="m-map-layer-type" class:wide={dataSource.wideType}>
 				{#each dataSource.type as t}
 					{#if 'h2' in t}
@@ -316,14 +324,21 @@
 			gap: var(--case-study-margin);
 		}
 
-		.m-map-layer-img {
+		.m-map-layer-img-zoom-container {
 			aspect-ratio: 16 / 9;
-			background-size: cover;
-			background-position: center center;
 			position: sticky;
 			top: var(--case-study-margin);
 			align-self: start;
 			background-color: var(--color-background);
+			overflow: hidden;
+		}
+
+		.m-map-layer-img {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			background-size: cover;
+			background-position: center center;
 		}
 	}
 </style>
