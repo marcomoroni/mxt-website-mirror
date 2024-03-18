@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import TrafficSimulation from './TrafficSimulation.svelte';
 
 	const defaultScale = 1;
 	const dataSources = [
 		{
-			img: '/images/A303Satellite.png',
+			media: { Img: { path: '/images/A303_Map_Features_Base.png' } },
 			fixedImg: false,
 			wideType: true,
 			type: [
@@ -16,39 +17,18 @@
 			scale: defaultScale
 		},
 		{
-			img: '/images/A303Elevation_Alpha.png',
+			media: { Img: { path: '/images/A303_Map_Features_Natural.png' } },
 			fixedImg: true,
 			wideType: false,
-			type: [{ p: 'Elevation...' }],
+			type: [{ p: 'Nature...' }],
 			scale: defaultScale
 		},
 		{
-			img: '/images/A303Roads_BW.png',
+			media: 'Traffic' as 'Traffic',
 			fixedImg: true,
 			wideType: false,
-			type: [{ p: 'Roads...' }],
-			scale: defaultScale
-		},
-		{
-			img: '/images/A303NewRoads_BW.png',
-			fixedImg: true,
-			wideType: false,
-			type: [{ p: 'New roads...' }],
-			scale: defaultScale
-		},
-		{
-			img: '/images/A303LandUse.png',
-			fixedImg: true,
-			wideType: false,
-			type: [{ p: 'Land use...' }],
-			scale: 2
-		},
-		{
-			img: '/images/A303Trees_BW.png',
-			fixedImg: true,
-			wideType: false,
-			type: [{ p: 'Trees...' }],
-			scale: defaultScale
+			type: [{ p: 'Traffic...' }],
+			scale: 1.1
 		}
 	];
 	const zoomPivot = { x: 0.8, y: 0.6 };
@@ -108,11 +88,17 @@
 						<div class="map-layer-img-zoom-container">
 							<div
 								class="map-layer-img"
-								style:background-image={`url(${dataSource.img})`}
+								style:background-image={dataSource.media !== 'Traffic'
+									? `url(${dataSource.media.Img.path})`
+									: undefined}
 								class:add-small-right-inset-margin={dataSource.fixedImg}
 								style:transform={`scale(${zoom})`}
 								style:transform-origin={`${zoomPivot.x * 100}% ${zoomPivot.y * 100}%`}
-							/>
+							>
+								{#if dataSource.media === 'Traffic'}
+									<TrafficSimulation />
+								{/if}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -155,10 +141,16 @@
 			<div class="m-map-layer-img-zoom-container">
 				<div
 					class="m-map-layer-img"
-					style:background-image={`url(${dataSource.img})`}
+					style:background-image={dataSource.media !== 'Traffic'
+						? `url(${dataSource.media.Img.path})`
+						: undefined}
 					style:transform={`scale(${dataSource.scale})`}
 					style:transform-origin={`${zoomPivot.x * 100}% ${zoomPivot.y * 100}%`}
-				/>
+				>
+					{#if dataSource.media === 'Traffic'}
+						<TrafficSimulation />
+					{/if}
+				</div>
 			</div>
 			<div class="m-map-layer-type" class:wide={dataSource.wideType}>
 				{#each dataSource.type as t}
