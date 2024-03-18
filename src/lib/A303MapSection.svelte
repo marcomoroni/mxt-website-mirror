@@ -24,6 +24,13 @@
 			scale: defaultScale
 		},
 		{
+			media: { Img: { path: '/images/A303_Map_Features_Human-made.png' } },
+			fixedImg: true,
+			wideType: false,
+			type: [{ p: 'Human-made...' }],
+			scale: defaultScale
+		},
+		{
 			media: 'Traffic' as 'Traffic',
 			fixedImg: true,
 			wideType: false,
