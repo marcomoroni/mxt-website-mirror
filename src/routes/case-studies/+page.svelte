@@ -37,21 +37,7 @@
 
 	$: {
 		if (scrollY) {
-			let newThreeState:
-				| undefined
-				| 'case-studies-anchor-a303'
-				| 'case-studies-anchor-p2'
-				| 'case-studies-anchor-p3' = undefined;
-			for (const card of cards) {
-				const hasPassedHalfWindow = card.el.getBoundingClientRect().y < windowHeight / 2;
-				if (hasPassedHalfWindow) {
-					newThreeState = card.threeState;
-				} else {
-					break;
-				}
-			}
-
-			caseStudiesPageIntersectingCard.set(newThreeState);
+			checkNewState();
 		}
 	}
 
