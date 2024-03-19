@@ -35,10 +35,10 @@
 			fixedImg: true,
 			wideType: false,
 			type: [{ p: 'Traffic...' }],
-			scale: 1.1
+			scale: 10
 		}
 	];
-	const zoomPivot = { x: 0.8, y: 0.6 };
+	const zoomPivot = { x: 0.37, y: 0.535 };
 
 	let scrollY: number;
 	let windowHeight: number;
