@@ -4,8 +4,8 @@
 
 	const roads = [
 		{
-			pos: { x: '1500px', y: '1078px' },
-			rot: '-12deg',
+			pos: { x: '1500px', y: '1094px' },
+			rot: '-13deg',
 			cars: [
 				{ delay: 0 },
 				{ delay: 0.4 },
@@ -20,8 +20,8 @@
 			]
 		},
 		{
-			pos: { x: '1500px', y: '1082px' },
-			rot: '168deg',
+			pos: { x: '1500px', y: '1098px' },
+			rot: '167deg',
 			cars: [
 				{ delay: 0 },
 				{ delay: 1 },
@@ -37,6 +37,8 @@
 			]
 		}
 	];
+
+	export let hideImageAroundSimulation: boolean;
 
 	// https://css-tricks.com/scaled-proportional-blocks-with-css-and-javascript/.
 	function scaledToCover(el: HTMLElement, size: { width: number; height: number }) {
@@ -69,8 +71,15 @@
 		style:width={`${layerSize.width}px`}
 		style:height={`${layerSize.height}px`}
 	>
-		{#each roads as road}
+		{#each roads as road, i}
 			<div class="road-pivot" style:top={road.pos.y} style:left={road.pos.x}>
+				{#if i === 0}
+					<div
+						class="road-border"
+						class:hidden={hideImageAroundSimulation}
+						style:transform={`translate(-50%, -50%) rotate(${road.rot})`}
+					/>
+				{/if}
 				<div class="road" style:transform={`translate(-50%, -50%) rotate(${road.rot})`}>
 					{#each road.cars as car}
 						<div class="car-pivot" style:animation-delay={`${car.delay}s`}>
@@ -107,6 +116,20 @@
 		position: absolute;
 		width: 0;
 		height: 0;
+	}
+
+	.road-border {
+		position: absolute;
+		width: 500px;
+		height: 300px;
+		background: var(--color-background);
+		transform: translate(-50%, -50%);
+		transform-origin: center center;
+		transition: opacity 2s ease-in-out;
+	}
+
+	.road-border.hidden {
+		opacity: 0;
 	}
 
 	.road {

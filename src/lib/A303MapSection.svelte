@@ -5,7 +5,8 @@
 	const defaultScale = 1;
 	const dataSources = [
 		{
-			media: { Img: { path: '/images/A303_Map_Features_Base.png' } },
+			img: '/images/A303_Map_Features_Base.png',
+			traffic: false,
 			fixedImg: false,
 			wideType: true,
 			type: [
@@ -17,21 +18,24 @@
 			scale: defaultScale
 		},
 		{
-			media: { Img: { path: '/images/A303_Map_Features_Natural.png' } },
+			img: '/images/A303_Map_Features_Natural.png',
+			traffic: false,
 			fixedImg: true,
 			wideType: false,
 			type: [{ p: 'Nature...' }],
 			scale: defaultScale
 		},
 		{
-			media: { Img: { path: '/images/A303_Map_Features_Human-made.png' } },
+			img: '/images/A303_Map_Features_Human-made.png',
+			traffic: false,
 			fixedImg: true,
 			wideType: false,
 			type: [{ p: 'Human-made...' }],
 			scale: defaultScale
 		},
 		{
-			media: 'Traffic' as 'Traffic',
+			img: '/images/A303_Map_Features_PreRoads.png',
+			traffic: true,
 			fixedImg: true,
 			wideType: false,
 			type: [{ p: 'Traffic...' }],
@@ -42,6 +46,7 @@
 
 	let scrollY: number;
 	let windowHeight: number;
+	let currentLayerIndex = 0;
 	let zoom = 1;
 
 	// Note that these are in order.
@@ -52,10 +57,12 @@
 
 	function checkNewZoom() {
 		let newZoom = layers.at(0)?.zoom ?? 1;
-		for (const layer of layers) {
+		for (let i = 0; i < layers.length; i++) {
+			const layer = layers[i];
 			const hasPassedHalfWindow = layer.el.getBoundingClientRect().y < windowHeight / 2;
 			if (hasPassedHalfWindow) {
 				newZoom = layer.zoom;
+				currentLayerIndex = i;
 			} else {
 				break;
 			}
@@ -87,7 +94,7 @@
 		<div class="hide-behind-top-margin-container">
 			<div class="hide-behind-top-margin" />
 		</div>
-		{#each dataSources as dataSource}
+		{#each dataSources as dataSource, i}
 			<div class="map-layer" use:scrollObserve={dataSource.scale}>
 				<div class="solid-gap" />
 				<div class="map-layer-img-mask" class:fixed={dataSource.fixedImg}>
@@ -95,15 +102,13 @@
 						<div class="map-layer-img-zoom-container">
 							<div
 								class="map-layer-img"
-								style:background-image={dataSource.media !== 'Traffic'
-									? `url(${dataSource.media.Img.path})`
-									: undefined}
+								style:background-image={`url(${dataSource.img})`}
 								class:add-small-right-inset-margin={dataSource.fixedImg}
 								style:transform={`scale(${zoom})`}
 								style:transform-origin={`${zoomPivot.x * 100}% ${zoomPivot.y * 100}%`}
 							>
-								{#if dataSource.media === 'Traffic'}
-									<TrafficSimulation />
+								{#if dataSource.traffic}
+									<TrafficSimulation hideImageAroundSimulation={currentLayerIndex !== i} />
 								{/if}
 							</div>
 						</div>
@@ -143,19 +148,17 @@
 	</div>
 </section>
 <section class="m-section-data-sources">
-	{#each dataSources as dataSource}
+	{#each dataSources as dataSource, i}
 		<div class="m-map-layer">
 			<div class="m-map-layer-img-zoom-container">
 				<div
 					class="m-map-layer-img"
-					style:background-image={dataSource.media !== 'Traffic'
-						? `url(${dataSource.media.Img.path})`
-						: undefined}
+					style:background-image={`url(${dataSource.img})`}
 					style:transform={`scale(${dataSource.scale})`}
 					style:transform-origin={`${zoomPivot.x * 100}% ${zoomPivot.y * 100}%`}
 				>
-					{#if dataSource.media === 'Traffic'}
-						<TrafficSimulation />
+					{#if dataSource.traffic}
+						<TrafficSimulation hideImageAroundSimulation={currentLayerIndex !== i} />
 					{/if}
 				</div>
 			</div>
