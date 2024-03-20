@@ -38,7 +38,6 @@
 			traditional presentations and illustrations was needed.
 		</p>
 	</div>
-	<div class="img-road" />
 </section>
 <div class="section-spacer" />
 <section class="section-results">
@@ -236,15 +235,8 @@
 	}
 
 	.type-2 {
-		grid-column: 3 / 7;
+		grid-column: 2 / 6;
 		grid-row: 1;
-	}
-
-	.img-road {
-		grid-column: 3 / 11;
-		grid-row: 2;
-		height: max(500px, calc(100dvh - (var(--case-study-margin) * 2)));
-		border: 10px solid salmon;
 	}
 
 	.section-results {
@@ -256,7 +248,7 @@
 	}
 
 	.type-results {
-		grid-column: 4 / 8;
+		grid-column: 6 / 10;
 		grid-row: 1;
 	}
 
@@ -416,11 +408,6 @@
 		.type-2 {
 			grid-column: unset;
 			grid-row: 1;
-		}
-
-		.img-road {
-			grid-column: unset;
-			grid-row: 2;
 		}
 
 		.section-results {
