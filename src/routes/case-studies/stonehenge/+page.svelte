@@ -63,7 +63,12 @@
 			immersive spaces.
 		</p>
 	</div>
-	<div class="img-results-1" />
+	<div class="img-results-1">
+		<!-- svelte-ignore a11y-media-has-caption -->
+		<video autoplay loop muted controls class="video-redered-scenes">
+			<source src="/videos/A303_Rendered_Scenes.mp4" type="video/mp4" />
+		</video>
+	</div>
 	<div class="img-results-2" />
 	<div class="img-results-3" />
 </section>
@@ -217,8 +222,12 @@
 	.img-results-1 {
 		grid-column: 1 / 11;
 		grid-row: 2;
-		border: 10px solid greenyellow;
-		aspect-ratio: 16 / 9;
+
+		/* aspect-ratio: 16 / 9; */
+	}
+
+	.video-redered-scenes {
+		width: 100%;
 	}
 
 	.img-results-2 {
