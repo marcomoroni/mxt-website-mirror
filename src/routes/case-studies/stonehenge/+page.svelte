@@ -11,7 +11,7 @@
 <CaseStudyLanding title={caseStudyData.title} leadParagraph={caseStudyData.leadParagraph} />
 <div class="landing-spacer" />
 <section class="intro-container">
-	<div class="img-stonehenge" />
+	<img class="img-stonehenge" src="/images/stonehenge.jpg" alt="Stonehenge." />
 	<div class="intro">
 		<p>
 			Stonehenge, one of the world's most iconic prehistoric landscapes, has been the focus of over
@@ -69,8 +69,36 @@
 			<source src="/videos/A303_Rendered_Scenes.mp4" type="video/mp4" />
 		</video>
 	</div>
-	<div class="img-results-2" />
-	<div class="img-results-3" />
+	<img
+		class="img-results-2"
+		src="/images/HighresScreenshot00003.png"
+		alt="Stonenge in the digital environment."
+	/>
+	<img
+		class="img-results-3"
+		src="/images/HighresScreenshot00009.png"
+		alt="An entrance of the new A303 tunnel."
+	/>
+	<img
+		class="img-results-4"
+		src="/images/HighresScreenshot00007.png"
+		alt="Cars on the current A303 interecting a walking path."
+	/>
+	<img
+		class="img-results-5"
+		src="/images/HighresScreenshot00013.png"
+		alt="A roundabout at night."
+	/>
+	<img
+		class="img-results-6"
+		src="/images/HighresScreenshot00018.png"
+		alt="The proposed Green Bridge."
+	/>
+	<img
+		class="img-results-7"
+		src="/images/HighresScreenshot00027.png"
+		alt="The Countess Roundabout at night."
+	/>
 </section>
 <div class="section-spacer" />
 <section class="section-development">
@@ -124,8 +152,21 @@
 	</div>
 	<div class="gameplay-illustration-1 thin-border" />
 	<div class="gameplay-illustration-2 thin-border" />
-	<div class="gameplay-illustration-3" />
-	<div class="gameplay-illustration-4" />
+	<img
+		class="gameplay-illustration-3"
+		src="/images/HighresScreenshot00001.png"
+		alt="The controls in virtual reality."
+	/>
+	<img
+		class="gameplay-illustration-4"
+		src="/images/desktop_menu.jpg"
+		alt="The controls in desktop."
+	/>
+	<img
+		class="gameplay-illustration-5"
+		src="/images/HighresScreenshot00005.png"
+		alt="The environment seen from a high point with the Heritage Areas highlighted."
+	/>
 </section>
 <div class="section-spacer" />
 <section class="section-events">
@@ -167,12 +208,12 @@
 	.img-stonehenge {
 		grid-column: 1 / 7;
 		grid-row: 1 / 3;
-		border: 10px solid red;
 		height: max(500px, calc(100dvh - (var(--case-study-margin) * 2)));
 		position: sticky;
 		top: var(--case-study-margin);
 		left: 0;
 		align-self: start;
+		object-fit: cover;
 	}
 
 	.intro {
@@ -222,8 +263,6 @@
 	.img-results-1 {
 		grid-column: 1 / 11;
 		grid-row: 2;
-
-		/* aspect-ratio: 16 / 9; */
 	}
 
 	.video-redered-scenes {
@@ -233,15 +272,31 @@
 	.img-results-2 {
 		grid-column: 2 / 10;
 		grid-row: 3;
-		border: 10px solid rebeccapurple;
-		aspect-ratio: 16 / 9;
 	}
 
 	.img-results-3 {
 		grid-column: 2 / 10;
 		grid-row: 4;
-		border: 10px solid aquamarine;
-		aspect-ratio: 16 / 9;
+	}
+
+	.img-results-4 {
+		grid-column: 2 / 10;
+		grid-row: 5;
+	}
+
+	.img-results-5 {
+		grid-column: 2 / 10;
+		grid-row: 6;
+	}
+
+	.img-results-6 {
+		grid-column: 2 / 10;
+		grid-row: 7;
+	}
+
+	.img-results-7 {
+		grid-column: 2 / 10;
+		grid-row: 8;
 	}
 
 	.section-development {
@@ -288,15 +343,16 @@
 	.gameplay-illustration-3 {
 		grid-column: 2 / 10;
 		grid-row: 3;
-		border: 10px solid rgba(124, 104, 238, 0.365);
-		aspect-ratio: 16 / 9;
 	}
 
 	.gameplay-illustration-4 {
 		grid-column: 2 / 10;
 		grid-row: 4;
-		border: 10px solid rgba(124, 104, 238, 0.365);
-		aspect-ratio: 16 / 9;
+	}
+
+	.gameplay-illustration-5 {
+		grid-column: 2 / 10;
+		grid-row: 5;
 	}
 
 	.section-events {
@@ -392,6 +448,26 @@
 			grid-row: 4;
 		}
 
+		.img-results-4 {
+			grid-column: unset;
+			grid-row: 5;
+		}
+
+		.img-results-5 {
+			grid-column: unset;
+			grid-row: 6;
+		}
+
+		.img-results-6 {
+			grid-column: unset;
+			grid-row: 7;
+		}
+
+		.img-results-7 {
+			grid-column: unset;
+			grid-row: 8;
+		}
+
 		.section-development {
 			grid-template-columns: unset;
 			grid-auto-flow: row;
@@ -430,6 +506,11 @@
 		.gameplay-illustration-4 {
 			grid-column: unset;
 			grid-row: 5;
+		}
+
+		.gameplay-illustration-5 {
+			grid-column: unset;
+			grid-row: 6;
 		}
 
 		.section-events {
