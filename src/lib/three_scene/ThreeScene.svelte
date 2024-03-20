@@ -81,7 +81,7 @@
 	const dioramasData = [
 		{
 			mesh: '/models/Diorama_Stonehenge.gltf',
-			ambientOcclusionTexture: '/models/stonehenge_AO_2048.png',
+			ambientOcclusionTextureAndHighlight: '/models/stonehenge_AO_2048.png',
 			sceneSettings: {
 				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
 					match($s)
@@ -113,8 +113,8 @@
 			}
 		},
 		{
-			mesh: '/models/Diorama_Stonehenge.gltf',
-			ambientOcclusionTexture: '/models/stonehenge_AO_2048.png',
+			mesh: '/models/Investigation_Diorama.gltf',
+			ambientOcclusionTextureAndHighlight: '/models/Investigation_AO_mask.png',
 			sceneSettings: {
 				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
 					match($s)
@@ -148,7 +148,7 @@
 		{
 			geometry: () => new THREE.TorusKnotGeometry(1, 0.2, 300, 8, 5, 11),
 			mesh: '/models/Diorama_Stonehenge.gltf',
-			ambientOcclusionTexture: '/models/stonehenge_AO_2048.png',
+			ambientOcclusionTextureAndHighlight: '/models/stonehenge_AO_2048.png',
 			sceneSettings: {
 				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
 					match($s)
@@ -503,7 +503,7 @@
 		const dioramaInstances = dioramasData.map((dioramaData, i, array) => {
 			const storeUnsubscribers: Array<Unsubscriber> = [];
 
-			const material = newDioramaMaterial(dioramaData.ambientOcclusionTexture);
+			const material = newDioramaMaterial(dioramaData.ambientOcclusionTextureAndHighlight);
 			material.setBackgroundColor(new THREE.Color(backgroundColor));
 			material.setBaseColor(new THREE.Color(backgroundColor));
 			material.setBaseColorShadow(new THREE.Color('black'));
@@ -512,6 +512,7 @@
 			material.setAccentColor3(new THREE.Color(colorPalette.accentColor3));
 			material.setAccentColor4(new THREE.Color('#C0BBB1'));
 			material.setAccentColorDim(new THREE.Color(accentColorDim));
+			material.setHighlightColor(new THREE.Color('#E1D7D2'));
 			let mesh: undefined | THREE.Mesh = undefined;
 			const ownPolarAngleDeg = lerp(0, 360, i / array.length);
 

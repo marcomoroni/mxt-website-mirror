@@ -1,16 +1,21 @@
 import * as THREE from 'three';
 
-export function newDioramaMaterial(ambientOcclusionTexture: string) {
+// The `ambientOcclusionTextureAndHighlight` texture should have
+//  - in the red channel the ambient occlusion
+//  - in the green channel the highlight color
+export function newDioramaMaterial(ambientOcclusionTextureAndHighlight: string) {
 	const material = new THREE.ShaderMaterial({
 		vertexShader: `
         // out vec3 vNormal;
         out vec3 vNormalWorld;
         varying vec2 vUv;
+        varying vec3 vPosition;
 
         void main() {
             // vNormal = normal;
             vNormalWorld = normalize(normalMatrix * normal);
             vUv = uv;
+            vPosition = position;
 
             vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
             gl_Position = projectionMatrix * modelViewPosition; 
@@ -27,10 +32,14 @@ export function newDioramaMaterial(ambientOcclusionTexture: string) {
         uniform vec3 accentColor3; // Up and down.
         uniform vec3 accentColor4; // Towards camera.
         uniform vec3 accentColorDim;
-        uniform sampler2D tAmbientOcclusion;
+        uniform vec3 highlightColor;
+        uniform float highlightColorFadeStart;
+        uniform float highlightColorFadeEnd;
+        uniform sampler2D tAmbientOcclusionAndHighlight;
         // in vec3 vNormal;
         in vec3 vNormalWorld;
         varying vec2 vUv;
+        varying vec3 vPosition;
 
         float map(float value, float min1, float max1, float min2, float max2) {
             return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
@@ -40,7 +49,7 @@ export function newDioramaMaterial(ambientOcclusionTexture: string) {
             // Not sure why but the y needs to be inverted.
             vec2 uv = vec2(vUv.r, 1.0 - vUv.g);
 
-            vec4 uvTex = texture2D(tAmbientOcclusion, uv);
+            vec4 uvTex = texture2D(tAmbientOcclusionAndHighlight, uv);
 
             vec3 accentColor1WithDim = mix(accentColor1, accentColorDim, accentColorDimVisibility);
             vec3 accentColor2WithDim = mix(accentColor2, accentColorDim, accentColorDimVisibility);
@@ -59,9 +68,14 @@ export function newDioramaMaterial(ambientOcclusionTexture: string) {
             vec3 tintedShadowZ = mix(tintedShadowXY, accentColor4WithDim, tintedShadowZAlpha);
             vec3 tintedShadow = tintedShadowZ;
 
-            // Create a gradient to map 'uvTex' to. The gradient has 3 colours: 'baseColor', 'tintedShadow' and 'baseColorShadow'.
+            // Add 'highlightColor' to 'baseColor'. The 'highlightColor' should be faded when at the edge of the diorama.
+            float distFromCenterHorizontal = sqrt(pow(vPosition.r, 2.0) + pow(vPosition.b, 2.0));
+            float higlightColorAmount = 1.0 - clamp(map(distFromCenterHorizontal, highlightColorFadeStart, highlightColorFadeEnd, 0.0, 1.0), 0.0, 1.0);
+            vec3 baseColorWithHighlight = mix(baseColor, highlightColor, uvTex.g * higlightColorAmount);
+
+            // Create a gradient to map 'uvTex' to. The gradient has 3 colours: 'baseColorWithHighlight', 'tintedShadow' and 'baseColorShadow'.
             // The gradient is created by manipulating the interpolation value in 'mix()'.
-            vec3 finalColor = mix(tintedShadow, baseColor, clamp(map(uvTex.r, 0.25, 1.0, 0.0, 1.0), 0.0, 1.0));
+            vec3 finalColor = mix(tintedShadow, baseColorWithHighlight, clamp(map(uvTex.r, 0.25, 1.0, 0.0, 1.0), 0.0, 1.0));
             finalColor = mix(finalColor, baseColorShadow, clamp(map(1.0 - uvTex.r, 0.5, 1.0, 0.0, 1.0), 0.0, 1.0));
 
             // Pretend to hide it by setting it to the same colour of the background.
@@ -84,8 +98,11 @@ export function newDioramaMaterial(ambientOcclusionTexture: string) {
 			accentColor4: { value: new THREE.Color('blue') },
 			accentColorDim: { value: new THREE.Color('tomato') },
 			accentColorDimVisibility: { value: 0 },
-			tAmbientOcclusion: {
-				value: new THREE.TextureLoader().load(ambientOcclusionTexture)
+			highlightColor: { value: new THREE.Color('cyan') },
+			highlightColorFadeStart: { value: 340 },
+			highlightColorFadeEnd: { value: 370 },
+			tAmbientOcclusionAndHighlight: {
+				value: new THREE.TextureLoader().load(ambientOcclusionTextureAndHighlight)
 			}
 		},
 		toneMapped: false // Makes the colours match the ones in the HTML.
@@ -122,6 +139,9 @@ export function newDioramaMaterial(ambientOcclusionTexture: string) {
 		},
 		setAccentColorDimVisibility: (value: number) => {
 			material.uniforms.accentColorDimVisibility.value = value;
+		},
+		setHighlightColor: (value: THREE.Color) => {
+			material.uniforms.highlightColor.value = value;
 		},
 		dispose: () => {
 			material.dispose();
