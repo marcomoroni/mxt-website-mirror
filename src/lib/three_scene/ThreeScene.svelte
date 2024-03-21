@@ -181,12 +181,33 @@
 		}
 	];
 	const colorPalettes = [
-		{ accentColor1: accentColor2, accentColor2: accentColor3, accentColor3: accentColor1 },
-		{ accentColor1: accentColor4, accentColor2: '#DCDAC3', accentColor3: '#BDD2D5' },
-		{ accentColor1: '#CAA98B', accentColor2: '#6B796A', accentColor3: accentColor5 },
-		{ accentColor1: '#CDD9C5', accentColor2: accentColor6, accentColor3: '#FFE8B0' }
+		{
+			accentColor1: accentColor2,
+			accentColor2: accentColor3,
+			accentColor3: accentColor1,
+			highlightColor: '#E1D7D2'
+		},
+		{
+			accentColor1: accentColor4,
+			accentColor2: '#DCDAC3',
+			accentColor3: '#BDD2D5',
+			highlightColor: '#E1D7D2'
+		},
+		{
+			accentColor1: '#CAA98B',
+			accentColor2: '#6B796A',
+			accentColor3: accentColor5,
+			highlightColor: '#C9CBC4'
+		},
+		{
+			accentColor1: '#CDD9C5',
+			accentColor2: accentColor6,
+			accentColor3: '#FFE8B0',
+			highlightColor: accentColor6
+		}
 	];
 	const accentColorDim = '#D9D6CE';
+	const highlightColorDim = '#E9E1DE';
 	const dioramaOwnPolarAngleMultWhenSmall = 0.28;
 	const gltfScaleMult = 0.01;
 
@@ -412,7 +433,12 @@
 		const applyAnimationValues = (
 			camera: THREE.PerspectiveCamera,
 			railCircumference: { center: THREE.Vector3; radius: number },
-			colorPalette: { accentColor1: string; accentColor2: string; accentColor3: string }
+			colorPalette: {
+				accentColor1: string;
+				accentColor2: string;
+				accentColor3: string;
+				highlightColor: string;
+			}
 		) => {
 			camera.position.y = animations.camera.pos.y.current;
 			camera.position.z = animations.camera.pos.z.current;
@@ -436,6 +462,10 @@
 			colorPalette.accentColor3 = d3.piecewise(
 				d3.interpolateRgb.gamma(2.2),
 				colorPalettes.map((p) => p.accentColor3)
+			)(colorPaletteI);
+			colorPalette.highlightColor = d3.piecewise(
+				d3.interpolateRgb.gamma(2.2),
+				colorPalettes.map((p) => p.highlightColor)
 			)(colorPaletteI);
 		};
 
@@ -512,7 +542,8 @@
 			material.setAccentColor3(new THREE.Color(colorPalette.accentColor3));
 			material.setAccentColor4(new THREE.Color('#C0BBB1'));
 			material.setAccentColorDim(new THREE.Color(accentColorDim));
-			material.setHighlightColor(new THREE.Color('#E1D7D2'));
+			material.setHighlightColor(new THREE.Color(colorPalette.highlightColor));
+			material.setHighlightColorDim(new THREE.Color(highlightColorDim));
 			let mesh: undefined | THREE.Mesh = undefined;
 			const ownPolarAngleDeg = lerp(0, 360, i / array.length);
 
@@ -594,7 +625,8 @@
 				material: {
 					setAccentColor1: material.setAccentColor1,
 					setAccentColor2: material.setAccentColor2,
-					setAccentColor3: material.setAccentColor3
+					setAccentColor3: material.setAccentColor3,
+					setHighlightColor: material.setHighlightColor
 				},
 				ownPolarAngleDeg,
 				rotDegAnimatedClockwiseAnim: {
@@ -716,6 +748,7 @@
 					material.setAccentColor1(new THREE.Color(colorPalette.accentColor1));
 					material.setAccentColor2(new THREE.Color(colorPalette.accentColor2));
 					material.setAccentColor3(new THREE.Color(colorPalette.accentColor3));
+					material.setHighlightColor(new THREE.Color(colorPalette.highlightColor));
 				}
 			);
 			headerInstances?.forEach(({ tick }) => tick(dt));
