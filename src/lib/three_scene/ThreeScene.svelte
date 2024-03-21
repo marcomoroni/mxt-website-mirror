@@ -147,8 +147,9 @@
 		},
 		{
 			geometry: () => new THREE.TorusKnotGeometry(1, 0.2, 300, 8, 5, 11),
-			mesh: '/models/Diorama_Stonehenge.gltf',
-			ambientOcclusionTextureAndHighlight: '/models/stonehenge_AO_2048.png',
+			mesh: '/models/Instructor_Diorama2.gltf',
+			ambientOcclusionTextureAndHighlight: '/models/Instructor_AO_mask.png',
+			foliageMeshName: 'Instructor_Diorama001',
 			sceneSettings: {
 				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
 					match($s)
@@ -544,25 +545,30 @@
 			material.setAccentColorDim(new THREE.Color(accentColorDim));
 			material.setHighlightColor(new THREE.Color(colorPalette.highlightColor));
 			material.setHighlightColorDim(new THREE.Color(highlightColorDim));
-			let mesh: undefined | THREE.Mesh = undefined;
+			const foliageMaterial = newDioramaMaterial(dioramaData.ambientOcclusionTextureAndHighlight);
+			let object3D: undefined | THREE.Object3D = undefined;
 			const ownPolarAngleDeg = lerp(0, 360, i / array.length);
 
 			const loader = new GLTFLoader();
 			loader.load(dioramaData.mesh, function (gltf) {
-				for (const child of gltf.scene.children) {
-					child.traverseVisible((child) => {
-						if (child instanceof THREE.Mesh) {
-							mesh = child;
-							mesh.scale.set(gltfScaleMult, gltfScaleMult, gltfScaleMult);
+				const gltfScene = gltf.scene;
+				gltfScene.scale.set(gltfScaleMult, gltfScaleMult, gltfScaleMult);
+				gltfScene.traverseVisible((child) => {
+					if (child instanceof THREE.Mesh) {
+						if (child.name === dioramaData.foliageMeshName) {
+							child.material = foliageMaterial.material;
+						} else {
 							child.material = material.material;
 						}
 
-						scene.add(child);
-					});
-				}
+						// Tip: Do not add children to another scene or group in this loop. Doing
+						// that affects the `traverseVisible` loop.
+					}
+				});
+				object3D = gltfScene;
+				scene.add(gltfScene);
 			});
 
-			// const perpetualRotationDelta = 0.012;
 			const perpetualRotationDelta = 0.004;
 			const rotDegAnimatedClockwiseAnim = perpetualSmoothDampAngleAnimation(
 				match(get(dioramaData.sceneSettings.polarAngleDegAnimatedClockwise))
@@ -619,8 +625,8 @@
 			};
 
 			return {
-				get mesh() {
-					return mesh;
+				get object3D() {
+					return object3D;
 				},
 				material: {
 					setAccentColor1: material.setAccentColor1,
@@ -640,6 +646,7 @@
 				tick,
 				dispose: () => {
 					material.dispose();
+					foliageMaterial.dispose();
 					storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
 				}
 			};
@@ -729,7 +736,14 @@
 
 			applyAnimationValues(camera, railCircumference, colorPalette);
 			dioramaInstances.forEach(
-				({ tick, mesh, material, ownPolarAngleDeg, rotDegAnimatedClockwiseAnim, radiusDispl }) => {
+				({
+					tick,
+					object3D,
+					material,
+					ownPolarAngleDeg,
+					rotDegAnimatedClockwiseAnim,
+					radiusDispl
+				}) => {
 					tick(dt);
 
 					const pos = positionInCircumference({
@@ -740,10 +754,10 @@
 							ownPolarAngleDeg * animations.dioramasOwnPolarAngleMult.current +
 							animations.railCircumference.polarAngleDegAnimatedToClosest.current
 					});
-					if (mesh) {
-						mesh.position.x = pos.x;
-						mesh.position.z = pos.z;
-						mesh.rotation.y = toRadians(rotDegAnimatedClockwiseAnim.current);
+					if (object3D) {
+						object3D.position.x = pos.x;
+						object3D.position.z = pos.z;
+						object3D.rotation.y = toRadians(rotDegAnimatedClockwiseAnim.current);
 					}
 					material.setAccentColor1(new THREE.Color(colorPalette.accentColor1));
 					material.setAccentColor2(new THREE.Color(colorPalette.accentColor2));
