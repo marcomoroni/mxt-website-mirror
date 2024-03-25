@@ -214,8 +214,8 @@
 			highlightColor: accentColor6
 		}
 	];
-	const accentColorDim = '#D9D6CE';
-	const highlightColorDim = '#E9E1DE';
+	const accentColorDim = '#E9E2DE';
+	const highlightColorDim = '#FBFAF9';
 	const dioramaOwnPolarAngleMultWhenSmall = 0.28;
 	const gltfScaleMult = 0.01;
 
@@ -656,6 +656,7 @@
 				setAccentColor3: diormamaMaterial.setAccentColor3,
 				setHighlightColor: (value: THREE.Color) => {
 					diormamaMaterial.setHighlightColor(value);
+					foliageMaterial.setBaseColor(value);
 				},
 				ownPolarAngleDeg,
 				rotDegAnimatedClockwiseAnim: {

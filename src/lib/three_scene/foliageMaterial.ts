@@ -17,7 +17,7 @@ export function newFoliageMaterial() {
             // Pretend to hide it by setting it to the same colour of the background.
             vec3 finalColor = mix(baseColor, backgroundColor, blendWithBackground);
 
-            gl_FragColor = vec4( finalColor, 0.8 );
+            gl_FragColor = vec4( finalColor, 1.0 );
 
             #include <tonemapping_fragment>
             #include <colorspace_fragment>
@@ -28,8 +28,7 @@ export function newFoliageMaterial() {
 			blendWithBackground: { value: 0 },
 			baseColor: { value: new THREE.Color(0xffffff) }
 		},
-		toneMapped: false, // Makes the colours match the ones in the HTML.
-		transparent: true
+		toneMapped: false // Makes the colours match the ones in the HTML.
 	});
 
 	return {
@@ -39,6 +38,9 @@ export function newFoliageMaterial() {
 		},
 		setBackgroundColor: (value: THREE.Color) => {
 			material.uniforms.backgroundColor.value = value;
+		},
+		setBaseColor: (value: THREE.Color) => {
+			material.uniforms.baseColor.value = value;
 		},
 		dispose: () => {
 			material.dispose();
