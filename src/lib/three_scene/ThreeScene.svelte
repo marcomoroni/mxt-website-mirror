@@ -190,7 +190,7 @@
 			accentColor1: accentColor2,
 			accentColor2: accentColor3,
 			accentColor3: accentColor1,
-			highlightColor: '#E1D7D2'
+			highlightColor: 'white'
 		},
 		{
 			baseColor: accentColor4,
