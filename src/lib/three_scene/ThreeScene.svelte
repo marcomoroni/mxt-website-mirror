@@ -22,6 +22,7 @@
 	import { perpetualSmoothDampAngleAnimation, smoothDampAnimation } from '$lib/smoothDamp';
 	import { newDioramaMaterial } from './dioramaMaterial';
 	import { newFoliageMaterial } from './foliageMaterial';
+	import { degToRad } from 'three/src/math/MathUtils.js';
 
 	const DEV_debugLog = false;
 	const FLAG_useHeaders = false;
@@ -151,6 +152,7 @@
 			mesh: '/models/Instructor_Diorama2.gltf',
 			ambientOcclusionTextureAndHighlight: '/models/Instructor_AO_mask.png',
 			foliageMeshName: 'Instructor_Diorama001',
+			rotationDisplacement: 120,
 			sceneSettings: {
 				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
 					match($s)
@@ -553,6 +555,12 @@
 
 			const loader = new GLTFLoader();
 			loader.load(dioramaData.mesh, function (gltf) {
+				const rootGroup = new THREE.Group();
+
+				const rotDisplGroup = new THREE.Group();
+				rotDisplGroup.rotation.y = degToRad(dioramaData.rotationDisplacement ?? 0);
+				rootGroup.add(rotDisplGroup);
+
 				const gltfScene = gltf.scene;
 				gltfScene.scale.set(gltfScaleMult, gltfScaleMult, gltfScaleMult);
 				gltfScene.traverseVisible((child) => {
@@ -567,8 +575,10 @@
 						// that affects the `traverseVisible` loop.
 					}
 				});
-				object3D = gltfScene;
-				scene.add(gltfScene);
+				rotDisplGroup.add(gltfScene);
+
+				object3D = rootGroup;
+				scene.add(object3D);
 			});
 
 			const perpetualRotationDelta = 0.004;
