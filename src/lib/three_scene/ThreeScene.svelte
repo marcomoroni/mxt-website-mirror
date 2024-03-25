@@ -519,13 +519,18 @@
 				)
 			);
 
+			let elapsedTime = 0;
 			const tick = (dt: DOMHighResTimeStamp) => {
+				elapsedTime += dt * 0.0001;
+
 				animations.radiusDispl.tick(dt);
 				animations.colorPaletteIndex.tick(dt);
 				rotDegAnimatedClockwiseAnim.tick(dt);
 
-				const interpolatedColors = colorPalettes.interpolated(animations.colorPaletteIndex.current);
-				console.log(animations.colorPaletteIndex.current);
+				const interpolatedColors = colorPalettes.interpolated(
+					animations.colorPaletteIndex.current,
+					elapsedTime
+				);
 				diormamaMaterial.setBaseColor(new THREE.Color(interpolatedColors.baseColor));
 				diormamaMaterial.setBaseColorShadow(new THREE.Color(interpolatedColors.baseShadowColor));
 				diormamaMaterial.setAccentColor1(new THREE.Color(interpolatedColors.accentColor1));
