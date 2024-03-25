@@ -186,24 +186,28 @@
 	];
 	const colorPalettes = [
 		{
+			baseColor: '#EEE8E4',
 			accentColor1: accentColor2,
 			accentColor2: accentColor3,
 			accentColor3: accentColor1,
 			highlightColor: '#E1D7D2'
 		},
 		{
+			baseColor: accentColor4,
 			accentColor1: accentColor4,
 			accentColor2: '#DCDAC3',
 			accentColor3: '#BDD2D5',
 			highlightColor: '#E1D7D2'
 		},
 		{
+			baseColor: accentColor5,
 			accentColor1: '#CAA98B',
 			accentColor2: '#6B796A',
 			accentColor3: accentColor5,
 			highlightColor: '#C9CBC4'
 		},
 		{
+			baseColor: accentColor6,
 			accentColor1: '#CDD9C5',
 			accentColor2: accentColor6,
 			accentColor3: '#FFE8B0',
@@ -438,6 +442,7 @@
 			camera: THREE.PerspectiveCamera,
 			railCircumference: { center: THREE.Vector3; radius: number },
 			colorPalette: {
+				baseColor: string;
 				accentColor1: string;
 				accentColor2: string;
 				accentColor3: string;
@@ -455,6 +460,10 @@
 			railCircumference.radius = animations.railCircumference.radius.current;
 
 			const colorPaletteI = animations.colorPaletteIndex.current / (colorPalettes.length - 1);
+			colorPalette.baseColor = d3.piecewise(
+				d3.interpolateRgb.gamma(2.2),
+				colorPalettes.map((p) => p.baseColor)
+			)(colorPaletteI);
 			colorPalette.accentColor1 = d3.piecewise(
 				d3.interpolateRgb.gamma(2.2),
 				colorPalettes.map((p) => p.accentColor1)
@@ -537,17 +546,17 @@
 		const dioramaInstances = dioramasData.map((dioramaData, i, array) => {
 			const storeUnsubscribers: Array<Unsubscriber> = [];
 
-			const material = newDioramaMaterial(dioramaData.ambientOcclusionTextureAndHighlight);
-			material.setBackgroundColor(new THREE.Color(backgroundColor));
-			material.setBaseColor(new THREE.Color(backgroundColor));
-			material.setBaseColorShadow(new THREE.Color('black'));
-			material.setAccentColor1(new THREE.Color(colorPalette.accentColor1));
-			material.setAccentColor2(new THREE.Color(colorPalette.accentColor2));
-			material.setAccentColor3(new THREE.Color(colorPalette.accentColor3));
-			material.setAccentColor4(new THREE.Color('#C0BBB1'));
-			material.setAccentColorDim(new THREE.Color(accentColorDim));
-			material.setHighlightColor(new THREE.Color(colorPalette.highlightColor));
-			material.setHighlightColorDim(new THREE.Color(highlightColorDim));
+			const diormamaMaterial = newDioramaMaterial(dioramaData.ambientOcclusionTextureAndHighlight);
+			diormamaMaterial.setBackgroundColor(new THREE.Color(backgroundColor));
+			diormamaMaterial.setBaseColor(new THREE.Color('#E1D7D2'));
+			diormamaMaterial.setBaseColorShadow(new THREE.Color('black'));
+			diormamaMaterial.setAccentColor1(new THREE.Color(colorPalette.accentColor1));
+			diormamaMaterial.setAccentColor2(new THREE.Color(colorPalette.accentColor2));
+			diormamaMaterial.setAccentColor3(new THREE.Color(colorPalette.accentColor3));
+			diormamaMaterial.setAccentColor4(new THREE.Color('#C0BBB1'));
+			diormamaMaterial.setAccentColorDim(new THREE.Color(accentColorDim));
+			diormamaMaterial.setHighlightColor(new THREE.Color(colorPalette.highlightColor));
+			diormamaMaterial.setHighlightColorDim(new THREE.Color(highlightColorDim));
 			const foliageMaterial = newFoliageMaterial();
 			foliageMaterial.setBackgroundColor(new THREE.Color(backgroundColor));
 			let object3D: undefined | THREE.Object3D = undefined;
@@ -568,7 +577,7 @@
 						if (child.name === dioramaData.foliageMeshName) {
 							child.material = foliageMaterial.material;
 						} else {
-							child.material = material.material;
+							child.material = diormamaMaterial.material;
 						}
 
 						// Tip: Do not add children to another scene or group in this loop. Doing
@@ -631,8 +640,8 @@
 				animations.radiusDispl.tick(dt);
 				animations.blendWithBackground.tick(dt);
 				animations.dimAccentColor.tick(dt);
-				material.setBlendWithBackground(animations.blendWithBackground.current);
-				material.setAccentColorDimVisibility(animations.dimAccentColor.current);
+				diormamaMaterial.setBlendWithBackground(animations.blendWithBackground.current);
+				diormamaMaterial.setAccentColorDimVisibility(animations.dimAccentColor.current);
 				foliageMaterial.setBlendWithBackground(animations.blendWithBackground.current);
 				rotDegAnimatedClockwiseAnim.tick(dt);
 			};
@@ -641,11 +650,12 @@
 				get object3D() {
 					return object3D;
 				},
-				material: {
-					setAccentColor1: material.setAccentColor1,
-					setAccentColor2: material.setAccentColor2,
-					setAccentColor3: material.setAccentColor3,
-					setHighlightColor: material.setHighlightColor
+				setBaseColor: diormamaMaterial.setBaseColor,
+				setAccentColor1: diormamaMaterial.setAccentColor1,
+				setAccentColor2: diormamaMaterial.setAccentColor2,
+				setAccentColor3: diormamaMaterial.setAccentColor3,
+				setHighlightColor: (value: THREE.Color) => {
+					diormamaMaterial.setHighlightColor(value);
 				},
 				ownPolarAngleDeg,
 				rotDegAnimatedClockwiseAnim: {
@@ -658,7 +668,7 @@
 				},
 				tick,
 				dispose: () => {
-					material.dispose();
+					diormamaMaterial.dispose();
 					foliageMaterial.dispose();
 					storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
 				}
@@ -752,7 +762,11 @@
 				({
 					tick,
 					object3D,
-					material,
+					setBaseColor,
+					setAccentColor1,
+					setAccentColor2,
+					setAccentColor3,
+					setHighlightColor,
 					ownPolarAngleDeg,
 					rotDegAnimatedClockwiseAnim,
 					radiusDispl
@@ -772,10 +786,11 @@
 						object3D.position.z = pos.z;
 						object3D.rotation.y = toRadians(rotDegAnimatedClockwiseAnim.current);
 					}
-					material.setAccentColor1(new THREE.Color(colorPalette.accentColor1));
-					material.setAccentColor2(new THREE.Color(colorPalette.accentColor2));
-					material.setAccentColor3(new THREE.Color(colorPalette.accentColor3));
-					material.setHighlightColor(new THREE.Color(colorPalette.highlightColor));
+					setBaseColor(new THREE.Color(colorPalette.baseColor));
+					setAccentColor1(new THREE.Color(colorPalette.accentColor1));
+					setAccentColor2(new THREE.Color(colorPalette.accentColor2));
+					setAccentColor3(new THREE.Color(colorPalette.accentColor3));
+					setHighlightColor(new THREE.Color(colorPalette.highlightColor));
 				}
 			);
 			headerInstances?.forEach(({ tick }) => tick(dt));
