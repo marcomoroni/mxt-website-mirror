@@ -21,6 +21,7 @@
 	import { newTextMaterial } from './textMaterial';
 	import { perpetualSmoothDampAngleAnimation, smoothDampAnimation } from '$lib/smoothDamp';
 	import { newDioramaMaterial } from './dioramaMaterial';
+	import { newFoliageMaterial } from './foliageMaterial';
 
 	const DEV_debugLog = false;
 	const FLAG_useHeaders = false;
@@ -545,7 +546,8 @@
 			material.setAccentColorDim(new THREE.Color(accentColorDim));
 			material.setHighlightColor(new THREE.Color(colorPalette.highlightColor));
 			material.setHighlightColorDim(new THREE.Color(highlightColorDim));
-			const foliageMaterial = newDioramaMaterial(dioramaData.ambientOcclusionTextureAndHighlight);
+			const foliageMaterial = newFoliageMaterial();
+			foliageMaterial.setBackgroundColor(new THREE.Color(backgroundColor));
 			let object3D: undefined | THREE.Object3D = undefined;
 			const ownPolarAngleDeg = lerp(0, 360, i / array.length);
 
@@ -621,6 +623,7 @@
 				animations.dimAccentColor.tick(dt);
 				material.setBlendWithBackground(animations.blendWithBackground.current);
 				material.setAccentColorDimVisibility(animations.dimAccentColor.current);
+				foliageMaterial.setBlendWithBackground(animations.blendWithBackground.current);
 				rotDegAnimatedClockwiseAnim.tick(dt);
 			};
 
