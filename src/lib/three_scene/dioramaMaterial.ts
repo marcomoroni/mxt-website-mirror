@@ -70,7 +70,7 @@ export function newDioramaMaterial(ambientOcclusionTextureAndHighlight: string) 
 
             // Create a gradient to map 'uvTex' to. The gradient has 3 colours: 'baseColorWithHighlight', 'tintedShadow' and 'baseColorShadow'.
             // The gradient is created by manipulating the interpolation value in 'mix()'.
-            vec3 finalColor = mix(tintedShadow, baseColorWithHighlight, clamp(map(uvTex.r, 0.25, 1.0, 0.0, 1.0), 0.0, 1.0));
+            vec3 finalColor = mix(tintedShadow, baseColorWithHighlight, clamp(map(uvTex.r, 0.55, 1.0, 0.0, 1.0), 0.0, 1.0));
             finalColor = mix(finalColor, baseColorShadow, clamp(map(1.0 - uvTex.r, 0.5, 1.0, 0.0, 1.0), 0.0, 1.0));
             
             gl_FragColor = vec4(finalColor, 1.0);

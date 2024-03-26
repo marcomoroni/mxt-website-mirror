@@ -521,7 +521,7 @@
 
 			let elapsedTime = 0;
 			const tick = (dt: DOMHighResTimeStamp) => {
-				elapsedTime += dt * 0.0001;
+				elapsedTime += dt * 0.00007;
 
 				animations.radiusDispl.tick(dt);
 				animations.colorPaletteIndex.tick(dt);

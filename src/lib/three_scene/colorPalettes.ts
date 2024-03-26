@@ -1,4 +1,10 @@
-import { accentColor1, accentColor2, accentColor3, backgroundColor } from '$lib/cssValues';
+import {
+	accentColor1,
+	accentColor2,
+	accentColor3,
+	accentColor5,
+	backgroundColor
+} from '$lib/cssValues';
 import { match } from 'ts-pattern';
 import * as d3 from 'd3';
 import { perlin1d } from '$lib/perlin';
@@ -14,7 +20,10 @@ export function colorPalettes() {
 	const accentColorFromNoise = (noiseValue: number, displacement: number) => {
 		let noiseResult = noise.getValue(noiseValue + displacement);
 		noiseResult = map(noiseResult, -1, 1, 0, 1);
-		return interpolateFunction([accentColor2, accentColor1, accentColor3], noiseResult);
+		return interpolateFunction(
+			[accentColor2, accentColor1, accentColor3, accentColor5],
+			noiseResult
+		);
 	};
 	const list = [
 		{
