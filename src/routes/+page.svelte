@@ -71,11 +71,11 @@
 	}
 
 	.a-c-b-b {
-		font-size: 24px;
-		max-width: 800px;
+		font-size: 26px;
+		max-width: 900px;
 		text-wrap: balance;
 		text-align: center;
-		font-weight: 500;
+		font-weight: 560;
 	}
 
 	.a-c-b-c {

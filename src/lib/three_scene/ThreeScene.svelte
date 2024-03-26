@@ -176,7 +176,7 @@
 					if ($s === 'services') {
 						return 30;
 					} else if ($s === 'case-studies') {
-						return 8;
+						return 7;
 					} else if ($s.includes('anchor')) {
 						return 5;
 					} else if ($s.startsWith('case-study')) {
@@ -191,7 +191,7 @@
 					if ($s === 'services') {
 						return 0.1;
 					} else if ($s === 'case-studies') {
-						return 37;
+						return 32;
 					} else if ($s.includes('anchor')) {
 						return 20;
 					} else if ($s.startsWith('case-study')) {
@@ -222,7 +222,7 @@
 				}),
 				z: derived(stateStore, ($s) => {
 					if ($s == 'case-studies') {
-						return 13;
+						return 10;
 					} else if ($s.includes('anchor')) {
 						return 3;
 					} else if ($s.startsWith('case-study')) {
