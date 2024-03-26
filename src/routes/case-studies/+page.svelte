@@ -68,6 +68,8 @@
 	text={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id venenatis sapien. Sed maximus nisi quis nibh imperdiet, id efficitur velit eleifend. Curabitur euismod magna ut vehicula accumsan. Integer tempus luctus magna a placerat. Vivamus at luctus nulla. Morbi tristique sapien odio, in porttitor metus interdum quis.'}
 />
 
+<div class="landing-spacer" />
+
 <ul class="case-studies-list">
 	{#each caseStudiesData as caseStudy}
 		<li class="case-study-card" use:scrollObserve={caseStudy.threeState}>
@@ -92,6 +94,10 @@
 </ul>
 
 <style>
+	.landing-spacer {
+		height: 100px;
+	}
+
 	.case-study-card {
 		--margin: 40px;
 		width: 100%;

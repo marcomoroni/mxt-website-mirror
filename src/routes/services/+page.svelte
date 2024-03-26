@@ -13,6 +13,8 @@
 
 <SecondaryPageLanding text={'-------------------------'} />
 
+<div class="landing-spacer" />
+
 <ServicesSection cssBackgroundColor={'white'}>
 	<svelte:fragment slot="type">
 		<h2 class="services-page-h2">Digital infrastructure</h2>
@@ -97,6 +99,10 @@
 <div class="bottom-page-spacer" />
 
 <style>
+	.landing-spacer {
+		height: 120px;
+	}
+
 	.section-gap {
 		height: 120px;
 	}
