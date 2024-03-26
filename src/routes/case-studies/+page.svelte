@@ -62,10 +62,14 @@
 <ul class="case-studies-list">
 	{#each caseStudiesData as caseStudy}
 		<li class="case-study-card" use:scrollObserve={caseStudy.threeState}>
-			<a class="box" href={caseStudy.href}>
-				<div class="background" />
+			<a class="box" href={caseStudy.comingSoon ? undefined : caseStudy.href}>
+				<div class="background" class:coming-soon={caseStudy.comingSoon} />
 				<div class="case-study-title-box-container">
-					<CaseStudyTitleBox title={caseStudy.title} leadParagraph={caseStudy.leadParagraph} />
+					<CaseStudyTitleBox
+						title={caseStudy.title}
+						leadParagraph={caseStudy.leadParagraph}
+						comingSoon={caseStudy.comingSoon}
+					/>
 				</div>
 			</a>
 			<div class="bottom-spacer" />
@@ -89,6 +93,11 @@
 		width: 100%;
 		height: 100%;
 		border: 2px solid var(--color-primary);
+	}
+
+	.background.coming-soon {
+		border-style: dashed;
+		opacity: 0.3;
 	}
 
 	.box {
