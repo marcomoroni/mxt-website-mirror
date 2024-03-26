@@ -15,7 +15,8 @@
 					p: 'Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK.'
 				}
 			],
-			scale: defaultScale
+			scale: defaultScale,
+			blurOnZoom: true
 		},
 		{
 			img: '/images/A303_Map_Features_Natural.png',
@@ -23,7 +24,8 @@
 			fixedImg: true,
 			wideType: false,
 			type: [{ p: 'Nature...' }],
-			scale: defaultScale
+			scale: defaultScale,
+			blurOnZoom: true
 		},
 		{
 			img: '/images/A303_Map_Features_Human-made.png',
@@ -31,7 +33,8 @@
 			fixedImg: true,
 			wideType: false,
 			type: [{ p: 'Human-made...' }],
-			scale: defaultScale
+			scale: defaultScale,
+			blurOnZoom: true
 		},
 		{
 			img: '/images/A303_Map_Features_PreRoads.png',
@@ -39,7 +42,8 @@
 			fixedImg: true,
 			wideType: false,
 			type: [{ p: 'Traffic...' }],
-			scale: 12
+			scale: 12,
+			blurOnZoom: false
 		}
 	];
 	const zoomPivot = { x: 0.41, y: 0.535 };
@@ -48,6 +52,7 @@
 	let windowHeight: number;
 	let currentLayerIndex = 0;
 	let zoom = 1;
+	let blurBlurrableLayers = false;
 
 	// Note that these are in order.
 	const layers: Array<{
@@ -75,6 +80,10 @@
 		if (scrollY) {
 			checkNewZoom();
 		}
+	}
+
+	$: {
+		blurBlurrableLayers = zoom > 1.2;
 	}
 
 	onMount(() => {
@@ -106,6 +115,7 @@
 								class:add-small-right-inset-margin={dataSource.fixedImg}
 								style:transform={`scale(${zoom})`}
 								style:transform-origin={`${zoomPivot.x * 100}% ${zoomPivot.y * 100}%`}
+								class:blur={dataSource.blurOnZoom && blurBlurrableLayers}
 							>
 								{#if dataSource.traffic}
 									<TrafficSimulation hideImageAroundSimulation={currentLayerIndex !== i} />
@@ -249,7 +259,13 @@
 		height: 100%;
 		background-size: cover;
 		background-position: center center;
-		transition: transform 2.5s ease-in-out;
+		transition: transform 2.5s ease-in-out 0s, filter 0.8s ease-in-out 1.5s;
+	}
+
+	.blur {
+		filter: blur(8px);
+		transition-delay: 0s, 0.5s;
+		transition-property: transform, filter;
 	}
 
 	.map-layers-type .map-layer-img-mask {
