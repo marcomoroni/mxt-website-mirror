@@ -161,6 +161,7 @@
 		}
 	];
 	const colorPalettes = newColorPalettes();
+	const dioramaOwnPolarAngleMultWhenCaseStudyLanding = 0.5;
 	const dioramaOwnPolarAngleMultWhenSmall = 0.28;
 	const gltfScaleMult = 0.01;
 
@@ -220,7 +221,7 @@
 				}),
 				z: derived(stateStore, ($s) => {
 					if ($s == 'case-studies') {
-						return 18;
+						return 13;
 					} else if ($s.includes('anchor')) {
 						return 3;
 					} else if ($s.startsWith('case-study')) {
@@ -233,6 +234,8 @@
 			radius: derived(stateStore, ($s) => {
 				if ($s === 'services') {
 					return 4.5;
+				} else if ($s == 'case-studies') {
+					return 8;
 				} else if ($s.startsWith('case-st')) {
 					return 14;
 				} else {
@@ -255,7 +258,10 @@
 			// A displacement added after the above. Always animated towards the closest value.
 			polarAngleDegAnimatedToClosest: derived(stateStore, ($s) =>
 				match($s)
-					.with('case-studies', () => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenSmall - 90)
+					.with(
+						'case-studies',
+						() => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenCaseStudyLanding - 90
+					)
 					.with('case-studies-anchor-a303', () => 0 * dioramaOwnPolarAngleMultWhenSmall)
 					.with('case-studies-anchor-p2', () => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenSmall)
 					.with('case-studies-anchor-p3', () => (360 / 3) * 2 * dioramaOwnPolarAngleMultWhenSmall)
@@ -267,7 +273,7 @@
 		},
 		dioramasOwnPolarAngleMult: derived(stateStore, ($s) =>
 			match($s)
-				.with('case-studies', () => dioramaOwnPolarAngleMultWhenSmall)
+				.with('case-studies', () => dioramaOwnPolarAngleMultWhenCaseStudyLanding)
 				.with('case-studies-anchor-a303', () => dioramaOwnPolarAngleMultWhenSmall)
 				.with('case-studies-anchor-p2', () => dioramaOwnPolarAngleMultWhenSmall)
 				.with('case-studies-anchor-p3', () => dioramaOwnPolarAngleMultWhenSmall)
@@ -397,7 +403,7 @@
 		// Dioramas are placed in a circumference at equal distances.
 		// To create the illusion of them moving around diverse dispositions animate the control points
 		// of this circumference, along with the camera.
-		const railCircumferencePolarAngleDegPerpetualRotationDelta = 0.005;
+		const railCircumferencePolarAngleDegPerpetualRotationDelta = 0.004;
 		const railCircumference = {
 			center: new THREE.Vector3(0, 0, 0),
 			radius: 4,
@@ -406,9 +412,7 @@
 					.with('KeepRotating', () => ({
 						keepRotating: {
 							by: railCircumferencePolarAngleDegPerpetualRotationDelta,
-							// Use this value as a starting one so that it less likely that you'll have to make a
-							// full circle animation when navigating to the case studies page.
-							initialValue: 165
+							initialValue: 270
 						}
 					}))
 					.with({ At: P.select() }, (to) => ({ fixedTarget: to }))
@@ -486,13 +490,14 @@
 			const rotDegAnimatedClockwiseAnim = perpetualSmoothDampAngleAnimation(
 				match(get(dioramaData.sceneSettings.polarAngleDegAnimatedClockwise))
 					.with('KeepRotating', () => ({
-						keepRotating: { by: perpetualRotationDelta, initialValue: 225 }
+						keepRotating: { by: perpetualRotationDelta, initialValue: 320 }
 					}))
 					.with({ At: P.select() }, (to) => ({ fixedTarget: to }))
 					.exhaustive(),
 				1.6,
 				'anticlockwise',
-				true
+				true,
+				30
 			);
 			storeUnsubscribers.push(
 				dioramaData.sceneSettings.polarAngleDegAnimatedClockwise.subscribe((v) => {
