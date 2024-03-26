@@ -1,19 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import * as THREE from 'three';
-	import * as d3 from 'd3';
 	import { derived, get, writable, type Unsubscriber } from 'svelte/store';
 	import { P, match } from 'ts-pattern';
-	import {
-		accentColor1,
-		accentColor2,
-		accentColor3,
-		accentColor4,
-		accentColor5,
-		accentColor6,
-		backgroundColor,
-		primaryColor
-	} from '$lib/cssValues';
+	import { backgroundColor, primaryColor } from '$lib/cssValues';
 	import { lerp } from '$lib/lerp';
 	import { toRadians } from '$lib/angleConversions';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -21,6 +11,9 @@
 	import { newTextMaterial } from './textMaterial';
 	import { perpetualSmoothDampAngleAnimation, smoothDampAnimation } from '$lib/smoothDamp';
 	import { newDioramaMaterial } from './dioramaMaterial';
+	import { newFoliageMaterial } from './foliageMaterial';
+	import { degToRad } from 'three/src/math/MathUtils.js';
+	import { colorPalettes as newColorPalettes } from './colorPalettes';
 
 	const DEV_debugLog = false;
 	const FLAG_useHeaders = false;
@@ -81,7 +74,7 @@
 	const dioramasData = [
 		{
 			mesh: '/models/Diorama_Stonehenge.gltf',
-			ambientOcclusionTexture: '/models/stonehenge_AO_2048.png',
+			ambientOcclusionTextureAndHighlight: '/models/stonehenge_AO_2048.png',
 			sceneSettings: {
 				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
 					match($s)
@@ -96,25 +89,20 @@
 						.with('case-study-p3', () => radDisplWhenAway)
 						.otherwise(() => 0)
 				),
-				blendWithBackground: derived(stateStore, ($s) =>
+				palette: derived(stateStore, ($s) =>
 					match($s)
-						.with('case-study-p2', () => 1)
-						.with('case-study-p3', () => 1)
-						.otherwise(() => 0)
-				),
-				dimAccentColor: derived(stateStore, ($s) =>
-					[
-						'case-studies-anchor-p2',
-						'case-studies-anchor-p3',
-						'case-study-p2',
-						'case-study-p3'
-					].includes($s)
+						.returnType<'default' | 'dim' | 'hidden'>()
+						.with('case-study-p2', () => 'hidden')
+						.with('case-study-p3', () => 'hidden')
+						.with('case-studies-anchor-p3', () => 'dim')
+						.with('case-studies-anchor-p2', () => 'dim')
+						.otherwise(() => 'default')
 				)
 			}
 		},
 		{
-			mesh: '/models/Diorama_Stonehenge.gltf',
-			ambientOcclusionTexture: '/models/stonehenge_AO_2048.png',
+			mesh: '/models/Investigation_Diorama.gltf',
+			ambientOcclusionTextureAndHighlight: '/models/Investigation_AO_mask.png',
 			sceneSettings: {
 				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
 					match($s)
@@ -129,26 +117,23 @@
 						.with('case-study-p3', () => radDisplWhenAway)
 						.otherwise(() => 0)
 				),
-				blendWithBackground: derived(stateStore, ($s) =>
+				palette: derived(stateStore, ($s) =>
 					match($s)
-						.with('case-study-a303', () => 1)
-						.with('case-study-p3', () => 1)
-						.otherwise(() => 0)
-				),
-				dimAccentColor: derived(stateStore, ($s) =>
-					[
-						'case-studies-anchor-a303',
-						'case-studies-anchor-p3',
-						'case-study-a303',
-						'case-study-p3'
-					].includes($s)
+						.returnType<'default' | 'dim' | 'hidden'>()
+						.with('case-study-p3', () => 'hidden')
+						.with('case-study-a303', () => 'hidden')
+						.with('case-studies-anchor-a303', () => 'dim')
+						.with('case-studies-anchor-p3', () => 'dim')
+						.otherwise(() => 'default')
 				)
 			}
 		},
 		{
 			geometry: () => new THREE.TorusKnotGeometry(1, 0.2, 300, 8, 5, 11),
-			mesh: '/models/Diorama_Stonehenge.gltf',
-			ambientOcclusionTexture: '/models/stonehenge_AO_2048.png',
+			mesh: '/models/Instructor_Diorama2.gltf',
+			ambientOcclusionTextureAndHighlight: '/models/Instructor_AO_mask.png',
+			foliageMeshName: 'Instructor_Diorama001',
+			rotationDisplacement: 120,
 			sceneSettings: {
 				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
 					match($s)
@@ -163,30 +148,20 @@
 						.with('case-study-a303', () => radDisplWhenAway)
 						.otherwise(() => 0)
 				),
-				blendWithBackground: derived(stateStore, ($s) =>
+				palette: derived(stateStore, ($s) =>
 					match($s)
-						.with('case-study-p2', () => 1)
-						.with('case-study-a303', () => 1)
-						.otherwise(() => 0)
-				),
-				dimAccentColor: derived(stateStore, ($s) =>
-					[
-						'case-studies-anchor-a303',
-						'case-studies-anchor-p2',
-						'case-study-a303',
-						'case-study-p2'
-					].includes($s)
+						.returnType<'default' | 'dim' | 'hidden'>()
+						.with('case-study-p2', () => 'hidden')
+						.with('case-study-a303', () => 'hidden')
+						.with('case-studies-anchor-a303', () => 'dim')
+						.with('case-studies-anchor-p2', () => 'dim')
+						.otherwise(() => 'default')
 				)
 			}
 		}
 	];
-	const colorPalettes = [
-		{ accentColor1: accentColor2, accentColor2: accentColor3, accentColor3: accentColor1 },
-		{ accentColor1: accentColor4, accentColor2: '#DCDAC3', accentColor3: '#BDD2D5' },
-		{ accentColor1: '#CAA98B', accentColor2: '#6B796A', accentColor3: accentColor5 },
-		{ accentColor1: '#CDD9C5', accentColor2: accentColor6, accentColor3: '#FFE8B0' }
-	];
-	const accentColorDim = '#D9D6CE';
+	const colorPalettes = newColorPalettes();
+	const dioramaOwnPolarAngleMultWhenCaseStudyLanding = 0.5;
 	const dioramaOwnPolarAngleMultWhenSmall = 0.28;
 	const gltfScaleMult = 0.01;
 
@@ -231,16 +206,6 @@
 				y: derived(stateStore, ($s) => ($s === 'home' ? 0.7 : 0))
 			}
 		},
-		colorPaletteIndex: derived(stateStore, ($s) =>
-			match($s)
-				.with('case-studies-anchor-a303', () => 1)
-				.with('case-studies-anchor-p2', () => 2)
-				.with('case-studies-anchor-p3', () => 3)
-				.with('case-study-a303', () => 1)
-				.with('case-study-p2', () => 2)
-				.with('case-study-p3', () => 3)
-				.otherwise(() => 0)
-		),
 		railCircumference: {
 			center: {
 				x: derived(stateStore, ($s) => {
@@ -256,7 +221,7 @@
 				}),
 				z: derived(stateStore, ($s) => {
 					if ($s == 'case-studies') {
-						return 18;
+						return 13;
 					} else if ($s.includes('anchor')) {
 						return 3;
 					} else if ($s.startsWith('case-study')) {
@@ -269,6 +234,8 @@
 			radius: derived(stateStore, ($s) => {
 				if ($s === 'services') {
 					return 4.5;
+				} else if ($s == 'case-studies') {
+					return 8;
 				} else if ($s.startsWith('case-st')) {
 					return 14;
 				} else {
@@ -291,7 +258,10 @@
 			// A displacement added after the above. Always animated towards the closest value.
 			polarAngleDegAnimatedToClosest: derived(stateStore, ($s) =>
 				match($s)
-					.with('case-studies', () => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenSmall - 90)
+					.with(
+						'case-studies',
+						() => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenCaseStudyLanding - 90
+					)
 					.with('case-studies-anchor-a303', () => 0 * dioramaOwnPolarAngleMultWhenSmall)
 					.with('case-studies-anchor-p2', () => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenSmall)
 					.with('case-studies-anchor-p3', () => (360 / 3) * 2 * dioramaOwnPolarAngleMultWhenSmall)
@@ -303,7 +273,7 @@
 		},
 		dioramasOwnPolarAngleMult: derived(stateStore, ($s) =>
 			match($s)
-				.with('case-studies', () => dioramaOwnPolarAngleMultWhenSmall)
+				.with('case-studies', () => dioramaOwnPolarAngleMultWhenCaseStudyLanding)
 				.with('case-studies-anchor-a303', () => dioramaOwnPolarAngleMultWhenSmall)
 				.with('case-studies-anchor-p2', () => dioramaOwnPolarAngleMultWhenSmall)
 				.with('case-studies-anchor-p3', () => dioramaOwnPolarAngleMultWhenSmall)
@@ -350,7 +320,6 @@
 					y: smoothDampAnimation(get(sceneSettings.camera.lookAt.y), 1.1)
 				}
 			},
-			colorPaletteIndex: smoothDampAnimation(get(sceneSettings.colorPaletteIndex), 0.3),
 			railCircumference: {
 				center: {
 					x: smoothDampAnimation(get(sceneSettings.railCircumference.center.x), 0.9),
@@ -377,9 +346,6 @@
 		);
 		storeUnsubscribers.push(
 			sceneSettings.camera.lookAt.y.subscribe((v) => (animations.camera.lookAt.y.target = v))
-		);
-		storeUnsubscribers.push(
-			sceneSettings.colorPaletteIndex.subscribe((v) => (animations.colorPaletteIndex.target = v))
 		);
 		storeUnsubscribers.push(
 			sceneSettings.railCircumference.center.x.subscribe(
@@ -411,8 +377,7 @@
 		// is called every frame and it manually reads values from the stores.
 		const applyAnimationValues = (
 			camera: THREE.PerspectiveCamera,
-			railCircumference: { center: THREE.Vector3; radius: number },
-			colorPalette: { accentColor1: string; accentColor2: string; accentColor3: string }
+			railCircumference: { center: THREE.Vector3; radius: number }
 		) => {
 			camera.position.y = animations.camera.pos.y.current;
 			camera.position.z = animations.camera.pos.z.current;
@@ -423,20 +388,6 @@
 				animations.railCircumference.center.z.current
 			);
 			railCircumference.radius = animations.railCircumference.radius.current;
-
-			const colorPaletteI = animations.colorPaletteIndex.current / (colorPalettes.length - 1);
-			colorPalette.accentColor1 = d3.piecewise(
-				d3.interpolateRgb.gamma(2.2),
-				colorPalettes.map((p) => p.accentColor1)
-			)(colorPaletteI);
-			colorPalette.accentColor2 = d3.piecewise(
-				d3.interpolateRgb.gamma(2.2),
-				colorPalettes.map((p) => p.accentColor2)
-			)(colorPaletteI);
-			colorPalette.accentColor3 = d3.piecewise(
-				d3.interpolateRgb.gamma(2.2),
-				colorPalettes.map((p) => p.accentColor3)
-			)(colorPaletteI);
 		};
 
 		const scene = new THREE.Scene();
@@ -452,7 +403,7 @@
 		// Dioramas are placed in a circumference at equal distances.
 		// To create the illusion of them moving around diverse dispositions animate the control points
 		// of this circumference, along with the camera.
-		const railCircumferencePolarAngleDegPerpetualRotationDelta = 0.005;
+		const railCircumferencePolarAngleDegPerpetualRotationDelta = 0.004;
 		const railCircumference = {
 			center: new THREE.Vector3(0, 0, 0),
 			radius: 4,
@@ -461,9 +412,7 @@
 					.with('KeepRotating', () => ({
 						keepRotating: {
 							by: railCircumferencePolarAngleDegPerpetualRotationDelta,
-							// Use this value as a starting one so that it less likely that you'll have to make a
-							// full circle animation when navigating to the case studies page.
-							initialValue: 165
+							initialValue: 270
 						}
 					}))
 					.with({ At: P.select() }, (to) => ({ fixedTarget: to }))
@@ -498,50 +447,57 @@
 			};
 		};
 
-		const colorPalette = { ...colorPalettes[0] };
-
 		const dioramaInstances = dioramasData.map((dioramaData, i, array) => {
 			const storeUnsubscribers: Array<Unsubscriber> = [];
 
-			const material = newDioramaMaterial(dioramaData.ambientOcclusionTexture);
-			material.setBackgroundColor(new THREE.Color(backgroundColor));
-			material.setBaseColor(new THREE.Color(backgroundColor));
-			material.setBaseColorShadow(new THREE.Color('black'));
-			material.setAccentColor1(new THREE.Color(colorPalette.accentColor1));
-			material.setAccentColor2(new THREE.Color(colorPalette.accentColor2));
-			material.setAccentColor3(new THREE.Color(colorPalette.accentColor3));
-			material.setAccentColor4(new THREE.Color('#C0BBB1'));
-			material.setAccentColorDim(new THREE.Color(accentColorDim));
-			let mesh: undefined | THREE.Mesh = undefined;
+			const diormamaMaterial = newDioramaMaterial(dioramaData.ambientOcclusionTextureAndHighlight);
+			diormamaMaterial.setBackgroundColor(new THREE.Color(backgroundColor));
+			diormamaMaterial.setBaseColor(new THREE.Color('#E1D7D2'));
+			const foliageMaterial = newFoliageMaterial();
+			foliageMaterial.setBackgroundColor(new THREE.Color(backgroundColor));
+			let object3D: undefined | THREE.Object3D = undefined;
 			const ownPolarAngleDeg = lerp(0, 360, i / array.length);
 
 			const loader = new GLTFLoader();
 			loader.load(dioramaData.mesh, function (gltf) {
-				for (const child of gltf.scene.children) {
-					child.traverseVisible((child) => {
-						if (child instanceof THREE.Mesh) {
-							mesh = child;
-							mesh.scale.set(gltfScaleMult, gltfScaleMult, gltfScaleMult);
-							child.material = material.material;
+				const rootGroup = new THREE.Group();
+
+				const rotDisplGroup = new THREE.Group();
+				rotDisplGroup.rotation.y = degToRad(dioramaData.rotationDisplacement ?? 0);
+				rootGroup.add(rotDisplGroup);
+
+				const gltfScene = gltf.scene;
+				gltfScene.scale.set(gltfScaleMult, gltfScaleMult, gltfScaleMult);
+				gltfScene.traverseVisible((child) => {
+					if (child instanceof THREE.Mesh) {
+						if (child.name === dioramaData.foliageMeshName) {
+							child.material = foliageMaterial.material;
+						} else {
+							child.material = diormamaMaterial.material;
 						}
 
-						scene.add(child);
-					});
-				}
+						// Tip: Do not add children to another scene or group in this loop. Doing
+						// that affects the `traverseVisible` loop.
+					}
+				});
+				rotDisplGroup.add(gltfScene);
+
+				object3D = rootGroup;
+				scene.add(object3D);
 			});
 
-			// const perpetualRotationDelta = 0.012;
 			const perpetualRotationDelta = 0.004;
 			const rotDegAnimatedClockwiseAnim = perpetualSmoothDampAngleAnimation(
 				match(get(dioramaData.sceneSettings.polarAngleDegAnimatedClockwise))
 					.with('KeepRotating', () => ({
-						keepRotating: { by: perpetualRotationDelta, initialValue: 225 }
+						keepRotating: { by: perpetualRotationDelta, initialValue: 320 }
 					}))
 					.with({ At: P.select() }, (to) => ({ fixedTarget: to }))
 					.exhaustive(),
 				1.6,
 				'anticlockwise',
-				true
+				true,
+				30
 			);
 			storeUnsubscribers.push(
 				dioramaData.sceneSettings.polarAngleDegAnimatedClockwise.subscribe((v) => {
@@ -554,46 +510,45 @@
 
 			const animations = {
 				radiusDispl: smoothDampAnimation(get(dioramaData.sceneSettings.radiusDispl), 1.1),
-				blendWithBackground: smoothDampAnimation(
-					get(dioramaData.sceneSettings.blendWithBackground),
-					0.8
-				),
-				dimAccentColor: smoothDampAnimation(
-					get(dioramaData.sceneSettings.dimAccentColor) ? 1 : 0,
-					0.8
+				colorPaletteIndex: smoothDampAnimation(
+					colorPalettes.nameToIndex(get(dioramaData.sceneSettings.palette)),
+					0.3
 				)
 			};
 			storeUnsubscribers.push(
 				dioramaData.sceneSettings.radiusDispl.subscribe((v) => (animations.radiusDispl.target = v))
 			);
 			storeUnsubscribers.push(
-				dioramaData.sceneSettings.blendWithBackground.subscribe(
-					(v) => (animations.blendWithBackground.target = v)
-				)
-			);
-			storeUnsubscribers.push(
-				dioramaData.sceneSettings.dimAccentColor.subscribe(
-					(v) => (animations.dimAccentColor.target = v ? 1 : 0)
+				dioramaData.sceneSettings.palette.subscribe(
+					(v) => (animations.colorPaletteIndex.target = colorPalettes.nameToIndex(v))
 				)
 			);
 
+			let elapsedTime = 0;
 			const tick = (dt: DOMHighResTimeStamp) => {
+				elapsedTime += dt * 0.00007;
+
 				animations.radiusDispl.tick(dt);
-				animations.blendWithBackground.tick(dt);
-				animations.dimAccentColor.tick(dt);
-				material.setBlendWithBackground(animations.blendWithBackground.current);
-				material.setAccentColorDimVisibility(animations.dimAccentColor.current);
+				animations.colorPaletteIndex.tick(dt);
 				rotDegAnimatedClockwiseAnim.tick(dt);
+
+				const interpolatedColors = colorPalettes.interpolated(
+					animations.colorPaletteIndex.current,
+					elapsedTime
+				);
+				diormamaMaterial.setBaseColor(new THREE.Color(interpolatedColors.baseColor));
+				diormamaMaterial.setBaseColorShadow(new THREE.Color(interpolatedColors.baseShadowColor));
+				diormamaMaterial.setAccentColor1(new THREE.Color(interpolatedColors.accentColor1));
+				diormamaMaterial.setAccentColor2(new THREE.Color(interpolatedColors.accentColor2));
+				diormamaMaterial.setAccentColor3(new THREE.Color(interpolatedColors.accentColor3));
+				diormamaMaterial.setAccentColor4(new THREE.Color(interpolatedColors.accentColor4));
+				diormamaMaterial.setHighlightColor(new THREE.Color(interpolatedColors.highlightColor));
+				foliageMaterial.setBaseColor(new THREE.Color(interpolatedColors.highlightColor));
 			};
 
 			return {
-				get mesh() {
-					return mesh;
-				},
-				material: {
-					setAccentColor1: material.setAccentColor1,
-					setAccentColor2: material.setAccentColor2,
-					setAccentColor3: material.setAccentColor3
+				get object3D() {
+					return object3D;
 				},
 				ownPolarAngleDeg,
 				rotDegAnimatedClockwiseAnim: {
@@ -606,7 +561,8 @@
 				},
 				tick,
 				dispose: () => {
-					material.dispose();
+					diormamaMaterial.dispose();
+					foliageMaterial.dispose();
 					storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
 				}
 			};
@@ -686,7 +642,7 @@
 			animations.camera.pos.y.tick(dt);
 			animations.camera.pos.z.tick(dt);
 			animations.camera.lookAt.y.tick(dt);
-			animations.colorPaletteIndex.tick(dt);
+			// animations.colorPaletteIndex.tick(dt);
 			animations.railCircumference.center.x.tick(dt);
 			animations.railCircumference.center.z.tick(dt);
 			animations.railCircumference.radius.tick(dt);
@@ -694,9 +650,9 @@
 			animations.dioramasOwnPolarAngleMult.tick(dt);
 			railCircumference.polarAngleDeg.tick(dt);
 
-			applyAnimationValues(camera, railCircumference, colorPalette);
+			applyAnimationValues(camera, railCircumference);
 			dioramaInstances.forEach(
-				({ tick, mesh, material, ownPolarAngleDeg, rotDegAnimatedClockwiseAnim, radiusDispl }) => {
+				({ tick, object3D, ownPolarAngleDeg, rotDegAnimatedClockwiseAnim, radiusDispl }) => {
 					tick(dt);
 
 					const pos = positionInCircumference({
@@ -707,14 +663,11 @@
 							ownPolarAngleDeg * animations.dioramasOwnPolarAngleMult.current +
 							animations.railCircumference.polarAngleDegAnimatedToClosest.current
 					});
-					if (mesh) {
-						mesh.position.x = pos.x;
-						mesh.position.z = pos.z;
-						mesh.rotation.y = toRadians(rotDegAnimatedClockwiseAnim.current);
+					if (object3D) {
+						object3D.position.x = pos.x;
+						object3D.position.z = pos.z;
+						object3D.rotation.y = toRadians(rotDegAnimatedClockwiseAnim.current);
 					}
-					material.setAccentColor1(new THREE.Color(colorPalette.accentColor1));
-					material.setAccentColor2(new THREE.Color(colorPalette.accentColor2));
-					material.setAccentColor3(new THREE.Color(colorPalette.accentColor3));
 				}
 			);
 			headerInstances?.forEach(({ tick }) => tick(dt));

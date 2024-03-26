@@ -262,33 +262,33 @@
 	}
 
 	.img-results-2 {
-		grid-column: 2 / 10;
+		grid-column: 1 / 6;
 		grid-row: 3;
 	}
 
 	.img-results-3 {
-		grid-column: 2 / 10;
-		grid-row: 4;
+		grid-column: 6 / 11;
+		grid-row: 3;
 	}
 
 	.img-results-4 {
-		grid-column: 2 / 10;
-		grid-row: 5;
+		grid-column: 1 / 6;
+		grid-row: 4;
 	}
 
 	.img-results-5 {
-		grid-column: 2 / 10;
-		grid-row: 6;
+		grid-column: 6 / 11;
+		grid-row: 4;
 	}
 
 	.img-results-6 {
-		grid-column: 2 / 10;
-		grid-row: 7;
+		grid-column: 6 / 11;
+		grid-row: 5;
 	}
 
 	.img-results-7 {
-		grid-column: 2 / 10;
-		grid-row: 8;
+		grid-column: 1 / 6;
+		grid-row: 5;
 	}
 
 	.section-development {
