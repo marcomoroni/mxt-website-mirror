@@ -63,15 +63,18 @@ export function newDioramaMaterial(ambientOcclusionTextureAndHighlight: string) 
             vec3 tintedShadowZ = mix(tintedShadowXY, accentColor4, tintedShadowZAlpha);
             vec3 tintedShadow = tintedShadowZ;
 
-            // Add 'highlightColor' to 'baseColor_'. The 'highlightColor' should be faded when at the edge of the diorama.
-            float distFromCenterHorizontal = sqrt(pow(vPosition.r, 2.0) + pow(vPosition.b, 2.0));
-            float higlightColorAmount = 1.0 - clamp(map(distFromCenterHorizontal, highlightColorFadeStart, highlightColorFadeEnd, 0.0, 1.0), 0.0, 1.0);
-            vec3 baseColorWithHighlight = mix(baseColor_, highlightColor, uvTex.g * higlightColorAmount);
+            // Add 'highlightColor' to 'baseColor_'.
+            vec3 baseColorWithHighlight = mix(baseColor_, highlightColor, uvTex.g);
 
             // Create a gradient to map 'uvTex' to. The gradient has 3 colours: 'baseColorWithHighlight', 'tintedShadow' and 'baseColorShadow'.
             // The gradient is created by manipulating the interpolation value in 'mix()'.
             vec3 finalColor = mix(tintedShadow, baseColorWithHighlight, clamp(map(uvTex.r, 0.55, 1.0, 0.0, 1.0), 0.0, 1.0));
             finalColor = mix(finalColor, baseColorShadow, clamp(map(1.0 - uvTex.r, 0.5, 1.0, 0.0, 1.0), 0.0, 1.0));
+
+            // Fade at the edge of the diorama.
+            float distFromCenterHorizontal = sqrt(pow(vPosition.r, 2.0) + pow(vPosition.b, 2.0));
+            float fadeColorAmount = 1.0 - clamp(map(distFromCenterHorizontal, highlightColorFadeStart, highlightColorFadeEnd, 0.0, 1.0), 0.0, 1.0);
+            finalColor = mix(backgroundColor, finalColor, fadeColorAmount);
             
             gl_FragColor = vec4(finalColor, 1.0);
 
