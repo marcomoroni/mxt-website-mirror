@@ -1,11 +1,17 @@
 <script lang="ts">
 	export let title: string;
 	export let leadParagraph: string;
+	export let comingSoon: boolean = false;
 </script>
 
 <div class="title-container">
 	<div class="size">
-		<div class="case-study">Case study</div>
+		<div class="r">
+			<div class="case-study">Case study</div>
+			{#if comingSoon}
+				<div class="coming-soon">Coming soon</div>
+			{/if}
+		</div>
 		<div class="divider-1" />
 		<h1>{title}</h1>
 		<div class="divider-2" />
@@ -40,11 +46,26 @@
 		text-wrap: balance;
 	}
 
-	.case-study {
+	.r {
+		display: flex;
+		gap: 20px;
+	}
+
+	.case-study,
+	.coming-soon {
 		font-weight: 550;
 		font-size: 13px;
 		text-transform: uppercase;
 		letter-spacing: 2px;
+		line-height: 30px;
+	}
+
+	.coming-soon {
+		background-color: var(--color-primary);
+		color: var(--color-background);
+		padding-left: 14px;
+		padding-right: 14px;
+		border-radius: 1000px;
 	}
 
 	.divider-1 {
