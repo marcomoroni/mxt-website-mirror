@@ -16,7 +16,7 @@
 	<div class="inner">
 		<div class="horizontal-margin" />
 		<div class="type-container coming-soon">
-			<p>Our new website is coming on the 31st March 2024.</p>
+			<p>Our new website is coming soon.</p>
 			<p>
 				Contact us at <a href="mailto:info@mxt.co.uk">info@mxt.co.uk</a>.
 			</p>
