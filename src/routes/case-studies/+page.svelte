@@ -1,6 +1,7 @@
 <script lang="ts">
 	import AccessibleHiddenHeader from '$lib/AccessibleHiddenHeader.svelte';
 	import CaseStudyTitleBox from '$lib/CaseStudyTitleBox.svelte';
+	import FocusHighlight from '$lib/FocusHighlight.svelte';
 	import { caseStudiesData } from '$lib/caseStudiesData';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
 	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
@@ -80,6 +81,7 @@
 						comingSoon={caseStudy.comingSoon}
 					/>
 				</div>
+				<FocusHighlight overflow={8} />
 			</a>
 			<div class="bottom-spacer" />
 		</li>

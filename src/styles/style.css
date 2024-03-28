@@ -21,6 +21,8 @@ html {
 	--color-accent-4: #1d5755;
 	--color-accent-5: #f5dee4;
 	--color-accent-6: #edbd6b;
+	--color-focus: #00b8eb;
+	--focus-thickness: 3px;
 	--nav-bar-height: 100px;
 	--case-study-margin: 30px;
 }
@@ -69,4 +71,13 @@ ul.with-disc {
 
 img {
 	display: block;
+}
+
+.underline-on-focus:focus-visible {
+	text-decoration: underline !important;
+	text-underline-offset: 0.1578em !important;
+	text-decoration-color: var(--color-focus) !important;
+	text-decoration-thickness: var(--focus-thickness) !important;
+	-webkit-text-decoration-skip-ink: none !important;
+	text-decoration-skip-ink: none !important;
 }
