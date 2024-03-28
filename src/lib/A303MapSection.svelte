@@ -160,6 +160,7 @@
 <section class="m-section-data-sources">
 	{#each dataSources as dataSource, i}
 		<div class="m-map-layer">
+			<div class="m-solid-gap" />
 			<div class="m-map-layer-img-zoom-container">
 				<div
 					class="m-map-layer-img"
@@ -349,6 +350,15 @@
 			align-self: start;
 			background-color: var(--color-background);
 			overflow: hidden;
+		}
+
+		.m-solid-gap {
+			position: sticky;
+			top: 0;
+			align-self: start;
+			background-color: var(--color-background);
+			width: 100%;
+			height: var(--case-study-margin);
 		}
 
 		.m-map-layer-img {

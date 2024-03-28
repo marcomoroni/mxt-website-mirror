@@ -7,6 +7,8 @@
 	import ThreeScene from '$lib/three_scene/ThreeScene.svelte';
 	import { P, match } from 'ts-pattern';
 	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
+	import { crossfade } from 'svelte/transition';
+	import { quintInOut } from 'svelte/easing';
 
 	let hoveringHomeLink = false;
 
@@ -76,6 +78,12 @@
 	function scrollToStartOfTopBar() {
 		topBarEl.scroll({ left: 0, behavior: 'smooth' });
 	}
+
+	const navLinkBackgroundKey = Symbol();
+	const [navLinkBackgroundSend, navLinkBackgroundReceive] = crossfade({
+		duration: 700,
+		easing: quintInOut
+	});
 </script>
 
 <svelte:window bind:scrollY />
@@ -119,12 +127,33 @@
 			class:current-page={$page.url.pathname.startsWith('/case-studies/')}
 		>
 			Case studies
+			{#if $page.url.pathname.startsWith('/case-studies/')}
+				<div
+					in:navLinkBackgroundSend={{ key: navLinkBackgroundKey }}
+					out:navLinkBackgroundReceive={{ key: navLinkBackgroundKey }}
+					class="page-link-background"
+				/>
+			{/if}
 		</a>
 		<a href="/services" class="page-link" class:current-page={$page.url.pathname === '/services/'}>
 			Services
+			{#if $page.url.pathname === '/services/'}
+				<div
+					in:navLinkBackgroundSend={{ key: navLinkBackgroundKey }}
+					out:navLinkBackgroundReceive={{ key: navLinkBackgroundKey }}
+					class="page-link-background"
+				/>
+			{/if}
 		</a>
 		<a href="/contacts" class="page-link" class:current-page={$page.url.pathname === '/contacts/'}>
 			Contacts
+			{#if $page.url.pathname === '/contacts/'}
+				<div
+					in:navLinkBackgroundSend={{ key: navLinkBackgroundKey }}
+					out:navLinkBackgroundReceive={{ key: navLinkBackgroundKey }}
+					class="page-link-background"
+				/>
+			{/if}
 		</a>
 	</div>
 	<div class="right">
@@ -186,6 +215,7 @@
 	}
 
 	.page-link {
+		position: relative;
 		line-height: 40px;
 		border-radius: 10000px;
 		padding-left: 18px;
@@ -193,15 +223,25 @@
 		text-decoration: none;
 		font-weight: 500;
 		white-space: nowrap;
-		transition: color 0.5s var(--ease);
 	}
 
-	.one-is-selected .page-link:not(.current-page) {
+	.one-is-selected .page-link:not(.current-page):not(:hover) {
 		color: color-mix(in oklab, var(--color-primary), transparent 30%);
 	}
 
-	.page-link.current-page {
+	/* .page-link.current-page {
 		background-color: white;
+	} */
+
+	.page-link-background {
+		background-color: white;
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		border-radius: 10000px;
+		z-index: -1;
 	}
 
 	.left {
