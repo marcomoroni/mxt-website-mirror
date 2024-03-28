@@ -216,4 +216,38 @@
 		transition-delay: 6s;
 		opacity: 0;
 	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.s1,
+		.s2,
+		.s3 {
+			animation: none;
+		}
+
+		.s1 {
+			background-color: var(--color-accent-1);
+			top: 500px;
+			left: -200px;
+			width: 1000px;
+		}
+
+		.s2 {
+			background-color: var(--color-accent-2);
+			top: -200px;
+			left: 300px;
+			width: 500px;
+		}
+
+		.s3 {
+			background-color: var(--color-accent-3);
+			top: 300px;
+			left: -1000px;
+			width: 1600px;
+		}
+
+		.blur,
+		.shape {
+			transition: none;
+		}
+	}
 </style>

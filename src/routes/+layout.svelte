@@ -294,4 +294,10 @@
 			animation-range-end: exit 30px;
 		}
 	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.three-container {
+			transition: none;
+		}
+	}
 </style>
