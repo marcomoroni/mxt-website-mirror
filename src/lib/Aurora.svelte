@@ -225,21 +225,21 @@
 		}
 
 		.s1 {
-			background-color: var(--color-accent-1);
+			animation: s1-anim-1 30s ease-in-out 0s infinite alternate;
 			top: 500px;
 			left: -200px;
 			width: 1000px;
 		}
 
 		.s2 {
-			background-color: var(--color-accent-2);
+			animation: s2-anim-1 30s ease-in-out 0s infinite alternate;
 			top: -200px;
 			left: 300px;
 			width: 500px;
 		}
 
 		.s3 {
-			background-color: var(--color-accent-3);
+			animation: s3-anim-1 30s ease-in-out 0s infinite alternate;
 			top: 300px;
 			left: -1000px;
 			width: 1600px;
