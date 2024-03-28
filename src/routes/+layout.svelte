@@ -9,6 +9,7 @@
 	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
 	import { crossfade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
+	import FocusHighlight from '$lib/FocusHighlight.svelte';
 
 	let hoveringHomeLink = false;
 
@@ -92,11 +93,11 @@
 	<title>MXT</title>
 </svelte:head>
 
-<div class="aurora-container">
+<div class="aurora-container" aria-hidden="true">
 	<Aurora visible={!auroraHidden} />
 </div>
 
-<div class="three-container" class:visible={!threeHidden}>
+<div class="three-container" class:visible={!threeHidden} aria-hidden="true">
 	<ThreeScene state={threeState} />
 </div>
 
@@ -113,6 +114,7 @@
 			<div class="logo-container">
 				<MxtLogo style={hoveringHomeLink ? 'default' : 'glass'} />
 			</div>
+			<FocusHighlight overflow={-4} />
 		</a>
 	</div>
 	<div
@@ -134,6 +136,7 @@
 					class="page-link-background"
 				/>
 			{/if}
+			<FocusHighlight overflow={6} cornerRadius={10000} />
 		</a>
 		<a href="/services" class="page-link" class:current-page={$page.url.pathname === '/services/'}>
 			Services
@@ -144,6 +147,7 @@
 					class="page-link-background"
 				/>
 			{/if}
+			<FocusHighlight overflow={6} cornerRadius={10000} />
 		</a>
 		<a href="/contacts" class="page-link" class:current-page={$page.url.pathname === '/contacts/'}>
 			Contacts
@@ -154,6 +158,7 @@
 					class="page-link-background"
 				/>
 			{/if}
+			<FocusHighlight overflow={6} cornerRadius={10000} />
 		</a>
 	</div>
 	<div class="right">
@@ -229,10 +234,6 @@
 		color: color-mix(in oklab, var(--color-primary), transparent 30%);
 	}
 
-	/* .page-link.current-page {
-		background-color: white;
-	} */
-
 	.page-link-background {
 		background-color: white;
 		position: absolute;
@@ -259,6 +260,7 @@
 		flex-direction: row;
 		justify-content: center;
 		align-items: center;
+		position: relative;
 	}
 
 	.logo-container {
@@ -290,6 +292,12 @@
 			animation-timeline: --scroll-timeline;
 			animation-fill-mode: both;
 			animation-range-end: exit 30px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.three-container {
+			transition: none;
 		}
 	}
 </style>

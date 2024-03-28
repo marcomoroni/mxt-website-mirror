@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import TrafficSimulation from './TrafficSimulation.svelte';
+	import { prefersReducedMotion as prefersReducedMotion_ } from './prefersReducedMotion';
 
 	const defaultScale = 1;
 	const dataSources = [
@@ -53,6 +54,7 @@
 	let currentLayerIndex = 0;
 	let zoom = 1;
 	let blurBlurrableLayers = false;
+	let prefersReducedMotion = false;
 
 	// Note that these are in order.
 	const layers: Array<{
@@ -87,6 +89,7 @@
 	}
 
 	onMount(() => {
+		prefersReducedMotion = prefersReducedMotion_();
 		checkNewZoom();
 	});
 
@@ -97,9 +100,9 @@
 
 <svelte:window bind:scrollY bind:innerHeight={windowHeight} />
 
-<section class="section-data-sources">
+<div class="section-data-sources">
 	<!-- Make two copied overlapping elements -->
-	<div class="map-layers-images">
+	<div class="map-layers-images" aria-hidden="true">
 		<div class="hide-behind-top-margin-container">
 			<div class="hide-behind-top-margin" />
 		</div>
@@ -113,9 +116,9 @@
 								class="map-layer-img"
 								style:background-image={`url(${dataSource.img})`}
 								class:add-small-right-inset-margin={dataSource.fixedImg}
-								style:transform={`scale(${zoom})`}
+								style:transform={`scale(${prefersReducedMotion ? dataSource.scale : zoom})`}
 								style:transform-origin={`${zoomPivot.x * 100}% ${zoomPivot.y * 100}%`}
-								class:blur={dataSource.blurOnZoom && blurBlurrableLayers}
+								class:blur={!prefersReducedMotion && dataSource.blurOnZoom && blurBlurrableLayers}
 							>
 								{#if dataSource.traffic}
 									<TrafficSimulation hideImageAroundSimulation={currentLayerIndex !== i} />
@@ -125,7 +128,6 @@
 					</div>
 				</div>
 				<div class="map-layer-type" class:wide={dataSource.wideType}>
-					{dataSource.type} aria-hidden="true">
 					{#each dataSource.type as t}
 						{#if 'h2' in t}
 							<h2 class="case-study-section-header">{t.h2}</h2>
@@ -156,8 +158,8 @@
 			</div>
 		{/each}
 	</div>
-</section>
-<section class="m-section-data-sources">
+</div>
+<div class="m-section-data-sources">
 	{#each dataSources as dataSource, i}
 		<div class="m-map-layer">
 			<div class="m-solid-gap" />
@@ -184,7 +186,7 @@
 			</div>
 		</div>
 	{/each}
-</section>
+</div>
 
 <style>
 	.section-data-sources {

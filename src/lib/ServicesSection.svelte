@@ -34,7 +34,7 @@
 
 <svelte:window bind:scrollY bind:innerHeight={windowHeight} />
 
-<section
+<div
 	use:xxx
 	class="section"
 	class:with-margin={withMargin}
@@ -51,7 +51,7 @@
 	</div>
 	<div class="vertical-margin left" />
 	<div class="vertical-margin right" />
-</section>
+</div>
 
 <style>
 	.section {
