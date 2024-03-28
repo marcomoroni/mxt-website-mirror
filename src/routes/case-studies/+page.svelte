@@ -2,6 +2,7 @@
 	import AccessibleHiddenHeader from '$lib/AccessibleHiddenHeader.svelte';
 	import CaseStudyTitleBox from '$lib/CaseStudyTitleBox.svelte';
 	import { caseStudiesData } from '$lib/caseStudiesData';
+	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
 	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
 	import { onMount } from 'svelte';
 
@@ -52,6 +53,10 @@
 		cards.push({ el, threeState });
 	}
 </script>
+
+<svelte:head>
+	<title>{mxtHeadTitle('Case studies')}</title>
+</svelte:head>
 
 <svelte:window bind:scrollY bind:innerHeight={windowHeight} />
 

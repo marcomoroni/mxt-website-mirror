@@ -4,9 +4,14 @@
 	import FillAspectRatio from '$lib/FillAspectRatio.svelte';
 	import StonehengeInUk from '$lib/StonehengeInUk.svelte';
 	import { caseStudiesData } from '$lib/caseStudiesData';
+	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
 
 	const caseStudyData = caseStudiesData[0];
 </script>
+
+<svelte:head>
+	<title>{mxtHeadTitle('Stonehenge')}</title>
+</svelte:head>
 
 <CaseStudyLanding title={caseStudyData.title} leadParagraph={caseStudyData.leadParagraph} />
 <div class="landing-spacer" />

@@ -1,7 +1,12 @@
 <script lang="ts">
 	import AccessibleHiddenHeader from '$lib/AccessibleHiddenHeader.svelte';
 	import ServicesSection from '$lib/ServicesSection.svelte';
+	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
 </script>
+
+<svelte:head>
+	<title>{mxtHeadTitle('Services')}</title>
+</svelte:head>
 
 <AccessibleHiddenHeader text="Services" />
 
