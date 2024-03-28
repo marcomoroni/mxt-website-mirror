@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import TrafficSimulation from './TrafficSimulation.svelte';
+	import { prefersReducedMotion } from './prefersReducedMotion';
+	import { scale } from 'svelte/transition';
 
 	const defaultScale = 1;
 	const dataSources = [
@@ -113,9 +115,9 @@
 								class="map-layer-img"
 								style:background-image={`url(${dataSource.img})`}
 								class:add-small-right-inset-margin={dataSource.fixedImg}
-								style:transform={`scale(${zoom})`}
+								style:transform={`scale(${prefersReducedMotion() ? dataSource.scale : zoom})`}
 								style:transform-origin={`${zoomPivot.x * 100}% ${zoomPivot.y * 100}%`}
-								class:blur={dataSource.blurOnZoom && blurBlurrableLayers}
+								class:blur={!prefersReducedMotion() && dataSource.blurOnZoom && blurBlurrableLayers}
 							>
 								{#if dataSource.traffic}
 									<TrafficSimulation hideImageAroundSimulation={currentLayerIndex !== i} />
