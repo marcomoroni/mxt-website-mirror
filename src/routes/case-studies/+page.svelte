@@ -112,6 +112,10 @@
 		justify-content: flex-end;
 	}
 
+	.box:hover .background:not(.coming-soon) {
+		border-width: 4px;
+	}
+
 	.bottom-spacer {
 		height: var(--margin);
 	}
