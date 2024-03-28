@@ -62,13 +62,18 @@
 <ul class="case-studies-list">
 	{#each caseStudiesData as caseStudy}
 		<li class="case-study-card" use:scrollObserve={caseStudy.threeState}>
-			<a class="box" href={caseStudy.comingSoon ? undefined : caseStudy.href}>
+			<a
+				class="box"
+				href={caseStudy.comingSoon ? undefined : caseStudy.href}
+				class:coming-soon={caseStudy.comingSoon}
+			>
 				<div class="background" class:coming-soon={caseStudy.comingSoon} />
 				<div class="case-study-title-box-container">
 					<CaseStudyTitleBox
 						title={caseStudy.title}
 						leadParagraph={caseStudy.leadParagraph}
 						comingSoon={caseStudy.comingSoon}
+						transition={caseStudy.titleBoxTransition}
 					/>
 				</div>
 			</a>
@@ -114,6 +119,10 @@
 
 	.box:hover .background:not(.coming-soon) {
 		border-width: 4px;
+	}
+
+	.box.coming-soon {
+		cursor: not-allowed;
 	}
 
 	.bottom-spacer {
