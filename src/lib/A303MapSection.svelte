@@ -97,9 +97,9 @@
 
 <svelte:window bind:scrollY bind:innerHeight={windowHeight} />
 
-<section class="section-data-sources">
+<div class="section-data-sources">
 	<!-- Make two copied overlapping elements -->
-	<div class="map-layers-images">
+	<div class="map-layers-images" aria-hidden="true">
 		<div class="hide-behind-top-margin-container">
 			<div class="hide-behind-top-margin" />
 		</div>
@@ -125,7 +125,6 @@
 					</div>
 				</div>
 				<div class="map-layer-type" class:wide={dataSource.wideType}>
-					{dataSource.type} aria-hidden="true">
 					{#each dataSource.type as t}
 						{#if 'h2' in t}
 							<h2 class="case-study-section-header">{t.h2}</h2>
@@ -156,8 +155,8 @@
 			</div>
 		{/each}
 	</div>
-</section>
-<section class="m-section-data-sources">
+</div>
+<div class="m-section-data-sources">
 	{#each dataSources as dataSource, i}
 		<div class="m-map-layer">
 			<div class="m-solid-gap" />
@@ -184,7 +183,7 @@
 			</div>
 		</div>
 	{/each}
-</section>
+</div>
 
 <style>
 	.section-data-sources {
