@@ -73,7 +73,6 @@
 						title={caseStudy.title}
 						leadParagraph={caseStudy.leadParagraph}
 						comingSoon={caseStudy.comingSoon}
-						transition={caseStudy.titleBoxTransition}
 					/>
 				</div>
 			</a>
