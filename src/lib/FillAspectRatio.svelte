@@ -4,6 +4,7 @@
 	// Make sure the child slot has 100% width and height.
 
 	export let aspectRatio: { x: number; y: number };
+	export let ariaRoleHidden: boolean = false;
 
 	// CSS needs to be added this way because we need to add props to `@container`.
 	$: style = `
@@ -37,7 +38,7 @@
 
 {@html style}
 
-<div class="fill-aspect-ratio-container">
+<div class="fill-aspect-ratio-container" aria-hidden={ariaRoleHidden}>
 	<div class="fill-aspect-ratio-child">
 		<slot />
 	</div>

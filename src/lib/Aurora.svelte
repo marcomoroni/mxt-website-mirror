@@ -216,4 +216,38 @@
 		transition-delay: 6s;
 		opacity: 0;
 	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.s1,
+		.s2,
+		.s3 {
+			animation: none;
+		}
+
+		.s1 {
+			animation: s1-anim-1 30s ease-in-out 0s infinite alternate;
+			top: 500px;
+			left: -200px;
+			width: 1000px;
+		}
+
+		.s2 {
+			animation: s2-anim-1 30s ease-in-out 0s infinite alternate;
+			top: -200px;
+			left: 300px;
+			width: 500px;
+		}
+
+		.s3 {
+			animation: s3-anim-1 30s ease-in-out 0s infinite alternate;
+			top: 300px;
+			left: -1000px;
+			width: 1600px;
+		}
+
+		.blur,
+		.shape {
+			transition: none;
+		}
+	}
 </style>

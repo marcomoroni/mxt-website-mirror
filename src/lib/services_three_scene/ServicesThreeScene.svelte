@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { prefersReducedMotion } from '$lib/prefersReducedMotion';
 	import { smoothDampAnimation } from '$lib/smoothDamp';
 	import { newTextMaterial } from '$lib/three_scene/textMaterial';
 	import { derived, writable, type Unsubscriber, get } from 'svelte/store';
@@ -20,7 +21,8 @@
 		const mesh = new THREE.Mesh(geometry, material.material);
 
 		let targetRotationDisplacement = 0;
-		const targetRotation = () => scrollY * 0.0015 + targetRotationDisplacement;
+		const targetRotation = () =>
+			prefersReducedMotion() ? 0 : scrollY * 0.0015 + targetRotationDisplacement;
 		const rotationAnimation = smoothDampAnimation(targetRotation(), 0.13);
 
 		const targetPosX = derived(moveAwayFromCameraStore, ($v) => ($v ? -5 : -2));
@@ -111,7 +113,7 @@
 
 <svelte:window bind:scrollY />
 
-<canvas use:initThreeScene />
+<canvas use:initThreeScene aria-hidden="true" />
 
 <style>
 	canvas {
