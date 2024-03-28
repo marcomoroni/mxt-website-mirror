@@ -310,6 +310,9 @@
 	function initThreeScene(canvasEl: HTMLCanvasElement) {
 		const storeUnsubscribers: Array<Unsubscriber> = [];
 
+		const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+		const prefersReducedMotion = !mediaQuery || mediaQuery.matches;
+
 		const animations = {
 			camera: {
 				pos: {
@@ -403,7 +406,9 @@
 		// Dioramas are placed in a circumference at equal distances.
 		// To create the illusion of them moving around diverse dispositions animate the control points
 		// of this circumference, along with the camera.
-		const railCircumferencePolarAngleDegPerpetualRotationDelta = 0.004;
+		const railCircumferencePolarAngleDegPerpetualRotationDelta = prefersReducedMotion
+			? 0.0001
+			: 0.004;
 		const railCircumference = {
 			center: new THREE.Vector3(0, 0, 0),
 			radius: 4,
@@ -486,11 +491,14 @@
 				scene.add(object3D);
 			});
 
-			const perpetualRotationDelta = 0.004;
+			const perpetualRotationDelta = prefersReducedMotion ? 0 : 0.004;
 			const rotDegAnimatedClockwiseAnim = perpetualSmoothDampAngleAnimation(
 				match(get(dioramaData.sceneSettings.polarAngleDegAnimatedClockwise))
 					.with('KeepRotating', () => ({
-						keepRotating: { by: perpetualRotationDelta, initialValue: 320 }
+						keepRotating: {
+							by: perpetualRotationDelta,
+							initialValue: prefersReducedMotion ? 0 : 320
+						}
 					}))
 					.with({ At: P.select() }, (to) => ({ fixedTarget: to }))
 					.exhaustive(),
@@ -642,7 +650,6 @@
 			animations.camera.pos.y.tick(dt);
 			animations.camera.pos.z.tick(dt);
 			animations.camera.lookAt.y.tick(dt);
-			// animations.colorPaletteIndex.tick(dt);
 			animations.railCircumference.center.x.tick(dt);
 			animations.railCircumference.center.z.tick(dt);
 			animations.railCircumference.radius.tick(dt);
