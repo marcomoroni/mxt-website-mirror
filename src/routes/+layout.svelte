@@ -193,10 +193,9 @@
 		text-decoration: none;
 		font-weight: 500;
 		white-space: nowrap;
-		transition: color 0.5s var(--ease);
 	}
 
-	.one-is-selected .page-link:not(.current-page) {
+	.one-is-selected .page-link:not(.current-page):not(:hover) {
 		color: color-mix(in oklab, var(--color-primary), transparent 30%);
 	}
 
