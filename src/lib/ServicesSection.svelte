@@ -86,6 +86,7 @@
 		position: sticky;
 		top: 0;
 		align-self: start;
+		pointer-events: none;
 	}
 
 	.vertical-margin {
