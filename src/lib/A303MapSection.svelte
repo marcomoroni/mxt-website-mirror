@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import TrafficSimulation from './TrafficSimulation.svelte';
-	import { prefersReducedMotion } from './prefersReducedMotion';
-	import { scale } from 'svelte/transition';
+	import { prefersReducedMotion as prefersReducedMotion_ } from './prefersReducedMotion';
 
 	const defaultScale = 1;
 	const dataSources = [
@@ -55,6 +54,7 @@
 	let currentLayerIndex = 0;
 	let zoom = 1;
 	let blurBlurrableLayers = false;
+	let prefersReducedMotion = false;
 
 	// Note that these are in order.
 	const layers: Array<{
@@ -89,6 +89,7 @@
 	}
 
 	onMount(() => {
+		prefersReducedMotion = prefersReducedMotion_();
 		checkNewZoom();
 	});
 
@@ -115,9 +116,9 @@
 								class="map-layer-img"
 								style:background-image={`url(${dataSource.img})`}
 								class:add-small-right-inset-margin={dataSource.fixedImg}
-								style:transform={`scale(${prefersReducedMotion() ? dataSource.scale : zoom})`}
+								style:transform={`scale(${prefersReducedMotion ? dataSource.scale : zoom})`}
 								style:transform-origin={`${zoomPivot.x * 100}% ${zoomPivot.y * 100}%`}
-								class:blur={!prefersReducedMotion() && dataSource.blurOnZoom && blurBlurrableLayers}
+								class:blur={!prefersReducedMotion && dataSource.blurOnZoom && blurBlurrableLayers}
 							>
 								{#if dataSource.traffic}
 									<TrafficSimulation hideImageAroundSimulation={currentLayerIndex !== i} />
