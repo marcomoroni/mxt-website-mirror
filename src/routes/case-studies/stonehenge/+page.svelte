@@ -15,7 +15,7 @@
 
 <CaseStudyLanding title={caseStudyData.title} leadParagraph={caseStudyData.leadParagraph} />
 <div class="landing-spacer" />
-<section class="intro-container">
+<div class="intro-container">
 	<img class="img-stonehenge" src="/images/stonehenge.jpg" alt="Stonehenge." />
 	<div class="intro">
 		<p>
@@ -26,15 +26,19 @@
 			Stonehenge to something like its original setting.
 		</p>
 	</div>
-	<div class="map-container">
+	<div
+		class="map-container"
+		role="img"
+		aria-label="A map of the UK showing the location of Stonehenge."
+	>
 		<!-- Same size as the svg -->
-		<FillAspectRatio aspectRatio={{ x: 196, y: 304 }}>
+		<FillAspectRatio aspectRatio={{ x: 196, y: 304 }} ariaRoleHidden={true}>
 			<StonehengeInUk />
 		</FillAspectRatio>
 	</div>
-</section>
+</div>
 <div class="section-spacer" />
-<section class="section-2-container">
+<div class="section-2-container">
 	<div class="type-2">
 		<p>
 			Significant infrastructural interventions within a UNESCO world heritage site produce a
@@ -43,9 +47,9 @@
 			traditional presentations and illustrations was needed.
 		</p>
 	</div>
-</section>
+</div>
 <div class="section-spacer" />
-<section class="section-results">
+<div class="section-results">
 	<div class="type-results">
 		<p>
 			A collaboration between National Highways, their technical partner AmW (AECOM, Mace and WSP),
@@ -68,8 +72,7 @@
 		</p>
 	</div>
 	<div class="img-results-1">
-		<!-- svelte-ignore a11y-media-has-caption -->
-		<video autoplay loop muted controls class="video-redered-scenes">
+		<video autoplay loop muted class="video-redered-scenes" tabindex="-1" aria-disabled="true">
 			<source src="/videos/A303_Rendered_Scenes.mp4" type="video/mp4" />
 		</video>
 	</div>
@@ -103,9 +106,9 @@
 		src="/images/HighresScreenshot00027.png"
 		alt="The Countess Roundabout at night."
 	/>
-</section>
+</div>
 <div class="section-spacer" />
-<section class="section-development">
+<div class="section-development">
 	<div class="type-development">
 		<p>
 			The development phase spanned an initial three months, during which a data-driven and
@@ -113,11 +116,11 @@
 			requirements and sensitivities of the Stonehenge landscape.
 		</p>
 	</div>
-</section>
+</div>
 <div class="section-spacer" />
 <A303MapSection />
 <div class="section-spacer" />
-<section class="section-gameplay">
+<div class="section-gameplay">
 	<div class="gameplay-type">
 		<h2 class="case-study-section-header">Human-centered design approach</h2>
 		<ul class="with-disc">
@@ -171,9 +174,9 @@
 		src="/images/HighresScreenshot00005.png"
 		alt="The environment seen from a high point with the Heritage Areas highlighted."
 	/>
-</section>
+</div>
 <div class="section-spacer" />
-<section class="section-events">
+<div class="section-events">
 	<div class="events-type">
 		<h2 class="case-study-section-header">Results and impact</h2>
 		<p>
@@ -184,7 +187,7 @@
 	</div>
 	<div class="events-img-1" />
 	<div class="events-img-2" />
-</section>
+</div>
 <div class="bottom-page-spacer" />
 
 <style>

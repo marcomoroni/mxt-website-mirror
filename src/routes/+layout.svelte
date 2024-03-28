@@ -93,11 +93,11 @@
 	<title>MXT</title>
 </svelte:head>
 
-<div class="aurora-container">
+<div class="aurora-container" aria-hidden="true">
 	<Aurora visible={!auroraHidden} />
 </div>
 
-<div class="three-container" class:visible={!threeHidden}>
+<div class="three-container" class:visible={!threeHidden} aria-hidden="true">
 	<ThreeScene state={threeState} />
 </div>
 
