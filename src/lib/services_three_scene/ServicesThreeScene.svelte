@@ -111,7 +111,7 @@
 
 <svelte:window bind:scrollY />
 
-<canvas use:initThreeScene />
+<canvas use:initThreeScene aria-hidden="true" />
 
 <style>
 	canvas {
