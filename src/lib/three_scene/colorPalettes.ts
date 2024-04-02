@@ -40,9 +40,9 @@ export function colorPalettes() {
 			name: 'dimmed',
 			baseColor: '#F2ECEA',
 			baseShadowColor: '#AAAAAA',
-			accentColor1: (noiseValue: number) => '#E9E2DE',
-			accentColor2: (noiseValue: number) => '#E9E2DE',
-			accentColor3: (noiseValue: number) => '#E9E2DE',
+			accentColor1: (_noiseValue: number) => '#E9E2DE',
+			accentColor2: (_noiseValue: number) => '#E9E2DE',
+			accentColor3: (_noiseValue: number) => '#E9E2DE',
 			accentColor4: '#C0BBB1',
 			highlightColor: '#F9F7F6'
 		},
@@ -50,9 +50,9 @@ export function colorPalettes() {
 			name: 'hidden',
 			baseColor: backgroundColor,
 			baseShadowColor: backgroundColor,
-			accentColor1: (noiseValue: number) => backgroundColor,
-			accentColor2: (noiseValue: number) => backgroundColor,
-			accentColor3: (noiseValue: number) => backgroundColor,
+			accentColor1: (_noiseValue: number) => backgroundColor,
+			accentColor2: (_noiseValue: number) => backgroundColor,
+			accentColor3: (_noiseValue: number) => backgroundColor,
 			accentColor4: backgroundColor,
 			highlightColor: backgroundColor
 		}
