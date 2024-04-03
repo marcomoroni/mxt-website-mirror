@@ -73,7 +73,6 @@
 			{ path: '/case-studies/p3/', atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
-		.with({ path: '/services/', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
 		.otherwise(() => false);
 	$: auroraHidden = $page.url.pathname !== '/contacts/';
 
@@ -112,7 +111,7 @@
 </div>
 
 <div class="three-container" class:visible={!threeHidden} aria-hidden="true">
-	<ThreeScene state={threeState} />
+	<!-- <ThreeScene state={threeState} /> -->
 </div>
 
 <nav class="top-bar" use:initialScroll bind:this={topBarEl}>
