@@ -1,10 +1,11 @@
 <script lang="ts">
 	export let scrollObserveAction: (el: HTMLElement) => void;
+	export let color: string;
 </script>
 
 <div use:scrollObserveAction class="section">
 	<div class="type-container">
-		<div class="type">
+		<div class="type" style:color>
 			<slot name="type" />
 			<div class="type-bottom-margin" />
 		</div>

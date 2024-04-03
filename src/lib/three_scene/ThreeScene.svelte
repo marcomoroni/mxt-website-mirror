@@ -13,7 +13,8 @@
 	import { newDioramaMaterial } from './dioramaMaterial';
 	import { newFoliageMaterial } from './foliageMaterial';
 	import { degToRad } from 'three/src/math/MathUtils.js';
-	import { colorPalettes as newColorPalettes } from './colorPalettes';
+	import { dioramaColorPalettes as newDioramaColorPalettes } from './dioramaColorPalettes';
+	import { backgroundColorPalettes as newBackgroundColorPalettes } from './backgroundColorPalettes';
 	import { prefersReducedMotion } from '$lib/prefersReducedMotion';
 
 	const DEV_debugLog = false;
@@ -176,7 +177,7 @@
 			}
 		}
 	];
-	const colorPalettes = newColorPalettes();
+	const colorPalettes = newDioramaColorPalettes();
 	const dioramaOwnPolarAngleMultWhenCaseStudyLanding = 0.5;
 	const dioramaOwnPolarAngleMultWhenSmall = 0.28;
 	const gltfScaleMult = 0.01;
@@ -188,8 +189,10 @@
 		camera: {
 			pos: {
 				y: derived(stateStore, ($s) => {
-					if ($s.startsWith('service')) {
+					if ($s === 'services') {
 						return 30;
+					} else if ($s.startsWith('service-')) {
+						return 38;
 					} else if ($s === 'case-studies') {
 						return 7;
 					} else if ($s.includes('anchor')) {
@@ -231,6 +234,8 @@
 						return 15;
 					} else if ($s === 'home') {
 						return -3;
+					} else if ($s.startsWith('service-')) {
+						return -8;
 					} else {
 						return 0;
 					}
@@ -298,6 +303,14 @@
 				.with('case-study-p3', () => dioramaOwnPolarAngleMultWhenSmall)
 				.otherwise(() => 1)
 		),
+		backgroundPalette: derived(stateStore, ($s) =>
+			match($s)
+				.returnType<'default' | 'service-1' | 'service-2' | 'service-3'>()
+				.with('service-1', () => 'service-1')
+				.with('service-2', () => 'service-2')
+				.with('service-3', () => 'service-3')
+				.otherwise(() => 'default')
+		),
 		// Header by index.
 		headerVisibility: derived(stateStore, ($s) =>
 			FLAG_useHeaders
@@ -326,6 +339,8 @@
 	function initThreeScene(canvasEl: HTMLCanvasElement) {
 		const storeUnsubscribers: Array<Unsubscriber> = [];
 
+		const backgroundColorPalettes = newBackgroundColorPalettes();
+
 		const animations = {
 			camera: {
 				pos: {
@@ -350,6 +365,10 @@
 			dioramasOwnPolarAngleMult: smoothDampAnimation(
 				get(sceneSettings.dioramasOwnPolarAngleMult),
 				0.9
+			),
+			backgroundColorPaletteIndex: smoothDampAnimation(
+				backgroundColorPalettes.nameToIndex(get(sceneSettings.backgroundPalette)),
+				0.3
 			)
 		};
 
@@ -386,6 +405,12 @@
 		storeUnsubscribers.push(
 			sceneSettings.dioramasOwnPolarAngleMult.subscribe(
 				(v) => (animations.dioramasOwnPolarAngleMult.target = v)
+			)
+		);
+		storeUnsubscribers.push(
+			sceneSettings.backgroundPalette.subscribe(
+				(v) =>
+					(animations.backgroundColorPaletteIndex.target = backgroundColorPalettes.nameToIndex(v))
 			)
 		);
 
@@ -546,7 +571,7 @@
 			);
 
 			let elapsedTime = 0;
-			const tick = (dt: DOMHighResTimeStamp) => {
+			const tick = (dt: DOMHighResTimeStamp, backgroundColor: THREE.Color) => {
 				elapsedTime += dt * 0.00007;
 
 				animations.radiusDispl.tick(dt);
@@ -557,6 +582,7 @@
 					animations.colorPaletteIndex.current,
 					elapsedTime
 				);
+				diormamaMaterial.setBackgroundColor(new THREE.Color(backgroundColor));
 				diormamaMaterial.setBaseColor(new THREE.Color(interpolatedColors.baseColor));
 				diormamaMaterial.setBaseColorShadow(new THREE.Color(interpolatedColors.baseShadowColor));
 				diormamaMaterial.setAccentColor1(new THREE.Color(interpolatedColors.accentColor1));
@@ -667,13 +693,21 @@
 			animations.railCircumference.center.z.tick(dt);
 			animations.railCircumference.radius.tick(dt);
 			animations.railCircumference.polarAngleDegAnimatedToClosest.tick(dt);
+			animations.backgroundColorPaletteIndex.tick(dt);
 			animations.dioramasOwnPolarAngleMult.tick(dt);
 			railCircumference.polarAngleDeg.tick(dt);
 
+			const backgroundColor = new THREE.Color(
+				backgroundColorPalettes.interpolated(
+					animations.backgroundColorPaletteIndex.current
+				).baseColor
+			);
+
+			scene.background = backgroundColor;
 			applyAnimationValues(camera, railCircumference);
 			dioramaInstances.forEach(
 				({ tick, object3D, ownPolarAngleDeg, rotDegAnimatedClockwiseAnim, radiusDispl }) => {
-					tick(dt);
+					tick(dt, backgroundColor);
 
 					const pos = positionInCircumference({
 						center: railCircumference.center,

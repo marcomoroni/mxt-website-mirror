@@ -13,7 +13,9 @@ function map(value: number, min1: number, max1: number, min2: number, max2: numb
 	return min2 + ((value - min1) * (max2 - min2)) / (max1 - min1);
 }
 
-export function colorPalettes() {
+// --- really need to use css for interpolation now that colours jump around
+
+export function dioramaColorPalettes() {
 	const noise = perlin1d();
 	const interpolateFunction = (colorList: Array<string>, normalizedI: number) =>
 		d3.piecewise(d3.interpolateRgb.gamma(2.2), colorList)(normalizedI);

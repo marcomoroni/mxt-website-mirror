@@ -2,6 +2,7 @@
 	import AccessibleHiddenHeader from '$lib/AccessibleHiddenHeader.svelte';
 	import SecondaryPageLanding from '$lib/SecondaryPageLanding.svelte';
 	import ServicesSection from '$lib/ServicesSection.svelte';
+	import { accentColor1, accentColor2, accentColor3 } from '$lib/cssValues';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
 	import { servicesPageIntersectingSection } from '$lib/three_scene/threeStateStores';
 	import { onMount } from 'svelte';
@@ -60,7 +61,7 @@
 
 <div class="landing-spacer" />
 
-<ServicesSection scrollObserveAction={(el) => scrollObserve(el, 'service-1')}>
+<ServicesSection scrollObserveAction={(el) => scrollObserve(el, 'service-1')} color={accentColor1}>
 	<svelte:fragment slot="type">
 		<h2 class="services-page-h2">Digital infrastructure</h2>
 		<p>
@@ -134,7 +135,7 @@
 	</svelte:fragment>
 </ServicesSection>
 <div class="section-gap" />
-<ServicesSection scrollObserveAction={(el) => scrollObserve(el, 'service-2')}>
+<ServicesSection scrollObserveAction={(el) => scrollObserve(el, 'service-2')} color={accentColor2}>
 	<svelte:fragment slot="type">
 		<h2 class="services-page-h2">Digital infrastructure</h2>
 		<p>
@@ -208,7 +209,7 @@
 	</svelte:fragment>
 </ServicesSection>
 <div class="section-gap" />
-<ServicesSection scrollObserveAction={(el) => scrollObserve(el, 'service-3')}>
+<ServicesSection scrollObserveAction={(el) => scrollObserve(el, 'service-3')} color={accentColor3}>
 	<svelte:fragment slot="type">
 		<h2 class="services-page-h2">Digital infrastructure</h2>
 		<p>
