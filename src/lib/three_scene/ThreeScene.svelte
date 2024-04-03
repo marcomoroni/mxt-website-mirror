@@ -29,6 +29,9 @@
 		| 'case-study-p2'
 		| 'case-study-p3'
 		| 'services'
+		| 'service-1'
+		| 'service-2'
+		| 'service-3'
 		| 'contacts';
 
 	// This is needed because I need some reactivity that I can't have with implicit Svelte
@@ -43,6 +46,9 @@
 		| 'case-study-p2'
 		| 'case-study-p3'
 		| 'services'
+		| 'service-1'
+		| 'service-2'
+		| 'service-3'
 		| 'contacts'
 	>(state);
 	$: {
@@ -92,11 +98,14 @@
 				),
 				palette: derived(stateStore, ($s) =>
 					match($s)
-						.returnType<'default' | 'dim' | 'hidden'>()
+						.returnType<'default' | 'dim' | 'hidden' | 'service-1' | 'service-2' | 'service-3'>()
 						.with('case-study-p2', () => 'hidden')
 						.with('case-study-p3', () => 'hidden')
 						.with('case-studies-anchor-p3', () => 'dim')
 						.with('case-studies-anchor-p2', () => 'dim')
+						.with('service-1', () => 'service-1')
+						.with('service-2', () => 'service-2')
+						.with('service-3', () => 'service-3')
 						.otherwise(() => 'default')
 				)
 			}
@@ -120,11 +129,14 @@
 				),
 				palette: derived(stateStore, ($s) =>
 					match($s)
-						.returnType<'default' | 'dim' | 'hidden'>()
+						.returnType<'default' | 'dim' | 'hidden' | 'service-1' | 'service-2' | 'service-3'>()
 						.with('case-study-p3', () => 'hidden')
 						.with('case-study-a303', () => 'hidden')
 						.with('case-studies-anchor-a303', () => 'dim')
 						.with('case-studies-anchor-p3', () => 'dim')
+						.with('service-1', () => 'service-1')
+						.with('service-2', () => 'service-2')
+						.with('service-3', () => 'service-3')
 						.otherwise(() => 'default')
 				)
 			}
@@ -151,11 +163,14 @@
 				),
 				palette: derived(stateStore, ($s) =>
 					match($s)
-						.returnType<'default' | 'dim' | 'hidden'>()
+						.returnType<'default' | 'dim' | 'hidden' | 'service-1' | 'service-2' | 'service-3'>()
 						.with('case-study-p2', () => 'hidden')
 						.with('case-study-a303', () => 'hidden')
 						.with('case-studies-anchor-a303', () => 'dim')
 						.with('case-studies-anchor-p2', () => 'dim')
+						.with('service-1', () => 'service-1')
+						.with('service-2', () => 'service-2')
+						.with('service-3', () => 'service-3')
 						.otherwise(() => 'default')
 				)
 			}
@@ -173,7 +188,7 @@
 		camera: {
 			pos: {
 				y: derived(stateStore, ($s) => {
-					if ($s === 'services') {
+					if ($s.startsWith('service')) {
 						return 30;
 					} else if ($s === 'case-studies') {
 						return 7;
@@ -188,7 +203,7 @@
 					}
 				}),
 				z: derived(stateStore, ($s) => {
-					if ($s === 'services') {
+					if ($s.startsWith('service')) {
 						return 0.1;
 					} else if ($s === 'case-studies') {
 						return 32;
@@ -233,7 +248,7 @@
 				})
 			},
 			radius: derived(stateStore, ($s) => {
-				if ($s === 'services') {
+				if ($s.startsWith('service')) {
 					return 4.5;
 				} else if ($s == 'case-studies') {
 					return 8;

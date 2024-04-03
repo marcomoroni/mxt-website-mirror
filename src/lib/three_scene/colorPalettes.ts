@@ -40,9 +40,9 @@ export function colorPalettes() {
 			name: 'dimmed',
 			baseColor: '#F2ECEA',
 			baseShadowColor: '#AAAAAA',
-			accentColor1: (noiseValue: number) => '#E9E2DE',
-			accentColor2: (noiseValue: number) => '#E9E2DE',
-			accentColor3: (noiseValue: number) => '#E9E2DE',
+			accentColor1: (_noiseValue: number) => '#E9E2DE',
+			accentColor2: (_noiseValue: number) => '#E9E2DE',
+			accentColor3: (_noiseValue: number) => '#E9E2DE',
 			accentColor4: '#C0BBB1',
 			highlightColor: '#F9F7F6'
 		},
@@ -50,25 +50,63 @@ export function colorPalettes() {
 			name: 'hidden',
 			baseColor: backgroundColor,
 			baseShadowColor: backgroundColor,
-			accentColor1: (noiseValue: number) => backgroundColor,
-			accentColor2: (noiseValue: number) => backgroundColor,
-			accentColor3: (noiseValue: number) => backgroundColor,
+			accentColor1: (_noiseValue: number) => backgroundColor,
+			accentColor2: (_noiseValue: number) => backgroundColor,
+			accentColor3: (_noiseValue: number) => backgroundColor,
 			accentColor4: backgroundColor,
 			highlightColor: backgroundColor
+		},
+		{
+			name: 'services1',
+			baseColor: accentColor1,
+			baseShadowColor: 'black',
+			accentColor1: (_noiseValue: number) => 'black',
+			accentColor2: (_noiseValue: number) => 'black',
+			accentColor3: (_noiseValue: number) => 'black',
+			accentColor4: accentColor1,
+			highlightColor: 'white'
+		},
+		{
+			name: 'services2',
+			baseColor: accentColor2,
+			baseShadowColor: 'black',
+			accentColor1: (_noiseValue: number) => 'black',
+			accentColor2: (_noiseValue: number) => 'black',
+			accentColor3: (_noiseValue: number) => 'black',
+			accentColor4: accentColor1,
+			highlightColor: 'white'
+		},
+		{
+			name: 'services3',
+			baseColor: accentColor3,
+			baseShadowColor: 'black',
+			accentColor1: (_noiseValue: number) => 'black',
+			accentColor2: (_noiseValue: number) => 'black',
+			accentColor3: (_noiseValue: number) => 'black',
+			accentColor4: accentColor1,
+			highlightColor: 'white'
 		}
 	];
-	const nameToIndex = (name: 'default' | 'dim' | 'hidden') =>
+	const nameToIndex = (
+		name: 'default' | 'dim' | 'hidden' | 'service-1' | 'service-2' | 'service-3'
+	) =>
 		match(name)
 			.with('default', () => 0)
 			.with('dim', () => 1)
 			.with('hidden', () => 2)
+			.with('service-1', () => 3)
+			.with('service-2', () => 4)
+			.with('service-3', () => 5)
 			.exhaustive();
 	const indexToName = (index: number) =>
 		match(index)
-			.returnType<'default' | 'dimmed' | 'hidden'>()
+			.returnType<'default' | 'dim' | 'hidden' | 'service-1' | 'service-2' | 'service-3'>()
 			.with(0, () => 'default')
-			.with(1, () => 'dimmed')
+			.with(1, () => 'dim')
 			.with(2, () => 'hidden')
+			.with(3, () => 'service-1')
+			.with(4, () => 'service-2')
+			.with(5, () => 'service-3')
 			.otherwise(() => {
 				throw new Error('?');
 			});

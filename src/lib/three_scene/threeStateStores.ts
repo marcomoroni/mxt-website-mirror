@@ -4,3 +4,7 @@ import { writable } from 'svelte/store';
 export const caseStudiesPageIntersectingCard = writable<
 	undefined | 'case-studies-anchor-a303' | 'case-studies-anchor-p2' | 'case-studies-anchor-p3'
 >(undefined);
+
+export const servicesPageIntersectingSection = writable<
+	undefined | 'service-1' | 'service-2' | 'service-3'
+>(undefined);
