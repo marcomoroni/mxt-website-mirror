@@ -10,12 +10,24 @@
 	import { crossfade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 	import FocusHighlight from '$lib/FocusHighlight.svelte';
+	import Background from '$lib/background/Background.svelte';
+	import { servicesPageIntersectingSection } from '$lib/background/backgroundStateStore';
 
 	let hoveringHomeLink = false;
 
 	let scrollY: number;
 	$: atTopOfWindow = scrollY <= 70;
 
+	$: backgroundState = match({
+		path: $page.url.pathname,
+		servicesPageIntersectingSection: $servicesPageIntersectingSection
+	})
+		.returnType<'default' | 'services1' | 'services2' | 'services3'>()
+		.with(
+			{ path: '/services/', servicesPageIntersectingSection: P.select() },
+			(s) => s ?? 'default'
+		)
+		.otherwise(() => 'default');
 	$: threeState = match({
 		path: $page.url.pathname,
 		caseStudiesPageIntersectingCard: $caseStudiesPageIntersectingCard
@@ -92,6 +104,8 @@
 <svelte:head>
 	<title>MXT</title>
 </svelte:head>
+
+<Background state={backgroundState} />
 
 <div class="aurora-container" aria-hidden="true">
 	<Aurora visible={!auroraHidden} />
