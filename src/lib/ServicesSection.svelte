@@ -4,33 +4,23 @@
 </script>
 
 <div use:scrollObserveAction class="section">
-	<div class="type-container">
-		<div class="type" style:color>
-			<slot name="type" />
-			<div class="type-bottom-margin" />
-		</div>
+	<div class="type" style:color>
+		<slot name="type" />
+		<div class="type-bottom-margin" />
 	</div>
 </div>
 
 <style>
 	.section {
 		display: grid;
-		--inner-margin: 14px;
-	}
-
-	.type-container {
-		grid-column: 1 / 11;
-		grid-row: 1;
-
-		display: grid;
 		grid-template-columns: repeat(10, 1fr);
 		gap: var(--case-study-margin);
-		margin-left: calc(var(--case-study-margin)+ var(--inner-margin));
-		margin-right: calc(var(--case-study-margin)+ var(--inner-margin));
+		margin-left: var(--case-study-margin);
+		margin-right: var(--case-study-margin);
 	}
 
 	.type {
-		grid-column: 5 / 9;
+		grid-column: 5 / 10;
 		grid-row: 1;
 	}
 
