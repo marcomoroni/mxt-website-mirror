@@ -28,7 +28,7 @@ This project is built on top of [Svelte](https://svelte.dev/) 4.x and [SvelteKit
 
 The main benefits of Svelte are:
 
-- Creating reactive UI.
+- Creating reactive UI
 - Split UI parts in components. These live in their own files and have their own scripts and styles
 - There's no need for Svelte-specific versions of JavaScript libraries, unlike you may need in React for example
 - There's almost no performance overhead to have reactivity, as Svelte compiles your code to insert reactivity rather than shipping a lot of JavaScript code to the client.
@@ -39,6 +39,8 @@ The main benefits of SvelteKit are:
 
 - Persistent page when changing url
 - Easy routing and templating. Routes simply mirror your folder structure.
+
+The Svelte tutorial linked above also includes the [tutorial for SvelteKit](https://learn.svelte.dev/tutorial/introducing-sveltekit).
 
 ### TypeScript
 
