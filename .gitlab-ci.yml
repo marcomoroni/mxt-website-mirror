@@ -7,7 +7,8 @@ variables:
 
 workflow:
   rules:
-  - if: $CI_PIPELINE_SOURCE == "web"
+    # You have to manually trigger a build from the GitLab website.
+    - if: $CI_PIPELINE_SOURCE == "web"
 
 build:
   stage: build
@@ -22,6 +23,8 @@ deploy:
   stage: deploy
   script:
     - $TARGET = ""
+    # If you trigger the build without any flag, the site will be uploaded to http://new-mxt.mxt.co.uk/.
+    # If you instead use the `DEPLOY_TO_PROD` key with value `1` the site will be upladed to https://mxt.co.uk/.
     - >
       if ($DEPLOY_TO_PROD -eq 1) {
         $TARGET = $TARGET_PROD

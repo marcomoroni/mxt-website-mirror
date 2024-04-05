@@ -45,3 +45,7 @@ The Svelte tutorial linked above also includes the [tutorial for SvelteKit](http
 ### TypeScript
 
 The project uses [TypeScript](https://www.typescriptlang.org/) to add type safety to JavaScript.
+
+## Deploying
+
+Refer to the `.gitlab-ci.yml` file.
