@@ -49,3 +49,9 @@ The project uses [TypeScript](https://www.typescriptlang.org/) to add type safet
 ## Deploying
 
 Refer to the `.gitlab-ci.yml` file.
+
+## Keeping it up-to-date
+
+Most dependencies are npm packages, so you can keep them up-to-date simply via npm.
+
+Fonts are not related to npm, so they have to be updated manually.
