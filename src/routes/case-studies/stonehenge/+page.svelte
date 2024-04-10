@@ -1,4 +1,6 @@
 <script lang="ts">
+	import A303GameplayFreeRoaming from '$lib/A303GameplayFreeRoaming.svelte';
+	import A303GameplayGuidedTour from '$lib/A303GameplayGuidedTour.svelte';
 	import A303MapSection from '$lib/A303MapSection.svelte';
 	import CaseStudyLanding from '$lib/CaseStudyLanding.svelte';
 	import FillAspectRatio from '$lib/FillAspectRatio.svelte';
@@ -157,8 +159,18 @@
 			</li>
 		</ul>
 	</div>
-	<div class="gameplay-illustration-1 thin-border" />
-	<div class="gameplay-illustration-2 thin-border" />
+	<div
+		class="gameplay-illustration-1 thin-border"
+		aria-label="An animated illustration explaining how the user can select the virtual environment aspects in any combination."
+	>
+		<A303GameplayFreeRoaming />
+	</div>
+	<div
+		class="gameplay-illustration-2 thin-border"
+		aria-label="An animated illustration explaining how the user can explore the virtual environment following a 'guided tour'."
+	>
+		<A303GameplayGuidedTour />
+	</div>
 	<img
 		class="gameplay-illustration-3"
 		src="/images/HighresScreenshot00001.png"
@@ -327,12 +339,12 @@
 
 	.gameplay-illustration-1 {
 		grid-column: 2 / 6;
-		grid-row: 2;
+		grid-row: 5;
 	}
 
 	.gameplay-illustration-2 {
 		grid-column: 6 / 10;
-		grid-row: 2;
+		grid-row: 5;
 	}
 
 	.gameplay-illustration-1,
@@ -342,17 +354,17 @@
 
 	.gameplay-illustration-3 {
 		grid-column: 2 / 10;
-		grid-row: 3;
+		grid-row: 2;
 	}
 
 	.gameplay-illustration-4 {
 		grid-column: 2 / 10;
-		grid-row: 4;
+		grid-row: 3;
 	}
 
 	.gameplay-illustration-5 {
 		grid-column: 2 / 10;
-		grid-row: 5;
+		grid-row: 4;
 	}
 
 	.section-events {
