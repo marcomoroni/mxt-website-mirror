@@ -1,5 +1,7 @@
 <script lang="ts">
-	import A303MapSection from '$lib/A303MapSection.svelte';
+	import A303GameplayFreeRoaming from '$lib/A303GameplayFreeRoaming.svelte';
+	import A303GameplayGuidedTour from '$lib/A303GameplayGuidedTour.svelte';
+import A303MapSection from '$lib/A303MapSection.svelte';
 	import CaseStudyLanding from '$lib/CaseStudyLanding.svelte';
 	import FillAspectRatio from '$lib/FillAspectRatio.svelte';
 	import StonehengeInUk from '$lib/StonehengeInUk.svelte';
@@ -157,8 +159,12 @@
 			</li>
 		</ul>
 	</div>
-	<div class="gameplay-illustration-1 thin-border" />
-	<div class="gameplay-illustration-2 thin-border" />
+	<div class="gameplay-illustration-1 thin-border">
+		<A303GameplayFreeRoaming />
+	</div>
+	<div class="gameplay-illustration-2 thin-border">
+		<A303GameplayGuidedTour />
+	</div>
 	<img
 		class="gameplay-illustration-3"
 		src="/images/HighresScreenshot00001.png"
