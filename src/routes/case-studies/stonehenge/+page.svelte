@@ -159,10 +159,16 @@
 			</li>
 		</ul>
 	</div>
-	<div class="gameplay-illustration-1 thin-border">
+	<div
+		class="gameplay-illustration-1 thin-border"
+		aria-label="An animated illustration explaining how the user can select the virtual environment aspects in any combination."
+	>
 		<A303GameplayFreeRoaming />
 	</div>
-	<div class="gameplay-illustration-2 thin-border">
+	<div
+		class="gameplay-illustration-2 thin-border"
+		aria-label="An animated illustration explaining how the user can explore the virtual environment following a 'guided tour'."
+	>
 		<A303GameplayGuidedTour />
 	</div>
 	<img

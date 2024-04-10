@@ -24,7 +24,11 @@
 	style:z-index={containerZIndex === undefined ? 'auto' : containerZIndex}
 >
 	{#each choices as choice, i (i)}
-		<div class="choice" style:z-index={textZIndex === undefined ? 'auto' : textZIndex}>
+		<div
+			class="choice"
+			style:z-index={textZIndex === undefined ? 'auto' : textZIndex}
+			aria-hidden="true"
+		>
 			{choice}
 			{#if selected === i}
 				<div in:receive={{ key: 'aaaaa' }} out:send={{ key: 'aaaaa' }} class="selection" />
