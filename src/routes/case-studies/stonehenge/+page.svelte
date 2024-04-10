@@ -1,7 +1,7 @@
 <script lang="ts">
 	import A303GameplayFreeRoaming from '$lib/A303GameplayFreeRoaming.svelte';
 	import A303GameplayGuidedTour from '$lib/A303GameplayGuidedTour.svelte';
-import A303MapSection from '$lib/A303MapSection.svelte';
+	import A303MapSection from '$lib/A303MapSection.svelte';
 	import CaseStudyLanding from '$lib/CaseStudyLanding.svelte';
 	import FillAspectRatio from '$lib/FillAspectRatio.svelte';
 	import StonehengeInUk from '$lib/StonehengeInUk.svelte';
@@ -333,12 +333,12 @@ import A303MapSection from '$lib/A303MapSection.svelte';
 
 	.gameplay-illustration-1 {
 		grid-column: 2 / 6;
-		grid-row: 2;
+		grid-row: 5;
 	}
 
 	.gameplay-illustration-2 {
 		grid-column: 6 / 10;
-		grid-row: 2;
+		grid-row: 5;
 	}
 
 	.gameplay-illustration-1,
@@ -348,17 +348,17 @@ import A303MapSection from '$lib/A303MapSection.svelte';
 
 	.gameplay-illustration-3 {
 		grid-column: 2 / 10;
-		grid-row: 3;
+		grid-row: 2;
 	}
 
 	.gameplay-illustration-4 {
 		grid-column: 2 / 10;
-		grid-row: 4;
+		grid-row: 3;
 	}
 
 	.gameplay-illustration-5 {
 		grid-column: 2 / 10;
-		grid-row: 5;
+		grid-row: 4;
 	}
 
 	.section-events {
