@@ -2,7 +2,6 @@
 	import AccessibleHiddenHeader from '$lib/AccessibleHiddenHeader.svelte';
 	import SecondaryPageLanding from '$lib/SecondaryPageLanding.svelte';
 	import ServicesSection from '$lib/ServicesSection.svelte';
-	import { accentColor1, accentColor2, accentColor3 } from '$lib/cssValues';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
 	import { servicesPageIntersectingSection } from '$lib/three_scene/threeStateStores';
 	import { onMount } from 'svelte';
@@ -61,7 +60,7 @@
 
 <div class="landing-spacer" />
 
-<ServicesSection scrollObserveAction={(el) => scrollObserve(el, 'service-1')} color={accentColor1}>
+<ServicesSection scrollObserveAction={(el) => scrollObserve(el, 'service-1')} color={'#6D6B3E'}>
 	<svelte:fragment slot="type">
 		<h2 class="services-page-h2">Digital infrastructure</h2>
 		<p>
@@ -135,9 +134,9 @@
 	</svelte:fragment>
 </ServicesSection>
 <div class="section-gap" />
-<ServicesSection scrollObserveAction={(el) => scrollObserve(el, 'service-2')} color={accentColor2}>
+<ServicesSection scrollObserveAction={(el) => scrollObserve(el, 'service-2')} color={'#744D2A'}>
 	<svelte:fragment slot="type">
-		<h2 class="services-page-h2">Digital infrastructure</h2>
+		<h2 class="services-page-h2">Research</h2>
 		<p>
 			MXT produce interactive visualisations for Nationally Signficant Infrastructure Projects
 			(NSIPs). Understanding complex scientific and industrial data visualisations in 2D can be
@@ -209,9 +208,9 @@
 	</svelte:fragment>
 </ServicesSection>
 <div class="section-gap" />
-<ServicesSection scrollObserveAction={(el) => scrollObserve(el, 'service-3')} color={accentColor3}>
+<ServicesSection scrollObserveAction={(el) => scrollObserve(el, 'service-3')} color={'#506458'}>
 	<svelte:fragment slot="type">
-		<h2 class="services-page-h2">Digital infrastructure</h2>
+		<h2 class="services-page-h2">Learning and development</h2>
 		<p>
 			MXT produce interactive visualisations for Nationally Signficant Infrastructure Projects
 			(NSIPs). Understanding complex scientific and industrial data visualisations in 2D can be

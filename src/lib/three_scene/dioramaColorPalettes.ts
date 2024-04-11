@@ -27,6 +27,9 @@ export function dioramaColorPalettes() {
 			noiseResult
 		);
 	};
+	const darkAccentColor1 = '#85824D';
+	const darkAccentColor2 = '#996334';
+	const darkAccentColor3 = '#868F87';
 	const list = [
 		{
 			name: 'default',
@@ -62,9 +65,9 @@ export function dioramaColorPalettes() {
 			name: 'services1',
 			baseColor: accentColor1,
 			baseShadowColor: 'black',
-			accentColor1: (_noiseValue: number) => 'black',
-			accentColor2: (_noiseValue: number) => 'black',
-			accentColor3: (_noiseValue: number) => 'black',
+			accentColor1: (_noiseValue: number) => darkAccentColor1,
+			accentColor2: (_noiseValue: number) => darkAccentColor1,
+			accentColor3: (_noiseValue: number) => darkAccentColor1,
 			accentColor4: accentColor1,
 			highlightColor: 'white'
 		},
@@ -72,20 +75,20 @@ export function dioramaColorPalettes() {
 			name: 'services2',
 			baseColor: accentColor2,
 			baseShadowColor: 'black',
-			accentColor1: (_noiseValue: number) => 'black',
-			accentColor2: (_noiseValue: number) => 'black',
-			accentColor3: (_noiseValue: number) => 'black',
-			accentColor4: accentColor1,
+			accentColor1: (_noiseValue: number) => darkAccentColor2,
+			accentColor2: (_noiseValue: number) => darkAccentColor2,
+			accentColor3: (_noiseValue: number) => darkAccentColor2,
+			accentColor4: accentColor2,
 			highlightColor: 'white'
 		},
 		{
 			name: 'services3',
 			baseColor: accentColor3,
 			baseShadowColor: 'black',
-			accentColor1: (_noiseValue: number) => 'black',
-			accentColor2: (_noiseValue: number) => 'black',
-			accentColor3: (_noiseValue: number) => 'black',
-			accentColor4: accentColor1,
+			accentColor1: (_noiseValue: number) => darkAccentColor3,
+			accentColor2: (_noiseValue: number) => darkAccentColor3,
+			accentColor3: (_noiseValue: number) => darkAccentColor3,
+			accentColor4: accentColor3,
 			highlightColor: 'white'
 		}
 	];
