@@ -3,18 +3,27 @@
 	import * as THREE from 'three';
 	import { derived, get, writable, type Unsubscriber } from 'svelte/store';
 	import { P, match } from 'ts-pattern';
-	import { backgroundColor, primaryColor } from '$lib/cssValues';
+	import {
+		accentColor1,
+		accentColor2,
+		accentColor3,
+		backgroundColor,
+		primaryColor
+	} from '$lib/cssValues';
 	import { lerp } from '$lib/lerp';
 	import { toRadians } from '$lib/angleConversions';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 	import { FontLoader, TextGeometry } from 'three/examples/jsm/Addons.js';
 	import { newTextMaterial } from './textMaterial';
-	import { perpetualSmoothDampAngleAnimation, smoothDampAnimation } from '$lib/smoothDamp';
+	import {
+		perpetualSmoothDampAngleAnimation,
+		smoothDampAnimation,
+		smoothDampColorAnimation
+	} from '$lib/smoothDamp';
 	import { newDioramaMaterial } from './dioramaMaterial';
 	import { newFoliageMaterial } from './foliageMaterial';
 	import { degToRad } from 'three/src/math/MathUtils.js';
 	import { dioramaColorPalettes as newDioramaColorPalettes } from './dioramaColorPalettes';
-	import { backgroundColorPalettes as newBackgroundColorPalettes } from './backgroundColorPalettes';
 	import { prefersReducedMotion } from '$lib/prefersReducedMotion';
 
 	const DEV_debugLog = false;
@@ -303,13 +312,12 @@
 				.with('case-study-p3', () => dioramaOwnPolarAngleMultWhenSmall)
 				.otherwise(() => 1)
 		),
-		backgroundPalette: derived(stateStore, ($s) =>
+		backgroundColor: derived(stateStore, ($s) =>
 			match($s)
-				.returnType<'default' | 'service-1' | 'service-2' | 'service-3'>()
-				.with('service-1', () => 'service-1')
-				.with('service-2', () => 'service-2')
-				.with('service-3', () => 'service-3')
-				.otherwise(() => 'default')
+				.with('service-1', () => accentColor1)
+				.with('service-2', () => accentColor2)
+				.with('service-3', () => accentColor3)
+				.otherwise(() => backgroundColor)
 		),
 		// Header by index.
 		headerVisibility: derived(stateStore, ($s) =>
@@ -339,8 +347,6 @@
 	function initThreeScene(canvasEl: HTMLCanvasElement) {
 		const storeUnsubscribers: Array<Unsubscriber> = [];
 
-		const backgroundColorPalettes = newBackgroundColorPalettes();
-
 		const animations = {
 			camera: {
 				pos: {
@@ -366,10 +372,7 @@
 				get(sceneSettings.dioramasOwnPolarAngleMult),
 				0.9
 			),
-			backgroundColorPaletteIndex: smoothDampAnimation(
-				backgroundColorPalettes.nameToIndex(get(sceneSettings.backgroundPalette)),
-				0.3
-			)
+			backgroundColor: smoothDampColorAnimation(get(sceneSettings.backgroundColor), 2.3)
 		};
 
 		// Update every spring store when its associated raw value changes.
@@ -408,10 +411,7 @@
 			)
 		);
 		storeUnsubscribers.push(
-			sceneSettings.backgroundPalette.subscribe(
-				(v) =>
-					(animations.backgroundColorPaletteIndex.target = backgroundColorPalettes.nameToIndex(v))
-			)
+			sceneSettings.backgroundColor.subscribe((v) => (animations.backgroundColor.target = v))
 		);
 
 		// The values of the animations are not applied by the stores themselves. Instead, this function
@@ -583,7 +583,7 @@
 					elapsedTime
 				);
 				diormamaMaterial.setBackgroundColor(new THREE.Color(backgroundColor));
-				diormamaMaterial.setBaseColor(new THREE.Color(interpolatedColors.baseColor));
+				diormamaMaterial.setBaseColor(new THREE.Color(interpolatedColors.baseColor)); // wrong: should use background colour, in an additional layer
 				diormamaMaterial.setBaseColorShadow(new THREE.Color(interpolatedColors.baseShadowColor));
 				diormamaMaterial.setAccentColor1(new THREE.Color(interpolatedColors.accentColor1));
 				diormamaMaterial.setAccentColor2(new THREE.Color(interpolatedColors.accentColor2));
@@ -693,16 +693,11 @@
 			animations.railCircumference.center.z.tick(dt);
 			animations.railCircumference.radius.tick(dt);
 			animations.railCircumference.polarAngleDegAnimatedToClosest.tick(dt);
-			animations.backgroundColorPaletteIndex.tick(dt);
 			animations.dioramasOwnPolarAngleMult.tick(dt);
+			animations.backgroundColor.tick(dt);
 			railCircumference.polarAngleDeg.tick(dt);
 
-			const backgroundColor = new THREE.Color(
-				backgroundColorPalettes.interpolated(
-					animations.backgroundColorPaletteIndex.current
-				).baseColor
-			);
-
+			const backgroundColor = new THREE.Color(animations.backgroundColor.current);
 			scene.background = backgroundColor;
 			applyAnimationValues(camera, railCircumference);
 			dioramaInstances.forEach(
