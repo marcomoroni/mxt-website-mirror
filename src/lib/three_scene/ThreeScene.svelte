@@ -25,6 +25,7 @@
 	import { degToRad } from 'three/src/math/MathUtils.js';
 	import { dioramaColorPalettes as newDioramaColorPalettes } from './dioramaColorPalettes';
 	import { prefersReducedMotion } from '$lib/prefersReducedMotion';
+	import { servicesPropsVisibilityAnimation } from './servicesPropsVisibilityAnimation';
 
 	const DEV_debugLog = false;
 	const FLAG_useHeaders = false;
@@ -186,6 +187,24 @@
 			}
 		}
 	];
+	const servicesPropsData = [
+		{
+			mesh: '/models/Instructor_Diorama2.gltf',
+			ambientOcclusionTextureAndHighlight: '/models/Instructor_AO_mask.png'
+		},
+		{
+			mesh: '/models/Research.gltf',
+			ambientOcclusionTextureAndHighlight: '/models/Research_AO.png',
+			rotationDisplacement: new THREE.Vector3(0, 280, 0),
+			positionDisplacement: new THREE.Vector3(-2, 20, 1.5)
+		},
+		{
+			mesh: '/models/LearnAndDev.gltf',
+			ambientOcclusionTextureAndHighlight: '/models/LearnAndDev_AO.png',
+			rotationDisplacement: new THREE.Vector3(0, 270, 90),
+			positionDisplacement: new THREE.Vector3(0, 8, 9)
+		}
+	];
 	const colorPalettes = newDioramaColorPalettes();
 	const dioramaOwnPolarAngleMultWhenCaseStudyLanding = 0.5;
 	const dioramaOwnPolarAngleMultWhenSmall = 0.28;
@@ -200,8 +219,12 @@
 				y: derived(stateStore, ($s) => {
 					if ($s === 'services') {
 						return 30;
-					} else if ($s.startsWith('service-')) {
-						return 38;
+					} else if ($s === 'service-1') {
+						return 45;
+					} else if ($s === 'service-2') {
+						return 51;
+					} else if ($s === 'service-3') {
+						return 58;
 					} else if ($s === 'case-studies') {
 						return 7;
 					} else if ($s.includes('anchor')) {
@@ -215,8 +238,14 @@
 					}
 				}),
 				z: derived(stateStore, ($s) => {
-					if ($s.startsWith('service')) {
+					if ($s === 'services') {
 						return 0.1;
+					} else if ($s === 'service-1') {
+						return 0.1;
+					} else if ($s === 'service-2') {
+						return 5;
+					} else if ($s === 'service-3') {
+						return 2;
 					} else if ($s === 'case-studies') {
 						return 32;
 					} else if ($s.includes('anchor')) {
@@ -243,8 +272,6 @@
 						return 15;
 					} else if ($s === 'home') {
 						return -3;
-					} else if ($s.startsWith('service-')) {
-						return -8;
 					} else {
 						return 0;
 					}
@@ -319,6 +346,14 @@
 				.with('service-3', () => accentColor3)
 				.otherwise(() => backgroundColor)
 		),
+		servicesProps: derived(stateStore, ($s) =>
+			match($s)
+				.returnType<number | undefined>()
+				.with('service-1', () => 0)
+				.with('service-2', () => 1)
+				.with('service-3', () => 2)
+				.otherwise(() => undefined)
+		),
 		// Header by index.
 		headerVisibility: derived(stateStore, ($s) =>
 			FLAG_useHeaders
@@ -372,7 +407,11 @@
 				get(sceneSettings.dioramasOwnPolarAngleMult),
 				0.9
 			),
-			backgroundColor: smoothDampColorAnimation(get(sceneSettings.backgroundColor), 2.3)
+			backgroundColor: smoothDampColorAnimation(get(sceneSettings.backgroundColor), 2.3),
+			servicesProps: servicesPropsVisibilityAnimation(
+				get(sceneSettings.servicesProps),
+				servicesPropsData.length
+			)
 		};
 
 		// Update every spring store when its associated raw value changes.
@@ -412,6 +451,9 @@
 		);
 		storeUnsubscribers.push(
 			sceneSettings.backgroundColor.subscribe((v) => (animations.backgroundColor.target = v))
+		);
+		storeUnsubscribers.push(
+			sceneSettings.servicesProps.subscribe((v) => animations.servicesProps.setVisibleItem(v))
 		);
 
 		// The values of the animations are not applied by the stores themselves. Instead, this function
@@ -615,6 +657,68 @@
 			};
 		});
 
+		const servicesPropInstances = servicesPropsData.map((data, i) => {
+			const material = new THREE.MeshNormalMaterial({
+				transparent: true,
+				opacity: 0
+				// depthWrite: false
+			});
+			// const material = newDioramaMaterial(data.ambientOcclusionTextureAndHighlight);
+			let object3D: undefined | THREE.Object3D = undefined;
+			const loader = new GLTFLoader();
+			loader.load(data.mesh, function (gltf) {
+				const rootGroup = new THREE.Group();
+
+				const transformDisplGroup = new THREE.Group();
+				const posDispl = data.positionDisplacement ?? new THREE.Vector3(0, 0, 0);
+				transformDisplGroup.position.x = posDispl.x;
+				transformDisplGroup.position.y = posDispl.y;
+				transformDisplGroup.position.z = posDispl.z;
+				const rotDispl = data.rotationDisplacement ?? new THREE.Vector3(0, 0, 0);
+				transformDisplGroup.rotation.x = degToRad(rotDispl.x);
+				transformDisplGroup.rotation.y = degToRad(rotDispl.y);
+				transformDisplGroup.rotation.z = degToRad(rotDispl.z);
+				rootGroup.add(transformDisplGroup);
+
+				const gltfScene = gltf.scene;
+				gltfScene.scale.set(gltfScaleMult, gltfScaleMult, gltfScaleMult);
+				gltfScene.traverseVisible((child) => {
+					if (child instanceof THREE.Mesh) {
+						// child.material = material.material;
+						child.material = material;
+					}
+				});
+				transformDisplGroup.add(gltfScene);
+
+				object3D = rootGroup;
+				scene.add(object3D);
+			});
+
+			const tick = (dt: DOMHighResTimeStamp, backgroundColor: THREE.Color) => {
+				let opacity = animations.servicesProps.getVisibility(i);
+
+				// Hack: there's some z sorting issues which make some transpasparent objects clip others even
+				// when they are not visible. To solve this I'm focing the object not to not be visible if the opacity
+				// is almost 0.
+				if (opacity < 0.001) {
+					material.visible = false;
+				} else {
+					material.visible = true;
+				}
+
+				material.opacity = opacity;
+
+				// material.setBackgroundColor(new THREE.Color(backgroundColor));
+			};
+
+			return {
+				tick,
+				dispose: () => {
+					material.dispose();
+				}
+			};
+		});
+
 		let headerInstances: undefined | Array<{ dispose: () => void; tick: (dt: number) => void }> =
 			undefined;
 		new FontLoader().load('/fontsJson/Figtree_Freeze.json', function (font) {
@@ -695,6 +799,7 @@
 			animations.railCircumference.polarAngleDegAnimatedToClosest.tick(dt);
 			animations.dioramasOwnPolarAngleMult.tick(dt);
 			animations.backgroundColor.tick(dt);
+			animations.servicesProps.tick(dt);
 			railCircumference.polarAngleDeg.tick(dt);
 
 			const backgroundColor = new THREE.Color(animations.backgroundColor.current);
@@ -719,6 +824,7 @@
 					}
 				}
 			);
+			servicesPropInstances.forEach(({ tick }) => tick(dt, backgroundColor));
 			headerInstances?.forEach(({ tick }) => tick(dt));
 			camera.lookAt(0, animations.camera.lookAt.y.current, 0);
 
@@ -735,6 +841,7 @@
 				shouldRequestNewAnimationFrame = false;
 				storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
 				dioramaInstances.forEach(({ dispose }) => dispose());
+				servicesPropInstances.forEach(({ dispose }) => dispose());
 				headerInstances?.forEach(({ dispose }) => dispose());
 				renderer.dispose();
 				renderer.forceContextLoss();

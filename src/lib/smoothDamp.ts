@@ -60,13 +60,19 @@ export function smoothDampAngle(
 	return smoothDamp(current, target, currentVelocity, smoothTime, deltaTime, maxSpeed);
 }
 
+export type SmoothDampAnimation = {
+	target: number;
+	get current(): number;
+	tick(deltaTime: DOMHighResTimeStamp): void;
+};
+
 // Managed state for a smoothdamp animation.
 // Call `tick()` at every frame.
 export function smoothDampAnimation(
 	initialValue: number,
 	smoothTime: number,
 	maxSpeed?: undefined | number
-) {
+): SmoothDampAnimation {
 	let current = initialValue;
 	let target = initialValue;
 	let velocity = 0;
