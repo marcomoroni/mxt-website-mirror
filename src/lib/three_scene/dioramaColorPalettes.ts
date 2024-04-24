@@ -8,9 +8,8 @@ import {
 import { match } from 'ts-pattern';
 import * as d3 from 'd3';
 import { perlin1d } from '$lib/perlin';
+import { map } from '$lib/map';
 
-function map(value: number, min1: number, max1: number, min2: number, max2: number) {
-	return min2 + ((value - min1) * (max2 - min2)) / (max1 - min1);
 }
 
 // --- really need to use css for interpolation now that colours jump around
