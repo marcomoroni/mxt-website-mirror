@@ -2,6 +2,7 @@
 	import AccessibleHiddenHeader from '$lib/AccessibleHiddenHeader.svelte';
 	import CaseStudyTitleBox from '$lib/CaseStudyTitleBox.svelte';
 	import FocusHighlight from '$lib/FocusHighlight.svelte';
+	import SecondaryPageLanding from '$lib/SecondaryPageLanding.svelte';
 	import { caseStudiesData } from '$lib/caseStudiesData';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
 	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
@@ -63,7 +64,11 @@
 
 <AccessibleHiddenHeader text="Case studies" />
 
-<div class="landing" />
+<SecondaryPageLanding
+	text={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id venenatis sapien. Sed maximus nisi quis nibh imperdiet, id efficitur velit eleifend. Curabitur euismod magna ut vehicula accumsan. Integer tempus luctus magna a placerat. Vivamus at luctus nulla. Morbi tristique sapien odio, in porttitor metus interdum quis.'}
+/>
+
+<div class="landing-spacer" />
 
 <ul class="case-studies-list">
 	{#each caseStudiesData as caseStudy}
@@ -89,9 +94,8 @@
 </ul>
 
 <style>
-	.landing {
-		height: 100dvh;
-		width: 100%;
+	.landing-spacer {
+		height: 100px;
 	}
 
 	.case-study-card {
