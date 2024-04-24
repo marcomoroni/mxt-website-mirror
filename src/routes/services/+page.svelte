@@ -1,5 +1,6 @@
 <script lang="ts">
 	import AccessibleHiddenHeader from '$lib/AccessibleHiddenHeader.svelte';
+	import SecondaryPageLanding from '$lib/SecondaryPageLanding.svelte';
 	import ServicesSection from '$lib/ServicesSection.svelte';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
 </script>
@@ -10,7 +11,9 @@
 
 <AccessibleHiddenHeader text="Services" />
 
-<div class="landing" />
+<SecondaryPageLanding text={'-------------------------'} />
+
+<div class="landing-spacer" />
 
 <ServicesSection cssBackgroundColor={'white'}>
 	<svelte:fragment slot="type">
@@ -96,9 +99,8 @@
 <div class="bottom-page-spacer" />
 
 <style>
-	.landing {
-		height: 100dvh;
-		width: 100%;
+	.landing-spacer {
+		height: 120px;
 	}
 
 	.section-gap {
