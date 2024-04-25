@@ -1,12 +1,15 @@
 <script lang="ts">
 	import AccessibleHiddenHeader from '$lib/AccessibleHiddenHeader.svelte';
 	import SecondaryPageLanding from '$lib/SecondaryPageLanding.svelte';
-	import ServicesSection from '$lib/ServicesSection.svelte';
-	import ServicesSectionSideBarEntry from '$lib/ServicesSectionSideBarEntry.svelte';
+	import Section from '$lib/services_page/Section.svelte';
+	import SideBarEntry from '$lib/services_page/SideBarEntry.svelte';
 	import { accentColor2, accentColor3 } from '$lib/cssValues';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
 	import { servicesPageIntersectingSection } from '$lib/three_scene/threeStateStores';
 	import { onMount } from 'svelte';
+	import P from '$lib/services_page/P.svelte';
+	import H3 from '$lib/services_page/H3.svelte';
+	import H4 from '$lib/services_page/H4.svelte';
 
 	let scrollY: number;
 	let windowHeight: number;
@@ -81,7 +84,7 @@
 			<div class="fill" />
 			<div class="list">
 				{#each sideBarEntries as entry}
-					<ServicesSectionSideBarEntry
+					<SideBarEntry
 						title={entry.title}
 						subtitle={entry.subtitle}
 						backgroundColor={entry.backgroundColor}
@@ -98,19 +101,241 @@
 		/>
 		<div class="landing-spacer" />
 		<div id="s1" class="section">
-			<ServicesSection scrollObserveAction={(el) => scrollObserve(el, 'service-1')}>
-				<svelte:fragment slot="type">section 1</svelte:fragment>
-			</ServicesSection>
+			<Section scrollObserveAction={(el) => scrollObserve(el, 'service-1')}>
+				<svelte:fragment slot="type">
+					sticky title that needs to be visible on mobile... section 1...
+					<P>
+						MXT produce interactive visualisations for Nationally Significant Infrastructure
+						Projects (NSIPs). Understanding planning applications can be challenging. Our work is to
+						transform your existing data into intuitive and immersive experiences for diverse
+						stakeholders from public and policy-making to, design, engineering and operational
+						audiences alike.
+					</P>
+					<H3>Benefits across the project lifecycle</H3>
+					<P>
+						Visualisations are cost effective when they recycle existing data and build digital
+						assets that add value across the project lifecycle, from public and scientific
+						communication to decision making and operational simulations.
+					</P>
+					<H4>Digital Communication</H4>
+					<P>
+						Engagement is more impactful when you can demonstrate your thinking visually, audibly
+						and experientially. Our tools empower customers to explore and learn about a project for
+						themselves. Our free-to-roam and data-led environments give assurance that what they see
+						is a transparent reflection of what’s to come.
+					</P>
+					<H4>Operational Simulations</H4>
+					<P>
+						By providing a safe environment to interact with digital assets, operations are able to
+						address uncertainty in strategic decision making, and build immersive training
+						programmes with capability and confidence, before moving to a real-world, live
+						environment.
+					</P>
+					<H3>Designed for reliability at speed</H3>
+					<P>
+						Our semi-automated approach combines geospatial and physical sciences with game and film
+						technologies to generates assurable environments, deliverable with speed.
+					</P>
+					<H4>Natural Environment</H4>
+					<P>
+						MXT are specialists at transforming geographic information into natural and believable
+						computer generated imagery.
+					</P>
+					<P>
+						Our environmental workflow incorporates data from an environmental statement with
+						national surveys by Defra, UKCEH and Ordinance Survey.
+					</P>
+					<P>
+						Combined, these resources underpin the generation of natural landscapes that visualises,
+						terrain, land use, ecology and archaeology information.
+					</P>
+					<P>--- images ---</P>
+					<H4>Built Environment</H4>
+					<P>
+						We specialise in preparing our client's building information modelling (BIM) for
+						interactive use, collaborating with engineers and architects to realise a project’s
+						design ambitions for public consultation. Post-decision, we efficiently handle detailed
+						design updates and maintain value during delivery by utilizing our environments and
+						assets in operational contexts.
+					</P>
+					<H4>Road User Modelling</H4>
+					<P>
+						Transport schemes are designed to make customer journeys safer, greener, quicker and
+						more reliable. The most impactful way of communicating those benefits is to show those
+						customers how their journey’s will change.
+					</P>
+					<P>--- images ---</P>
+					<P>
+						To-date MXT are the only UK government provider to marry building information and
+						traffic modelling to give customers a complete and immersive view of the improved
+						effects from a scheme.
+					</P>
+					<P>
+						Our interactive mobility simulations ingest standard two-dimensional, origin-destination
+						data and return believable, three-dimensional results; faithfully recreating the
+						physics, graphics and traffic management of real transport environments.
+					</P>
+					<P>--- Download technical specification here ---</P>
+				</svelte:fragment>
+			</Section>
 		</div>
 		<div id="s2" class="section">
-			<ServicesSection scrollObserveAction={(el) => scrollObserve(el, 'service-2')}>
-				<svelte:fragment slot="type">section 2</svelte:fragment>
-			</ServicesSection>
+			<Section scrollObserveAction={(el) => scrollObserve(el, 'service-2')}>
+				<svelte:fragment slot="type">
+					section 2
+					<P>
+						MXT produce interactive visualisations for Nationally Significant Infrastructure
+						Projects (NSIPs). Understanding planning applications can be challenging. Our work is to
+						transform your existing data into intuitive and immersive experiences for diverse
+						stakeholders from public and policy-making to, design, engineering and operational
+						audiences alike.
+					</P>
+					<H3>Benefits across the project lifecycle</H3>
+					<P>
+						Visualisations are cost effective when they recycle existing data and build digital
+						assets that add value across the project lifecycle, from public and scientific
+						communication to decision making and operational simulations.
+					</P>
+					<H4>Digital Communication</H4>
+					<P>
+						Engagement is more impactful when you can demonstrate your thinking visually, audibly
+						and experientially. Our tools empower customers to explore and learn about a project for
+						themselves. Our free-to-roam and data-led environments give assurance that what they see
+						is a transparent reflection of what’s to come.
+					</P>
+					<H4>Operational Simulations</H4>
+					<P>
+						By providing a safe environment to interact with digital assets, operations are able to
+						address uncertainty in strategic decision making, and build immersive training
+						programmes with capability and confidence, before moving to a real-world, live
+						environment.
+					</P>
+					<H3>Designed for reliability at speed</H3>
+					<P>
+						Our semi-automated approach combines geospatial and physical sciences with game and film
+						technologies to generates assurable environments, deliverable with speed.
+					</P>
+					<H4>Natural Environment</H4>
+					<P>
+						MXT are specialists at transforming geographic information into natural and believable
+						computer generated imagery.
+					</P>
+					<P>
+						Our environmental workflow incorporates data from an environmental statement with
+						national surveys by Defra, UKCEH and Ordinance Survey.
+					</P>
+					<P>
+						Combined, these resources underpin the generation of natural landscapes that visualises,
+						terrain, land use, ecology and archaeology information.
+					</P>
+					<P>--- images ---</P>
+					<H4>Built Environment</H4>
+					<P>
+						We specialise in preparing our client's building information modelling (BIM) for
+						interactive use, collaborating with engineers and architects to realise a project’s
+						design ambitions for public consultation. Post-decision, we efficiently handle detailed
+						design updates and maintain value during delivery by utilizing our environments and
+						assets in operational contexts.
+					</P>
+					<H4>Road User Modelling</H4>
+					<P>
+						Transport schemes are designed to make customer journeys safer, greener, quicker and
+						more reliable. The most impactful way of communicating those benefits is to show those
+						customers how their journey’s will change.
+					</P>
+					<P>--- images ---</P>
+					<P>
+						To-date MXT are the only UK government provider to marry building information and
+						traffic modelling to give customers a complete and immersive view of the improved
+						effects from a scheme.
+					</P>
+					<P>
+						Our interactive mobility simulations ingest standard two-dimensional, origin-destination
+						data and return believable, three-dimensional results; faithfully recreating the
+						physics, graphics and traffic management of real transport environments.
+					</P>
+					<P>--- Download technical specification here ---</P>
+				</svelte:fragment>
+			</Section>
 		</div>
 		<div id="s3" class="section">
-			<ServicesSection scrollObserveAction={(el) => scrollObserve(el, 'service-3')}>
-				<svelte:fragment slot="type">section 3</svelte:fragment>
-			</ServicesSection>
+			<Section scrollObserveAction={(el) => scrollObserve(el, 'service-3')}>
+				<svelte:fragment slot="type">
+					section 3
+					<P>
+						MXT produce interactive visualisations for Nationally Significant Infrastructure
+						Projects (NSIPs). Understanding planning applications can be challenging. Our work is to
+						transform your existing data into intuitive and immersive experiences for diverse
+						stakeholders from public and policy-making to, design, engineering and operational
+						audiences alike.
+					</P>
+					<H3>Benefits across the project lifecycle</H3>
+					<P>
+						Visualisations are cost effective when they recycle existing data and build digital
+						assets that add value across the project lifecycle, from public and scientific
+						communication to decision making and operational simulations.
+					</P>
+					<H4>Digital Communication</H4>
+					<P>
+						Engagement is more impactful when you can demonstrate your thinking visually, audibly
+						and experientially. Our tools empower customers to explore and learn about a project for
+						themselves. Our free-to-roam and data-led environments give assurance that what they see
+						is a transparent reflection of what’s to come.
+					</P>
+					<H4>Operational Simulations</H4>
+					<P>
+						By providing a safe environment to interact with digital assets, operations are able to
+						address uncertainty in strategic decision making, and build immersive training
+						programmes with capability and confidence, before moving to a real-world, live
+						environment.
+					</P>
+					<H3>Designed for reliability at speed</H3>
+					<P>
+						Our semi-automated approach combines geospatial and physical sciences with game and film
+						technologies to generates assurable environments, deliverable with speed.
+					</P>
+					<H4>Natural Environment</H4>
+					<P>
+						MXT are specialists at transforming geographic information into natural and believable
+						computer generated imagery.
+					</P>
+					<P>
+						Our environmental workflow incorporates data from an environmental statement with
+						national surveys by Defra, UKCEH and Ordinance Survey.
+					</P>
+					<P>
+						Combined, these resources underpin the generation of natural landscapes that visualises,
+						terrain, land use, ecology and archaeology information.
+					</P>
+					<P>--- images ---</P>
+					<H4>Built Environment</H4>
+					<P>
+						We specialise in preparing our client's building information modelling (BIM) for
+						interactive use, collaborating with engineers and architects to realise a project’s
+						design ambitions for public consultation. Post-decision, we efficiently handle detailed
+						design updates and maintain value during delivery by utilizing our environments and
+						assets in operational contexts.
+					</P>
+					<H4>Road User Modelling</H4>
+					<P>
+						Transport schemes are designed to make customer journeys safer, greener, quicker and
+						more reliable. The most impactful way of communicating those benefits is to show those
+						customers how their journey’s will change.
+					</P>
+					<P>--- images ---</P>
+					<P>
+						To-date MXT are the only UK government provider to marry building information and
+						traffic modelling to give customers a complete and immersive view of the improved
+						effects from a scheme.
+					</P>
+					<P>
+						Our interactive mobility simulations ingest standard two-dimensional, origin-destination
+						data and return believable, three-dimensional results; faithfully recreating the
+						physics, graphics and traffic management of real transport environments.
+					</P>
+					<P>--- Download technical specification here ---</P>
+				</svelte:fragment>
+			</Section>
 		</div>
 	</div>
 </div>
@@ -176,5 +401,7 @@
 	.section {
 		min-height: 100dvh;
 		border: 2px solid green;
+		padding-left: 70px;
+		padding-right: 70px;
 	}
 </style>

@@ -8,6 +8,6 @@
 
 <style>
 	.container {
-		background-color: aquamarine;
+		padding-bottom: 100px;
 	}
 </style>

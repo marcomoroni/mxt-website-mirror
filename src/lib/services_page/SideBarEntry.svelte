@@ -26,9 +26,9 @@
 	}
 
 	.title {
-		font-size: 28px;
+		font-size: 30px;
 		text-wrap: balance;
-		margin-bottom: 20px;
+		margin-bottom: 16px;
 		font-weight: 700;
 	}
 
@@ -36,5 +36,6 @@
 		font-size: 20px;
 		text-wrap: balance;
 		opacity: 0.8;
+		font-weight: 550;
 	}
 </style>
