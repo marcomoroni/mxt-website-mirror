@@ -10,8 +10,6 @@ import * as d3 from 'd3';
 import { perlin1d } from '$lib/perlin';
 import { map } from '$lib/map';
 
-}
-
 // --- really need to use css for interpolation now that colours jump around
 
 export function dioramaColorPalettes() {
