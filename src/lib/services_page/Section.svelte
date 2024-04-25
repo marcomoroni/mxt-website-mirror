@@ -17,9 +17,11 @@
 <div use:scrollObserveAction class="container">
 	<div class="small-screen-header">
 		<div class="header-solid-background" style:background-color={$backgroundColorStore}>
-			<div class="header-content">
-				<h2 class="title" class:fade={currentState !== 'current'}>{title}</h2>
-				<p class="subtitle" class:fade={currentState !== 'current'}>{subtitle}</p>
+			<div class="header-content-center">
+				<div class="header-content">
+					<h2 class="title" class:fade={currentState !== 'current'}>{title}</h2>
+					<p class="subtitle" class:fade={currentState !== 'current'}>{subtitle}</p>
+				</div>
 			</div>
 		</div>
 		<div
@@ -73,7 +75,7 @@
 	}
 
 	.type,
-	.header-solid-background {
+	.header-content-center {
 		padding-left: 70px;
 		padding-right: 70px;
 		max-width: 800px;
@@ -87,7 +89,7 @@
 		}
 
 		.type,
-		.header-solid-background {
+		.header-content-center {
 			padding-left: var(--horizontal-margin);
 			padding-right: var(--horizontal-margin);
 		}
