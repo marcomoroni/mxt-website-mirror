@@ -7,7 +7,6 @@
 	export let color: string;
 	export let scrollTo: string;
 	export let associatedState: 'service-1' | 'service-2' | 'service-3';
-	const scrollOffset = 40;
 
 	$: currentState = match($servicesPageIntersectingSection)
 		.with(undefined, () => 'none')
@@ -15,13 +14,7 @@
 		.otherwise(() => 'another');
 
 	function scrollHere() {
-		window.scrollTo({
-			behavior: 'smooth',
-			top:
-				document.getElementById(scrollTo)!.getBoundingClientRect().top -
-				document.body.getBoundingClientRect().top -
-				scrollOffset
-		});
+		document.getElementById(scrollTo)!.scrollIntoView({ behavior: 'smooth' });
 	}
 </script>
 
@@ -60,15 +53,14 @@
 		padding-top: 26px;
 		padding-bottom: 27px;
 		border-left: 4px solid var(--color-primary);
-		transition: 0.3s var(--ease);
 	}
 
 	.title {
-		font-size: 30px;
+		font-size: 36px;
 		text-wrap: balance;
 		margin-bottom: 16px;
-		font-weight: 700;
-		transition: 0.3s var(--ease);
+		font-weight: 600;
+		line-height: 1.3;
 	}
 
 	.subtitle {
@@ -76,6 +68,5 @@
 		text-wrap: balance;
 		opacity: 0.8;
 		font-weight: 550;
-		transition: opacity 0.3s var(--ease);
 	}
 </style>

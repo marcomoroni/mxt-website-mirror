@@ -7,6 +7,7 @@
 	export let associatedState: 'service-1' | 'service-2' | 'service-3';
 	export let title: string;
 	export let subtitle: string;
+	export let isLast: boolean;
 
 	$: currentState = match($servicesPageIntersectingSection)
 		.with(undefined, () => 'none')
@@ -29,7 +30,7 @@
 			style:background={`linear-gradient(in oklab, ${$backgroundColorStore}, color-mix(in oklab, ${$backgroundColorStore}, transparent 100%))`}
 		/>
 	</div>
-	<div class="type" class:fade={currentState !== 'current'}>
+	<div class="type" class:fade={currentState !== 'current'} class:small-padding-bottom={isLast}>
 		<slot name="type" />
 	</div>
 </div>
@@ -56,22 +57,28 @@
 	}
 
 	.title {
-		font-size: 30px;
+		font-size: 36px;
 		text-wrap: balance;
 		margin-top: 26px;
 		margin-bottom: 16px;
 		font-weight: 700;
+		line-height: 1.3;
 	}
 
 	.subtitle {
 		font-size: 20px;
 		text-wrap: balance;
 		opacity: 0.8;
-		font-weight: 550;
+		font-weight: 600;
 	}
 
 	.type {
-		padding-bottom: 180px;
+		padding-bottom: 130px;
+		transition: 0.5s var(--ease);
+	}
+
+	.small-padding-bottom {
+		padding-bottom: 100px;
 	}
 
 	.type,
@@ -88,6 +95,14 @@
 			display: block;
 		}
 
+		.type {
+			padding-bottom: 170px;
+		}
+
+		.small-padding-bottom {
+			padding-bottom: 70px;
+		}
+
 		.type,
 		.header-content-center {
 			padding-left: var(--horizontal-margin);
@@ -96,16 +111,12 @@
 	}
 
 	@media (min-width: 1000px) {
-		.title.fade {
-			opacity: 0.5;
-		}
-
-		.subtitle.fade {
-			opacity: 0.3;
+		.container {
+			padding-top: 40px;
 		}
 
 		.type.fade {
-			opacity: 0.5;
+			opacity: 0;
 		}
 	}
 </style>

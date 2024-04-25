@@ -94,7 +94,6 @@
 <div class="two-col-container">
 	<div class="left-col">
 		<div class="left-bar">
-			<!-- <div class="fill" /> -->
 			<div class="list">
 				{#each sectionsData as entry}
 					<SideBarEntry
@@ -106,7 +105,6 @@
 					/>
 				{/each}
 			</div>
-			<!-- <div class="h-gap" /> -->
 		</div>
 	</div>
 	<div class="right-col">
@@ -116,6 +114,7 @@
 				associatedState={sectionsData[0].associatedState}
 				title={sectionsData[0].title}
 				subtitle={sectionsData[0].subtitle}
+				isLast={false}
 			>
 				<svelte:fragment slot="type">
 					<P>
@@ -199,6 +198,7 @@
 				associatedState={sectionsData[1].associatedState}
 				title={sectionsData[1].title}
 				subtitle={sectionsData[1].subtitle}
+				isLast={false}
 			>
 				<svelte:fragment slot="type">
 					<P>
@@ -282,6 +282,7 @@
 				associatedState={sectionsData[2].associatedState}
 				title={sectionsData[2].title}
 				subtitle={sectionsData[2].subtitle}
+				isLast={true}
 			>
 				<svelte:fragment slot="type">
 					<P>
@@ -364,7 +365,7 @@
 
 <style>
 	.landing-spacer {
-		height: 120px;
+		height: 150px;
 	}
 
 	.two-col-container {
@@ -395,19 +396,9 @@
 		scrollbar-width: none;
 	}
 
-	.h-gap {
-		flex-basis: var(--horizontal-margin);
-		flex-shrink: 0;
-	}
-
 	.left-bar::-webkit-scrollbar {
 		display: none;
 	}
-
-	/* .fill {
-		flex-grow: 1;
-		min-height: calc(var(--nav-bar-height) + 10px);
-	} */
 
 	.list {
 		flex-shrink: 0;
