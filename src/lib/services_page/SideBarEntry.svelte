@@ -27,12 +27,27 @@
 
 <button
 	class="container"
-	style:color={`color-mix(in srgb, ${color} 70%, var(--color-background))`}
-	class:highlight={currentState === 'current'}
+	style:background-color={currentState === 'current'
+		? `color-mix(in oklab, var(--color-primary) 30%, ${color})`
+		: undefined}
 	on:click={scrollHere}
 >
-	<div class="title" class:fade={currentState === 'another'}>{title}</div>
-	<div class="subtitle" class:fade={currentState === 'another'}>{subtitle}</div>
+	<div
+		class="title"
+		style:color={currentState === 'current'
+			? `color-mix(in oklab, white 90%, ${color})`
+			: undefined}
+	>
+		{title}
+	</div>
+	<div
+		class="subtitle"
+		style:color={currentState === 'current'
+			? `color-mix(in oklab, white 90%, ${color})`
+			: undefined}
+	>
+		{subtitle}
+	</div>
 </button>
 
 <style>
@@ -40,16 +55,12 @@
 		scroll-margin-top: 40px;
 		display: flex;
 		flex-direction: column;
-		padding-left: 26px;
+		padding-left: 22px;
 		padding-right: 26px;
 		padding-top: 26px;
 		padding-bottom: 27px;
-		background-color: color-mix(in srgb, var(--color-primary) 90%, var(--color-background));
-		transition: background-color 0.3s var(--ease);
-	}
-
-	.container.highlight {
-		background-color: var(--color-primary);
+		border-left: 4px solid var(--color-primary);
+		transition: 0.3s var(--ease);
 	}
 
 	.title {
@@ -57,11 +68,7 @@
 		text-wrap: balance;
 		margin-bottom: 16px;
 		font-weight: 700;
-		transition: opacity 0.3s var(--ease);
-	}
-
-	.title.fade {
-		opacity: 0.5;
+		transition: 0.3s var(--ease);
 	}
 
 	.subtitle {
@@ -70,9 +77,5 @@
 		opacity: 0.8;
 		font-weight: 550;
 		transition: opacity 0.3s var(--ease);
-	}
-
-	.subtitle.fade {
-		opacity: 0.4;
 	}
 </style>

@@ -86,10 +86,15 @@
 
 <AccessibleHiddenHeader text="Services" />
 
+<SecondaryPageLanding
+	text={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id venenatis sapien. Sed maximus nisi quis nibh imperdiet, id efficitur velit eleifend. Curabitur euismod magna ut vehicula accumsan. Integer tempus luctus magna a placerat. Vivamus at luctus nulla. Morbi tristique sapien odio, in porttitor metus interdum quis.'}
+/>
+<div class="landing-spacer" />
+
 <div class="two-col-container">
 	<div class="left-col">
 		<div class="left-bar">
-			<div class="fill" />
+			<!-- <div class="fill" /> -->
 			<div class="list">
 				{#each sectionsData as entry}
 					<SideBarEntry
@@ -101,14 +106,10 @@
 					/>
 				{/each}
 			</div>
-			<div class="h-gap" />
+			<!-- <div class="h-gap" /> -->
 		</div>
 	</div>
 	<div class="right-col">
-		<SecondaryPageLanding
-			text={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id venenatis sapien. Sed maximus nisi quis nibh imperdiet, id efficitur velit eleifend. Curabitur euismod magna ut vehicula accumsan. Integer tempus luctus magna a placerat. Vivamus at luctus nulla. Morbi tristique sapien odio, in porttitor metus interdum quis.'}
-		/>
-		<div class="landing-spacer" />
 		<div id="s1" class="section">
 			<Section
 				scrollObserveAction={(el) => scrollObserve(el, 'service-1')}
@@ -403,10 +404,10 @@
 		display: none;
 	}
 
-	.fill {
+	/* .fill {
 		flex-grow: 1;
 		min-height: calc(var(--nav-bar-height) + 10px);
-	}
+	} */
 
 	.list {
 		flex-shrink: 0;
@@ -415,6 +416,9 @@
 		grid-auto-rows: 1fr;
 		gap: 20px;
 		margin-left: var(--horizontal-margin);
+		position: sticky;
+		align-self: start;
+		top: var(--horizontal-margin);
 	}
 
 	.right-col {
