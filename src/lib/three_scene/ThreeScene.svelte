@@ -28,6 +28,7 @@
 	import { servicesPropsVisibilityAnimation } from './servicesPropsVisibilityAnimation';
 	import { newServicesPropMaterial } from './servicesPropMaterial';
 	import { map } from '$lib/map';
+	import { backgroundColor as backgroundColorStore } from '$lib/three_scene/threeStateStores';
 
 	const DEV_debugLog = false;
 	const FLAG_useHeaders = false;
@@ -842,6 +843,8 @@
 			servicesPropInstances.forEach(({ tick }) => tick(dt, backgroundColor));
 			headerInstances?.forEach(({ tick }) => tick(dt));
 			camera.lookAt(0, animations.camera.lookAt.y.current, 0);
+
+			backgroundColorStore.set(backgroundColor.getStyle());
 
 			renderer.render(scene, camera);
 		};

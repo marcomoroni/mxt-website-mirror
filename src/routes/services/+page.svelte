@@ -52,7 +52,7 @@
 		sections.push({ el, sectionStateForBackground });
 	}
 
-	const sideBarEntries = [
+	const sectionsData = [
 		{
 			title: 'Digital Infrastructure',
 			subtitle:
@@ -91,7 +91,7 @@
 		<div class="left-bar">
 			<div class="fill" />
 			<div class="list">
-				{#each sideBarEntries as entry}
+				{#each sectionsData as entry}
 					<SideBarEntry
 						title={entry.title}
 						subtitle={entry.subtitle}
@@ -112,10 +112,11 @@
 		<div id="s1" class="section">
 			<Section
 				scrollObserveAction={(el) => scrollObserve(el, 'service-1')}
-				associatedState="service-1"
+				associatedState={sectionsData[0].associatedState}
+				title={sectionsData[0].title}
+				subtitle={sectionsData[0].subtitle}
 			>
 				<svelte:fragment slot="type">
-					sticky title that needs to be visible on mobile... section 1...
 					<P>
 						MXT produce interactive visualisations for Nationally Significant Infrastructure
 						Projects (NSIPs). Understanding planning applications can be challenging. Our work is to
@@ -194,10 +195,11 @@
 		<div id="s2" class="section">
 			<Section
 				scrollObserveAction={(el) => scrollObserve(el, 'service-2')}
-				associatedState="service-2"
+				associatedState={sectionsData[1].associatedState}
+				title={sectionsData[1].title}
+				subtitle={sectionsData[1].subtitle}
 			>
 				<svelte:fragment slot="type">
-					section 2
 					<P>
 						MXT produce interactive visualisations for Nationally Significant Infrastructure
 						Projects (NSIPs). Understanding planning applications can be challenging. Our work is to
@@ -276,10 +278,11 @@
 		<div id="s3" class="section">
 			<Section
 				scrollObserveAction={(el) => scrollObserve(el, 'service-3')}
-				associatedState="service-3"
+				associatedState={sectionsData[2].associatedState}
+				title={sectionsData[2].title}
+				subtitle={sectionsData[2].subtitle}
 			>
 				<svelte:fragment slot="type">
-					section 3
 					<P>
 						MXT produce interactive visualisations for Nationally Significant Infrastructure
 						Projects (NSIPs). Understanding planning applications can be challenging. Our work is to
@@ -419,15 +422,21 @@
 		grid-row: 1 / 1;
 	}
 
-	.section {
-		padding-left: 70px;
-		padding-right: 70px;
-		max-width: 800px;
-		margin-left: auto;
-		margin-right: auto;
-	}
-
 	.section:last-child {
 		min-height: calc(100dvh - 40px);
+	}
+
+	@media (max-width: 1000px) {
+		.two-col-container {
+			grid-template-columns: 1fr;
+		}
+
+		.left-col {
+			display: none;
+		}
+
+		.right-col {
+			grid-column: 1 / 2;
+		}
 	}
 </style>
