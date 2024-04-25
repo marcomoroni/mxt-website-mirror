@@ -58,14 +58,22 @@
 			subtitle:
 				'Our multidisciplinary visualisations bring projects to life, improving decision-making and engagement',
 			backgroundColor: 'yellow',
-			scrollTo: 's1'
+			scrollTo: 's1',
+			associatedState: 'service-1' as 'service-1'
 		},
-		{ title: 'Research', subtitle: 'subtitle', backgroundColor: accentColor2, scrollTo: 's2' },
+		{
+			title: 'Research',
+			subtitle: 'subtitle',
+			backgroundColor: accentColor2,
+			scrollTo: 's2',
+			associatedState: 'service-2' as 'service-2'
+		},
 		{
 			title: 'Learning and Development',
 			subtitle: 'subtitle',
 			backgroundColor: accentColor3,
-			scrollTo: 's3'
+			scrollTo: 's3',
+			associatedState: 'service-3' as 'service-3'
 		}
 	];
 </script>
@@ -89,6 +97,7 @@
 						subtitle={entry.subtitle}
 						backgroundColor={entry.backgroundColor}
 						scrollTo={entry.scrollTo}
+						associatedState={entry.associatedState}
 					/>
 				{/each}
 			</div>
@@ -101,7 +110,10 @@
 		/>
 		<div class="landing-spacer" />
 		<div id="s1" class="section">
-			<Section scrollObserveAction={(el) => scrollObserve(el, 'service-1')}>
+			<Section
+				scrollObserveAction={(el) => scrollObserve(el, 'service-1')}
+				associatedState="service-1"
+			>
 				<svelte:fragment slot="type">
 					sticky title that needs to be visible on mobile... section 1...
 					<P>
@@ -180,7 +192,10 @@
 			</Section>
 		</div>
 		<div id="s2" class="section">
-			<Section scrollObserveAction={(el) => scrollObserve(el, 'service-2')}>
+			<Section
+				scrollObserveAction={(el) => scrollObserve(el, 'service-2')}
+				associatedState="service-2"
+			>
 				<svelte:fragment slot="type">
 					section 2
 					<P>
@@ -259,7 +274,10 @@
 			</Section>
 		</div>
 		<div id="s3" class="section">
-			<Section scrollObserveAction={(el) => scrollObserve(el, 'service-3')}>
+			<Section
+				scrollObserveAction={(el) => scrollObserve(el, 'service-3')}
+				associatedState="service-3"
+			>
 				<svelte:fragment slot="type">
 					section 3
 					<P>
@@ -400,7 +418,6 @@
 
 	.section {
 		min-height: 100dvh;
-		border: 2px solid green;
 		padding-left: 70px;
 		padding-right: 70px;
 	}
