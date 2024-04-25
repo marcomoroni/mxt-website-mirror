@@ -405,7 +405,7 @@
 
 	.fill {
 		flex-grow: 1;
-		min-height: calc(var(--nav-bar-height) + 40px);
+		min-height: calc(var(--nav-bar-height) + 10px);
 	}
 
 	.list {
