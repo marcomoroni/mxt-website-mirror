@@ -4,7 +4,7 @@
 
 	export let title: string;
 	export let subtitle: string;
-	export let backgroundColor: string;
+	export let color: string;
 	export let scrollTo: string;
 	export let associatedState: 'service-1' | 'service-2' | 'service-3';
 	const scrollOffset = 40;
@@ -25,7 +25,12 @@
 	}
 </script>
 
-<button class="container" style:background-color={backgroundColor} on:click={scrollHere}>
+<button
+	class="container"
+	style:color={`color-mix(in srgb, ${color} 70%, var(--color-background))`}
+	class:highlight={currentState === 'current'}
+	on:click={scrollHere}
+>
 	<div class="title" class:fade={currentState === 'another'}>{title}</div>
 	<div class="subtitle" class:fade={currentState === 'another'}>{subtitle}</div>
 </button>
@@ -35,11 +40,16 @@
 		scroll-margin-top: 40px;
 		display: flex;
 		flex-direction: column;
-		background-color: yellow;
 		padding-left: 26px;
 		padding-right: 26px;
 		padding-top: 26px;
-		padding-bottom: 26px;
+		padding-bottom: 27px;
+		background-color: color-mix(in srgb, var(--color-primary) 90%, var(--color-background));
+		transition: background-color 0.3s var(--ease);
+	}
+
+	.container.highlight {
+		background-color: var(--color-primary);
 	}
 
 	.title {
