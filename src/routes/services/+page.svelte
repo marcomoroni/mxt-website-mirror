@@ -365,6 +365,9 @@
 
 	.two-col-container {
 		width: 100%;
+		max-width: 1800px;
+		margin-left: auto;
+		margin-right: auto;
 		display: grid;
 		grid-template-columns: 1fr 2fr;
 	}
@@ -417,8 +420,14 @@
 	}
 
 	.section {
-		min-height: 100dvh;
 		padding-left: 70px;
 		padding-right: 70px;
+		max-width: 800px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.section:last-child {
+		min-height: calc(100dvh - 40px);
 	}
 </style>
