@@ -48,7 +48,7 @@
 		scroll-margin-top: 40px;
 		display: flex;
 		flex-direction: column;
-		padding-left: 22px;
+		padding-left: 26px;
 		padding-right: 26px;
 		padding-top: 26px;
 		padding-bottom: 27px;
