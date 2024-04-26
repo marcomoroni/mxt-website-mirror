@@ -1,6 +1,6 @@
 import { smoothDampAnimation, type SmoothDampAnimation } from '$lib/smoothDamp';
 
-const smoothTime = 0.3;
+const smoothTime = 0.4;
 const visibilityWhenVisible = 1;
 const visibilityWhenInvisible = 0;
 

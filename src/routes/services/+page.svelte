@@ -409,7 +409,9 @@
 		margin-left: var(--horizontal-margin);
 		position: sticky;
 		align-self: start;
-		top: var(--horizontal-margin);
+		top: 0px;
+		padding-top: var(--horizontal-margin);
+		padding-bottom: var(--horizontal-margin);
 	}
 
 	.right-col {

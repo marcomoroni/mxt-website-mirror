@@ -74,7 +74,7 @@
 
 	.type {
 		padding-bottom: 130px;
-		transition: 0.5s var(--ease);
+		transition: 0.5s ease-in-out;
 	}
 
 	.small-padding-bottom {
