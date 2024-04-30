@@ -20,11 +20,10 @@ export function newServicesPropMaterial(ambientOcclusionTextureAndHighlight: str
         uniform float opacity;
         uniform vec3 backgroundColor;
         uniform vec3 baseColor;
+		uniform vec3 baseColorShadow;
         uniform vec3 highlightColor;
         uniform sampler2D tAmbientOcclusionAndHighlight;
         varying vec2 vUv;
-
-        const vec3 aoColor = vec3(0.0, 0.0, 0.0);
 
         void main() {
             // Not sure why but the y needs to be inverted.
@@ -35,7 +34,7 @@ export function newServicesPropMaterial(ambientOcclusionTextureAndHighlight: str
             vec3 finalColor = baseColor;
 
             // Use the red channel to match the ambient occlusion.
-            finalColor = mix(finalColor, aoColor, 1.0 - uvTex.r);
+            finalColor = mix(finalColor, baseColorShadow, 1.0 - uvTex.r);
 
             // Use the green channel to match the highlight color.
             finalColor = mix(finalColor, highlightColor, uvTex.g);
@@ -53,6 +52,7 @@ export function newServicesPropMaterial(ambientOcclusionTextureAndHighlight: str
 			opacity: { value: 1.0 },
 			backgroundColor: { value: new THREE.Color('cyan') },
 			baseColor: { value: new THREE.Color('red') },
+			baseColorShadow: { value: new THREE.Color('black') },
 			highlightColor: { value: new THREE.Color('cyan') },
 			tAmbientOcclusionAndHighlight: {
 				value: new THREE.TextureLoader().load(ambientOcclusionTextureAndHighlight)
@@ -75,6 +75,9 @@ export function newServicesPropMaterial(ambientOcclusionTextureAndHighlight: str
 		},
 		setBaseColor: (value: THREE.Color) => {
 			material.uniforms.baseColor.value = value;
+		},
+		setBaseColorShadow: (value: THREE.Color) => {
+			material.uniforms.baseColorShadow.value = value;
 		},
 		setHighlightColor: (value: THREE.Color) => {
 			material.uniforms.highlightColor.value = value;

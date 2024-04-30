@@ -59,7 +59,7 @@
 		font-size: 36px;
 		text-wrap: balance;
 		margin-bottom: 16px;
-		font-weight: 600;
+		font-weight: 650;
 		line-height: 1.3;
 	}
 
@@ -67,6 +67,6 @@
 		font-size: 20px;
 		text-wrap: balance;
 		opacity: 0.8;
-		font-weight: 550;
+		font-weight: 600;
 	}
 </style>

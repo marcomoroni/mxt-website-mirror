@@ -61,7 +61,7 @@
 		text-wrap: balance;
 		margin-top: 26px;
 		margin-bottom: 16px;
-		font-weight: 700;
+		font-weight: 750;
 		line-height: 1.3;
 	}
 
