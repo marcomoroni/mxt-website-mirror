@@ -1,7 +1,10 @@
 export const caseStudiesData: Array<{
 	title: string;
 	leadParagraph: string;
-	threeState: 'case-studies-anchor-a303' | 'case-studies-anchor-p2' | 'case-studies-anchor-p3';
+	threeState:
+		| 'case-studies-anchor-a303'
+		| 'case-studies-anchor-vehicle-simulator'
+		| 'case-studies-anchor-p3';
 	href: string;
 	comingSoon: boolean;
 }> = [
@@ -14,11 +17,11 @@ export const caseStudiesData: Array<{
 		comingSoon: false
 	},
 	{
-		title: 'Case study 2',
-		leadParagraph: 'Lead paragraph...',
-		threeState: 'case-studies-anchor-p2',
-		href: '/case-studies/p2/',
-		comingSoon: true
+		title: 'Vehicle Simulator',
+		leadParagraph: 'Behavioural science and road safety research',
+		threeState: 'case-studies-anchor-vehicle-simulator',
+		href: '/case-studies/vehicle-simulator/',
+		comingSoon: false
 	},
 	{
 		title: 'Case study 3',

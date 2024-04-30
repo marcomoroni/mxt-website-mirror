@@ -42,10 +42,10 @@
 		| 'home'
 		| 'case-studies'
 		| 'case-studies-anchor-a303'
-		| 'case-studies-anchor-p2'
+		| 'case-studies-anchor-vehicle-simulator'
 		| 'case-studies-anchor-p3'
 		| 'case-study-a303'
-		| 'case-study-p2'
+		| 'case-study-vehicle-simulator'
 		| 'case-study-p3'
 		| 'services'
 		| 'service-1'
@@ -59,10 +59,10 @@
 		| 'home'
 		| 'case-studies'
 		| 'case-studies-anchor-a303'
-		| 'case-studies-anchor-p2'
+		| 'case-studies-anchor-vehicle-simulator'
 		| 'case-studies-anchor-p3'
 		| 'case-study-a303'
-		| 'case-study-p2'
+		| 'case-study-vehicle-simulator'
 		| 'case-study-p3'
 		| 'services'
 		| 'service-1'
@@ -111,48 +111,17 @@
 				),
 				radiusDispl: derived(stateStore, ($s) =>
 					match($s)
-						.with('case-study-p2', () => radDisplWhenAway)
+						.with('case-study-vehicle-simulator', () => radDisplWhenAway)
 						.with('case-study-p3', () => radDisplWhenAway)
 						.otherwise(() => 0)
 				),
 				palette: derived(stateStore, ($s) =>
 					match($s)
 						.returnType<PaletteName>()
-						.with('case-study-p2', () => 'hidden')
+						.with('case-study-vehicle-simulator', () => 'hidden')
 						.with('case-study-p3', () => 'hidden')
 						.with('case-studies-anchor-p3', () => 'dim')
-						.with('case-studies-anchor-p2', () => 'dim')
-						.with('service-1', () => 'service-1')
-						.with('service-2', () => 'service-2')
-						.with('service-3', () => 'service-3')
-						.otherwise(() => 'default')
-				)
-			}
-		},
-		{
-			mesh: '/models/Investigation_Diorama.gltf',
-			ambientOcclusionTextureAndHighlight: '/models/Investigation_AO_mask.png',
-			sceneSettings: {
-				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
-					match($s)
-						.returnType<'KeepRotating' | { At: number }>()
-						.with('case-studies-anchor-p2', () => ({ At: 0 }))
-						.with('case-study-p2', () => ({ At: 0 }))
-						.otherwise(() => 'KeepRotating')
-				),
-				radiusDispl: derived(stateStore, ($s) =>
-					match($s)
-						.with('case-study-a303', () => radDisplWhenAway)
-						.with('case-study-p3', () => radDisplWhenAway)
-						.otherwise(() => 0)
-				),
-				palette: derived(stateStore, ($s) =>
-					match($s)
-						.returnType<PaletteName>()
-						.with('case-study-p3', () => 'hidden')
-						.with('case-study-a303', () => 'hidden')
-						.with('case-studies-anchor-a303', () => 'dim')
-						.with('case-studies-anchor-p3', () => 'dim')
+						.with('case-studies-anchor-vehicle-simulator', () => 'dim')
 						.with('service-1', () => 'service-1')
 						.with('service-2', () => 'service-2')
 						.with('service-3', () => 'service-3')
@@ -170,23 +139,54 @@
 				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
 					match($s)
 						.returnType<'KeepRotating' | { At: number }>()
+						.with('case-studies-anchor-vehicle-simulator', () => ({ At: 0 }))
+						.with('case-study-vehicle-simulator', () => ({ At: 0 }))
+						.otherwise(() => 'KeepRotating')
+				),
+				radiusDispl: derived(stateStore, ($s) =>
+					match($s)
+						.with('case-study-a303', () => radDisplWhenAway)
+						.with('case-study-p3', () => radDisplWhenAway)
+						.otherwise(() => 0)
+				),
+				palette: derived(stateStore, ($s) =>
+					match($s)
+						.returnType<PaletteName>()
+						.with('case-study-p3', () => 'hidden')
+						.with('case-study-a303', () => 'hidden')
+						.with('case-studies-anchor-a303', () => 'dim')
+						.with('case-studies-anchor-p3', () => 'dim')
+						.with('service-1', () => 'service-1')
+						.with('service-2', () => 'service-2')
+						.with('service-3', () => 'service-3')
+						.otherwise(() => 'default')
+				)
+			}
+		},
+		{
+			mesh: '/models/Investigation_Diorama.gltf',
+			ambientOcclusionTextureAndHighlight: '/models/Investigation_AO_mask.png',
+			sceneSettings: {
+				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
+					match($s)
+						.returnType<'KeepRotating' | { At: number }>()
 						.with('case-studies-anchor-p3', () => ({ At: 0 }))
 						.with('case-study-p3', () => ({ At: 0 }))
 						.otherwise(() => 'KeepRotating')
 				),
 				radiusDispl: derived(stateStore, ($s) =>
 					match($s)
-						.with('case-study-p2', () => radDisplWhenAway)
+						.with('case-study-vehicle-simulator', () => radDisplWhenAway)
 						.with('case-study-a303', () => radDisplWhenAway)
 						.otherwise(() => 0)
 				),
 				palette: derived(stateStore, ($s) =>
 					match($s)
 						.returnType<PaletteName>()
-						.with('case-study-p2', () => 'hidden')
+						.with('case-study-vehicle-simulator', () => 'hidden')
 						.with('case-study-a303', () => 'hidden')
 						.with('case-studies-anchor-a303', () => 'dim')
-						.with('case-studies-anchor-p2', () => 'dim')
+						.with('case-studies-anchor-vehicle-simulator', () => 'dim')
 						.with('service-1', () => 'service-1')
 						.with('service-2', () => 'service-2')
 						.with('service-3', () => 'service-3')
@@ -362,10 +362,10 @@
 					.returnType<'KeepRotating' | { At: number }>()
 					.with('case-studies', () => ({ At: 180 }))
 					.with('case-studies-anchor-a303', () => ({ At: 180 }))
-					.with('case-studies-anchor-p2', () => ({ At: 180 }))
+					.with('case-studies-anchor-vehicle-simulator', () => ({ At: 180 }))
 					.with('case-studies-anchor-p3', () => ({ At: 180 }))
 					.with('case-study-a303', () => ({ At: 180 }))
-					.with('case-study-p2', () => ({ At: 180 }))
+					.with('case-study-vehicle-simulator', () => ({ At: 180 }))
 					.with('case-study-p3', () => ({ At: 180 }))
 					.otherwise(() => 'KeepRotating')
 			),
@@ -377,10 +377,16 @@
 						() => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenCaseStudyLanding - 90
 					)
 					.with('case-studies-anchor-a303', () => 0 * dioramaOwnPolarAngleMultWhenSmall)
-					.with('case-studies-anchor-p2', () => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenSmall)
+					.with(
+						'case-studies-anchor-vehicle-simulator',
+						() => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenSmall
+					)
 					.with('case-studies-anchor-p3', () => (360 / 3) * 2 * dioramaOwnPolarAngleMultWhenSmall)
 					.with('case-study-a303', () => 0 * dioramaOwnPolarAngleMultWhenSmall)
-					.with('case-study-p2', () => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenSmall)
+					.with(
+						'case-study-vehicle-simulator',
+						() => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenSmall
+					)
 					.with('case-study-p3', () => (360 / 3) * 2 * dioramaOwnPolarAngleMultWhenSmall)
 					.otherwise(() => 0)
 			)
@@ -389,10 +395,10 @@
 			match($s)
 				.with('case-studies', () => dioramaOwnPolarAngleMultWhenCaseStudyLanding)
 				.with('case-studies-anchor-a303', () => dioramaOwnPolarAngleMultWhenSmall)
-				.with('case-studies-anchor-p2', () => dioramaOwnPolarAngleMultWhenSmall)
+				.with('case-studies-anchor-vehicle-simulator', () => dioramaOwnPolarAngleMultWhenSmall)
 				.with('case-studies-anchor-p3', () => dioramaOwnPolarAngleMultWhenSmall)
 				.with('case-study-a303', () => dioramaOwnPolarAngleMultWhenSmall)
-				.with('case-study-p2', () => dioramaOwnPolarAngleMultWhenSmall)
+				.with('case-study-vehicle-simulator', () => dioramaOwnPolarAngleMultWhenSmall)
 				.with('case-study-p3', () => dioramaOwnPolarAngleMultWhenSmall)
 				.otherwise(() => 1)
 		),

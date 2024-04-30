@@ -17,14 +17,17 @@
 	// Note that these are in order.
 	const cards: Array<{
 		el: HTMLElement;
-		threeState: 'case-studies-anchor-a303' | 'case-studies-anchor-p2' | 'case-studies-anchor-p3';
+		threeState:
+			| 'case-studies-anchor-a303'
+			| 'case-studies-anchor-vehicle-simulator'
+			| 'case-studies-anchor-p3';
 	}> = [];
 
 	function checkNewState() {
 		let newThreeState:
 			| undefined
 			| 'case-studies-anchor-a303'
-			| 'case-studies-anchor-p2'
+			| 'case-studies-anchor-vehicle-simulator'
 			| 'case-studies-anchor-p3' = undefined;
 		for (const card of cards) {
 			const hasPassedHalfWindow = card.el.getBoundingClientRect().y < windowHeight / 2;
@@ -50,7 +53,10 @@
 
 	function scrollObserve(
 		el: HTMLElement,
-		threeState: 'case-studies-anchor-a303' | 'case-studies-anchor-p2' | 'case-studies-anchor-p3'
+		threeState:
+			| 'case-studies-anchor-a303'
+			| 'case-studies-anchor-vehicle-simulator'
+			| 'case-studies-anchor-p3'
 	) {
 		cards.push({ el, threeState });
 	}

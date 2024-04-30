@@ -28,10 +28,10 @@
 			| 'home'
 			| 'case-studies'
 			| 'case-studies-anchor-a303'
-			| 'case-studies-anchor-p2'
+			| 'case-studies-anchor-vehicle-simulator'
 			| 'case-studies-anchor-p3'
 			| 'case-study-a303'
-			| 'case-study-p2'
+			| 'case-study-vehicle-simulator'
 			| 'case-study-p3'
 			| 'services'
 			| 'service-1'
@@ -45,7 +45,7 @@
 			(s) => s ?? 'case-studies'
 		)
 		.with({ path: '/case-studies/stonehenge/' }, () => 'case-study-a303')
-		.with({ path: '/case-studies/p2/' }, () => 'case-study-p2')
+		.with({ path: '/case-studies/vehicle-simulator/' }, () => 'case-study-vehicle-simulator')
 		.with({ path: '/case-studies/p3/' }, () => 'case-study-p3')
 		.with(
 			{ path: '/services/', servicesPageIntersectingSection: P.select() },
@@ -64,7 +64,7 @@
 			(atTopOfWindow) => !atTopOfWindow
 		)
 		.with(
-			{ path: '/case-studies/p2/', atTopOfWindow: P.select() },
+			{ path: '/case-studies/vehicle-simulator/', atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
 		.with(
