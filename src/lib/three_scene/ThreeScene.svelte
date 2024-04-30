@@ -3,18 +3,37 @@
 	import * as THREE from 'three';
 	import { derived, get, writable, type Unsubscriber } from 'svelte/store';
 	import { P, match } from 'ts-pattern';
-	import { backgroundColor, primaryColor } from '$lib/cssValues';
+	import {
+		accentColor1,
+		accentColor2,
+		accentColor3,
+		backgroundColor,
+		primaryColor
+	} from '$lib/cssValues';
 	import { lerp } from '$lib/lerp';
 	import { toRadians } from '$lib/angleConversions';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 	import { FontLoader, TextGeometry } from 'three/examples/jsm/Addons.js';
 	import { newTextMaterial } from './textMaterial';
-	import { perpetualSmoothDampAngleAnimation, smoothDampAnimation } from '$lib/smoothDamp';
+	import {
+		perpetualSmoothDampAngleAnimation,
+		smoothDampAnimation,
+		smoothDampColorAnimation
+	} from '$lib/smoothDamp';
 	import { newDioramaMaterial } from './dioramaMaterial';
 	import { newFoliageMaterial } from './foliageMaterial';
 	import { degToRad } from 'three/src/math/MathUtils.js';
-	import { colorPalettes as newColorPalettes } from './colorPalettes';
+	import {
+		dioramaColorPalettes as newDioramaColorPalettes,
+		type PaletteName
+	} from './dioramaColorPalettes';
 	import { prefersReducedMotion } from '$lib/prefersReducedMotion';
+	import { servicesPropsVisibilityAnimation } from './servicesPropsVisibilityAnimation';
+	import { newServicesPropMaterial } from './servicesPropMaterial';
+	import { map } from '$lib/map';
+	import { backgroundColor as backgroundColorStore } from '$lib/three_scene/threeStateStores';
+	import { accentColorsFromNoise } from './accentColorFromNoise';
+	import * as d3 from 'd3';
 
 	const DEV_debugLog = false;
 	const FLAG_useHeaders = false;
@@ -29,6 +48,9 @@
 		| 'case-study-p2'
 		| 'case-study-p3'
 		| 'services'
+		| 'service-1'
+		| 'service-2'
+		| 'service-3'
 		| 'contacts';
 
 	// This is needed because I need some reactivity that I can't have with implicit Svelte
@@ -43,6 +65,9 @@
 		| 'case-study-p2'
 		| 'case-study-p3'
 		| 'services'
+		| 'service-1'
+		| 'service-2'
+		| 'service-3'
 		| 'contacts'
 	>(state);
 	$: {
@@ -92,11 +117,14 @@
 				),
 				palette: derived(stateStore, ($s) =>
 					match($s)
-						.returnType<'default' | 'dim' | 'hidden'>()
+						.returnType<PaletteName>()
 						.with('case-study-p2', () => 'hidden')
 						.with('case-study-p3', () => 'hidden')
 						.with('case-studies-anchor-p3', () => 'dim')
 						.with('case-studies-anchor-p2', () => 'dim')
+						.with('service-1', () => 'service-1')
+						.with('service-2', () => 'service-2')
+						.with('service-3', () => 'service-3')
 						.otherwise(() => 'default')
 				)
 			}
@@ -120,11 +148,14 @@
 				),
 				palette: derived(stateStore, ($s) =>
 					match($s)
-						.returnType<'default' | 'dim' | 'hidden'>()
+						.returnType<PaletteName>()
 						.with('case-study-p3', () => 'hidden')
 						.with('case-study-a303', () => 'hidden')
 						.with('case-studies-anchor-a303', () => 'dim')
 						.with('case-studies-anchor-p3', () => 'dim')
+						.with('service-1', () => 'service-1')
+						.with('service-2', () => 'service-2')
+						.with('service-3', () => 'service-3')
 						.otherwise(() => 'default')
 				)
 			}
@@ -151,17 +182,87 @@
 				),
 				palette: derived(stateStore, ($s) =>
 					match($s)
-						.returnType<'default' | 'dim' | 'hidden'>()
+						.returnType<PaletteName>()
 						.with('case-study-p2', () => 'hidden')
 						.with('case-study-a303', () => 'hidden')
 						.with('case-studies-anchor-a303', () => 'dim')
 						.with('case-studies-anchor-p2', () => 'dim')
+						.with('service-1', () => 'service-1')
+						.with('service-2', () => 'service-2')
+						.with('service-3', () => 'service-3')
 						.otherwise(() => 'default')
 				)
 			}
 		}
 	];
-	const colorPalettes = newColorPalettes();
+	const digitalInfrastructurePosY = 10;
+	const digitalInfrastructureRot = (opacity: number) =>
+		new THREE.Vector3(0, map(opacity, 0, 1, 9.5, 10), 0);
+	const servicesPropsData = [
+		{
+			baseColor: (currentBackgroundColor: string) => currentBackgroundColor,
+			highlightColor: (() => {
+				const { l, c, h } = d3.lch(accentColor1);
+				const lighterColor = d3.lch(l + 20, c, h);
+				return lighterColor.toString();
+			})(),
+			aoColor: 'black',
+			backgroundColor: (_currentBackgroundColor: string) => accentColor1,
+			meshes: [
+				{
+					mesh: '/models/DigitalInfrastructure.gltf',
+					ambientOcclusionTextureAndHighlight: '/models/DigitalInfrastructure_CADTexture.png',
+					rotationDisplacement: digitalInfrastructureRot,
+					positionDisplacement: (_opacity: number) =>
+						new THREE.Vector3(0, digitalInfrastructurePosY, 0)
+				},
+				...[0, 1, 2].map((i) => ({
+					mesh: '/models/CAD_Lines.gltf',
+					ambientOcclusionTextureAndHighlight: '/models/DigitalInfrastructure_CADTexture.png',
+					rotationDisplacement: digitalInfrastructureRot,
+					positionDisplacement: (
+						_opacity: number,
+						dioramaPositions: Array<{ x: number; z: number }>
+					) =>
+						new THREE.Vector3(
+							dioramaPositions[i].x,
+							digitalInfrastructurePosY - 0.2,
+							dioramaPositions[i].z
+						)
+				}))
+			]
+		},
+		{
+			baseColor: (_currentBackgroundColor: string) => '#EDAF74',
+			highlightColor: 'white',
+			aoColor: '#8B5725',
+			backgroundColor: (currentBackgroundColor: string) => currentBackgroundColor,
+			meshes: [
+				{
+					mesh: '/models/Research.gltf',
+					ambientOcclusionTextureAndHighlight: '/models/Research_AO.png',
+					rotationDisplacement: (_opacity: number) => new THREE.Vector3(0, 280, 0),
+					positionDisplacement: (_opacity: number) => new THREE.Vector3(-2, 20, 1.5)
+				}
+			]
+		},
+		{
+			baseColor: (_currentBackgroundColor: string) => '#E1F1EE',
+			highlightColor: 'white',
+			aoColor: '#4E7B74',
+			backgroundColor: (currentBackgroundColor: string) => currentBackgroundColor,
+			meshes: [
+				{
+					mesh: '/models/LearnAndDev.gltf',
+					ambientOcclusionTextureAndHighlight: '/models/LearnAndDev_AO.png',
+					rotationDisplacement: (_opacity: number) => new THREE.Vector3(0, 270, 90),
+					positionDisplacement: (_opacity: number) => new THREE.Vector3(0, 8, 9)
+				}
+			]
+		}
+	];
+	const colorPalettes = newDioramaColorPalettes();
+	const colorAnimationSmoothTime = 0.9;
 	const dioramaOwnPolarAngleMultWhenCaseStudyLanding = 0.5;
 	const dioramaOwnPolarAngleMultWhenSmall = 0.28;
 	const gltfScaleMult = 0.01;
@@ -175,6 +276,12 @@
 				y: derived(stateStore, ($s) => {
 					if ($s === 'services') {
 						return 30;
+					} else if ($s === 'service-1') {
+						return 45;
+					} else if ($s === 'service-2') {
+						return 51;
+					} else if ($s === 'service-3') {
+						return 58;
 					} else if ($s === 'case-studies') {
 						return 7;
 					} else if ($s.includes('anchor')) {
@@ -190,6 +297,12 @@
 				z: derived(stateStore, ($s) => {
 					if ($s === 'services') {
 						return 0.1;
+					} else if ($s === 'service-1') {
+						return 0.1;
+					} else if ($s === 'service-2') {
+						return 5;
+					} else if ($s === 'service-3') {
+						return 2;
 					} else if ($s === 'case-studies') {
 						return 32;
 					} else if ($s.includes('anchor')) {
@@ -233,7 +346,7 @@
 				})
 			},
 			radius: derived(stateStore, ($s) => {
-				if ($s === 'services') {
+				if ($s.startsWith('service')) {
 					return 4.5;
 				} else if ($s == 'case-studies') {
 					return 8;
@@ -282,6 +395,25 @@
 				.with('case-study-p2', () => dioramaOwnPolarAngleMultWhenSmall)
 				.with('case-study-p3', () => dioramaOwnPolarAngleMultWhenSmall)
 				.otherwise(() => 1)
+		),
+		backgroundColor: derived(stateStore, ($s) =>
+			match($s)
+				.with('service-1', () => {
+					const { l, c, h } = d3.lch(accentColor1);
+					const lighterColor = d3.lch(l + 5, c, h);
+					return lighterColor.toString();
+				})
+				.with('service-2', () => accentColor2)
+				.with('service-3', () => accentColor3)
+				.otherwise(() => backgroundColor)
+		),
+		servicesProps: derived(stateStore, ($s) =>
+			match($s)
+				.returnType<number | undefined>()
+				.with('service-1', () => 0)
+				.with('service-2', () => 1)
+				.with('service-3', () => 2)
+				.otherwise(() => undefined)
 		),
 		// Header by index.
 		headerVisibility: derived(stateStore, ($s) =>
@@ -335,6 +467,14 @@
 			dioramasOwnPolarAngleMult: smoothDampAnimation(
 				get(sceneSettings.dioramasOwnPolarAngleMult),
 				0.9
+			),
+			backgroundColor: smoothDampColorAnimation(
+				get(sceneSettings.backgroundColor),
+				colorAnimationSmoothTime
+			),
+			servicesProps: servicesPropsVisibilityAnimation(
+				get(sceneSettings.servicesProps),
+				servicesPropsData.length
 			)
 		};
 
@@ -372,6 +512,12 @@
 			sceneSettings.dioramasOwnPolarAngleMult.subscribe(
 				(v) => (animations.dioramasOwnPolarAngleMult.target = v)
 			)
+		);
+		storeUnsubscribers.push(
+			sceneSettings.backgroundColor.subscribe((v) => (animations.backgroundColor.target = v))
+		);
+		storeUnsubscribers.push(
+			sceneSettings.servicesProps.subscribe((v) => animations.servicesProps.setVisibleItem(v))
 		);
 
 		// The values of the animations are not applied by the stores themselves. Instead, this function
@@ -514,42 +660,119 @@
 				})
 			);
 
+			let elapsedTime = 0;
+
+			const accentColorColouredNoiseInterpSmoothTime = 0.8;
+			const initialPalette = colorPalettes.getPalette(get(dioramaData.sceneSettings.palette));
 			const animations = {
 				radiusDispl: smoothDampAnimation(get(dioramaData.sceneSettings.radiusDispl), 1.1),
-				colorPaletteIndex: smoothDampAnimation(
-					colorPalettes.nameToIndex(get(dioramaData.sceneSettings.palette)),
-					0.3
+				baseColor: smoothDampColorAnimation(initialPalette.baseColor, colorAnimationSmoothTime),
+				baseColorShadow: smoothDampColorAnimation(
+					initialPalette.baseShadowColor,
+					colorAnimationSmoothTime
+				),
+				accentColor1: smoothDampColorAnimation(
+					initialPalette.accentColor1,
+					colorAnimationSmoothTime
+				),
+				accentColor2: smoothDampColorAnimation(
+					initialPalette.accentColor2,
+					colorAnimationSmoothTime
+				),
+				accentColor3: smoothDampColorAnimation(
+					initialPalette.accentColor3,
+					colorAnimationSmoothTime
+				),
+				accentColor1ColouredNoiseInterp: smoothDampAnimation(
+					initialPalette.accentColor1 === 'ColouredNoise' ? 1 : 0,
+					accentColorColouredNoiseInterpSmoothTime
+				),
+				accentColor2ColouredNoiseInterp: smoothDampAnimation(
+					initialPalette.accentColor2 === 'ColouredNoise' ? 1 : 0,
+					accentColorColouredNoiseInterpSmoothTime
+				),
+				accentColor3ColouredNoiseInterp: smoothDampAnimation(
+					initialPalette.accentColor3 === 'ColouredNoise' ? 1 : 0,
+					accentColorColouredNoiseInterpSmoothTime
+				),
+				accentColor4: smoothDampColorAnimation(
+					initialPalette.accentColor4,
+					colorAnimationSmoothTime
+				),
+				highlightColor: smoothDampColorAnimation(
+					initialPalette.highlightColor,
+					colorAnimationSmoothTime
 				)
 			};
 			storeUnsubscribers.push(
 				dioramaData.sceneSettings.radiusDispl.subscribe((v) => (animations.radiusDispl.target = v))
 			);
 			storeUnsubscribers.push(
-				dioramaData.sceneSettings.palette.subscribe(
-					(v) => (animations.colorPaletteIndex.target = colorPalettes.nameToIndex(v))
-				)
+				dioramaData.sceneSettings.palette.subscribe((v) => {
+					const palette = colorPalettes.getPalette(v);
+					animations.baseColor.target = palette.baseColor;
+					animations.baseColorShadow.target = palette.baseShadowColor;
+					animations.accentColor1.target =
+						palette.accentColor1 === 'ColouredNoise'
+							? palette.baseShadowColor
+							: palette.accentColor1;
+					animations.accentColor2.target =
+						palette.accentColor2 === 'ColouredNoise'
+							? palette.baseShadowColor
+							: palette.accentColor2;
+					animations.accentColor3.target =
+						palette.accentColor3 === 'ColouredNoise'
+							? palette.baseShadowColor
+							: palette.accentColor3;
+					animations.accentColor1ColouredNoiseInterp.target =
+						palette.accentColor1 === 'ColouredNoise' ? 1 : 0;
+					animations.accentColor2ColouredNoiseInterp.target =
+						palette.accentColor2 === 'ColouredNoise' ? 1 : 0;
+					animations.accentColor3ColouredNoiseInterp.target =
+						palette.accentColor3 === 'ColouredNoise' ? 1 : 0;
+					animations.accentColor4.target = palette.accentColor4;
+					animations.highlightColor.target = palette.highlightColor;
+				})
 			);
 
-			let elapsedTime = 0;
-			const tick = (dt: DOMHighResTimeStamp) => {
+			const tick = (dt: DOMHighResTimeStamp, backgroundColor: THREE.Color) => {
 				elapsedTime += dt * 0.00007;
 
 				animations.radiusDispl.tick(dt);
-				animations.colorPaletteIndex.tick(dt);
+				animations.baseColor.tick(dt);
+				animations.baseColorShadow.tick(dt);
+				animations.accentColor1.tick(dt);
+				animations.accentColor2.tick(dt);
+				animations.accentColor3.tick(dt);
+				animations.accentColor1ColouredNoiseInterp.tick(dt);
+				animations.accentColor2ColouredNoiseInterp.tick(dt);
+				animations.accentColor3ColouredNoiseInterp.tick(dt);
+				animations.accentColor4.tick(dt);
+				animations.highlightColor.tick(dt);
 				rotDegAnimatedClockwiseAnim.tick(dt);
 
-				const interpolatedColors = colorPalettes.interpolated(
-					animations.colorPaletteIndex.current,
-					elapsedTime
-				);
-				diormamaMaterial.setBaseColor(new THREE.Color(interpolatedColors.baseColor));
-				diormamaMaterial.setBaseColorShadow(new THREE.Color(interpolatedColors.baseShadowColor));
-				diormamaMaterial.setAccentColor1(new THREE.Color(interpolatedColors.accentColor1));
-				diormamaMaterial.setAccentColor2(new THREE.Color(interpolatedColors.accentColor2));
-				diormamaMaterial.setAccentColor3(new THREE.Color(interpolatedColors.accentColor3));
-				diormamaMaterial.setAccentColor4(new THREE.Color(interpolatedColors.accentColor4));
-				diormamaMaterial.setHighlightColor(new THREE.Color(interpolatedColors.highlightColor));
-				foliageMaterial.setBaseColor(new THREE.Color(interpolatedColors.highlightColor));
+				const accentColor1 = d3.interpolateLab(
+					animations.accentColor1.current,
+					accentColorsFromNoise.accentColor1(elapsedTime)
+				)(animations.accentColor1ColouredNoiseInterp.current);
+				const accentColor2 = d3.interpolateLab(
+					animations.accentColor2.current,
+					accentColorsFromNoise.accentColor2(elapsedTime)
+				)(animations.accentColor2ColouredNoiseInterp.current);
+				const accentColor3 = d3.interpolateLab(
+					animations.accentColor3.current,
+					accentColorsFromNoise.accentColor3(elapsedTime)
+				)(animations.accentColor3ColouredNoiseInterp.current);
+
+				diormamaMaterial.setBackgroundColor(new THREE.Color(backgroundColor));
+				diormamaMaterial.setBaseColor(new THREE.Color(animations.baseColor.current)); // wrong: should use background colour, in an additional layer
+				diormamaMaterial.setBaseColorShadow(new THREE.Color(animations.baseColorShadow.current));
+				diormamaMaterial.setAccentColor1(new THREE.Color(accentColor1));
+				diormamaMaterial.setAccentColor2(new THREE.Color(accentColor2));
+				diormamaMaterial.setAccentColor3(new THREE.Color(accentColor3));
+				diormamaMaterial.setAccentColor4(new THREE.Color(animations.accentColor4.current));
+				diormamaMaterial.setHighlightColor(new THREE.Color(animations.highlightColor.current));
+				foliageMaterial.setBaseColor(new THREE.Color(animations.highlightColor.current));
 			};
 
 			return {
@@ -570,6 +793,102 @@
 					diormamaMaterial.dispose();
 					foliageMaterial.dispose();
 					storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
+				}
+			};
+		});
+
+		const servicesPropInstances = servicesPropsData.map((data, i) => {
+			const tickAccumulator: Array<
+				(
+					dt: DOMHighResTimeStamp,
+					backgroundColor: THREE.Color,
+					dioramaPositions: Array<{ x: number; z: number }>
+				) => void
+			> = [];
+			const disposeAccumulator: Array<() => void> = [];
+			data.meshes.forEach(
+				({
+					mesh,
+					ambientOcclusionTextureAndHighlight,
+					positionDisplacement,
+					rotationDisplacement
+				}) => {
+					const material = newServicesPropMaterial(ambientOcclusionTextureAndHighlight);
+					material.setHighlightColor(new THREE.Color(data.highlightColor));
+					material.setBaseColorShadow(new THREE.Color(data.aoColor));
+					let displamentPivot: undefined | THREE.Object3D = undefined;
+					const loader = new GLTFLoader();
+					loader.load(mesh, function (gltf) {
+						const rootGroup = new THREE.Group();
+
+						const transformDisplGroup = new THREE.Group();
+						rootGroup.add(transformDisplGroup);
+
+						const gltfScene = gltf.scene;
+						gltfScene.scale.set(gltfScaleMult, gltfScaleMult, gltfScaleMult);
+						gltfScene.traverseVisible((child) => {
+							if (child instanceof THREE.Mesh) {
+								child.material = material.material;
+							}
+						});
+						transformDisplGroup.add(gltfScene);
+
+						scene.add(rootGroup);
+
+						displamentPivot = transformDisplGroup;
+					});
+
+					const tick = (
+						dt: DOMHighResTimeStamp,
+						backgroundColor: THREE.Color,
+						dioramaPositions: Array<{ x: number; z: number }>
+					) => {
+						const opacity = animations.servicesProps.getVisibility(i);
+
+						// Hack: there's some z sorting issues which make some transpasparent objects clip others even
+						// when they are not visible. To solve this I'm focing the object not to not be visible if the opacity
+						// is almost 0.
+						material.setVisibility(opacity >= 0.001);
+
+						material.setOpacity(opacity);
+						material.setBackgroundColor(
+							new THREE.Color(data.backgroundColor(backgroundColor.getStyle()))
+						);
+						material.setBaseColor(new THREE.Color(data.baseColor(backgroundColor.getStyle())));
+
+						if (displamentPivot) {
+							const posDispl = positionDisplacement
+								? positionDisplacement(opacity, dioramaPositions)
+								: new THREE.Vector3(0, 0, 0);
+							displamentPivot.position.x = posDispl.x;
+							displamentPivot.position.y = posDispl.y;
+							displamentPivot.position.z = posDispl.z;
+							const rotDispl = rotationDisplacement
+								? rotationDisplacement(opacity)
+								: new THREE.Vector3(0, 0, 0);
+							displamentPivot.rotation.x = degToRad(rotDispl.x);
+							displamentPivot.rotation.y = degToRad(rotDispl.y);
+							displamentPivot.rotation.z = degToRad(rotDispl.z);
+						}
+					};
+
+					tickAccumulator.push(tick);
+					disposeAccumulator.push(() => {
+						material.dispose();
+					});
+				}
+			);
+
+			return {
+				tick: (
+					dt: DOMHighResTimeStamp,
+					backgroundColor: THREE.Color,
+					dioramaPositions: Array<{ x: number; z: number }>
+				) => {
+					tickAccumulator.forEach((tick) => tick(dt, backgroundColor, dioramaPositions));
+				},
+				dispose: () => {
+					disposeAccumulator.forEach((dispose) => dispose());
 				}
 			};
 		});
@@ -653,12 +972,17 @@
 			animations.railCircumference.radius.tick(dt);
 			animations.railCircumference.polarAngleDegAnimatedToClosest.tick(dt);
 			animations.dioramasOwnPolarAngleMult.tick(dt);
+			animations.backgroundColor.tick(dt);
+			animations.servicesProps.tick(dt);
 			railCircumference.polarAngleDeg.tick(dt);
 
+			const backgroundColor = new THREE.Color(animations.backgroundColor.current);
+			scene.background = backgroundColor;
 			applyAnimationValues(camera, railCircumference);
+			const dioramaPositions: Array<{ x: number; z: number }> = [];
 			dioramaInstances.forEach(
 				({ tick, object3D, ownPolarAngleDeg, rotDegAnimatedClockwiseAnim, radiusDispl }) => {
-					tick(dt);
+					tick(dt, backgroundColor);
 
 					const pos = positionInCircumference({
 						center: railCircumference.center,
@@ -673,10 +997,14 @@
 						object3D.position.z = pos.z;
 						object3D.rotation.y = toRadians(rotDegAnimatedClockwiseAnim.current);
 					}
+					dioramaPositions.push(pos);
 				}
 			);
+			servicesPropInstances.forEach(({ tick }) => tick(dt, backgroundColor, dioramaPositions));
 			headerInstances?.forEach(({ tick }) => tick(dt));
 			camera.lookAt(0, animations.camera.lookAt.y.current, 0);
+
+			backgroundColorStore.set(backgroundColor.getStyle());
 
 			renderer.render(scene, camera);
 		};
@@ -691,6 +1019,7 @@
 				shouldRequestNewAnimationFrame = false;
 				storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
 				dioramaInstances.forEach(({ dispose }) => dispose());
+				servicesPropInstances.forEach(({ dispose }) => dispose());
 				headerInstances?.forEach(({ dispose }) => dispose());
 				renderer.dispose();
 				renderer.forceContextLoss();

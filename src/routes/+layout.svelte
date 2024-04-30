@@ -6,7 +6,10 @@
 	import Aurora from '$lib/Aurora.svelte';
 	import ThreeScene from '$lib/three_scene/ThreeScene.svelte';
 	import { P, match } from 'ts-pattern';
-	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
+	import {
+		caseStudiesPageIntersectingCard,
+		servicesPageIntersectingSection
+	} from '$lib/three_scene/threeStateStores';
 	import { crossfade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 	import FocusHighlight from '$lib/FocusHighlight.svelte';
@@ -18,7 +21,8 @@
 
 	$: threeState = match({
 		path: $page.url.pathname,
-		caseStudiesPageIntersectingCard: $caseStudiesPageIntersectingCard
+		caseStudiesPageIntersectingCard: $caseStudiesPageIntersectingCard,
+		servicesPageIntersectingSection: $servicesPageIntersectingSection
 	})
 		.returnType<
 			| 'home'
@@ -30,6 +34,9 @@
 			| 'case-study-p2'
 			| 'case-study-p3'
 			| 'services'
+			| 'service-1'
+			| 'service-2'
+			| 'service-3'
 			| 'contacts'
 		>()
 		.with({ path: '/' }, () => 'home')
@@ -40,7 +47,10 @@
 		.with({ path: '/case-studies/stonehenge/' }, () => 'case-study-a303')
 		.with({ path: '/case-studies/p2/' }, () => 'case-study-p2')
 		.with({ path: '/case-studies/p3/' }, () => 'case-study-p3')
-		.with({ path: '/services/' }, () => 'services')
+		.with(
+			{ path: '/services/', servicesPageIntersectingSection: P.select() },
+			(s) => s ?? 'services'
+		)
 		.otherwise(() => 'contacts');
 
 	$: threeHidden = match({
@@ -61,7 +71,6 @@
 			{ path: '/case-studies/p3/', atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
-		.with({ path: '/services/', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
 		.otherwise(() => false);
 	$: auroraHidden = $page.url.pathname !== '/contacts/';
 
