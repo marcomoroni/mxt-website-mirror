@@ -212,8 +212,8 @@
 					positionDisplacement: (_opacity: number) =>
 						new THREE.Vector3(0, digitalInfrastructurePosY, 0)
 				},
-				{
-					mesh: '/models/DigitalInfrastructure.gltf',
+				...[0, 1, 2].map((i) => ({
+					mesh: '/models/CAD_Lines.gltf',
 					ambientOcclusionTextureAndHighlight: '/models/DigitalInfrastructure_CADTexture.png',
 					rotationDisplacement: digitalInfrastructureRot,
 					positionDisplacement: (
@@ -221,11 +221,11 @@
 						dioramaPositions: Array<{ x: number; z: number }>
 					) =>
 						new THREE.Vector3(
-							dioramaPositions[0].x,
+							dioramaPositions[i].x,
 							digitalInfrastructurePosY - 0.2,
-							dioramaPositions[0].z
+							dioramaPositions[i].z
 						)
-				}
+				}))
 			]
 		},
 		{

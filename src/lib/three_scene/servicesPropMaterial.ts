@@ -42,6 +42,8 @@ export function newServicesPropMaterial(ambientOcclusionTextureAndHighlight: str
             // Use the blue channel to match the background.
             finalColor = mix(finalColor, backgroundColor, uvTex.b);
 
+            float opacity = opacity * uvTex.a;
+
             gl_FragColor = vec4(finalColor, opacity);
 
             #include <tonemapping_fragment>
