@@ -1,6 +1,7 @@
 // Based on https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Math/Mathf.cs.
 
 import { P, match } from 'ts-pattern';
+import * as d3 from 'd3';
 
 // Gradually changes a value towards a desired goal over time.
 export function smoothDamp(
@@ -59,13 +60,19 @@ export function smoothDampAngle(
 	return smoothDamp(current, target, currentVelocity, smoothTime, deltaTime, maxSpeed);
 }
 
+export type SmoothDampAnimation = {
+	target: number;
+	get current(): number;
+	tick(deltaTime: DOMHighResTimeStamp): void;
+};
+
 // Managed state for a smoothdamp animation.
 // Call `tick()` at every frame.
 export function smoothDampAnimation(
 	initialValue: number,
 	smoothTime: number,
 	maxSpeed?: undefined | number
-) {
+): SmoothDampAnimation {
 	let current = initialValue;
 	let target = initialValue;
 	let velocity = 0;
@@ -179,6 +186,46 @@ export function perpetualSmoothDampAngleAnimation(
 				.with({ fixedTarget: P.select() }, (t) => {
 					target = t;
 				});
+		},
+		tick
+	};
+}
+
+export function smoothDampColorAnimation(
+	initialValue: string,
+	smoothTime: number,
+	maxSpeed?: undefined | number
+) {
+	let colorFrom = initialValue;
+	let colorTo = initialValue;
+	let currentInterpolationValue = 1;
+	const targetInterpolationValue = 1;
+	let velocity = 0;
+	const currentColor = () => d3.interpolateLab(colorFrom, colorTo)(currentInterpolationValue);
+	const setTarget = (value: string) => {
+		colorFrom = currentColor();
+		colorTo = value;
+		currentInterpolationValue = 0;
+	};
+	const tick = (deltaTime: DOMHighResTimeStamp) => {
+		const smoothDampResult = smoothDamp(
+			currentInterpolationValue,
+			targetInterpolationValue,
+			velocity,
+			smoothTime,
+			deltaTime,
+			maxSpeed
+		);
+		velocity = smoothDampResult.currentVelocity;
+		currentInterpolationValue = smoothDampResult.output;
+	};
+
+	return {
+		set target(value: string) {
+			setTarget(value);
+		},
+		get current() {
+			return currentColor();
 		},
 		tick
 	};
