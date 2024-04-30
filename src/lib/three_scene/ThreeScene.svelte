@@ -201,9 +201,13 @@
 	const servicesPropsData = [
 		{
 			baseColor: (currentBackgroundColor: string) => currentBackgroundColor,
-			highlightColor: 'white',
+			highlightColor: (() => {
+				const { l, c, h } = d3.lch(accentColor1);
+				const lighterColor = d3.lch(l + 20, c, h);
+				return lighterColor.toString();
+			})(),
 			aoColor: 'black',
-			backgroundColor: (_currentBackgroundColor: string) => 'yellow',
+			backgroundColor: (_currentBackgroundColor: string) => accentColor1,
 			meshes: [
 				{
 					mesh: '/models/DigitalInfrastructure.gltf',
@@ -394,7 +398,11 @@
 		),
 		backgroundColor: derived(stateStore, ($s) =>
 			match($s)
-				.with('service-1', () => accentColor1)
+				.with('service-1', () => {
+					const { l, c, h } = d3.lch(accentColor1);
+					const lighterColor = d3.lch(l + 5, c, h);
+					return lighterColor.toString();
+				})
 				.with('service-2', () => accentColor2)
 				.with('service-3', () => accentColor3)
 				.otherwise(() => backgroundColor)

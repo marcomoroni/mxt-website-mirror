@@ -3,7 +3,7 @@
 	import SecondaryPageLanding from '$lib/SecondaryPageLanding.svelte';
 	import Section from '$lib/services_page/Section.svelte';
 	import SideBarEntry from '$lib/services_page/SideBarEntry.svelte';
-	import { accentColor2, accentColor3 } from '$lib/cssValues';
+	import { accentColor1, accentColor2, accentColor3 } from '$lib/cssValues';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
 	import { servicesPageIntersectingSection } from '$lib/three_scene/threeStateStores';
 	import { onMount } from 'svelte';
@@ -57,7 +57,7 @@
 			title: 'Digital Infrastructure',
 			subtitle:
 				'Our multidisciplinary visualisations bring projects to life, improving decision-making and engagement',
-			color: 'yellow',
+			color: accentColor1,
 			scrollTo: 's1',
 			associatedState: 'service-1' as 'service-1'
 		},
