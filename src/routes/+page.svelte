@@ -16,7 +16,7 @@
 		<div class="a-c-b">
 			<div class="a-c-b-a" />
 			<div class="a-c-b-b">
-				MXT are an immersive technology company providing learning, research and visualisation
+				We are an immersive technology company providing learning, research and visualisation
 				services to transport and infrastructure partners.
 			</div>
 			<div class="a-c-b-c" />
