@@ -132,13 +132,9 @@
 			$page.url.pathname === '/services/' ||
 			$page.url.pathname === '/contacts/'}
 	>
-		<a
-			href="/case-studies"
-			class="page-link"
-			class:current-page={$page.url.pathname.startsWith('/case-studies/')}
-		>
-			Case studies
-			{#if $page.url.pathname.startsWith('/case-studies/')}
+		<a href="/services" class="page-link" class:current-page={$page.url.pathname === '/services/'}>
+			Services
+			{#if $page.url.pathname === '/services/'}
 				<div
 					in:navLinkBackgroundSend={{ key: navLinkBackgroundKey }}
 					out:navLinkBackgroundReceive={{ key: navLinkBackgroundKey }}
@@ -147,9 +143,13 @@
 			{/if}
 			<FocusHighlight overflow={6} cornerRadius={10000} />
 		</a>
-		<a href="/services" class="page-link" class:current-page={$page.url.pathname === '/services/'}>
-			Services
-			{#if $page.url.pathname === '/services/'}
+		<a
+			href="/case-studies"
+			class="page-link"
+			class:current-page={$page.url.pathname.startsWith('/case-studies/')}
+		>
+			Case studies
+			{#if $page.url.pathname.startsWith('/case-studies/')}
 				<div
 					in:navLinkBackgroundSend={{ key: navLinkBackgroundKey }}
 					out:navLinkBackgroundReceive={{ key: navLinkBackgroundKey }}
