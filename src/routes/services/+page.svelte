@@ -108,13 +108,15 @@
 		</div>
 	</div>
 	<div class="right-col">
-		<div id="s1" class="section">
+		<div class="section">
 			<Section
 				scrollObserveAction={(el) => scrollObserve(el, 'service-1')}
 				associatedState={sectionsData[0].associatedState}
 				title={sectionsData[0].title}
 				subtitle={sectionsData[0].subtitle}
 				isLast={false}
+				isFirst={true}
+				scrollToId={sectionsData[0].scrollTo}
 			>
 				<svelte:fragment slot="type">
 					<P>
@@ -192,13 +194,15 @@
 				</svelte:fragment>
 			</Section>
 		</div>
-		<div id="s2" class="section">
+		<div class="section">
 			<Section
 				scrollObserveAction={(el) => scrollObserve(el, 'service-2')}
 				associatedState={sectionsData[1].associatedState}
 				title={sectionsData[1].title}
 				subtitle={sectionsData[1].subtitle}
 				isLast={false}
+				isFirst={false}
+				scrollToId={sectionsData[1].scrollTo}
 			>
 				<svelte:fragment slot="type">
 					<P>
@@ -276,13 +280,15 @@
 				</svelte:fragment>
 			</Section>
 		</div>
-		<div id="s3" class="section">
+		<div class="section">
 			<Section
 				scrollObserveAction={(el) => scrollObserve(el, 'service-3')}
 				associatedState={sectionsData[2].associatedState}
 				title={sectionsData[2].title}
 				subtitle={sectionsData[2].subtitle}
 				isLast={true}
+				isFirst={false}
+				scrollToId={sectionsData[2].scrollTo}
 			>
 				<svelte:fragment slot="type">
 					<P>
@@ -370,15 +376,19 @@
 
 	.two-col-container {
 		width: 100%;
-		max-width: 1800px;
-		margin-left: auto;
-		margin-right: auto;
 		display: grid;
-		grid-template-columns: 1fr 2fr;
+		grid-template-columns: 0 1fr 2fr 0;
+		overflow-x: clip;
+	}
+
+	@media (min-width: 1800px) {
+		.two-col-container {
+			grid-template-columns: 1fr calc(1800px / 3) calc(1800px / 3 * 2) 1fr;
+		}
 	}
 
 	.left-col {
-		grid-column: 1 / 2;
+		grid-column: 2 / 3;
 		grid-row: 1 / 1;
 		position: sticky;
 		top: 0;
@@ -415,7 +425,7 @@
 	}
 
 	.right-col {
-		grid-column: 2 / 3;
+		grid-column: 3 / 4;
 		grid-row: 1 / 1;
 	}
 
