@@ -196,8 +196,6 @@
 		}
 	];
 	const digitalInfrastructurePosY = 10;
-	const digitalInfrastructureRot = (opacity: number) =>
-		new THREE.Vector3(0, map(opacity, 0, 1, 9.5, 10), 0);
 	const servicesPropsData = [
 		{
 			baseColor: (currentBackgroundColor: string) => currentBackgroundColor,
@@ -212,14 +210,14 @@
 				{
 					mesh: '/models/DigitalInfrastructure.gltf',
 					ambientOcclusionTextureAndHighlight: '/models/DigitalInfrastructure_CADTexture.png',
-					rotationDisplacement: digitalInfrastructureRot,
+					rotationDisplacement: new THREE.Vector3(0, 0, 0),
 					positionDisplacement: (_opacity: number) =>
 						new THREE.Vector3(0, digitalInfrastructurePosY, 0)
 				},
 				...[0, 1, 2].map((i) => ({
 					mesh: '/models/CAD_Lines.gltf',
 					ambientOcclusionTextureAndHighlight: '/models/DigitalInfrastructure_CADTexture.png',
-					rotationDisplacement: digitalInfrastructureRot,
+					rotationDisplacement: new THREE.Vector3(0, 0, 0),
 					positionDisplacement: (
 						_opacity: number,
 						dioramaPositions: Array<{ x: number; z: number }>
