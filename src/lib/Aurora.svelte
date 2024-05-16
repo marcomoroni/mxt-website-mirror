@@ -104,13 +104,13 @@
 
 	@keyframes s2-anim-1 {
 		0% {
-			background-color: var(--color-accent-6);
+			background-color: var(--color-accent-2);
 		}
 		50% {
-			background-color: var(--color-accent-1);
+			background-color: var(--color-accent-3);
 		}
 		100% {
-			background-color: var(--color-accent-2);
+			background-color: var(--color-accent-1);
 		}
 	}
 
@@ -153,10 +153,10 @@
 
 	@keyframes s3-anim-1 {
 		0% {
-			background-color: var(--color-accent-5);
+			background-color: var(--color-accent-3);
 		}
 		50% {
-			background-color: var(--color-accent-3);
+			background-color: var(--color-accent-2);
 		}
 		100% {
 			background-color: var(--color-accent-1);

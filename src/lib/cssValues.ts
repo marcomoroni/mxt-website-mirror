@@ -1,9 +1,6 @@
 // A copy of the accent colours defined in the CSS.
 export const primaryColor = '#5a554e';
 export const backgroundColor = '#f5f1ef';
-export const accentColor1 = '#b8c26c';
-export const accentColor2 = '#db8c3f';
-export const accentColor3 = '#badad5';
-export const accentColor4 = '#1d5755';
-export const accentColor5 = '#f5dee4';
-export const accentColor6 = '#edbd6b';
+export const accentColor1 = '#4ca7ce';
+export const accentColor2 = '#f66b84';
+export const accentColor3 = '#fcc221';
