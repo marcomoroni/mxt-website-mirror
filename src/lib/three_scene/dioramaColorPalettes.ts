@@ -15,7 +15,7 @@ export function dioramaColorPalettes() {
 				accentColor1: 'ColouredNoise',
 				accentColor2: 'ColouredNoise',
 				accentColor3: 'ColouredNoise',
-				accentColor4: '#C0BBB1',
+				accentColor4: 'ColouredNoise',
 				highlightColor: 'white'
 			}
 		],

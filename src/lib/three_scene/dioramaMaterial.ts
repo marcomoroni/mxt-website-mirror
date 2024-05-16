@@ -6,13 +6,11 @@ import * as THREE from 'three';
 export function newDioramaMaterial(ambientOcclusionTextureAndHighlight: string) {
 	const material = new THREE.ShaderMaterial({
 		vertexShader: `
-        // out vec3 vNormal;
         out vec3 vNormalWorld;
         varying vec2 vUv;
         varying vec3 vPosition;
 
         void main() {
-            // vNormal = normal;
             vNormalWorld = normalize(normalMatrix * normal);
             vUv = uv;
             vPosition = position;
@@ -33,13 +31,26 @@ export function newDioramaMaterial(ambientOcclusionTextureAndHighlight: string) 
         uniform float highlightColorFadeStart;
         uniform float highlightColorFadeEnd;
         uniform sampler2D tAmbientOcclusionAndHighlight;
-        // in vec3 vNormal;
         in vec3 vNormalWorld;
         varying vec2 vUv;
         varying vec3 vPosition;
 
         float map(float value, float min1, float max1, float min2, float max2) {
             return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
+        }
+
+        float customLinearEasing(float x, float minValue, float maxValue, float startPoint, float endPoint) {
+            if (x <= startPoint) {
+                return minValue;
+            } else if (x >= endPoint) {
+                return maxValue;
+            }
+            
+            // Calculate the slope of the linear segment.
+            float slope = (maxValue - minValue) / (endPoint - startPoint);
+            
+            // Calculate the value using linear interpolation.
+            return minValue + slope * (x - startPoint);
         }
 
         void main() {
@@ -67,9 +78,8 @@ export function newDioramaMaterial(ambientOcclusionTextureAndHighlight: string) 
             vec3 baseColorWithHighlight = mix(baseColor_, highlightColor, uvTex.g);
 
             // Create a gradient to map 'uvTex' to. The gradient has 3 colours: 'baseColorWithHighlight', 'tintedShadow' and 'baseColorShadow'.
-            // The gradient is created by manipulating the interpolation value in 'mix()'.
-            vec3 finalColor = mix(tintedShadow, baseColorWithHighlight, clamp(map(uvTex.r, 0.55, 1.0, 0.0, 1.0), 0.0, 1.0));
-            finalColor = mix(finalColor, baseColorShadow, clamp(map(1.0 - uvTex.r, 0.5, 1.0, 0.0, 1.0), 0.0, 1.0));
+            vec3 finalColor = mix(tintedShadow, baseColorWithHighlight, customLinearEasing(uvTex.r, 0.1, 1.0, 0.65, 0.9));
+            finalColor = mix(baseColorShadow, finalColor, customLinearEasing(uvTex.r, 0.7, 1.0, 0.1, 0.5));
 
             // Fade at the edge of the diorama.
             float distFromCenterHorizontal = sqrt(pow(vPosition.r, 2.0) + pow(vPosition.b, 2.0));

@@ -18,5 +18,6 @@ const accentColorFromNoise = (noiseValue: number, displacement: number) => {
 export const accentColorsFromNoise = {
 	accentColor1: (noiseValue: number) => accentColorFromNoise(noiseValue, 0),
 	accentColor2: (noiseValue: number) => accentColorFromNoise(noiseValue, 20000),
-	accentColor3: (noiseValue: number) => accentColorFromNoise(noiseValue, 40000)
+	accentColor3: (noiseValue: number) => accentColorFromNoise(noiseValue, 40000),
+	accentColor4: (noiseValue: number) => accentColorFromNoise(noiseValue, 60000)
 };

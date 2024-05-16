@@ -681,6 +681,10 @@
 					initialPalette.accentColor3,
 					colorAnimationSmoothTime
 				),
+				accentColor4: smoothDampColorAnimation(
+					initialPalette.accentColor4,
+					colorAnimationSmoothTime
+				),
 				accentColor1ColouredNoiseInterp: smoothDampAnimation(
 					initialPalette.accentColor1 === 'ColouredNoise' ? 1 : 0,
 					accentColorColouredNoiseInterpSmoothTime
@@ -693,9 +697,9 @@
 					initialPalette.accentColor3 === 'ColouredNoise' ? 1 : 0,
 					accentColorColouredNoiseInterpSmoothTime
 				),
-				accentColor4: smoothDampColorAnimation(
-					initialPalette.accentColor4,
-					colorAnimationSmoothTime
+				accentColor4ColouredNoiseInterp: smoothDampAnimation(
+					initialPalette.accentColor4 === 'ColouredNoise' ? 1 : 0,
+					accentColorColouredNoiseInterpSmoothTime
 				),
 				highlightColor: smoothDampColorAnimation(
 					initialPalette.highlightColor,
@@ -722,13 +726,18 @@
 						palette.accentColor3 === 'ColouredNoise'
 							? palette.baseShadowColor
 							: palette.accentColor3;
+					animations.accentColor4.target =
+						palette.accentColor4 === 'ColouredNoise'
+							? palette.baseShadowColor
+							: palette.accentColor4;
 					animations.accentColor1ColouredNoiseInterp.target =
 						palette.accentColor1 === 'ColouredNoise' ? 1 : 0;
 					animations.accentColor2ColouredNoiseInterp.target =
 						palette.accentColor2 === 'ColouredNoise' ? 1 : 0;
 					animations.accentColor3ColouredNoiseInterp.target =
 						palette.accentColor3 === 'ColouredNoise' ? 1 : 0;
-					animations.accentColor4.target = palette.accentColor4;
+					animations.accentColor4ColouredNoiseInterp.target =
+						palette.accentColor4 === 'ColouredNoise' ? 1 : 0;
 					animations.highlightColor.target = palette.highlightColor;
 				})
 			);
@@ -742,10 +751,11 @@
 				animations.accentColor1.tick(dt);
 				animations.accentColor2.tick(dt);
 				animations.accentColor3.tick(dt);
+				animations.accentColor4.tick(dt);
 				animations.accentColor1ColouredNoiseInterp.tick(dt);
 				animations.accentColor2ColouredNoiseInterp.tick(dt);
 				animations.accentColor3ColouredNoiseInterp.tick(dt);
-				animations.accentColor4.tick(dt);
+				animations.accentColor4ColouredNoiseInterp.tick(dt);
 				animations.highlightColor.tick(dt);
 				rotDegAnimatedClockwiseAnim.tick(dt);
 
@@ -761,6 +771,10 @@
 					animations.accentColor3.current,
 					accentColorsFromNoise.accentColor3(elapsedTime)
 				)(animations.accentColor3ColouredNoiseInterp.current);
+				const accentColor4 = d3.interpolateLab(
+					animations.accentColor4.current,
+					accentColorsFromNoise.accentColor4(elapsedTime)
+				)(animations.accentColor4ColouredNoiseInterp.current);
 
 				diormamaMaterial.setBackgroundColor(new THREE.Color(backgroundColor));
 				diormamaMaterial.setBaseColor(new THREE.Color(animations.baseColor.current)); // wrong: should use background colour, in an additional layer
@@ -768,7 +782,7 @@
 				diormamaMaterial.setAccentColor1(new THREE.Color(accentColor1));
 				diormamaMaterial.setAccentColor2(new THREE.Color(accentColor2));
 				diormamaMaterial.setAccentColor3(new THREE.Color(accentColor3));
-				diormamaMaterial.setAccentColor4(new THREE.Color(animations.accentColor4.current));
+				diormamaMaterial.setAccentColor4(new THREE.Color(accentColor4));
 				diormamaMaterial.setHighlightColor(new THREE.Color(animations.highlightColor.current));
 				foliageMaterial.setBaseColor(new THREE.Color(animations.highlightColor.current));
 			};
