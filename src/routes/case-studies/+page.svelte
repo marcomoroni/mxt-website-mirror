@@ -65,7 +65,7 @@
 <AccessibleHiddenHeader text="Case studies" />
 
 <SecondaryPageLanding
-	text={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id venenatis sapien. Sed maximus nisi quis nibh imperdiet, id efficitur velit eleifend. Curabitur euismod magna ut vehicula accumsan. Integer tempus luctus magna a placerat. Vivamus at luctus nulla. Morbi tristique sapien odio, in porttitor metus interdum quis.'}
+	text={'From leading industrial firms to UK public sector organisations, we support our clients through meaningful partnerships.'}
 />
 
 <div class="landing-spacer" />

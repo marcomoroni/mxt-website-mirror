@@ -55,8 +55,7 @@
 	const sectionsData = [
 		{
 			title: 'Digital Infrastructure',
-			subtitle:
-				'Our multidisciplinary visualisations bring projects to life, improving decision-making and engagement',
+			subtitle: 'Improving decision-making and engagement through multidisciplinary visualisations',
 			color: accentColor1,
 			scrollTo: 's1',
 			associatedState: 'service-1' as 'service-1'
@@ -87,7 +86,7 @@
 <AccessibleHiddenHeader text="Services" />
 
 <SecondaryPageLanding
-	text={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id venenatis sapien. Sed maximus nisi quis nibh imperdiet, id efficitur velit eleifend. Curabitur euismod magna ut vehicula accumsan. Integer tempus luctus magna a placerat. Vivamus at luctus nulla. Morbi tristique sapien odio, in porttitor metus interdum quis.'}
+	text={'Our software platform and services help our customers solve complex transport challenges through advanced simulation environments for communication, research and learning.'}
 />
 <div class="landing-spacer" />
 
