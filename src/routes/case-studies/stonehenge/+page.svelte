@@ -18,7 +18,11 @@
 <CaseStudyLanding title={caseStudyData.title} leadParagraph={caseStudyData.leadParagraph} />
 <div class="landing-spacer" />
 <div class="intro-container">
-	<img class="img-stonehenge" src="/images/stonehenge.jpg" alt="Stonehenge." />
+	<img
+		class="img-stonehenge"
+		src="/images/HighresScreenshot00016.png"
+		alt="Stonehenge in a virtual environment."
+	/>
 	<div class="intro">
 		<p>
 			Stonehenge, one of the world's most iconic prehistoric landscapes, has been the focus of over
