@@ -21,7 +21,7 @@
 		margin-left: 40px;
 		margin-right: 40px;
 		max-width: 1400px;
-		filter: drop-shadow(0 0 15px var(--color-background));
+		filter: var(--strong-drop-shadow);
 		text-align: center;
 		text-wrap: balance;
 		font-size: 26px;
