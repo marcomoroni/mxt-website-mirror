@@ -30,7 +30,6 @@
 	import { prefersReducedMotion } from '$lib/prefersReducedMotion';
 	import { servicesPropsVisibilityAnimation } from './servicesPropsVisibilityAnimation';
 	import { newServicesPropMaterial } from './servicesPropMaterial';
-	import { map } from '$lib/map';
 	import { backgroundColor as backgroundColorStore } from '$lib/three_scene/threeStateStores';
 	import { accentColorsFromNoise } from './accentColorFromNoise';
 	import * as d3 from 'd3';
