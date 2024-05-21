@@ -991,14 +991,11 @@
 		};
 
 		let previousTimeStamp = document.timeline.currentTime as DOMHighResTimeStamp;
-		let shouldRequestNewAnimationFrame = true;
+		let animationFrameRequest: undefined | number = undefined;
 		const animate = (timeStamp: DOMHighResTimeStamp) => {
 			const dt = timeStamp - previousTimeStamp;
 			previousTimeStamp = timeStamp;
-
-			if (shouldRequestNewAnimationFrame) {
-				requestAnimationFrame(animate);
-			}
+			animationFrameRequest = requestAnimationFrame(animate);
 
 			animations.camera.pos.y.tick(dt);
 			animations.camera.pos.z.tick(dt);
@@ -1041,7 +1038,6 @@
 				}
 			);
 			servicesPropInstances.forEach(({ tick }) =>
-				// tick(blendedAccentColourForServicesProps_, dioramaPositions)
 				tick(accentColourForServicesProps.current, dioramaPositions)
 			);
 			headerInstances?.forEach(({ tick }) => tick(dt));
@@ -1060,7 +1056,9 @@
 
 		return {
 			destroy() {
-				shouldRequestNewAnimationFrame = false;
+				if (animationFrameRequest !== undefined) {
+					cancelAnimationFrame(animationFrameRequest);
+				}
 				storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
 				dioramaInstances.forEach(({ dispose }) => dispose());
 				servicesPropInstances.forEach(({ dispose }) => dispose());
