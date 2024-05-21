@@ -1,10 +1,6 @@
 <script lang="ts">
-	import {
-		backgroundColor,
-		servicesPageIntersectingSection
-	} from '$lib/three_scene/threeStateStores';
+	import { servicesPageIntersectingSection } from '$lib/three_scene/threeStateStores';
 	import { match } from 'ts-pattern';
-	import { backgroundColor as backgroundColorStore } from '$lib/three_scene/threeStateStores';
 
 	export let scrollObserveAction: (el: HTMLElement) => void;
 	export let associatedState: 'service-1' | 'service-2' | 'service-3';
@@ -22,7 +18,7 @@
 
 <div use:scrollObserveAction class="container">
 	<div class="small-screen-header">
-		<div class="header-solid-background" style:background-color={$backgroundColorStore}>
+		<div class="header-solid-background">
 			<div class="header-content-center">
 				<div class="header-content">
 					<h2 class="title" class:fade={currentState !== 'current'}>{title}</h2>
@@ -30,23 +26,16 @@
 				</div>
 			</div>
 		</div>
-		<div
-			class="header-fade-background"
-			style:background={`linear-gradient(in oklab, ${$backgroundColorStore}, color-mix(in oklab, ${$backgroundColorStore}, transparent 100%))`}
-		/>
+		<div class="header-fade-background" />
 	</div>
 	<div id={scrollToId} class="scroll-anchor" class:displace-above={!isFirst} />
 	<div class="show-behind top" class:full-height={isFirst} />
 	<div class="type" class:fade={currentState !== 'current'} class:small-padding-bottom={isLast}>
-		<div
-			class="solid-background-fade top"
-			style:background={`linear-gradient(transparent, ${$backgroundColor})`}
-		/>
-		<div
-			class="solid-background-fade bottom"
-			style:background={`linear-gradient(${$backgroundColor}, transparent)`}
-		/>
-		<div class="solid-background" style:background-color={$backgroundColor} />
+		<div class="solid-background-fade top" />
+		{#if !isLast}
+			<div class="solid-background-fade bottom" />
+		{/if}
+		<div class="solid-background" />
 		<slot name="type" />
 	</div>
 	{#if !isLast}
@@ -84,10 +73,16 @@
 
 	.header-solid-background {
 		padding-bottom: 30px;
+		background-color: var(--color-background);
 	}
 
 	.header-fade-background {
 		height: 30px;
+		background: linear-gradient(
+			in oklab,
+			var(--color-background),
+			color-mix(in oklab, var(--color-background), transparent 100%)
+		);
 	}
 
 	.title {
@@ -138,6 +133,7 @@
 	.solid-background {
 		top: 0;
 		height: 100%;
+		background-color: var(--color-background);
 	}
 
 	.solid-background-fade.top,
@@ -148,10 +144,12 @@
 
 	.solid-background-fade.top {
 		top: calc(var(--fade-height) * -1);
+		background: linear-gradient(transparent, var(--color-background));
 	}
 
 	.solid-background-fade.bottom {
 		bottom: calc(var(--fade-height) * -1);
+		background: linear-gradient(var(--color-background), transparent);
 	}
 
 	.small-padding-bottom {

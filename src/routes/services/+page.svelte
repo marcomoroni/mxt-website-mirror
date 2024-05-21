@@ -56,21 +56,18 @@
 		{
 			title: 'Digital Infrastructure',
 			subtitle: 'Improving decision-making and engagement through multidisciplinary visualisations',
-			color: accentColor1,
 			scrollTo: 's1',
 			associatedState: 'service-1' as 'service-1'
 		},
 		{
 			title: 'Research',
 			subtitle: 'subtitle',
-			color: accentColor2,
 			scrollTo: 's2',
 			associatedState: 'service-2' as 'service-2'
 		},
 		{
 			title: 'Learning and Development',
 			subtitle: 'subtitle',
-			color: accentColor3,
 			scrollTo: 's3',
 			associatedState: 'service-3' as 'service-3'
 		}
@@ -98,7 +95,6 @@
 					<SideBarEntry
 						title={entry.title}
 						subtitle={entry.subtitle}
-						color={entry.color}
 						scrollTo={entry.scrollTo}
 						associatedState={entry.associatedState}
 					/>

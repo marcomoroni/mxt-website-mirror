@@ -18,7 +18,7 @@ export function newServicesPropMaterial(ambientOcclusionTextureAndHighlight: str
         `,
 		fragmentShader: `
         uniform float opacity;
-        uniform vec3 backgroundColor;
+        uniform vec3 mockBackgroundColor;
         uniform vec3 baseColor;
 		uniform vec3 baseColorShadow;
         uniform vec3 highlightColor;
@@ -40,7 +40,7 @@ export function newServicesPropMaterial(ambientOcclusionTextureAndHighlight: str
             finalColor = mix(finalColor, highlightColor, uvTex.g);
 
             // Use the blue channel to match the background.
-            finalColor = mix(finalColor, backgroundColor, uvTex.b);
+            finalColor = mix(finalColor, mockBackgroundColor, uvTex.b);
 
             float opacity = opacity * uvTex.a;
 
@@ -52,7 +52,7 @@ export function newServicesPropMaterial(ambientOcclusionTextureAndHighlight: str
         `,
 		uniforms: {
 			opacity: { value: 1.0 },
-			backgroundColor: { value: new THREE.Color('cyan') },
+			mockBackgroundColor: { value: new THREE.Color('cyan') },
 			baseColor: { value: new THREE.Color('red') },
 			baseColorShadow: { value: new THREE.Color('black') },
 			highlightColor: { value: new THREE.Color('cyan') },
@@ -72,8 +72,8 @@ export function newServicesPropMaterial(ambientOcclusionTextureAndHighlight: str
 		setOpacity: (opacity: number) => {
 			material.uniforms.opacity.value = opacity;
 		},
-		setBackgroundColor: (value: THREE.Color) => {
-			material.uniforms.backgroundColor.value = value;
+		setMockBackgroundColor: (value: THREE.Color) => {
+			material.uniforms.mockBackgroundColor.value = value;
 		},
 		setBaseColor: (value: THREE.Color) => {
 			material.uniforms.baseColor.value = value;

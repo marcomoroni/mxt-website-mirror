@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { servicesPageIntersectingSection } from '$lib/three_scene/threeStateStores';
+	import {
+		accentColourInServicesProps,
+		servicesPageIntersectingSection
+	} from '$lib/three_scene/threeStateStores';
 	import { match } from 'ts-pattern';
 
 	export let title: string;
 	export let subtitle: string;
-	export let color: string;
 	export let scrollTo: string;
 	export let associatedState: 'service-1' | 'service-2' | 'service-3';
 
@@ -21,14 +23,14 @@
 <button
 	class="container"
 	style:background-color={currentState === 'current'
-		? `color-mix(in oklab, var(--color-primary) 30%, ${color})`
+		? `color-mix(in oklab, var(--color-primary) 30%, ${$accentColourInServicesProps})`
 		: undefined}
 	on:click={scrollHere}
 >
 	<div
 		class="title"
 		style:color={currentState === 'current'
-			? `color-mix(in oklab, white 90%, ${color})`
+			? `color-mix(in oklab, white 90%, ${$accentColourInServicesProps})`
 			: undefined}
 	>
 		{title}
@@ -36,7 +38,7 @@
 	<div
 		class="subtitle"
 		style:color={currentState === 'current'
-			? `color-mix(in oklab, white 90%, ${color})`
+			? `color-mix(in oklab, white 90%, ${$accentColourInServicesProps})`
 			: undefined}
 	>
 		{subtitle}

@@ -9,6 +9,15 @@ const palette1 = [accentColor2, accentColor1, accentColor3];
 const palette2 = [accentColor1, accentColor2, accentColor3];
 const palette3 = [accentColor3, accentColor1, accentColor2];
 const palette4 = [accentColor3, accentColor2, accentColor1];
+const palette5 = [
+	accentColor3,
+	accentColor2,
+	accentColor1,
+	accentColor2,
+	accentColor3,
+	accentColor2,
+	accentColor1
+];
 
 const noise = perlin1d();
 const accentColorFromNoise = (palette: Array<string>, noiseValue: number, displacement: number) => {
@@ -21,5 +30,6 @@ export const accentColorsFromNoise = {
 	accentColor1: (noiseValue: number) => accentColorFromNoise(palette1, noiseValue, 0),
 	accentColor2: (noiseValue: number) => accentColorFromNoise(palette2, noiseValue, 20000),
 	accentColor3: (noiseValue: number) => accentColorFromNoise(palette3, noiseValue, 40000),
-	accentColor4: (noiseValue: number) => accentColorFromNoise(palette4, noiseValue, 60000)
+	accentColor4: (noiseValue: number) => accentColorFromNoise(palette4, noiseValue, 60000),
+	accentColorForServicesProps: (noiseValue: number) => accentColorFromNoise(palette5, noiseValue, 0)
 };

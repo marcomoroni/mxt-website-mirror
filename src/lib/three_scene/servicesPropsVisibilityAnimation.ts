@@ -1,3 +1,4 @@
+import { map } from '$lib/map';
 import { smoothDampAnimation, type SmoothDampAnimation } from '$lib/smoothDamp';
 
 const smoothTime = 0.4;
@@ -40,9 +41,20 @@ export function servicesPropsVisibilityAnimation(
 		itemsVisibility.forEach(({ tick }) => tick(dt));
 	};
 
+	// The visibility value, which is from 0 to 1, is then split in two (see `splitVisibility`). Because
+	// opacity is on a fragment shader, faces behind other transparent faces are visibile. This is particularly bad when
+	// a semitransparent coloured part of the mesh is partially visibile when this animation occurs.
+	// As a solution, animate the parts, which coulours would collide, sequentially.
+	const splitVisibility = (visibility: number) => {
+		return {
+			meshVisibility: Math.min(1, Math.max(0, map(visibility, 0, 0.5, 0, 1))),
+			backgroundVisibility: Math.min(1, Math.max(0, map(visibility, 0.5, 1, 0, 1)))
+		};
+	};
+
 	return {
 		setVisibleItem,
 		tick,
-		getVisibility: (itemIndex: number) => itemsVisibility[itemIndex].current
+		getVisibility: (itemIndex: number) => splitVisibility(itemsVisibility[itemIndex].current)
 	};
 }
