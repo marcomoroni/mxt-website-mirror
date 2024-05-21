@@ -10,4 +10,4 @@ export const servicesPageIntersectingSection = writable<
 	undefined | 'service-1' | 'service-2' | 'service-3'
 >(undefined);
 
-export const backgroundColor = writable<string>(backgroundColor_);
+export const accentColourInServicesProps = writable<string>('magenta');
