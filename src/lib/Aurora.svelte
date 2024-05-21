@@ -29,6 +29,7 @@
 		width: 100%;
 		height: 100%;
 		overflow: hidden;
+		--color-anim-duration: 25s;
 	}
 
 	.shapes-pivot {
@@ -44,6 +45,7 @@
 		position: absolute;
 		border-radius: 100%;
 		transform: translate(-50%, -50%);
+		opacity: 0.7;
 		transition: opacity 5s var(--ease);
 	}
 
@@ -96,7 +98,7 @@
 
 	.s1 {
 		background-color: var(--color-accent-1);
-		animation: s1-anim-1 22s ease-in-out 0s infinite alternate,
+		animation: s1-anim-1 var(--color-anim-duration) ease-in-out 0s infinite alternate,
 			s1-anim-2 18s ease-in-out 0s infinite alternate,
 			s1-anim-3 20s ease-in-out 0s infinite alternate,
 			s1-anim-4 15s ease-in-out 0s infinite alternate;
@@ -145,7 +147,7 @@
 		background-color: var(--color-accent-2);
 		top: 20%;
 		left: 20%;
-		animation: s2-anim-1 25s ease-in-out 0s infinite alternate,
+		animation: s2-anim-1 var(--color-anim-duration) ease-in-out 0s infinite alternate,
 			s2-anim-2 20s ease-in-out 0s infinite alternate,
 			s2-anim-3 27s ease-in-out 0s infinite alternate,
 			s2-anim-4 18s ease-in-out 0s infinite alternate;
@@ -156,10 +158,10 @@
 			background-color: var(--color-accent-3);
 		}
 		50% {
-			background-color: var(--color-accent-2);
+			background-color: var(--color-accent-1);
 		}
 		100% {
-			background-color: var(--color-accent-1);
+			background-color: var(--color-accent-2);
 		}
 	}
 
@@ -194,7 +196,7 @@
 		background-color: var(--color-accent-3);
 		top: 60%;
 		left: 60%;
-		animation: s3-anim-1 30s ease-in-out 0s infinite alternate,
+		animation: s3-anim-1 var(--color-anim-duration) ease-in-out 0s infinite alternate,
 			s3-anim-2 21s ease-in-out 0s infinite alternate,
 			s3-anim-3 28s ease-in-out 0s infinite alternate,
 			s3-anim-4 20s ease-in-out 0s infinite alternate;
