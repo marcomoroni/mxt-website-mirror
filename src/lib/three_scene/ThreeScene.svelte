@@ -218,7 +218,7 @@
 		{
 			baseColor: (accentColor: string) => accentColor,
 			highlightColor: 'white',
-			aoColor: '#8B5725',
+			aoColor: 'black',
 			backgroundColor: undefined,
 			meshes: [
 				{
@@ -232,7 +232,7 @@
 		{
 			baseColor: (accentColor: string) => accentColor,
 			highlightColor: 'white',
-			aoColor: '#4E7B74',
+			aoColor: 'black',
 			backgroundColor: (_accentColor: string) => 'white',
 			meshes: [
 				{
