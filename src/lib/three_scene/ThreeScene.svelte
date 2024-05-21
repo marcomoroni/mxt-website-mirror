@@ -3,13 +3,7 @@
 	import * as THREE from 'three';
 	import { derived, get, writable, type Unsubscriber } from 'svelte/store';
 	import { P, match } from 'ts-pattern';
-	import {
-		accentColor1,
-		accentColor2,
-		accentColor3,
-		backgroundColor,
-		primaryColor
-	} from '$lib/cssValues';
+	import { backgroundColor, primaryColor } from '$lib/cssValues';
 	import { lerp } from '$lib/lerp';
 	import { toRadians } from '$lib/angleConversions';
 	import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
@@ -30,10 +24,9 @@
 	import { prefersReducedMotion } from '$lib/prefersReducedMotion';
 	import { servicesPropsVisibilityAnimation } from './servicesPropsVisibilityAnimation';
 	import { newServicesPropMaterial } from './servicesPropMaterial';
-	import { map } from '$lib/map';
-	import { backgroundColor as backgroundColorStore } from '$lib/three_scene/threeStateStores';
 	import { accentColorsFromNoise } from './accentColorFromNoise';
 	import * as d3 from 'd3';
+	import { accentColourInServicesProps as accentColourInServicesPropsStore } from './threeStateStores';
 
 	const DEV_debugLog = false;
 	const FLAG_useHeaders = false;
@@ -198,30 +191,22 @@
 	const digitalInfrastructurePosY = 10;
 	const servicesPropsData = [
 		{
-			baseColor: (currentBackgroundColor: string) => currentBackgroundColor,
-			highlightColor: (() => {
-				const { l, c, h } = d3.lch(accentColor1);
-				const lighterColor = d3.lch(l + 20, c, h);
-				return lighterColor.toString();
-			})(),
+			baseColor: (accentColor: string) => accentColor,
+			highlightColor: 'white',
 			aoColor: 'black',
-			backgroundColor: (_currentBackgroundColor: string) => accentColor1,
+			backgroundColor: (accentColor: string) => accentColor,
 			meshes: [
 				{
 					mesh: '/models/DigitalInfrastructure.gltf',
 					ambientOcclusionTextureAndHighlight: '/models/DigitalInfrastructure_CADTexture.png',
-					rotationDisplacement: (_opacity: number) => new THREE.Vector3(0, 0, 0),
-					positionDisplacement: (_opacity: number) =>
-						new THREE.Vector3(0, digitalInfrastructurePosY, 0)
+					rotationDisplacement: () => new THREE.Vector3(0, 0, 0),
+					positionDisplacement: () => new THREE.Vector3(0, digitalInfrastructurePosY, 0)
 				},
 				...[0, 1, 2].map((i) => ({
 					mesh: '/models/CAD_Lines.gltf',
 					ambientOcclusionTextureAndHighlight: '/models/DigitalInfrastructure_CADTexture.png',
-					rotationDisplacement: (_opacity: number) => new THREE.Vector3(0, 0, 0),
-					positionDisplacement: (
-						_opacity: number,
-						dioramaPositions: Array<{ x: number; z: number }>
-					) =>
+					rotationDisplacement: () => new THREE.Vector3(0, 0, 0),
+					positionDisplacement: (dioramaPositions: Array<{ x: number; z: number }>) =>
 						new THREE.Vector3(
 							dioramaPositions[i].x,
 							digitalInfrastructurePosY - 0.2,
@@ -231,30 +216,30 @@
 			]
 		},
 		{
-			baseColor: (_currentBackgroundColor: string) => '#EDAF74',
+			baseColor: (accentColor: string) => accentColor,
 			highlightColor: 'white',
 			aoColor: '#8B5725',
-			backgroundColor: (currentBackgroundColor: string) => currentBackgroundColor,
+			backgroundColor: undefined,
 			meshes: [
 				{
 					mesh: '/models/Research.gltf',
 					ambientOcclusionTextureAndHighlight: '/models/Research_AO.png',
-					rotationDisplacement: (_opacity: number) => new THREE.Vector3(0, 280, 0),
-					positionDisplacement: (_opacity: number) => new THREE.Vector3(-2, 20, 1.5)
+					rotationDisplacement: () => new THREE.Vector3(0, 280, 0),
+					positionDisplacement: () => new THREE.Vector3(-2, 20, 1.5)
 				}
 			]
 		},
 		{
-			baseColor: (_currentBackgroundColor: string) => '#E1F1EE',
+			baseColor: (accentColor: string) => accentColor,
 			highlightColor: 'white',
 			aoColor: '#4E7B74',
-			backgroundColor: (currentBackgroundColor: string) => currentBackgroundColor,
+			backgroundColor: (_accentColor: string) => 'white',
 			meshes: [
 				{
 					mesh: '/models/LearnAndDev.gltf',
 					ambientOcclusionTextureAndHighlight: '/models/LearnAndDev_AO.png',
-					rotationDisplacement: (_opacity: number) => new THREE.Vector3(0, 270, 90),
-					positionDisplacement: (_opacity: number) => new THREE.Vector3(0, 8, 9)
+					rotationDisplacement: () => new THREE.Vector3(0, 270, 90),
+					positionDisplacement: () => new THREE.Vector3(0, 8, 9)
 				}
 			]
 		}
@@ -394,17 +379,6 @@
 				.with('case-study-p3', () => dioramaOwnPolarAngleMultWhenSmall)
 				.otherwise(() => 1)
 		),
-		backgroundColor: derived(stateStore, ($s) =>
-			match($s)
-				.with('service-1', () => {
-					const { l, c, h } = d3.lch(accentColor1);
-					const lighterColor = d3.lch(l + 5, c, h);
-					return lighterColor.toString();
-				})
-				.with('service-2', () => accentColor2)
-				.with('service-3', () => accentColor3)
-				.otherwise(() => backgroundColor)
-		),
 		servicesProps: derived(stateStore, ($s) =>
 			match($s)
 				.returnType<number | undefined>()
@@ -466,10 +440,6 @@
 				get(sceneSettings.dioramasOwnPolarAngleMult),
 				0.9
 			),
-			backgroundColor: smoothDampColorAnimation(
-				get(sceneSettings.backgroundColor),
-				colorAnimationSmoothTime
-			),
 			servicesProps: servicesPropsVisibilityAnimation(
 				get(sceneSettings.servicesProps),
 				servicesPropsData.length
@@ -512,11 +482,55 @@
 			)
 		);
 		storeUnsubscribers.push(
-			sceneSettings.backgroundColor.subscribe((v) => (animations.backgroundColor.target = v))
-		);
-		storeUnsubscribers.push(
 			sceneSettings.servicesProps.subscribe((v) => animations.servicesProps.setVisibleItem(v))
 		);
+
+		const accentColourForServicesProps = (() => {
+			let elapsedTime = 0;
+			let currentAccentColor = 'magenta';
+			const tick = (dt: DOMHighResTimeStamp) => {
+				elapsedTime += dt * 0.00002;
+				currentAccentColor = accentColorsFromNoise.accentColorForServicesProps(elapsedTime);
+			};
+			return {
+				tick,
+				get current() {
+					return currentAccentColor;
+				}
+			};
+		})();
+
+		const animatedBackgroundColor = (
+			defaultBackgroundColor: string,
+			accentColor: string,
+			getServicesPropsVisibility: (itemIndex: number) => {
+				backgroundVisibility: number;
+			}
+		) => {
+			return servicesPropsData.reduce(
+				(highest, current, i) => {
+					const backgroundVisibility = getServicesPropsVisibility(i).backgroundVisibility;
+					if (backgroundVisibility > highest.visibility) {
+						const modifiedBackgroundColor = current.backgroundColor
+							? d3.interpolateLab(
+									backgroundColor,
+									current.backgroundColor(accentColor)
+							  )(backgroundVisibility)
+							: defaultBackgroundColor;
+						return {
+							backgroundColor: modifiedBackgroundColor,
+							visibility: backgroundVisibility
+						};
+					} else {
+						return highest;
+					}
+				},
+				{
+					backgroundColor: defaultBackgroundColor,
+					visibility: 0
+				}
+			).backgroundColor;
+		};
 
 		// The values of the animations are not applied by the stores themselves. Instead, this function
 		// is called every frame and it manually reads values from the stores.
@@ -536,7 +550,6 @@
 		};
 
 		const scene = new THREE.Scene();
-		scene.background = new THREE.Color(backgroundColor);
 		const camera = new THREE.PerspectiveCamera(
 			30,
 			window.innerWidth / window.innerHeight,
@@ -742,7 +755,7 @@
 				})
 			);
 
-			const tick = (dt: DOMHighResTimeStamp, backgroundColor: THREE.Color) => {
+			const tick = (dt: DOMHighResTimeStamp, backgroundColor: string) => {
 				elapsedTime += dt * 0.00007;
 
 				animations.radiusDispl.tick(dt);
@@ -810,24 +823,15 @@
 		});
 
 		const servicesPropInstances = servicesPropsData.map((data, i) => {
-			const tickAccumulator: Array<
+			const meshInstances = data.meshes.reduce(
 				(
-					dt: DOMHighResTimeStamp,
-					backgroundColor: THREE.Color,
-					dioramaPositions: Array<{ x: number; z: number }>
-				) => void
-			> = [];
-			const disposeAccumulator: Array<() => void> = [];
-			data.meshes.forEach(
-				({
-					mesh,
-					ambientOcclusionTextureAndHighlight,
-					positionDisplacement,
-					rotationDisplacement
-				}) => {
-					const material = newServicesPropMaterial(ambientOcclusionTextureAndHighlight);
-					material.setHighlightColor(new THREE.Color(data.highlightColor));
-					material.setBaseColorShadow(new THREE.Color(data.aoColor));
+					acc,
+					{ mesh, ambientOcclusionTextureAndHighlight, positionDisplacement, rotationDisplacement }
+				) => {
+					const baseMaterial = newServicesPropMaterial(ambientOcclusionTextureAndHighlight);
+					baseMaterial.setMockBackgroundColor(new THREE.Color(backgroundColor));
+					baseMaterial.setHighlightColor(new THREE.Color(data.highlightColor));
+					baseMaterial.setBaseColorShadow(new THREE.Color(data.aoColor));
 					let displamentPivot: undefined | THREE.Object3D = undefined;
 					const loader = new GLTFLoader();
 					loader.load(mesh, function (gltf) {
@@ -840,7 +844,7 @@
 						gltfScene.scale.set(gltfScaleMult, gltfScaleMult, gltfScaleMult);
 						gltfScene.traverseVisible((child) => {
 							if (child instanceof THREE.Mesh) {
-								child.material = material.material;
+								child.material = baseMaterial.material;
 							}
 						});
 						transformDisplGroup.add(gltfScene);
@@ -851,32 +855,34 @@
 					});
 
 					const tick = (
-						dt: DOMHighResTimeStamp,
-						backgroundColor: THREE.Color,
+						meshVisibility: number,
+						backgroundVisibility: number,
+						accentColor: string,
 						dioramaPositions: Array<{ x: number; z: number }>
 					) => {
-						const opacity = animations.servicesProps.getVisibility(i);
+						const modifiedBaseColor = d3.interpolateLab(
+							backgroundColor,
+							data.baseColor(accentColor)
+						)(backgroundVisibility);
 
 						// Hack: there's some z sorting issues which make some transpasparent objects clip others even
-						// when they are not visible. To solve this I'm focing the object not to not be visible if the opacity
+						// when they are not visible. To solve this I'm focing the object to not be visible if the opacity
 						// is almost 0.
-						material.setVisibility(opacity >= 0.001);
+						baseMaterial.setVisibility(meshVisibility >= 0.001);
 
-						material.setOpacity(opacity);
-						material.setBackgroundColor(
-							new THREE.Color(data.backgroundColor(backgroundColor.getStyle()))
-						);
-						material.setBaseColor(new THREE.Color(data.baseColor(backgroundColor.getStyle())));
+						baseMaterial.setOpacity(meshVisibility);
+						// baseMaterial.setBaseColor(new THREE.Color(data.baseColor(accentColor)));
+						baseMaterial.setBaseColor(new THREE.Color(modifiedBaseColor));
 
 						if (displamentPivot) {
 							const posDispl = positionDisplacement
-								? positionDisplacement(opacity, dioramaPositions)
+								? positionDisplacement(dioramaPositions)
 								: new THREE.Vector3(0, 0, 0);
 							displamentPivot.position.x = posDispl.x;
 							displamentPivot.position.y = posDispl.y;
 							displamentPivot.position.z = posDispl.z;
 							const rotDispl = rotationDisplacement
-								? rotationDisplacement(opacity)
+								? rotationDisplacement()
 								: new THREE.Vector3(0, 0, 0);
 							displamentPivot.rotation.x = degToRad(rotDispl.x);
 							displamentPivot.rotation.y = degToRad(rotDispl.y);
@@ -884,24 +890,42 @@
 						}
 					};
 
-					tickAccumulator.push(tick);
-					disposeAccumulator.push(() => {
-						material.dispose();
-					});
+					const dispose = () => {
+						baseMaterial.dispose();
+					};
+
+					return {
+						tickAccumulator: [...acc.tickAccumulator, tick],
+						disposeAccumulator: [...acc.disposeAccumulator, dispose]
+					};
+				},
+				{
+					tickAccumulator: [] as Array<
+						(
+							meshVisibility: number,
+							backgroundVisibility: number,
+							accentColor: string,
+							dioramaPositions: Array<{ x: number; z: number }>
+						) => void
+					>,
+					disposeAccumulator: [] as Array<() => void>
 				}
 			);
 
+			const tick = (accentColor: string, dioramaPositions: Array<{ x: number; z: number }>) => {
+				const { meshVisibility, backgroundVisibility } = animations.servicesProps.getVisibility(i);
+				meshInstances.tickAccumulator.forEach((tick) =>
+					tick(meshVisibility, backgroundVisibility, accentColor, dioramaPositions)
+				);
+			};
+
+			const dispose = () => {
+				meshInstances.disposeAccumulator.forEach((dispose) => dispose());
+			};
+
 			return {
-				tick: (
-					dt: DOMHighResTimeStamp,
-					backgroundColor: THREE.Color,
-					dioramaPositions: Array<{ x: number; z: number }>
-				) => {
-					tickAccumulator.forEach((tick) => tick(dt, backgroundColor, dioramaPositions));
-				},
-				dispose: () => {
-					disposeAccumulator.forEach((dispose) => dispose());
-				}
+				tick,
+				dispose
 			};
 		});
 
@@ -967,14 +991,11 @@
 		};
 
 		let previousTimeStamp = document.timeline.currentTime as DOMHighResTimeStamp;
-		let shouldRequestNewAnimationFrame = true;
+		let animationFrameRequest: undefined | number = undefined;
 		const animate = (timeStamp: DOMHighResTimeStamp) => {
 			const dt = timeStamp - previousTimeStamp;
 			previousTimeStamp = timeStamp;
-
-			if (shouldRequestNewAnimationFrame) {
-				requestAnimationFrame(animate);
-			}
+			animationFrameRequest = requestAnimationFrame(animate);
 
 			animations.camera.pos.y.tick(dt);
 			animations.camera.pos.z.tick(dt);
@@ -984,17 +1005,21 @@
 			animations.railCircumference.radius.tick(dt);
 			animations.railCircumference.polarAngleDegAnimatedToClosest.tick(dt);
 			animations.dioramasOwnPolarAngleMult.tick(dt);
-			animations.backgroundColor.tick(dt);
 			animations.servicesProps.tick(dt);
 			railCircumference.polarAngleDeg.tick(dt);
+			accentColourForServicesProps.tick(dt);
 
-			const backgroundColor = new THREE.Color(animations.backgroundColor.current);
-			scene.background = backgroundColor;
+			const backgroundColor_ = animatedBackgroundColor(
+				backgroundColor,
+				accentColourForServicesProps.current,
+				animations.servicesProps.getVisibility
+			);
+
 			applyAnimationValues(camera, railCircumference);
 			const dioramaPositions: Array<{ x: number; z: number }> = [];
 			dioramaInstances.forEach(
 				({ tick, object3D, ownPolarAngleDeg, rotDegAnimatedClockwiseAnim, radiusDispl }) => {
-					tick(dt, backgroundColor);
+					tick(dt, backgroundColor_);
 
 					const pos = positionInCircumference({
 						center: railCircumference.center,
@@ -1012,11 +1037,14 @@
 					dioramaPositions.push(pos);
 				}
 			);
-			servicesPropInstances.forEach(({ tick }) => tick(dt, backgroundColor, dioramaPositions));
+			servicesPropInstances.forEach(({ tick }) =>
+				tick(accentColourForServicesProps.current, dioramaPositions)
+			);
 			headerInstances?.forEach(({ tick }) => tick(dt));
 			camera.lookAt(0, animations.camera.lookAt.y.current, 0);
+			scene.background = new THREE.Color(backgroundColor_);
 
-			backgroundColorStore.set(backgroundColor.getStyle());
+			accentColourInServicesPropsStore.set(accentColourForServicesProps.current);
 
 			renderer.render(scene, camera);
 		};
@@ -1028,7 +1056,9 @@
 
 		return {
 			destroy() {
-				shouldRequestNewAnimationFrame = false;
+				if (animationFrameRequest !== undefined) {
+					cancelAnimationFrame(animationFrameRequest);
+				}
 				storeUnsubscribers.forEach((unsubscribe) => unsubscribe());
 				dioramaInstances.forEach(({ dispose }) => dispose());
 				servicesPropInstances.forEach(({ dispose }) => dispose());

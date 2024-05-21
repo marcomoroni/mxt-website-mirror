@@ -3,9 +3,6 @@ import { accentColor1, accentColor2, accentColor3, backgroundColor } from '$lib/
 export type PaletteName = 'default' | 'dim' | 'hidden' | 'service-1' | 'service-2' | 'service-3';
 
 export function dioramaColorPalettes() {
-	const darkAccentColor1 = '#B0BA5F';
-	const darkAccentColor2 = '#D48233';
-	const darkAccentColor3 = '#A9D4CD';
 	const palettes = new Map([
 		[
 			'default' as PaletteName,
@@ -46,37 +43,37 @@ export function dioramaColorPalettes() {
 		[
 			'service-1' as PaletteName,
 			{
-				baseColor: darkAccentColor1,
-				baseShadowColor: 'black',
-				accentColor1: darkAccentColor1,
-				accentColor2: darkAccentColor1,
-				accentColor3: darkAccentColor1,
-				accentColor4: accentColor1,
-				highlightColor: darkAccentColor1
+				baseColor: 'white',
+				baseShadowColor: 'white',
+				accentColor1: 'white',
+				accentColor2: 'white',
+				accentColor3: 'white',
+				accentColor4: 'white',
+				highlightColor: 'white'
 			}
 		],
 		[
 			'service-2' as PaletteName,
 			{
-				baseColor: darkAccentColor2,
-				baseShadowColor: 'black',
-				accentColor1: darkAccentColor2,
-				accentColor2: darkAccentColor2,
-				accentColor3: darkAccentColor2,
-				accentColor4: accentColor2,
-				highlightColor: darkAccentColor2
+				baseColor: '#E8DFDA',
+				baseShadowColor: '#E8DFDA',
+				accentColor1: '#E8DFDA',
+				accentColor2: '#E8DFDA',
+				accentColor3: '#E8DFDA',
+				accentColor4: '#E8DFDA',
+				highlightColor: '#EFE6E2'
 			}
 		],
 		[
 			'service-3' as PaletteName,
 			{
-				baseColor: darkAccentColor3,
-				baseShadowColor: 'black',
-				accentColor1: darkAccentColor3,
-				accentColor2: darkAccentColor3,
-				accentColor3: darkAccentColor3,
-				accentColor4: accentColor3,
-				highlightColor: darkAccentColor3
+				baseColor: '#908C86',
+				baseShadowColor: '#908C86',
+				accentColor1: '#908C86',
+				accentColor2: '#908C86',
+				accentColor3: '#908C86',
+				accentColor4: '#908C86',
+				highlightColor: '#908C86'
 			}
 		]
 	]);

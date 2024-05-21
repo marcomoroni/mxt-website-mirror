@@ -78,7 +78,7 @@ export function newDioramaMaterial(ambientOcclusionTextureAndHighlight: string) 
             vec3 baseColorWithHighlight = mix(baseColor_, highlightColor, uvTex.g);
 
             // Create a gradient to map 'uvTex' to. The gradient has 3 colours: 'baseColorWithHighlight', 'tintedShadow' and 'baseColorShadow'.
-            vec3 finalColor = mix(tintedShadow, baseColorWithHighlight, customLinearEasing(uvTex.r, 0.1, 1.0, 0.65, 0.9));
+            vec3 finalColor = mix(tintedShadow, baseColorWithHighlight, customLinearEasing(uvTex.r, 0.2, 1.0, 0.66, 0.83));
             finalColor = mix(baseColorShadow, finalColor, customLinearEasing(uvTex.r, 0.7, 1.0, 0.1, 0.5));
 
             // Fade at the edge of the diorama.

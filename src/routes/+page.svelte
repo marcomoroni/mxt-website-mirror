@@ -31,7 +31,7 @@
 		min-height: 100dvh;
 		display: flex;
 		flex-direction: column;
-		filter: drop-shadow(0 0 15px var(--color-background));
+		filter: var(--strong-drop-shadow);
 	}
 
 	.a-a {

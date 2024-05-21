@@ -15,16 +15,15 @@ html {
 	--horizontal-margin: 30px;
 	--ease: cubic-bezier(0.22, 0.6, 0.36, 1);
 	--color-logo-base: var(--color-primary);
-	--color-accent-1: #b8c26c;
-	--color-accent-2: #db8c3f;
-	--color-accent-3: #badad5;
-	--color-accent-4: #1d5755;
-	--color-accent-5: #f5dee4;
-	--color-accent-6: #edbd6b;
+	--color-accent-1: #4ca7ce;
+	--color-accent-2: #f66b84;
+	--color-accent-3: #fcc221;
 	--color-focus: #00b8eb;
 	--focus-thickness: 3px;
 	--nav-bar-height: 100px;
 	--case-study-margin: 30px;
+	--strong-drop-shadow: drop-shadow(0 0 15px var(--color-background))
+		drop-shadow(0 0 15px var(--color-background)) drop-shadow(0 0 5px var(--color-background));
 }
 
 body {

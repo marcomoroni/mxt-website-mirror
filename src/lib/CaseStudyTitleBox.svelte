@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { accentColourInServicesProps } from './three_scene/threeStateStores';
+
 	export let title: string;
 	export let leadParagraph: string;
 	export let comingSoon: boolean = false;
@@ -7,9 +9,19 @@
 <div class="title-container">
 	<div class="size">
 		<div class="r">
-			<div class="case-study">Case study</div>
+			<div
+				class="case-study"
+				style:color={`color-mix(in oklab, var(--color-primary) 60%, ${$accentColourInServicesProps})`}
+			>
+				Case study
+			</div>
 			{#if comingSoon}
-				<div class="coming-soon">Coming soon</div>
+				<div
+					class="coming-soon"
+					style:background-color={`color-mix(in oklab, var(--color-primary) 60%, ${$accentColourInServicesProps})`}
+				>
+					Coming soon
+				</div>
 			{/if}
 		</div>
 		<div class="divider-1" />
@@ -61,7 +73,6 @@
 	}
 
 	.coming-soon {
-		background-color: var(--color-primary);
 		color: var(--color-background);
 		padding-left: 14px;
 		padding-right: 14px;

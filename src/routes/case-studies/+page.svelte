@@ -5,7 +5,10 @@
 	import SecondaryPageLanding from '$lib/SecondaryPageLanding.svelte';
 	import { caseStudiesData } from '$lib/caseStudiesData';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
-	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
+	import {
+		accentColourInServicesProps,
+		caseStudiesPageIntersectingCard
+	} from '$lib/three_scene/threeStateStores';
 	import { onMount } from 'svelte';
 
 	// `IntersectionObserver` does not work well in this situation becasue getting the first state asyncronously
@@ -65,7 +68,7 @@
 <AccessibleHiddenHeader text="Case studies" />
 
 <SecondaryPageLanding
-	text={'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id venenatis sapien. Sed maximus nisi quis nibh imperdiet, id efficitur velit eleifend. Curabitur euismod magna ut vehicula accumsan. Integer tempus luctus magna a placerat. Vivamus at luctus nulla. Morbi tristique sapien odio, in porttitor metus interdum quis.'}
+	text={'From leading industrial firms to UK public sector organisations, we support our clients through meaningful partnerships.'}
 />
 
 <div class="landing-spacer" />
@@ -78,6 +81,11 @@
 				href={caseStudy.comingSoon ? undefined : caseStudy.href}
 				class:coming-soon={caseStudy.comingSoon}
 			>
+				<div
+					class="border-when-hovered"
+					class:coming-soon={caseStudy.comingSoon}
+					style:border-color={$accentColourInServicesProps}
+				/>
 				<div class="background" class:coming-soon={caseStudy.comingSoon} />
 				<div class="case-study-title-box-container">
 					<CaseStudyTitleBox
@@ -127,8 +135,26 @@
 		justify-content: flex-end;
 	}
 
-	.box:hover .background:not(.coming-soon) {
+	.box:hover .background:not(.coming-soon),
+	.box:focus-visible .background:not(.coming-soon) {
+		display: none;
+	}
+
+	.border-when-hovered {
+		pointer-events: none;
 		border-width: 4px;
+		border-style: solid;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		display: none;
+	}
+
+	.box:hover .border-when-hovered:not(.coming-soon),
+	.box:focus-visible .border-when-hovered:not(.coming-soon) {
+		display: block;
 	}
 
 	.box.coming-soon {
