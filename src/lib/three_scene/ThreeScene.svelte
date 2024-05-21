@@ -233,7 +233,7 @@
 			baseColor: (accentColor: string) => accentColor,
 			highlightColor: 'white',
 			aoColor: '#4E7B74',
-			backgroundColor: (_accentColor: string) => 'grey',
+			backgroundColor: (_accentColor: string) => 'white',
 			meshes: [
 				{
 					mesh: '/models/LearnAndDev.gltf',
