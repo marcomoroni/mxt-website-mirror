@@ -109,6 +109,7 @@
 	.case-study-card {
 		--margin: 40px;
 		width: 100%;
+		filter: var(--strong-drop-shadow);
 	}
 
 	.background {

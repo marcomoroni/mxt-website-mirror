@@ -19,6 +19,7 @@
 		width: 100%;
 		display: flex;
 		flex-direction: column;
+		filter: var(--strong-drop-shadow);
 	}
 
 	.div-margin-top {
