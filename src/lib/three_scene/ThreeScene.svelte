@@ -984,9 +984,13 @@
 		});
 
 		const resize = () => {
-			// --- should I use a resize observer?
-			renderer.setSize(window.innerWidth, window.innerHeight);
-			camera.aspect = window.innerWidth / window.innerHeight;
+			const width = window.innerWidth;
+			const height = window.innerHeight;
+			const useMoblieFOV = width / height < 1;
+			const fov = useMoblieFOV ? 56 : 30;
+			renderer.setSize(width, height);
+			camera.aspect = width / height;
+			camera.fov = fov;
 			camera.updateProjectionMatrix();
 		};
 
