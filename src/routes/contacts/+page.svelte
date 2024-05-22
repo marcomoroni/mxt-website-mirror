@@ -15,12 +15,17 @@
 		<div class="horizontal-margin" />
 		<address class="type-container">
 			<div>
+				<a href="https://www.linkedin.com/company/mxt-reality" class="underline-on-focus">
+					LinkedIn
+				</a>
+			</div>
+			<div>
 				<a href="mailto:info@mxt.co.uk" class="underline-on-focus">info@mxt.co.uk</a>
 			</div>
 			<div>
 				<a href="tel:+44 0203 633 5450" class="underline-on-focus">0203 633 5450</a>
 			</div>
-			<div>The Courtyard<br />4 Evelyn Road<br />London<br />W4 5JL</div>
+			<div>The Courtyard, 4 Evelyn Road<br />London W4 5JL</div>
 		</address>
 		<div class="horizontal-margin" />
 	</div>
