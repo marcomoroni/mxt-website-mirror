@@ -13,6 +13,7 @@
 	import { crossfade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 	import FocusHighlight from '$lib/FocusHighlight.svelte';
+	import Footer from '$lib/Footer.svelte';
 
 	let hoveringHomeLink = false;
 
@@ -71,6 +72,7 @@
 			{ path: '/case-studies/p3/', atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
+		.with({ path: '/privacy-policy/' }, () => true)
 		.otherwise(() => false);
 	$: auroraHidden = $page.url.pathname !== '/contacts/';
 
@@ -176,6 +178,8 @@
 </nav>
 
 <slot />
+
+<Footer />
 
 <style>
 	.aurora-container {
