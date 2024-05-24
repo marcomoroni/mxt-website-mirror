@@ -2,7 +2,7 @@
 
 <style>
 	h3 {
-		font-size: 27px;
+		font-size: 28px;
 		margin-top: 40px;
 		margin-bottom: 26px;
 		line-height: 1.4;

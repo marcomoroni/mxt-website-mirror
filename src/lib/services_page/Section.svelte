@@ -158,9 +158,9 @@
 
 	.type,
 	.header-content-center {
-		padding-left: 70px;
-		padding-right: 70px;
-		max-width: 800px;
+		padding-left: 60px;
+		padding-right: 60px;
+		max-width: 900px;
 		margin-left: auto;
 		margin-right: auto;
 	}
