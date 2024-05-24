@@ -15,13 +15,28 @@
 	import FocusHighlight from '$lib/FocusHighlight.svelte';
 	import Footer from '$lib/Footer.svelte';
 
+	const navLinks = [
+		{
+			label: 'Services',
+			href: '/services'
+		},
+		{
+			label: 'Case studies',
+			href: '/case-studies'
+		},
+		{
+			label: 'Contacts',
+			href: '/contacts'
+		}
+	];
+
 	let hoveringHomeLink = false;
 
 	let scrollY: number;
 	$: atTopOfWindow = scrollY <= 70;
 
 	$: threeState = match({
-		path: $page.url.pathname,
+		path: $page.route.id,
 		caseStudiesPageIntersectingCard: $caseStudiesPageIntersectingCard,
 		servicesPageIntersectingSection: $servicesPageIntersectingSection
 	})
@@ -42,39 +57,39 @@
 		>()
 		.with({ path: '/' }, () => 'home')
 		.with(
-			{ path: '/case-studies/', caseStudiesPageIntersectingCard: P.select() },
+			{ path: '/case-studies', caseStudiesPageIntersectingCard: P.select() },
 			(s) => s ?? 'case-studies'
 		)
-		.with({ path: '/case-studies/stonehenge/' }, () => 'case-study-a303')
-		.with({ path: '/case-studies/p2/' }, () => 'case-study-p2')
-		.with({ path: '/case-studies/p3/' }, () => 'case-study-p3')
+		.with({ path: '/case-studies/stonehenge' }, () => 'case-study-a303')
+		.with({ path: '/case-studies/p2' }, () => 'case-study-p2')
+		.with({ path: '/case-studies/p3' }, () => 'case-study-p3')
 		.with(
-			{ path: '/services/', servicesPageIntersectingSection: P.select() },
+			{ path: '/services', servicesPageIntersectingSection: P.select() },
 			(s) => s ?? 'services'
 		)
 		.otherwise(() => 'contacts');
 
 	$: threeHidden = match({
-		path: $page.url.pathname,
+		path: $page.route.id,
 		atTopOfWindow
 	})
 		.returnType<boolean>()
-		.with({ path: '/contacts/' }, () => true)
+		.with({ path: '/contacts' }, () => true)
 		.with(
-			{ path: '/case-studies/stonehenge/', atTopOfWindow: P.select() },
+			{ path: '/case-studies/stonehenge', atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
 		.with(
-			{ path: '/case-studies/p2/', atTopOfWindow: P.select() },
+			{ path: '/case-studies/p2', atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
 		.with(
-			{ path: '/case-studies/p3/', atTopOfWindow: P.select() },
+			{ path: '/case-studies/p3', atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
-		.with({ path: '/privacy-policy/' }, () => true)
+		.with({ path: '/privacy-policy' }, () => true)
 		.otherwise(() => false);
-	$: auroraHidden = $page.url.pathname !== '/contacts/';
+	$: auroraHidden = $page.url.pathname !== '/contacts';
 
 	function initialScroll(el: HTMLElement) {
 		let w = el.getElementsByClassName('home-link')[0]!.clientWidth;
@@ -130,47 +145,24 @@
 	</div>
 	<div
 		class="central"
-		class:one-is-selected={$page.url.pathname.startsWith('/case-studies/') ||
-			$page.url.pathname === '/services/' ||
-			$page.url.pathname === '/contacts/'}
+		class:one-is-selected={$page.route.id
+			? navLinks.map(({ href }) => href).includes($page.route.id)
+			: false}
 	>
-		<a href="/services" class="page-link" class:current-page={$page.url.pathname === '/services/'}>
-			Services
-			{#if $page.url.pathname === '/services/'}
-				<div
-					in:navLinkBackgroundSend={{ key: navLinkBackgroundKey }}
-					out:navLinkBackgroundReceive={{ key: navLinkBackgroundKey }}
-					class="page-link-background"
-				/>
-			{/if}
-			<FocusHighlight overflow={6} cornerRadius={10000} />
-		</a>
-		<a
-			href="/case-studies"
-			class="page-link"
-			class:current-page={$page.url.pathname.startsWith('/case-studies/')}
-		>
-			Case studies
-			{#if $page.url.pathname.startsWith('/case-studies/')}
-				<div
-					in:navLinkBackgroundSend={{ key: navLinkBackgroundKey }}
-					out:navLinkBackgroundReceive={{ key: navLinkBackgroundKey }}
-					class="page-link-background"
-				/>
-			{/if}
-			<FocusHighlight overflow={6} cornerRadius={10000} />
-		</a>
-		<a href="/contacts" class="page-link" class:current-page={$page.url.pathname === '/contacts/'}>
-			Contacts
-			{#if $page.url.pathname === '/contacts/'}
-				<div
-					in:navLinkBackgroundSend={{ key: navLinkBackgroundKey }}
-					out:navLinkBackgroundReceive={{ key: navLinkBackgroundKey }}
-					class="page-link-background"
-				/>
-			{/if}
-			<FocusHighlight overflow={6} cornerRadius={10000} />
-		</a>
+		{#each navLinks as navLink}
+			{@const isCurrentPage = $page.route.id === navLink.href}
+			<a href={navLink.href} class="page-link" class:current-page={isCurrentPage}>
+				{navLink.label}
+				{#if isCurrentPage}
+					<div
+						in:navLinkBackgroundSend={{ key: navLinkBackgroundKey }}
+						out:navLinkBackgroundReceive={{ key: navLinkBackgroundKey }}
+						class="page-link-background"
+					/>
+				{/if}
+				<FocusHighlight overflow={6} cornerRadius={10000} />
+			</a>
+		{/each}
 	</div>
 	<div class="right">
 		<div class="nav-right-margin" />
