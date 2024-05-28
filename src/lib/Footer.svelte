@@ -1,10 +1,7 @@
 <footer>
-	<p>© MXTREALITY UK LTD.</p>
+	<p>© MXTREALITY UK LTD. 2024</p>
 	<p><a href="/privacy-policy" class="underline-on-focus">Privacy statement</a></p>
-	<p>
-		MXTREALITY UK LTD. trading as "MXT", a company registered in England and Wales. Company number:
-		10431348
-	</p>
+	<p>Company number: 10431348</p>
 </footer>
 
 <style>
