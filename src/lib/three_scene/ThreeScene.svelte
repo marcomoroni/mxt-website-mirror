@@ -224,8 +224,8 @@
 				{
 					mesh: '/models/Research.gltf',
 					ambientOcclusionTextureAndHighlight: '/models/Research_AO.png',
-					rotationDisplacement: () => new THREE.Vector3(0, 280, 0),
-					positionDisplacement: () => new THREE.Vector3(-2, 20, 1.5)
+					rotationDisplacement: () => new THREE.Vector3(0, 100, 0),
+					positionDisplacement: () => new THREE.Vector3(2, 20, 1.5)
 				}
 			]
 		},
@@ -260,7 +260,7 @@
 					if ($s === 'services') {
 						return 30;
 					} else if ($s === 'service-1') {
-						return 45;
+						return 54;
 					} else if ($s === 'service-2') {
 						return 51;
 					} else if ($s === 'service-3') {
@@ -418,11 +418,11 @@
 		const animations = {
 			camera: {
 				pos: {
-					y: smoothDampAnimation(get(sceneSettings.camera.pos.y), 1.1),
-					z: smoothDampAnimation(get(sceneSettings.camera.pos.z), 1.1)
+					y: smoothDampAnimation(get(sceneSettings.camera.pos.y), 1.9),
+					z: smoothDampAnimation(get(sceneSettings.camera.pos.z), 1.9)
 				},
 				lookAt: {
-					y: smoothDampAnimation(get(sceneSettings.camera.lookAt.y), 1.1)
+					y: smoothDampAnimation(get(sceneSettings.camera.lookAt.y), 1.9)
 				}
 			},
 			railCircumference: {
@@ -1013,9 +1013,13 @@
 			railCircumference.polarAngleDeg.tick(dt);
 			accentColourForServicesProps.tick(dt);
 
+			const lighterAccentColor = d3.interpolateLab(
+				accentColourForServicesProps.current,
+				backgroundColor
+			)(0.3);
 			const backgroundColor_ = animatedBackgroundColor(
 				backgroundColor,
-				accentColourForServicesProps.current,
+				lighterAccentColor,
 				animations.servicesProps.getVisibility
 			);
 
@@ -1041,9 +1045,7 @@
 					dioramaPositions.push(pos);
 				}
 			);
-			servicesPropInstances.forEach(({ tick }) =>
-				tick(accentColourForServicesProps.current, dioramaPositions)
-			);
+			servicesPropInstances.forEach(({ tick }) => tick(lighterAccentColor, dioramaPositions));
 			headerInstances?.forEach(({ tick }) => tick(dt));
 			camera.lookAt(0, animations.camera.lookAt.y.current, 0);
 			scene.background = new THREE.Color(backgroundColor_);

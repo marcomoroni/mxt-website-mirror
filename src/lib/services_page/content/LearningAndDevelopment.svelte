@@ -1,0 +1,138 @@
+<script lang="ts">
+	import Card from './Card.svelte';
+	import CardContentScaffold from './CardContentScaffold.svelte';
+	import Content from './Content.svelte';
+</script>
+
+<Content>
+	<div class="grid">
+		<div class="card-container-1">
+			<Card>
+				<div slot="front" class="intro">
+					<p>
+						Immersive technologies for problem-based learning, combined with analytics, have the
+						capacity to transform enterprise learning and development. MXT’s interactive and
+						immersive learning environments are enjoyable and memorable. They are deliverable at
+						scale, offering efficient and effective results right across the organisation.
+					</p>
+				</div>
+			</Card>
+		</div>
+
+		<div class="card-container-2 common-card-min-height">
+			<Card>
+				<svelte:fragment slot="front">
+					<CardContentScaffold width="1">
+						<h2 class="large-header">Digital Rehearsals</h2>
+					</CardContentScaffold>
+				</svelte:fragment>
+				<svelte:fragment slot="back">
+					<CardContentScaffold width="2">
+						<p>
+							MXT’s simulation technology is designed to enable road-transport planning. We can
+							simulate a range of exercises - of critical importance is incident and emergency
+							planning exercises.
+						</p>
+						<p>
+							An exercise is a simulation of an emergency situation. Exercises have 3 main purposes:
+						</p>
+						<ul class="with-disc">
+							<li>To validate plans.</li>
+							<li>
+								To develop staff competencies and give them practice in carrying out their roles.
+							</li>
+							<li>To test well-established procedures.</li>
+						</ul>
+						<p>
+							Planning for emergencies cannot be considered reliable until it is exercised and
+							proven to be workable, avoiding the risk of false confidence being placed in the
+							integrity of a written plan. Simulated exercises enable participants to build
+							procedural knowledge and confidence, in their roles, in a safe and repeatable
+							environment before being subjected to the stresses and risks of a costly live
+							rehearsal.
+						</p>
+						<p>
+							A networked software architecture enables scenarios to simulate the division between
+							responders who need to communicate, and be coordinated, in complex road transport
+							environments. An immersive virtual environment brings believability and realism to the
+							simulation.
+						</p>
+					</CardContentScaffold>
+				</svelte:fragment>
+			</Card>
+		</div>
+
+		<div class="card-container-3 common-card-min-height">
+			<Card>
+				<svelte:fragment slot="front">
+					<CardContentScaffold width="1">
+						<h2 class="large-header">Soft Skills Training</h2>
+					</CardContentScaffold>
+				</svelte:fragment>
+				<svelte:fragment slot="back">
+					<CardContentScaffold width="2">
+						<p>
+							Beyond procedural knowledge, a modern corporate environment necessitates a workforce
+							with a robust set of soft skills; empathy, leadership, resilience and the ability to
+							manage through change. It’s often possible — and highly advantageous — to teach teams
+							through immersive, virtual reality experiences.
+						</p>
+						<h3 class="small-header">Enhanced Memory Recall</h3>
+						<p>
+							Emotion has a substantial influence on our cognitive processes, including perception,
+							attention, learning, memory, reasoning and problem solving. By forming deeper,
+							emotional, connections to the learning material, MXT’s solutions can achieve increased
+							information retention compared to traditional methods. Higher retention also means
+							learners may need less frequent refreshers.
+						</p>
+						<h3 class="small-header">Enjoyable</h3>
+						<p>
+							MXT has found that our delegates find interactive, immersive, problem-based training
+							to be more enjoyable than traditional classroom-based learning methods.
+						</p>
+						<p>
+							We wanted our learners to feel like their time was spent doing something valuable and
+							enjoyable. If learners feel that training is effective, it leads to improved employee
+							satisfaction and retention.
+						</p>
+						<h3 class="small-header">Flexibility</h3>
+						<p>
+							People are our clients’ most valuable asset. Having teams travel to attend (often)
+							off-site, in person, training can be disruptive and difficult. It is also costly.
+						</p>
+						<p>
+							Digital and cloud-based-delivery is flexible to remote and hybrid working
+							environments. MXT’s solutions are delivered peripatetically, whether that is remote,
+							to a person’s home or their place of work.
+						</p>
+					</CardContentScaffold>
+				</svelte:fragment>
+			</Card>
+		</div>
+	</div>
+</Content>
+
+<style>
+	.grid {
+		display: grid;
+		grid-template-columns: 3fr 2fr;
+		gap: var(--grid-gap);
+		align-items: stretch;
+		justify-items: stretch;
+	}
+
+	.card-container-1 {
+		grid-row: 1 / 2;
+		grid-column: 2 / 3;
+	}
+
+	.card-container-2 {
+		grid-row: 1 / 2;
+		grid-column: 1 / 2;
+	}
+
+	.card-container-3 {
+		grid-row: 2 / 3;
+		grid-column: 1 / 3;
+	}
+</style>

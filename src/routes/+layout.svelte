@@ -14,6 +14,7 @@
 	import { quintInOut } from 'svelte/easing';
 	import FocusHighlight from '$lib/FocusHighlight.svelte';
 	import Footer from '$lib/Footer.svelte';
+	import { sectionsData as servicesSectionsData } from '$lib/servicesData';
 
 	const navLinks = [
 		{
@@ -37,6 +38,7 @@
 
 	$: threeState = match({
 		path: $page.route.id,
+		hash: $page.url.hash,
 		caseStudiesPageIntersectingCard: $caseStudiesPageIntersectingCard,
 		servicesPageIntersectingSection: $servicesPageIntersectingSection
 	})
@@ -63,10 +65,9 @@
 		.with({ path: '/case-studies/stonehenge' }, () => 'case-study-a303')
 		.with({ path: '/case-studies/p2' }, () => 'case-study-p2')
 		.with({ path: '/case-studies/p3' }, () => 'case-study-p3')
-		.with(
-			{ path: '/services', servicesPageIntersectingSection: P.select() },
-			(s) => s ?? 'services'
-		)
+		.with({ path: '/services', hash: servicesSectionsData[1].hash }, () => 'service-2')
+		.with({ path: '/services', hash: servicesSectionsData[2].hash }, () => 'service-3')
+		.with({ path: '/services' }, () => 'service-1')
 		.otherwise(() => 'contacts');
 
 	$: threeHidden = match({
@@ -87,9 +88,10 @@
 			{ path: '/case-studies/p3', atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
+		.with({ path: '/services', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
 		.with({ path: '/privacy-policy' }, () => true)
 		.otherwise(() => false);
-	$: auroraHidden = $page.url.pathname !== '/contacts';
+	$: auroraHidden = $page.route.id !== '/contacts';
 
 	function initialScroll(el: HTMLElement) {
 		let w = el.getElementsByClassName('home-link')[0]!.clientWidth;
@@ -208,6 +210,7 @@
 		align-items: center;
 		overflow-x: scroll;
 		scrollbar-width: none;
+		transition: filter 0.5s var(--ease);
 	}
 
 	.left,

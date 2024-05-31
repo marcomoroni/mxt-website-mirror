@@ -1,7 +1,7 @@
 import { map } from '$lib/map';
 import { smoothDampAnimation, type SmoothDampAnimation } from '$lib/smoothDamp';
 
-const smoothTime = 0.4;
+const smoothTime = 0.2;
 const visibilityWhenVisible = 1;
 const visibilityWhenInvisible = 0;
 
