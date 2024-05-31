@@ -14,16 +14,16 @@ export const caseStudiesData: Array<{
 		comingSoon: false
 	},
 	{
-		title: 'Case study 2',
-		leadParagraph: 'Lead paragraph...',
+		title: 'Insight into Driver Behaviour and Attitudes on SMART Motorways',
+		leadParagraph:
+			'A mixed-reality simulator study to explore confusion on dynamic hard shoulders motorways',
 		threeState: 'case-studies-anchor-p2',
 		href: '/case-studies/p2/',
 		comingSoon: true
 	},
 	{
-		title: 'Case study 3',
-		leadParagraph:
-			'Harnessing the power of immersive technologies for complex infrastructure projects',
+		title: 'Performance and Decision Making through Simulation',
+		leadParagraph: "Driving Simulation for National Highways' Traffic Officers",
 		threeState: 'case-studies-anchor-p3',
 		href: '/case-studies/p3/',
 		comingSoon: true
