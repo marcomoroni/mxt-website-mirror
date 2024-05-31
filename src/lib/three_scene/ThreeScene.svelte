@@ -237,7 +237,7 @@
 					mesh: '/models/LearnAndDev.gltf',
 					ambientOcclusionTextureAndHighlight: '/models/LearnAndDev_AO.png',
 					rotationDisplacement: () => new THREE.Vector3(0, 270, 90),
-					positionDisplacement: () => new THREE.Vector3(0, 8, 9)
+					positionDisplacement: () => new THREE.Vector3(0, 11, 6)
 				}
 			]
 		}
