@@ -37,11 +37,11 @@
 							An exercise is a simulation of an emergency situation. Exercises have 3 main purposes:
 						</p>
 						<ul class="with-disc">
-							<li>To validate plans.</li>
+							<li>To validate plans</li>
 							<li>
-								To develop staff competencies and give them practice in carrying out their roles.
+								To develop staff competencies and give them practice in carrying out their roles
 							</li>
-							<li>To test well-established procedures.</li>
+							<li>To test well-established procedures</li>
 						</ul>
 						<p>
 							Planning for emergencies cannot be considered reliable until it is exercised and

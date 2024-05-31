@@ -4,6 +4,8 @@
 
 	export let backgroundImg: string | undefined = undefined;
 	export let intro = false;
+	export let backgroundCover = false;
+	export let customBackgroundColor: string | undefined = undefined;
 
 	let isShowingBack = false;
 
@@ -15,10 +17,12 @@
 <div
 	class="card"
 	style:background-image={`url(${backgroundImg})`}
+	class:background-cover={backgroundCover}
 	class:no-background={intro}
 	style:color={intro
 		? `color-mix(in oklab, var(--color-primary) 50%, ${$accentColourInServicesProps})`
 		: undefined}
+	style:background-color={customBackgroundColor}
 >
 	<div class="front-content" inert={isShowingBack}>
 		<slot name="front" />
@@ -56,6 +60,11 @@
 		background-position: center;
 	}
 
+	.background-cover {
+		background-size: contain;
+		background-repeat: no-repeat;
+	}
+
 	.no-background {
 		background-color: unset;
 	}
@@ -91,7 +100,7 @@
 
 	.back-content :global(p),
 	.back-content :global(ul) {
-		opacity: 0.8;
+		opacity: 0.9;
 	}
 
 	.back-content.visible {

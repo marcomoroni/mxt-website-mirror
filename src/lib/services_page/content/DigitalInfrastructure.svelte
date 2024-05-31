@@ -31,11 +31,6 @@
 				<svelte:fragment slot="front">
 					<CardContentScaffold width="1">
 						<h2 class="large-header">Benefits spanning the project life cycle</h2>
-						<ul>
-							<li>Enhance Communication</li>
-							<li>Improve Planning</li>
-							<li>Cost Saving</li>
-						</ul>
 					</CardContentScaffold>
 				</svelte:fragment>
 				<svelte:fragment slot="back">
@@ -70,11 +65,11 @@
 		</div>
 
 		<div class="card-container-4 common-card-min-height">
-			<Card>
+			<Card backgroundImg={'/images/HighresScreenshot00027.png'}>
 				<svelte:fragment slot="front">
 					<CardContentScaffold width="1">
-						<h2 class="large-header">Designed for accuracy at speed</h2>
-						<p>
+						<h2 class="large-header white">Designed for accuracy at speed</h2>
+						<p class="white">
 							MXT’s semi-automated approach combines geospatial and physical sciences with game and
 							film technologies to generates assurable environments, that can be delivered at pace.
 						</p>
@@ -91,12 +86,10 @@
 							Our environmental workflow incorporates data from both environmental impact
 							assessments and national surveys.
 						</p>
-						<p>...</p>
 						<p>
 							Combined, these resources underpin the generation of natural landscapes that
 							visualise, terrain, land use, ecology and archaeology information.
 						</p>
-						<p>...</p>
 						<h3 class="small-header">Built Environment</h3>
 						<p>
 							MXT specialise in preparing our clients’ Building Information Modelling (BIM) for
@@ -105,14 +98,12 @@
 							detailed design updates and extend value, during delivery, by using our environments
 							and assets in operational contexts.
 						</p>
-						<p>...</p>
 						<h3 class="small-header">Road User Modelling</h3>
 						<p>
 							Transport schemes are designed to make customer journeys safer, greener, quicker, and
 							more reliable. The most impactful way of communicating those benefits is to show those
 							customers how their journey’s will change.
 						</p>
-						<p>...</p>
 						<p>
 							MXT are the first, and currently only, UK government provider to combine building
 							information and traffic modelling in a single solution that gives customers a complete
@@ -125,7 +116,6 @@
 							faithfully recreate the physics, graphics and traffic management of real transport
 							environments.
 						</p>
-						<p>...</p>
 					</CardContentScaffold>
 				</svelte:fragment>
 			</Card>
@@ -160,5 +150,9 @@
 	.card-container-4 {
 		grid-row: 3 / 4;
 		grid-column: 1 / 3;
+	}
+
+	.white {
+		color: white;
 	}
 </style>

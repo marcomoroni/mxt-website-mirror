@@ -8,7 +8,7 @@
 	<slot />
 	{#if caseStudyIndexes.length > 0}
 		<h2 class="case-study-links-header">Related case studies</h2>
-		<ul class="case-study-links">
+		<ul class="case-study-links with-disc">
 			{#each caseStudyIndexes as caseStudyIndex}
 				{@const caseStudyData = caseStudiesData[caseStudyIndex]}
 				<li><a href={caseStudyData.href}>{caseStudyData.title}</a></li>
@@ -42,8 +42,11 @@
 	.content :global(.small-header) {
 		font-size: 19px;
 		margin-bottom: 11px;
-		margin-top: 20px;
 		font-weight: 650;
+	}
+
+	.content :global(.small-header:not(:first-child)) {
+		margin-top: 20px;
 	}
 
 	.content :global(.common-card-min-height) {
@@ -65,7 +68,7 @@
 		letter-spacing: 3px;
 		font-weight: 620;
 		margin-top: 130px;
-		margin-bottom: 30px;
+		margin-bottom: 20px;
 		color: color-mix(in oklab, var(--color-primary) 30%, var(--color-background));
 	}
 </style>

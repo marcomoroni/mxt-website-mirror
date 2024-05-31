@@ -37,10 +37,10 @@
 						</p>
 						<ul class="with-disc">
 							<li>
-								Examine the attitudes and behaviour of drivers in a safe, controlled, environment;
+								Examine the attitudes and behaviour of drivers in a safe, controlled, environment
 							</li>
-							<li>test and measure drivers’ performance;</li>
-							<li>Inform legislation, transport policy, and road technology innovation.</li>
+							<li>test and measure drivers’ performance</li>
+							<li>Inform legislation, transport policy, and road technology innovation</li>
 						</ul>
 					</CardContentScaffold>
 				</svelte:fragment>
@@ -48,14 +48,15 @@
 		</div>
 
 		<div class="card-container-3 common-card-min-height">
-			<Card backgroundImg={'/images/desktop_menu.jpg'}>
-				<svelte:fragment slot="front">
-					<CardContentScaffold width="1">
-						<h2 class="large-header">Simulation Hardware</h2>
-					</CardContentScaffold>
-				</svelte:fragment>
+			<Card
+				backgroundImg={'/images/rig-diagram.png'}
+				customBackgroundColor={'white'}
+				backgroundCover={true}
+			>
+				<svelte:fragment slot="front" />
 				<svelte:fragment slot="back">
 					<CardContentScaffold width="2">
+						<h2 class="small-header">Simulation Hardware</h2>
 						<p>
 							The driving simulator incorporates an ergonomic cabin package with a compact motion
 							platform and mixed reality camera technology.
@@ -65,15 +66,14 @@
 							elements of the real world. This provides a convincing combination of both immersivity
 							and presence as drivers can see themselves as they operate the virtual vehicle.
 						</p>
-						<p>...</p>
 						<p>In comparison to on-road trials, our compact driving simulator enables:</p>
 						<ul class="with-disc">
-							<li>Multiple innovative ideas be tested under the same conditions;</li>
-							<li>Close control of the scenario provides robust evidence of cause and effect;</li>
-							<li>Safe testing of emergency situations;</li>
-							<li>Alignment with Department for Transport’s “Pilots and Trials” guidance;</li>
-							<li>Significant reduction in the effort of organising a future live trial;</li>
-							<li>Portability and capability to engage with a broad spectrum of participants.</li>
+							<li>Multiple innovative ideas be tested under the same conditions</li>
+							<li>Close control of the scenario provides robust evidence of cause and effect</li>
+							<li>Safe testing of emergency situations</li>
+							<li>Alignment with Department for Transport’s “Pilots and Trials” guidance</li>
+							<li>Significant reduction in the effort of organising a future live trial</li>
+							<li>Portability and capability to engage with a broad spectrum of participants</li>
 						</ul>
 					</CardContentScaffold>
 				</svelte:fragment>
