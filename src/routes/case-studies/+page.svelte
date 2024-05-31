@@ -5,10 +5,7 @@
 	import SecondaryPageLanding from '$lib/SecondaryPageLanding.svelte';
 	import { caseStudiesData } from '$lib/caseStudiesData';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
-	import {
-		accentColourInServicesProps,
-		caseStudiesPageIntersectingCard
-	} from '$lib/three_scene/threeStateStores';
+	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
 	import { onMount } from 'svelte';
 
 	// `IntersectionObserver` does not work well in this situation becasue getting the first state asyncronously
@@ -81,11 +78,7 @@
 				href={caseStudy.comingSoon ? undefined : caseStudy.href}
 				class:coming-soon={caseStudy.comingSoon}
 			>
-				<div
-					class="border-when-hovered"
-					class:coming-soon={caseStudy.comingSoon}
-					style:border-color={$accentColourInServicesProps}
-				/>
+				<div class="border-when-hovered" class:coming-soon={caseStudy.comingSoon} />
 				<div class="background" class:coming-soon={caseStudy.comingSoon} />
 				<div class="case-study-title-box-container">
 					<CaseStudyTitleBox
@@ -151,6 +144,7 @@
 		width: 100%;
 		height: 100%;
 		display: none;
+		border-color: var(--color-primary);
 	}
 
 	.box:hover .border-when-hovered:not(.coming-soon),
