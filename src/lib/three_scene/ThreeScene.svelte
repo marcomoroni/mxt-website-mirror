@@ -40,7 +40,6 @@
 		| 'case-study-a303'
 		| 'case-study-p2'
 		| 'case-study-p3'
-		| 'services'
 		| 'service-1'
 		| 'service-2'
 		| 'service-3'
@@ -57,7 +56,6 @@
 		| 'case-study-a303'
 		| 'case-study-p2'
 		| 'case-study-p3'
-		| 'services'
 		| 'service-1'
 		| 'service-2'
 		| 'service-3'
@@ -257,9 +255,7 @@
 		camera: {
 			pos: {
 				y: derived(stateStore, ($s) => {
-					if ($s === 'services') {
-						return 30;
-					} else if ($s === 'service-1') {
+					if ($s === 'service-1') {
 						return 54;
 					} else if ($s === 'service-2') {
 						return 51;
@@ -278,9 +274,7 @@
 					}
 				}),
 				z: derived(stateStore, ($s) => {
-					if ($s === 'services') {
-						return 0.1;
-					} else if ($s === 'service-1') {
+					if ($s === 'service-1') {
 						return 0.1;
 					} else if ($s === 'service-2') {
 						return 5;
@@ -392,7 +386,6 @@
 			FLAG_useHeaders
 				? match($s)
 						.with('case-studies', () => [true, false, false])
-						.with('services', () => [false, true, false])
 						.with('contacts', () => [false, false, true])
 						.otherwise(() => [false, false, false])
 				: []

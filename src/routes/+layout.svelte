@@ -51,7 +51,6 @@
 			| 'case-study-a303'
 			| 'case-study-p2'
 			| 'case-study-p3'
-			| 'services'
 			| 'service-1'
 			| 'service-2'
 			| 'service-3'
