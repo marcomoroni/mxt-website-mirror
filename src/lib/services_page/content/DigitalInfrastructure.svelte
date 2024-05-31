@@ -155,4 +155,16 @@
 	.white {
 		color: white;
 	}
+
+	@media (max-width: 1000px) {
+		.grid {
+			grid-template-columns: unset;
+			grid-auto-flow: row;
+		}
+
+		.grid > * {
+			grid-column: unset;
+			grid-row: unset;
+		}
+	}
 </style>

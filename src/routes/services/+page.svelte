@@ -62,18 +62,19 @@
 <style>
 	.main-grid {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
 		grid-template-rows: auto 4px auto;
-		column-gap: 10px;
-		padding-left: var(--case-study-margin);
-		padding-right: var(--case-study-margin);
+		grid-template-columns: var(--case-study-margin) 1fr var(--case-study-margin);
 		max-width: 1800px;
 		margin-left: auto;
 		margin-right: auto;
+		overflow: hidden;
+	}
+
+	.main-grid > * {
+		grid-column: 2 / 3;
 	}
 
 	.landing-space {
-		grid-column: 1 / 4;
 		grid-row: 1 / 2;
 		min-height: 100dvh;
 	}
@@ -82,36 +83,36 @@
 		grid-column: 1 / 4;
 		grid-row: 1 / 2;
 		align-self: end;
+		justify-self: stretch;
 		display: grid;
-		grid-template-columns: subgrid;
+		grid-auto-flow: column;
+		grid-auto-columns: 1fr;
+		overflow-x: scroll;
+		column-gap: 10px;
+		scrollbar-width: none;
 	}
 
 	.tab-item {
 		display: grid;
 	}
 
-	:global([data-col='0']) {
-		grid-column: 1 / 2;
+	.tab-item:first-child {
+		margin-left: var(--case-study-margin);
 	}
 
-	:global([data-col='1']) {
-		grid-column: 2 / 3;
-	}
-
-	:global([data-col='2']) {
-		grid-column: 3 / 4;
+	.tab-item:last-child {
+		margin-right: var(--case-study-margin);
 	}
 
 	.bar {
-		grid-row: 2 / 3;
 		grid-column: 1 / 4;
+		grid-row: 2 / 3;
 		align-self: stretch;
 		justify-self: stretch;
 	}
 
 	.section-content {
 		grid-row: 3 / 4;
-		grid-column: 1 / 4;
 		min-height: 100dvh;
 	}
 </style>

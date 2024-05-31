@@ -34,6 +34,12 @@
 		align-self: center;
 	}
 
+	@media (max-width: 600px) {
+		.content :global(.intro) {
+			padding-inline: unset;
+		}
+	}
+
 	.content :global(.large-header) {
 		font-size: 36px;
 		margin-bottom: 30px;

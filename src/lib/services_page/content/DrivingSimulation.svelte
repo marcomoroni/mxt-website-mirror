@@ -172,4 +172,16 @@
 		grid-column: 2 / 3;
 		grid-row: 3 / 4;
 	}
+
+	@media (max-width: 1000px) {
+		.grid {
+			grid-template-columns: unset;
+			grid-auto-flow: row;
+		}
+
+		.grid > * {
+			grid-column: unset;
+			grid-row: unset;
+		}
+	}
 </style>

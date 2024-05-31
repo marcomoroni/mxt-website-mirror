@@ -135,4 +135,16 @@
 		grid-row: 2 / 3;
 		grid-column: 1 / 3;
 	}
+
+	@media (max-width: 1000px) {
+		.grid {
+			grid-template-columns: unset;
+			grid-auto-flow: row;
+		}
+
+		.grid > * {
+			grid-column: unset;
+			grid-row: unset;
+		}
+	}
 </style>
