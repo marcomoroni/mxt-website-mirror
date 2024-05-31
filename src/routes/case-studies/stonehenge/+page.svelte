@@ -72,9 +72,9 @@
 			</li>
 		</ul>
 		<p>
-			The result was a 36 km<sup>2</sup> interactive environment synthesising a 1TB of data to produce
-			a digital mirror of Stonehenge and its surroundings accessible in virtual reality, desktop and
-			shared immersive spaces.
+			The result was a 36 km<sup>2</sup> interactive environment synthesising a terabyte of raw information
+			to produce a digital mirror of Stonehenge and its surroundings accessible in virtual reality, desktop
+			and shared immersive spaces.
 		</p>
 	</div>
 	<div class="img-results-1">
