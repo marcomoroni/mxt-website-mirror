@@ -435,7 +435,8 @@
 			),
 			servicesProps: servicesPropsVisibilityAnimation(
 				get(sceneSettings.servicesProps),
-				servicesPropsData.length
+				servicesPropsData.length,
+				28
 			)
 		};
 
@@ -1002,7 +1003,7 @@
 			animations.railCircumference.radius.tick(dt);
 			animations.railCircumference.polarAngleDegAnimatedToClosest.tick(dt);
 			animations.dioramasOwnPolarAngleMult.tick(dt);
-			animations.servicesProps.tick(dt);
+			animations.servicesProps.tick(dt, animations.camera.pos.y.current);
 			railCircumference.polarAngleDeg.tick(dt);
 			accentColourForServicesProps.tick(dt);
 

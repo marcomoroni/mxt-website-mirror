@@ -10,7 +10,8 @@ const visibilityWhenInvisible = 0;
 // Identify the different elements by their index.
 export function servicesPropsVisibilityAnimation(
 	initialVisibleItemIndex: undefined | number,
-	itemsCount: number
+	itemsCount: number,
+	fadeInMinCameraDistance: number
 ) {
 	const itemsVisibility: Array<SmoothDampAnimation> = [];
 	for (let i = 0; i < itemsCount; i++) {
@@ -31,11 +32,15 @@ export function servicesPropsVisibilityAnimation(
 		});
 	};
 
-	const tick = (dt: DOMHighResTimeStamp) => {
+	const tick = (dt: DOMHighResTimeStamp, cameraDistance: number) => {
 		const anotherNonTargetIsStillVisible = itemsVisibility.some(
 			({ current }, i) => i !== targetVisibleItemIndex && current > 0.001
 		);
-		if (!anotherNonTargetIsStillVisible && targetVisibleItemIndex != undefined) {
+		if (
+			!anotherNonTargetIsStillVisible &&
+			targetVisibleItemIndex != undefined &&
+			cameraDistance > fadeInMinCameraDistance
+		) {
 			itemsVisibility[targetVisibleItemIndex].target = visibilityWhenVisible;
 		}
 		itemsVisibility.forEach(({ tick }) => tick(dt));
