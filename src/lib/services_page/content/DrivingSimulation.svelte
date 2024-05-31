@@ -7,7 +7,7 @@
 <Content>
 	<div class="grid">
 		<div class="card-container-1">
-			<Card>
+			<Card intro={true}>
 				<div slot="front" class="intro">
 					<p>
 						MXT’s vehicle simulator was designed working alongside the UK Government company

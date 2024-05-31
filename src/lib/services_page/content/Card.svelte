@@ -3,6 +3,7 @@
 	import ReadMoreButton from './ReadMoreButton.svelte';
 
 	export let backgroundImg: string | undefined = undefined;
+	export let intro = false;
 
 	let isShowingBack = false;
 
@@ -11,7 +12,14 @@
 	}
 </script>
 
-<div class="card" style:background-image={`url(${backgroundImg})`}>
+<div
+	class="card"
+	style:background-image={`url(${backgroundImg})`}
+	class:no-background={intro}
+	style:color={intro
+		? `color-mix(in oklab, var(--color-primary) 50%, ${$accentColourInServicesProps})`
+		: undefined}
+>
 	<div class="front-content" inert={isShowingBack}>
 		<slot name="front" />
 	</div>
@@ -43,9 +51,13 @@
 		width: 100%;
 		height: 100%;
 		overflow: hidden;
-		background-color: #e9e1de;
+		background-color: #fcfbfa;
 		background-size: cover;
 		background-position: center;
+	}
+
+	.no-background {
+		background-color: unset;
 	}
 
 	.front-content,

@@ -13,7 +13,7 @@
 		</div>
 
 		<div class="card-container-2">
-			<Card>
+			<Card intro={true}>
 				<div slot="front" class="intro">
 					<p>
 						MXT produce interactive visualisations for Nationally Significant Infrastructure

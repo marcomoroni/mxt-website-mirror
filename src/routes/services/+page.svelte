@@ -4,8 +4,8 @@
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
 	import { sectionsData } from '$lib/servicesData';
 	import Tab from '$lib/services_page/Tab.svelte';
-	import TabBorder from '$lib/services_page/TabBorder.svelte';
 	import * as Content from '$lib/services_page/content/index';
+	import { accentColourInServicesProps } from '$lib/three_scene/threeStateStores';
 
 	$: currentSectionIndex = (() => {
 		const index = sectionsData.findIndex((sectionData) => $page.url.hash === sectionData.hash);
@@ -36,7 +36,10 @@
 		{/each}
 	</ul>
 
-	<TabBorder {currentSectionIndex} />
+	<div
+		class="bar"
+		style:background-color={`color-mix(in oklab, var(--color-primary) 5%, ${$accentColourInServicesProps})`}
+	/>
 
 	{#each sectionsData as _sectionData, i}
 		<section
@@ -60,8 +63,8 @@
 	.main-grid {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
-		grid-template-rows: auto var(--case-study-margin) auto;
-		column-gap: 25px;
+		grid-template-rows: auto 4px auto;
+		column-gap: 10px;
 		padding-left: var(--case-study-margin);
 		padding-right: var(--case-study-margin);
 		max-width: 1800px;
@@ -71,7 +74,7 @@
 
 	.landing-space {
 		grid-column: 1 / 4;
-		grid-row: 1 / 3;
+		grid-row: 1 / 2;
 		min-height: 100dvh;
 	}
 
@@ -97,6 +100,13 @@
 
 	:global([data-col='2']) {
 		grid-column: 3 / 4;
+	}
+
+	.bar {
+		grid-row: 2 / 3;
+		grid-column: 1 / 4;
+		align-self: stretch;
+		justify-self: stretch;
 	}
 
 	.section-content {

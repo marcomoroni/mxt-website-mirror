@@ -5,8 +5,6 @@
 </script>
 
 <div class="content">
-	<div class="fade" />
-	<div class="fade-gap" />
 	<slot />
 	{#if caseStudyIndexes.length > 0}
 		<h2 class="case-study-links-header">Related case studies</h2>
@@ -22,21 +20,8 @@
 <style>
 	.content {
 		padding-bottom: 140px;
+		padding-top: 100px;
 		--grid-gap: 10px;
-	}
-
-	.fade {
-		position: sticky;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 80px;
-		background: linear-gradient(0deg, transparent 0%, var(--color-background) 25%);
-		z-index: 1;
-	}
-
-	.fade-gap {
-		padding-top: 20px;
 	}
 
 	.content :global(.intro) {

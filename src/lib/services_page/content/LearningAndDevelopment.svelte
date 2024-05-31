@@ -7,7 +7,7 @@
 <Content>
 	<div class="grid">
 		<div class="card-container-1">
-			<Card>
+			<Card intro={true}>
 				<div slot="front" class="intro">
 					<p>
 						Immersive technologies for problem-based learning, combined with analytics, have the

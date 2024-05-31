@@ -14,9 +14,10 @@
 		window.scrollTo({ top: 0 });
 	}}
 	role="tab"
-	style:color={isActive
+	style:background-color={isActive
 		? `color-mix(in oklab, var(--color-primary) 5%, ${$accentColourInServicesProps})`
 		: undefined}
+	style:color={isActive ? 'white' : undefined}
 >
 	<div class="title">
 		{title}
@@ -32,10 +33,14 @@
 		justify-self: stretch;
 		display: flex;
 		flex-direction: column;
-		padding-top: 26px;
+		padding-top: 30px;
 		padding-bottom: 36px;
 		text-decoration: none;
-		color: #c2b6a5;
+		padding-inline: 30px;
+		background-color: #e9e1deeb;
+		--border-radius: 40px;
+		border-top-left-radius: var(--border-radius);
+		border-top-right-radius: var(--border-radius);
 	}
 
 	.title {
@@ -49,7 +54,6 @@
 	.subtitle {
 		font-size: 20px;
 		text-wrap: pretty;
-		opacity: 0.8;
 		font-weight: 600;
 	}
 </style>
