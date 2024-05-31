@@ -23,7 +23,7 @@ html {
 	--nav-bar-height: 100px;
 	--case-study-margin: 30px;
 	--strong-drop-shadow: drop-shadow(0 0 15px var(--color-background))
-		drop-shadow(0 0 15px var(--color-background)) drop-shadow(0 0 5px var(--color-background));
+		drop-shadow(0 0 7px var(--color-background)) drop-shadow(0 0 3px var(--color-background));
 }
 
 body {

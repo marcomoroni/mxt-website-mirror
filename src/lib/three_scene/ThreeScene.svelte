@@ -40,7 +40,6 @@
 		| 'case-study-a303'
 		| 'case-study-p2'
 		| 'case-study-p3'
-		| 'services'
 		| 'service-1'
 		| 'service-2'
 		| 'service-3'
@@ -57,7 +56,6 @@
 		| 'case-study-a303'
 		| 'case-study-p2'
 		| 'case-study-p3'
-		| 'services'
 		| 'service-1'
 		| 'service-2'
 		| 'service-3'
@@ -218,28 +216,28 @@
 		{
 			baseColor: (accentColor: string) => accentColor,
 			highlightColor: 'white',
-			aoColor: '#8B5725',
+			aoColor: 'black',
 			backgroundColor: undefined,
 			meshes: [
 				{
 					mesh: '/models/Research.gltf',
 					ambientOcclusionTextureAndHighlight: '/models/Research_AO.png',
-					rotationDisplacement: () => new THREE.Vector3(0, 280, 0),
-					positionDisplacement: () => new THREE.Vector3(-2, 20, 1.5)
+					rotationDisplacement: () => new THREE.Vector3(0, 100, 0),
+					positionDisplacement: () => new THREE.Vector3(2, 20, 1.5)
 				}
 			]
 		},
 		{
 			baseColor: (accentColor: string) => accentColor,
 			highlightColor: 'white',
-			aoColor: '#4E7B74',
+			aoColor: 'black',
 			backgroundColor: (_accentColor: string) => 'white',
 			meshes: [
 				{
 					mesh: '/models/LearnAndDev.gltf',
 					ambientOcclusionTextureAndHighlight: '/models/LearnAndDev_AO.png',
 					rotationDisplacement: () => new THREE.Vector3(0, 270, 90),
-					positionDisplacement: () => new THREE.Vector3(0, 8, 9)
+					positionDisplacement: () => new THREE.Vector3(0, 11, 6)
 				}
 			]
 		}
@@ -257,10 +255,8 @@
 		camera: {
 			pos: {
 				y: derived(stateStore, ($s) => {
-					if ($s === 'services') {
-						return 30;
-					} else if ($s === 'service-1') {
-						return 45;
+					if ($s === 'service-1') {
+						return 54;
 					} else if ($s === 'service-2') {
 						return 51;
 					} else if ($s === 'service-3') {
@@ -278,9 +274,7 @@
 					}
 				}),
 				z: derived(stateStore, ($s) => {
-					if ($s === 'services') {
-						return 0.1;
-					} else if ($s === 'service-1') {
+					if ($s === 'service-1') {
 						return 0.1;
 					} else if ($s === 'service-2') {
 						return 5;
@@ -392,7 +386,6 @@
 			FLAG_useHeaders
 				? match($s)
 						.with('case-studies', () => [true, false, false])
-						.with('services', () => [false, true, false])
 						.with('contacts', () => [false, false, true])
 						.otherwise(() => [false, false, false])
 				: []
@@ -418,11 +411,11 @@
 		const animations = {
 			camera: {
 				pos: {
-					y: smoothDampAnimation(get(sceneSettings.camera.pos.y), 1.1),
-					z: smoothDampAnimation(get(sceneSettings.camera.pos.z), 1.1)
+					y: smoothDampAnimation(get(sceneSettings.camera.pos.y), 1.9),
+					z: smoothDampAnimation(get(sceneSettings.camera.pos.z), 1.9)
 				},
 				lookAt: {
-					y: smoothDampAnimation(get(sceneSettings.camera.lookAt.y), 1.1)
+					y: smoothDampAnimation(get(sceneSettings.camera.lookAt.y), 1.9)
 				}
 			},
 			railCircumference: {
@@ -442,7 +435,8 @@
 			),
 			servicesProps: servicesPropsVisibilityAnimation(
 				get(sceneSettings.servicesProps),
-				servicesPropsData.length
+				servicesPropsData.length,
+				28
 			)
 		};
 
@@ -1009,13 +1003,17 @@
 			animations.railCircumference.radius.tick(dt);
 			animations.railCircumference.polarAngleDegAnimatedToClosest.tick(dt);
 			animations.dioramasOwnPolarAngleMult.tick(dt);
-			animations.servicesProps.tick(dt);
+			animations.servicesProps.tick(dt, animations.camera.pos.y.current);
 			railCircumference.polarAngleDeg.tick(dt);
 			accentColourForServicesProps.tick(dt);
 
+			const lighterAccentColor = d3.interpolateLab(
+				accentColourForServicesProps.current,
+				backgroundColor
+			)(0.3);
 			const backgroundColor_ = animatedBackgroundColor(
 				backgroundColor,
-				accentColourForServicesProps.current,
+				lighterAccentColor,
 				animations.servicesProps.getVisibility
 			);
 
@@ -1041,9 +1039,7 @@
 					dioramaPositions.push(pos);
 				}
 			);
-			servicesPropInstances.forEach(({ tick }) =>
-				tick(accentColourForServicesProps.current, dioramaPositions)
-			);
+			servicesPropInstances.forEach(({ tick }) => tick(lighterAccentColor, dioramaPositions));
 			headerInstances?.forEach(({ tick }) => tick(dt));
 			camera.lookAt(0, animations.camera.lookAt.y.current, 0);
 			scene.background = new THREE.Color(backgroundColor_);

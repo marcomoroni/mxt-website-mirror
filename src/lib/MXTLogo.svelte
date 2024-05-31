@@ -53,8 +53,7 @@
 	}
 
 	.glass {
-		fill: #ba874c57;
-		backdrop-filter: blur(40px) brightness(120%);
+		fill: #e0cdb7;
 	}
 
 	svg * {
