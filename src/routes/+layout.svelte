@@ -14,7 +14,10 @@
 	import { quintInOut } from 'svelte/easing';
 	import FocusHighlight from '$lib/FocusHighlight.svelte';
 	import Footer from '$lib/Footer.svelte';
-	import { sectionsData as servicesSectionsData } from '$lib/servicesData';
+	import {
+		getCurrentSectionData as getCurrentServicesSectionData,
+		sectionsData as servicesSectionsData
+	} from '$lib/servicesData';
 
 	const navLinks = [
 		{
@@ -38,7 +41,7 @@
 
 	$: threeState = match({
 		path: $page.route.id,
-		hash: $page.url.hash,
+		servicesSection: getCurrentServicesSectionData($page.route.id),
 		caseStudiesPageIntersectingCard: $caseStudiesPageIntersectingCard,
 		servicesPageIntersectingSection: $servicesPageIntersectingSection
 	})
@@ -64,9 +67,10 @@
 		.with({ path: '/case-studies/stonehenge' }, () => 'case-study-a303')
 		.with({ path: '/case-studies/p2' }, () => 'case-study-p2')
 		.with({ path: '/case-studies/p3' }, () => 'case-study-p3')
-		.with({ path: '/services', hash: servicesSectionsData[1].hash }, () => 'service-2')
-		.with({ path: '/services', hash: servicesSectionsData[2].hash }, () => 'service-3')
-		.with({ path: '/services' }, () => 'service-1')
+		.with(
+			{ servicesSection: { data: { associatedState: P.select() } } },
+			(associatedState) => associatedState
+		)
 		.otherwise(() => 'contacts');
 
 	$: threeHidden = match({
@@ -88,6 +92,18 @@
 			(atTopOfWindow) => !atTopOfWindow
 		)
 		.with({ path: '/services', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
+		.with(
+			{ path: servicesSectionsData[0].href, atTopOfWindow: P.select() },
+			(atTopOfWindow) => !atTopOfWindow
+		)
+		.with(
+			{ path: servicesSectionsData[1].href, atTopOfWindow: P.select() },
+			(atTopOfWindow) => !atTopOfWindow
+		)
+		.with(
+			{ path: servicesSectionsData[2].href, atTopOfWindow: P.select() },
+			(atTopOfWindow) => !atTopOfWindow
+		)
 		.with({ path: '/privacy-policy' }, () => true)
 		.otherwise(() => false);
 	$: auroraHidden = $page.route.id !== '/contacts';
