@@ -193,16 +193,36 @@
 </div>
 <div class="section-spacer" />
 <div class="section-events">
-	<div class="events-type">
-		<h2 class="case-study-section-header">Results and impact</h2>
-		<p>
-			The coordinated efforts to marry scheme traffic and environmental data were described as
-			remarkable by the joint world heritage centre and ICOMOS advisory mission and represents a
-			first for a UK Government sponsored infrastructure project.
-		</p>
+	<div class="events-type-container">
+		<div class="events-type">
+			<h2 class="case-study-section-header">Results and impact</h2>
+			<p>
+				The coordinated efforts to marry scheme traffic and environmental data were described as
+				remarkable by the joint world heritage centre and ICOMOS advisory mission and represents a
+				first for a UK Government sponsored infrastructure project.
+			</p>
+		</div>
 	</div>
-	<div class="events-img-1" />
-	<div class="events-img-2" />
+	<img
+		class="events-img-1"
+		src="/images/DSC02898.JPG"
+		alt="A person using the Stonehenge VR experience."
+	/>
+	<img
+		class="events-img-2"
+		src="/images/DSC02900.JPG"
+		alt="A poster with the map that can be explored in the VR experience."
+	/>
+	<img
+		class="events-img-3"
+		src="/images/Lord Parkinson VR Pod.jpeg"
+		alt="Lord Parkinson using the Stonehenge VR experience."
+	/>
+	<img
+		class="events-img-4"
+		src="/images/Dome_Night.jpg"
+		alt="The outside of a dome used for the A303 experience."
+	/>
 </div>
 <div class="bottom-page-spacer" />
 
@@ -379,26 +399,36 @@
 		margin-right: var(--case-study-margin);
 	}
 
+	.events-type-container {
+		grid-column: 1 / 4;
+		grid-row: 1 / 3;
+		align-self: stretch;
+		justify-self: stretch;
+	}
+
 	.events-type {
-		grid-column: 2 / 5;
-		grid-row: 1 / 2;
 		position: sticky;
 		top: var(--case-study-margin);
-		align-self: start;
 	}
 
 	.events-img-1 {
 		grid-column: 5 / 11;
 		grid-row: 1;
-		border: 10px solid rgba(124, 104, 238, 0.365);
-		aspect-ratio: 16 / 9;
 	}
 
 	.events-img-2 {
 		grid-column: 5 / 11;
 		grid-row: 2;
-		border: 10px solid rgba(124, 104, 238, 0.365);
-		aspect-ratio: 16 / 9;
+	}
+
+	.events-img-3 {
+		grid-column: 3 / 7;
+		grid-row: 3;
+	}
+
+	.events-img-4 {
+		grid-column: 7 / 11;
+		grid-row: 3;
 	}
 
 	@media (max-width: 900px) {
@@ -544,6 +574,16 @@
 		.events-img-2 {
 			grid-column: unset;
 			grid-row: 3;
+		}
+
+		.events-img-3 {
+			grid-column: unset;
+			grid-row: 4;
+		}
+
+		.events-img-4 {
+			grid-column: unset;
+			grid-row: 5;
 		}
 	}
 </style>
