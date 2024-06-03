@@ -101,10 +101,11 @@
 		width: 100%;
 		height: 100%;
 		overflow: hidden;
+		--bg: #fcfbfa;
 	}
 
 	.image-like-container {
-		/* background-color: #ffffff; */
+		background-color: var(--bg);
 		position: relative;
 		left: 50%;
 		top: 50%;
@@ -122,7 +123,7 @@
 		position: absolute;
 		width: 500px;
 		height: 300px;
-		background: var(--color-background);
+		background: var(--bg);
 		transform: translate(-50%, -50%);
 		transform-origin: center center;
 		transition: opacity 2s ease-in-out;

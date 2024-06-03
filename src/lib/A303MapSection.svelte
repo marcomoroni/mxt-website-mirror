@@ -24,7 +24,21 @@
 			traffic: false,
 			fixedImg: true,
 			wideType: false,
-			type: [{ p: 'Nature...' }],
+			type: [
+				{
+					p: 'The Environment Agency National LIDAR Programme provides accurate elevation data at 1m spatial resolution for all of England and is at the core of our workflow.'
+				},
+				{
+					p: "We use the dataset to generate the environment's terrain. We use a Vegetation Object Model (VOM), a derivative of the dataset, to procedurally generate the environment's diverse foliage and trees with an accuracy of 95%."
+				},
+				{
+					p: 'We generate ground cover using UKCEH Land Cover Maps, which describes land parcels via 21 distinct habitat classes.'
+				},
+				{
+					p: 'The UKCEH digital river network of Great Britain supplies the river centre line of rivers canals, surface pipes and channels.'
+				},
+				{ p: 'High resolution (12.5cm) aerial imagery via APGB contract adds depth and detail.' }
+			],
 			scale: defaultScale,
 			blurOnZoom: true
 		},
@@ -33,7 +47,18 @@
 			traffic: false,
 			fixedImg: true,
 			wideType: false,
-			type: [{ p: 'Human-made...' }],
+			type: [
+				{
+					p: "The infrastructure is built upon Building Information Modelling retrieved from Bentley's ProjectWise. Beyond that, the built environment is generated via Ordnance Survey's National Geographic Database (NGD), including:"
+				},
+				{
+					ul: [
+						{ li: 'OS MasterMap Highways Network' },
+						{ li: 'Building Features' },
+						{ li: 'Structures' }
+					]
+				}
+			],
 			scale: defaultScale,
 			blurOnZoom: true
 		},
@@ -42,7 +67,14 @@
 			traffic: true,
 			fixedImg: true,
 			wideType: false,
-			type: [{ p: 'Traffic...' }],
+			type: [
+				{
+					p: '2,000 simulated vehicles are generated via a PTV Vissim dataset, capturing class 4 and heavy articulated vehicles.'
+				},
+				{
+					p: 'Each car and truck affects the noise, light and overall perception of the site.'
+				}
+			],
 			scale: 12,
 			blurOnZoom: false
 		}
@@ -133,6 +165,12 @@
 							<h2 class="case-study-section-header">{t.h2}</h2>
 						{:else if 'p' in t}
 							<p>{t.p}</p>
+						{:else if 'ul' in t}
+							<ul class="with-disc">
+								{#each t.ul as li}
+									<li>{li}</li>
+								{/each}
+							</ul>
 						{/if}
 					{/each}
 				</div>
@@ -152,6 +190,12 @@
 							<h2 class="case-study-section-header">{t.h2}</h2>
 						{:else if 'p' in t}
 							<p>{t.p}</p>
+						{:else if 'ul' in t}
+							<ul class="with-disc">
+								{#each t.ul as { li }}
+									<li>{li}</li>
+								{/each}
+							</ul>
 						{/if}
 					{/each}
 				</div>

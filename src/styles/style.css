@@ -57,6 +57,7 @@ sup {
 ul.with-disc {
 	list-style-type: disc;
 	margin-left: 25px;
+	margin-block: 8px;
 }
 
 .case-study-section-header {
