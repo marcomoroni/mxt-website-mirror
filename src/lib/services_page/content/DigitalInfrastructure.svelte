@@ -7,12 +7,6 @@
 <Content caseStudyIndexes={[0]}>
 	<div class="grid">
 		<div class="card-container-1">
-			<Card backgroundImg={'/images/HighresScreenshot00005.png'}>
-				<div slot="front" />
-			</Card>
-		</div>
-
-		<div class="card-container-2">
 			<Card intro={true}>
 				<div slot="front" class="intro">
 					<p>
@@ -26,7 +20,7 @@
 			</Card>
 		</div>
 
-		<div class="card-container-3 common-card-min-height">
+		<div class="card-container-2 common-card-min-height">
 			<Card>
 				<svelte:fragment slot="front">
 					<CardContentScaffold width="1">
@@ -64,7 +58,7 @@
 			</Card>
 		</div>
 
-		<div class="card-container-4 common-card-min-height">
+		<div class="card-container-3 common-card-min-height">
 			<Card backgroundImg={'/images/HighresScreenshot00027.png'}>
 				<svelte:fragment slot="front">
 					<CardContentScaffold width="1">
@@ -126,29 +120,24 @@
 <style>
 	.grid {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 2fr 3fr;
 		gap: var(--grid-gap);
 		align-items: stretch;
 		justify-items: stretch;
 	}
 
 	.card-container-1 {
-		grid-row: 1 / 3;
-		grid-column: 2 / 3;
-	}
-
-	.card-container-2 {
 		grid-row: 1 / 2;
 		grid-column: 1 / 2;
 	}
 
-	.card-container-3 {
-		grid-row: 2 / 3;
-		grid-column: 1 / 2;
+	.card-container-2 {
+		grid-row: 1 / 2;
+		grid-column: 2 / 3;
 	}
 
-	.card-container-4 {
-		grid-row: 3 / 4;
+	.card-container-3 {
+		grid-row: 2 / 3;
 		grid-column: 1 / 3;
 	}
 

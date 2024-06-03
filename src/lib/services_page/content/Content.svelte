@@ -56,7 +56,7 @@
 	}
 
 	.content :global(.common-card-min-height) {
-		min-height: max(400px, 45dvh);
+		min-height: max(400px, 55dvh);
 	}
 
 	.content :global(ul) {
