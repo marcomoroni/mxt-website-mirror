@@ -27,6 +27,7 @@
 	import { accentColorsFromNoise } from './accentColorFromNoise';
 	import * as d3 from 'd3';
 	import { accentColourInServicesProps as accentColourInServicesPropsStore } from './threeStateStores';
+	import { siteWideAccentColor } from './sitewideAccentColor';
 
 	const DEV_debugLog = false;
 	const FLAG_useHeaders = false;
@@ -479,20 +480,7 @@
 			sceneSettings.servicesProps.subscribe((v) => animations.servicesProps.setVisibleItem(v))
 		);
 
-		const accentColourForServicesProps = (() => {
-			let elapsedTime = 0;
-			let currentAccentColor = 'magenta';
-			const tick = (dt: DOMHighResTimeStamp) => {
-				elapsedTime += dt * 0.00002;
-				currentAccentColor = accentColorsFromNoise.accentColorForServicesProps(elapsedTime);
-			};
-			return {
-				tick,
-				get current() {
-					return currentAccentColor;
-				}
-			};
-		})();
+		const accentColourForServicesProps = siteWideAccentColor(70000);
 
 		const animatedBackgroundColor = (
 			defaultBackgroundColor: string,
