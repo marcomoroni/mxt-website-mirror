@@ -10,9 +10,6 @@
 <a
 	class="container"
 	{href}
-	on:click={() => {
-		window.scrollTo({ top: 0 });
-	}}
 	role="tab"
 	style:background-color={isActive
 		? `color-mix(in oklab, var(--color-primary) 5%, ${$accentColourInServicesProps})`
