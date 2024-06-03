@@ -16,7 +16,7 @@
 
 <div
 	class="card"
-	style:background-image={`url(${backgroundImg})`}
+	style:background-image={backgroundImg !== undefined ? `url('${backgroundImg}')` : undefined}
 	class:background-cover={backgroundCover}
 	class:no-background={intro}
 	style:color={intro
