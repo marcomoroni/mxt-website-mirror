@@ -29,17 +29,18 @@
 				<svelte:fragment slot="back">
 					<CardContentScaffold width="2">
 						<p>
-							The safety, satisfaction, and behaviour of road users is impacted by their interaction
-							with vehicle and road transport technologies. A vehicle simulator enables our
-							customers to improve design and reduce risk by examining how drivers use proposed, and
-							existing, transport systems through investigating and measuring distraction, fatigue
-							and impairment factors. We can:
+							The safety and satisfaction of road users is impacted by their interaction with
+							vehicle and road transport technologies.
+						</p>
+						<p>
+							By examining how drivers use proposed, and existing, transport systems through the
+							measurement of distraction, fatigue and impairment factors. We can:
 						</p>
 						<ul class="with-disc">
 							<li>
-								Examine the attitudes and behaviour of drivers in a safe, controlled, environment
+								Examine the attitudes and behaviour of drivers in a safe and controlled environment
 							</li>
-							<li>test and measure drivers’ performance</li>
+							<li>Test and measure drivers’ performance</li>
 							<li>Inform legislation, transport policy, and road technology innovation</li>
 						</ul>
 					</CardContentScaffold>
@@ -58,22 +59,20 @@
 					<CardContentScaffold width="2">
 						<h2 class="small-header">Simulation Hardware</h2>
 						<p>
-							The driving simulator incorporates an ergonomic cabin package with a compact motion
-							platform and mixed reality camera technology.
+							The driving simulator incorporates a compact motion platform and mixed reality camera
+							technology.
 						</p>
 						<p>
 							Our software immerses drivers in a digital scene, whilst simultaneously incorporating
-							elements of the real world. This provides a convincing combination of both immersivity
-							and presence as drivers can see themselves as they operate the virtual vehicle.
+							elements of the real world. Drivers can see themselves operating the virtual vehicle.
 						</p>
-						<p>In comparison to on-road trials, our compact driving simulator enables:</p>
+						<p>Our compact driving simulator enables:</p>
 						<ul class="with-disc">
 							<li>Multiple innovative ideas be tested under the same conditions</li>
 							<li>Close control of the scenario provides robust evidence of cause and effect</li>
 							<li>Safe testing of emergency situations</li>
 							<li>Alignment with Department for Transport’s “Pilots and Trials” guidance</li>
-							<li>Significant reduction in the effort of organising a future live trial</li>
-							<li>Portability and capability to engage with a broad spectrum of participants</li>
+							<li>Reduces the time to run an on-road live trial</li>
 						</ul>
 					</CardContentScaffold>
 				</svelte:fragment>
