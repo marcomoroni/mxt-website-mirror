@@ -109,7 +109,7 @@
 		grid-row: 2 / 3;
 		display: flex;
 		flex-direction: row;
-		gap: var(--case-study-margin);
+		gap: 5px;
 	}
 
 	.tab-item {
