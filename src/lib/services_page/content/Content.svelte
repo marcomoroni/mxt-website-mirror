@@ -44,6 +44,7 @@
 	.content :global(.large-header) {
 		font-size: 36px;
 		margin-bottom: 30px;
+		line-height: 1.4;
 	}
 
 	.content :global(.small-header) {
