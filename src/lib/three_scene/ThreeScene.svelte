@@ -480,7 +480,7 @@
 			sceneSettings.servicesProps.subscribe((v) => animations.servicesProps.setVisibleItem(v))
 		);
 
-		const accentColourForServicesProps = siteWideAccentColor(70000);
+		const accentColourForServicesProps = siteWideAccentColor(90000);
 
 		const animatedBackgroundColor = (
 			defaultBackgroundColor: string,
