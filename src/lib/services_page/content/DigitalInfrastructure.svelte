@@ -2,6 +2,8 @@
 	import Card from './Card.svelte';
 	import CardContentScaffold from './CardContentScaffold.svelte';
 	import Content from './Content.svelte';
+	import * as ColumnsCardContent from './columns-card-content';
+	import * as IntegrationsCollection from './integrations-collection';
 </script>
 
 <Content caseStudyIndexes={[0]}>
@@ -70,46 +72,86 @@
 					</CardContentScaffold>
 				</svelte:fragment>
 				<svelte:fragment slot="back">
-					<CardContentScaffold width="2">
-						<h3 class="small-header">Natural Environment</h3>
-						<p>
-							MXT are specialists in transforming geographic information into natural and believable
-							computer-generated imagery.
-						</p>
-						<p>
-							Our environmental workflow incorporates data from both environmental impact
-							assessments and national surveys.
-						</p>
-						<p>
-							Combined, these resources underpin the generation of natural landscapes that
-							visualise, terrain, land use, ecology and archaeology information.
-						</p>
-						<h3 class="small-header">Built Environment</h3>
-						<p>
-							MXT specialise in preparing our clients’ Building Information Modelling (BIM) for
-							interactive use, collaborating with engineers and architects to realise a project’s
-							design ambitions for public consultation. Post-decision, we efficiently handle
-							detailed design updates and extend value, during delivery, by using our environments
-							and assets in operational contexts.
-						</p>
-						<h3 class="small-header">Road User Modelling</h3>
-						<p>
-							Transport schemes are designed to make customer journeys safer, greener, quicker, and
-							more reliable. The most impactful way of communicating those benefits is to show those
-							customers how their journey’s will change.
-						</p>
-						<p>
-							MXT are the first, and currently only, UK government provider to combine building
-							information and traffic modelling in a single solution that gives customers a complete
-							and immersive view of the journey time and congestion improvements a scheme might
-							bring.
-						</p>
-						<p>
-							Our interactive mobility simulations ingest standard two-dimensional,
-							origin-destination data and output believable, three-dimensional results that
-							faithfully recreate the physics, graphics and traffic management of real transport
-							environments.
-						</p>
+					<CardContentScaffold width="3">
+						<ColumnsCardContent.Container>
+							<ColumnsCardContent.Column>
+								<h3 class="small-header">Natural Environment</h3>
+								<p>
+									MXT are specialists in transforming geographic information into natural and
+									believable computer-generated imagery.
+								</p>
+								<p>
+									Our environmental workflow incorporates data from both environmental impact
+									assessments and national surveys.
+								</p>
+								<p>
+									Combined, these resources underpin the generation of natural landscapes that
+									visualise, terrain, land use, ecology and archaeology information.
+								</p>
+								<IntegrationsCollection.Container>
+									<IntegrationsCollection.Entry
+										img="/images/dep.png"
+										alt="Logo of the Department for Environment, Food and Rural Affairs."
+									/>
+									<IntegrationsCollection.Entry
+										img="/images/bluesky-international.x46346564.webp"
+										alt="Logo of BlueSky."
+									/>
+									<IntegrationsCollection.Entry
+										img="/images/ukceh_logo_long_720x170_rgb.png"
+										alt="Logo of UK Centre for Ecology & Hydrology."
+									/>
+								</IntegrationsCollection.Container>
+							</ColumnsCardContent.Column>
+							<ColumnsCardContent.Divider />
+							<ColumnsCardContent.Column>
+								<h3 class="small-header">Built Environment</h3>
+								<p>
+									MXT specialise in preparing our clients’ Building Information Modelling (BIM) for
+									interactive use, collaborating with engineers and architects to realise a
+									project’s design ambitions for public consultation. Post-decision, we efficiently
+									handle detailed design updates and extend value, during delivery, by using our
+									environments and assets in operational contexts.
+								</p>
+								<IntegrationsCollection.Container>
+									<IntegrationsCollection.Entry
+										img="/images/ord.png"
+										alt="Logo of Ordinance Survey."
+									/>
+									<IntegrationsCollection.Entry
+										img="/images/nh.png"
+										alt="Logo of National Highways."
+									/>
+									<IntegrationsCollection.Entry img="/images/verisk.png" alt="Logo of Verisk." />
+								</IntegrationsCollection.Container>
+							</ColumnsCardContent.Column>
+							<ColumnsCardContent.Divider />
+							<ColumnsCardContent.Column>
+								<h3 class="small-header">Road User Modelling</h3>
+								<p>
+									Transport schemes are designed to make customer journeys safer, greener, quicker,
+									and more reliable. The most impactful way of communicating those benefits is to
+									show those customers how their journey’s will change.
+								</p>
+								<p>
+									MXT are the first, and currently only, UK government provider to combine building
+									information and traffic modelling in a single solution that gives customers a
+									complete and immersive view of the journey time and congestion improvements a
+									scheme might bring.
+								</p>
+								<p>
+									Our interactive mobility simulations ingest standard two-dimensional,
+									origin-destination data and output believable, three-dimensional results that
+									faithfully recreate the physics, graphics and traffic management of real transport
+									environments.
+								</p>
+								<IntegrationsCollection.Container>
+									<IntegrationsCollection.Entry img="/images/asam.png" alt="Logo of ASAM." />
+									<IntegrationsCollection.Entry img="/images/sumo.png" alt="Logo of SUMO." />
+									<IntegrationsCollection.Entry img="/images/ptv.jpg" alt="Logo of PTV." />
+								</IntegrationsCollection.Container>
+							</ColumnsCardContent.Column>
+						</ColumnsCardContent.Container>
 					</CardContentScaffold>
 				</svelte:fragment>
 			</Card>
@@ -120,25 +162,21 @@
 <style>
 	.grid {
 		display: grid;
-		grid-template-columns: 2fr 3fr;
 		gap: var(--grid-gap);
 		align-items: stretch;
 		justify-items: stretch;
 	}
 
 	.card-container-1 {
-		grid-row: 1 / 2;
-		grid-column: 1 / 2;
+		grid-row: 1;
 	}
 
 	.card-container-2 {
-		grid-row: 1 / 2;
-		grid-column: 2 / 3;
+		grid-row: 2;
 	}
 
 	.card-container-3 {
-		grid-row: 2 / 3;
-		grid-column: 1 / 3;
+		grid-row: 3;
 	}
 
 	.white {

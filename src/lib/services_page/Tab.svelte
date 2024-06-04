@@ -35,22 +35,20 @@
 		text-decoration: none;
 		padding-inline: 30px;
 		background-color: #e9e1deeb;
-		--border-radius: 40px;
-		border-top-left-radius: var(--border-radius);
-		border-top-right-radius: var(--border-radius);
 	}
 
 	.title {
-		font-size: 38px;
+		font-size: 34px;
 		text-wrap: pretty;
 		margin-bottom: 16px;
 		font-weight: 650;
-		line-height: 1.3;
+		line-height: 1.33;
 	}
 
 	.subtitle {
 		font-size: 20px;
 		text-wrap: pretty;
 		font-weight: 600;
+		line-height: 1.45;
 	}
 </style>

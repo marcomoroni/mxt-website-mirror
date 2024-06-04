@@ -20,12 +20,11 @@
 	}
 
 	button {
-		align-self: start;
-		justify-self: start;
+		align-self: end;
+		justify-self: end;
 		background-color: var(--color-primary);
-		--size: 48px;
-		width: var(--size);
-		height: var(--size);
+		width: var(--read-more-buttonn-size);
+		height: var(--read-more-buttonn-size);
 		border-radius: 100000px;
 		z-index: 1;
 		display: grid;

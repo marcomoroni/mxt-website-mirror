@@ -50,7 +50,8 @@
 <style>
 	.card {
 		display: grid;
-		--horizontal-padding: 70px;
+		--read-more-buttonn-size: 48px;
+		--horizontal-padding: calc(60px + 48px);
 		grid-template-rows: var(--horizontal-padding) 1fr var(--horizontal-padding);
 		width: 100%;
 		height: 100%;
@@ -73,9 +74,13 @@
 	.back-content {
 		grid-row: 2 / 3;
 		grid-column: 1 / 2;
-		align-self: stretch;
 		justify-self: stretch;
 		display: grid;
+	}
+
+	.front-content {
+		align-self: start;
+		margin-top: 30px;
 	}
 
 	.back-background {
@@ -92,6 +97,7 @@
 	}
 
 	.back-content {
+		align-self: stretch;
 		color: white;
 		opacity: 0;
 		transition: opacity 0.5s var(--ease);
@@ -109,11 +115,21 @@
 	}
 
 	.read-more-button-container {
-		grid-row: 3 / 4;
+		grid-row: 1 / 2;
 		grid-column: 1 / 2;
 		align-self: stretch;
-		justify-self: end;
+		justify-self: start;
 		z-index: 1;
 		display: grid;
+	}
+
+	@media (max-width: 600px) {
+		.card {
+			--horizontal-padding: calc(20px + 48px);
+		}
+
+		.front-content {
+			margin-top: 16px;
+		}
 	}
 </style>
