@@ -1,8 +1,8 @@
 <script lang="ts">
-	export let width: '1' | '2';
+	export let width: '1' | '2' | '3';
 </script>
 
-<div class="scaffold" class:tight={width === '1'}>
+<div class="scaffold" class:tight={width === '1'} class:wide={width === '3'}>
 	<div class="content">
 		<slot />
 	</div>
@@ -23,6 +23,10 @@
 		grid-template-columns: var(--horizontal-padding) minmax(auto, 600px) auto var(
 				--horizontal-padding
 			);
+	}
+
+	.scaffold.wide {
+		grid-template-columns: var(--horizontal-padding) auto 0px var(--horizontal-padding);
 	}
 
 	.content {

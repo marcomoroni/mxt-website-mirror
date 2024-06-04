@@ -2,6 +2,7 @@
 	import Card from './Card.svelte';
 	import CardContentScaffold from './CardContentScaffold.svelte';
 	import Content from './Content.svelte';
+	import * as ColumnsCardContent from './columns-card-content';
 </script>
 
 <Content>
@@ -67,44 +68,54 @@
 				<svelte:fragment slot="front">
 					<CardContentScaffold width="1">
 						<h2 class="large-header">Soft Skills Training</h2>
-					</CardContentScaffold>
-				</svelte:fragment>
-				<svelte:fragment slot="back">
-					<CardContentScaffold width="2">
 						<p>
 							Beyond procedural knowledge, a modern corporate environment necessitates a workforce
 							with a robust set of soft skills; empathy, leadership, resilience and the ability to
 							manage through change. It’s often possible — and highly advantageous — to teach teams
 							through immersive, virtual reality experiences.
 						</p>
-						<h3 class="small-header">Enhanced Memory Recall</h3>
-						<p>
-							Emotion has a substantial influence on our cognitive processes, including perception,
-							attention, learning, memory, reasoning and problem solving. By forming deeper,
-							emotional, connections to the learning material, MXT’s solutions can achieve increased
-							information retention compared to traditional methods. Higher retention also means
-							learners may need less frequent refreshers.
-						</p>
-						<h3 class="small-header">Enjoyable</h3>
-						<p>
-							MXT has found that our delegates find interactive, immersive, problem-based training
-							to be more enjoyable than traditional classroom-based learning methods.
-						</p>
-						<p>
-							We wanted our learners to feel like their time was spent doing something valuable and
-							enjoyable. If learners feel that training is effective, it leads to improved employee
-							satisfaction and retention.
-						</p>
-						<h3 class="small-header">Flexibility</h3>
-						<p>
-							People are our clients’ most valuable asset. Having teams travel to attend (often)
-							off-site, in person, training can be disruptive and difficult. It is also costly.
-						</p>
-						<p>
-							Digital and cloud-based-delivery is flexible to remote and hybrid working
-							environments. MXT’s solutions are delivered peripatetically, whether that is remote,
-							to a person’s home or their place of work.
-						</p>
+					</CardContentScaffold>
+				</svelte:fragment>
+				<svelte:fragment slot="back">
+					<CardContentScaffold width="3">
+						<ColumnsCardContent.Container>
+							<ColumnsCardContent.Column>
+								<h3 class="small-header">Enhanced Memory Recall</h3>
+								<p>
+									Emotion has a substantial influence on our cognitive processes, including
+									perception, attention, learning, memory, reasoning and problem solving. By forming
+									deeper, emotional, connections to the learning material, MXT’s solutions can
+									achieve increased information retention compared to traditional methods. Higher
+									retention also means learners may need less frequent refreshers.
+								</p>
+							</ColumnsCardContent.Column>
+							<ColumnsCardContent.Divider />
+							<ColumnsCardContent.Column>
+								<h3 class="small-header">Enjoyable</h3>
+								<p>
+									MXT has found that our delegates find interactive, immersive, problem-based
+									training to be more enjoyable than traditional classroom-based learning methods.
+								</p>
+								<p>
+									We wanted our learners to feel like their time was spent doing something valuable
+									and enjoyable. If learners feel that training is effective, it leads to improved
+									employee satisfaction and retention.
+								</p>
+							</ColumnsCardContent.Column>
+							<ColumnsCardContent.Divider />
+							<ColumnsCardContent.Column>
+								<h3 class="small-header">Flexibility</h3>
+								<p>
+									People are our clients’ most valuable asset. Having teams travel to attend (often)
+									off-site, in person, training can be disruptive and difficult. It is also costly.
+								</p>
+								<p>
+									Digital and cloud-based-delivery is flexible to remote and hybrid working
+									environments. MXT’s solutions are delivered peripatetically, whether that is
+									remote, to a person’s home or their place of work.
+								</p>
+							</ColumnsCardContent.Column>
+						</ColumnsCardContent.Container>
 					</CardContentScaffold>
 				</svelte:fragment>
 			</Card>
@@ -115,25 +126,21 @@
 <style>
 	.grid {
 		display: grid;
-		grid-template-columns: 3fr 2fr;
 		gap: var(--grid-gap);
 		align-items: stretch;
 		justify-items: stretch;
 	}
 
 	.card-container-1 {
-		grid-row: 1 / 2;
-		grid-column: 2 / 3;
+		grid-row: 1;
 	}
 
 	.card-container-2 {
-		grid-row: 1 / 2;
-		grid-column: 1 / 2;
+		grid-row: 2;
 	}
 
 	.card-container-3 {
-		grid-row: 2 / 3;
-		grid-column: 1 / 3;
+		grid-row: 3;
 	}
 
 	@media (max-width: 1000px) {
