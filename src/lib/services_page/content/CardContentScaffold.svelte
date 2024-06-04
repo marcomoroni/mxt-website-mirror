@@ -16,7 +16,7 @@
 		grid-template-columns: var(--horizontal-padding) minmax(auto, 800px) auto var(
 				--horizontal-padding
 			);
-		padding-block: 10px;
+		padding-block: 20px;
 	}
 
 	.scaffold.tight {
