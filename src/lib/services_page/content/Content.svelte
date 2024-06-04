@@ -21,7 +21,8 @@
 	.content {
 		padding-bottom: 140px;
 		padding-top: 100px;
-		--grid-gap: 10px;
+		--grid-gap: var(--case-study-margin);
+		--small-header-margin-top: 20px;
 	}
 
 	.content :global(.intro) {
@@ -52,7 +53,7 @@
 	}
 
 	.content :global(.small-header:not(:first-child)) {
-		margin-top: 20px;
+		margin-top: var(--small-header-margin-top);
 	}
 
 	.content :global(.common-card-min-height) {
