@@ -30,31 +30,41 @@
 					</CardContentScaffold>
 				</svelte:fragment>
 				<svelte:fragment slot="back">
-					<CardContentScaffold width="2">
-						<h3 class="small-header">Enhance Communication</h3>
-						<p>
-							Engagement is more impactful when you demonstrate your thinking visually, audibly and
-							experientially.
-						</p>
-						<ul class="with-disc">
-							<li>Deliver key messages about client scheme requirements</li>
-							<li>
-								Free-to-roam, data led environments build trust that a visualisation is a
-								transparent reflection of what’s to come
-							</li>
-							<li>Gain insight into customer sentiment through in-built analytics</li>
-						</ul>
-						<h3 class="small-header">Improve Planning</h3>
-						<p>
-							We provide a safe, repeatable digital project twin for operations teams to address
-							uncertainty in decision-making, conduct scenario planning and develop immersive
-							training programs.
-						</p>
-						<h3 class="small-header">Cost Saving</h3>
-						<p>
-							Our software recycles and reuses existing data and delivers new digital assets that
-							add value throughout the project lifecycle.
-						</p>
+					<CardContentScaffold width="3">
+						<ColumnsCardContent.Container>
+							<ColumnsCardContent.Column>
+								<h3 class="small-header">Enhance Communication</h3>
+								<p>
+									Engagement is more impactful when you demonstrate your thinking visually, audibly
+									and experientially.
+								</p>
+								<ul class="with-disc">
+									<li>Deliver key messages about client scheme requirements</li>
+									<li>
+										Free-to-roam, data led environments build trust that a visualisation is a
+										transparent reflection of what’s to come
+									</li>
+									<li>Gain insight into customer sentiment through in-built analytics</li>
+								</ul>
+							</ColumnsCardContent.Column>
+							<ColumnsCardContent.Divider />
+							<ColumnsCardContent.Column>
+								<h3 class="small-header">Improve Planning</h3>
+								<p>
+									We provide a safe, repeatable digital project twin for operations teams to address
+									uncertainty in decision-making, conduct scenario planning and develop immersive
+									training programs.
+								</p>
+							</ColumnsCardContent.Column>
+							<ColumnsCardContent.Divider />
+							<ColumnsCardContent.Column>
+								<h3 class="small-header">Cost Saving</h3>
+								<p>
+									Our software recycles and reuses existing data and delivers new digital assets
+									that add value throughout the project lifecycle.
+								</p>
+							</ColumnsCardContent.Column>
+						</ColumnsCardContent.Container>
 					</CardContentScaffold>
 				</svelte:fragment>
 			</Card>
