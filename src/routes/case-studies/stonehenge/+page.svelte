@@ -559,7 +559,7 @@
 			grid-auto-flow: row;
 		}
 
-		.events-type {
+		.events-type-container {
 			grid-column: unset;
 			grid-row: 1;
 			position: relative;
