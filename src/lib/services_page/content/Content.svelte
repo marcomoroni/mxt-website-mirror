@@ -20,7 +20,7 @@
 <style>
 	.content {
 		padding-bottom: 140px;
-		padding-top: 100px;
+		padding-top: 60px;
 		--grid-gap: var(--case-study-margin);
 		--small-header-margin-top: 20px;
 	}

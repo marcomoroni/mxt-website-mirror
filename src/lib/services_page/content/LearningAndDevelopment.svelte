@@ -126,25 +126,21 @@
 <style>
 	.grid {
 		display: grid;
-		grid-template-columns: 3fr 2fr;
 		gap: var(--grid-gap);
 		align-items: stretch;
 		justify-items: stretch;
 	}
 
 	.card-container-1 {
-		grid-row: 1 / 2;
-		grid-column: 2 / 3;
+		grid-row: 1;
 	}
 
 	.card-container-2 {
-		grid-row: 1 / 2;
-		grid-column: 1 / 2;
+		grid-row: 2;
 	}
 
 	.card-container-3 {
-		grid-row: 2 / 3;
-		grid-column: 1 / 3;
+		grid-row: 3;
 	}
 
 	@media (max-width: 1000px) {
