@@ -27,6 +27,8 @@
 	<div class="landing-space" />
 
 	<div class="tabs-container">
+		<div class="tabs-margin-top" />
+
 		<ul role="tablist" class="tabs">
 			{#each sectionsData as sectionData, i}
 				<li class="tab-item" data-col={i}>
@@ -93,20 +95,28 @@
 		align-self: end;
 		justify-self: stretch;
 		display: grid;
-		grid-template-rows: auto var(--tabs-line-size);
+		grid-template-rows: auto auto var(--tabs-line-size);
 		overflow-x: scroll;
 		scrollbar-width: none;
 	}
 
-	.tabs {
+	.tabs-margin-top {
 		grid-row: 1 / 2;
-		display: grid;
-		grid-auto-flow: column;
-		grid-auto-columns: 1fr;
-		column-gap: 10px;
+		height: max(var(--nav-bar-height), calc(100dvh - 200px));
+	}
+
+	.tabs {
+		grid-row: 2 / 3;
+		display: flex;
+		flex-direction: row;
+		gap: 10px;
 	}
 
 	.tab-item {
+		flex-basis: 0;
+		flex-grow: 1;
+		flex-shrink: 0;
+		min-width: 340px;
 		display: grid;
 	}
 
@@ -119,7 +129,7 @@
 	}
 
 	.bar {
-		grid-row: 2 / 3;
+		grid-row: 3 / 4;
 		align-self: stretch;
 		justify-self: stretch;
 		margin-inline: var(--case-study-margin);
