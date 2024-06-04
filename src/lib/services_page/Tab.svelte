@@ -35,9 +35,6 @@
 		text-decoration: none;
 		padding-inline: 30px;
 		background-color: #e9e1deeb;
-		--border-radius: 40px;
-		border-top-left-radius: var(--border-radius);
-		border-top-right-radius: var(--border-radius);
 	}
 
 	.title {

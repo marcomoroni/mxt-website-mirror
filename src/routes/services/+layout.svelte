@@ -26,23 +26,25 @@
 <div class="main-grid">
 	<div class="landing-space" />
 
-	<ul role="tablist" class="tabs">
-		{#each sectionsData as sectionData, i}
-			<li class="tab-item" data-col={i}>
-				<Tab
-					title={sectionData.title}
-					subtitle={sectionData.subtitle}
-					href={sectionData.href}
-					isActive={currentSectionIndex === i}
-				/>
-			</li>
-		{/each}
-	</ul>
+	<div class="tabs-container">
+		<ul role="tablist" class="tabs">
+			{#each sectionsData as sectionData, i}
+				<li class="tab-item" data-col={i}>
+					<Tab
+						title={sectionData.title}
+						subtitle={sectionData.subtitle}
+						href={sectionData.href}
+						isActive={currentSectionIndex === i}
+					/>
+				</li>
+			{/each}
+		</ul>
 
-	<div
-		class="bar"
-		style:background-color={`color-mix(in oklab, var(--color-primary) 5%, ${$accentColourInServicesProps})`}
-	/>
+		<div
+			class="bar"
+			style:background-color={`color-mix(in oklab, var(--color-primary) 5%, ${$accentColourInServicesProps})`}
+		/>
+	</div>
 
 	{#each sectionsData as _sectionData, i}
 		<section
@@ -66,8 +68,9 @@
 
 <style>
 	.main-grid {
+		--tabs-line-size: 4px;
 		display: grid;
-		grid-template-rows: auto 4px auto;
+		grid-template-rows: auto auto;
 		grid-template-columns: var(--case-study-margin) 1fr var(--case-study-margin);
 		max-width: 1800px;
 		margin-left: auto;
@@ -81,20 +84,26 @@
 
 	.landing-space {
 		grid-row: 1 / 2;
-		min-height: 100dvh;
+		min-height: calc(100dvh + var(--tabs-line-size));
 	}
 
-	.tabs {
+	.tabs-container {
 		grid-column: 1 / 4;
 		grid-row: 1 / 2;
 		align-self: end;
 		justify-self: stretch;
 		display: grid;
+		grid-template-rows: auto var(--tabs-line-size);
+		overflow-x: scroll;
+		scrollbar-width: none;
+	}
+
+	.tabs {
+		grid-row: 1 / 2;
+		display: grid;
 		grid-auto-flow: column;
 		grid-auto-columns: 1fr;
-		overflow-x: scroll;
 		column-gap: 10px;
-		scrollbar-width: none;
 	}
 
 	.tab-item {
@@ -110,10 +119,10 @@
 	}
 
 	.bar {
-		grid-column: 1 / 4;
 		grid-row: 2 / 3;
 		align-self: stretch;
 		justify-self: stretch;
+		margin-inline: var(--case-study-margin);
 	}
 
 	.section-content {
