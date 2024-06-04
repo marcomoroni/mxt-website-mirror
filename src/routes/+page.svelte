@@ -2,98 +2,48 @@
 	import MxtLogo from '$lib/MXTLogo.svelte';
 </script>
 
-<div class="a">
-	<div class="a-a" />
-	<div class="a-b">
-		<div class="a-b-a" />
-		<div class="logo-container">
-			<MxtLogo />
-		</div>
-		<div class="a-b-c" />
+<div class="container">
+	<div class="margin-top" />
+	<div class="logo-container">
+		<MxtLogo />
 	</div>
-	<div class="a-c">
-		<div class="a-c-a" />
-		<div class="a-c-b">
-			<div class="a-c-b-a" />
-			<div class="a-c-b-b">
-				We are an immersive technology company providing learning, research and visualisation
-				services to transport and infrastructure partners.
-			</div>
-			<div class="a-c-b-c" />
-		</div>
-		<div class="a-c-c" />
+	<div class="type">
+		We are an immersive technology company providing learning, research and visualisation services
+		to transport and infrastructure partners.
 	</div>
 </div>
 
 <style>
-	.a {
-		width: 100%;
+	.container {
+		display: grid;
+		grid-template-rows: 0.9fr min-content 1fr;
+		grid-template-columns: 1fr minmax(max-content, 550px) 1fr;
 		min-height: 100dvh;
-		display: flex;
-		flex-direction: column;
+		padding-inline: 40px;
+		margin-inline: auto;
 		filter: var(--strong-drop-shadow);
 	}
 
-	.a-a {
-		/* Make it 0.9 for visual balance. */
-		flex: 0.9 1 0px;
+	.margin-top {
+		height: calc(var(--nav-bar-height) + 40px);
 	}
 
-	.a-c {
-		flex: 1 1 0px;
+	.logo-container {
+		justify-self: stretch;
+		grid-row: 2;
+		grid-column: 2;
 	}
 
-	.a-a,
-	.a-c {
-		min-height: calc(var(--nav-bar-height) + 40px);
-	}
-
-	.a-c {
-		display: flex;
-		flex-direction: row;
-		align-items: flex-start;
-		justify-content: center;
-	}
-
-	.a-c-a,
-	.a-c-c {
-		width: 40px;
-	}
-
-	.a-c-b {
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-start;
-	}
-
-	.a-c-b-a {
-		height: 80px;
-	}
-
-	.a-c-b-b {
+	.type {
+		grid-row: 3;
+		grid-column: 1 / 4;
 		font-size: 26px;
 		max-width: 900px;
 		text-wrap: balance;
 		text-align: center;
 		font-weight: 560;
-	}
-
-	.a-c-b-c {
-		height: 90px;
-	}
-
-	.a-b {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-	}
-
-	.a-b-a,
-	.a-b-c {
-		width: 40px;
-	}
-
-	.logo-container {
-		width: 550px;
+		margin-top: 80px;
+		margin-bottom: 90px;
+		justify-self: center;
 	}
 </style>
