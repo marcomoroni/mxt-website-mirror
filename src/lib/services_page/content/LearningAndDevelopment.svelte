@@ -80,7 +80,7 @@
 					<CardContentScaffold width="3">
 						<ColumnsCardContent.Container>
 							<ColumnsCardContent.Column>
-								<h3 class="small-header">Enhanced Memory Recall</h3>
+								<h3 class="small-header">Memorable</h3>
 								<p>
 									Emotion has a substantial influence on our cognitive processes, including
 									perception, attention, learning, memory, reasoning and problem solving. By forming
@@ -104,7 +104,7 @@
 							</ColumnsCardContent.Column>
 							<ColumnsCardContent.Divider />
 							<ColumnsCardContent.Column>
-								<h3 class="small-header">Flexibility</h3>
+								<h3 class="small-header">Flexible</h3>
 								<p>
 									People are our clients’ most valuable asset. Having teams travel to attend (often)
 									off-site, in person, training can be disruptive and difficult. It is also costly.
