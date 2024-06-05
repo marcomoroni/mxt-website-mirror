@@ -16,7 +16,7 @@
 <style>
 	.container {
 		display: grid;
-		grid-template-rows: 0.9fr min-content 1fr;
+		grid-template-rows: 36dvh min-content 1fr;
 		grid-template-columns: 1fr minmax(max-content, 550px) 1fr;
 		min-height: 100dvh;
 		padding-inline: 40px;
