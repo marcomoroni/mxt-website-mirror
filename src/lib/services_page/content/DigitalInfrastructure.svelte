@@ -141,19 +141,19 @@
 								<p>
 									Transport schemes are designed to make customer journeys safer, greener, quicker,
 									and more reliable. The most impactful way of communicating those benefits is to
-									show those customers how their journey’s will change.
+									show those customers how their journey’s will chang.
 								</p>
 								<p>
-									MXT are the first, and currently only, UK government provider to combine building
-									information and traffic modelling in a single solution that gives customers a
-									complete and immersive view of the journey time and congestion improvements a
-									scheme might bring.
+									MXT is the first and currently the only UK government provider to combine building
+									information and traffic modelling into a single solution. This unique approach
+									offers customers a complete and immersive view of a projects journey time and
+									congestion improvements.
 								</p>
 								<p>
 									Our interactive mobility simulations ingest standard two-dimensional,
-									origin-destination data and output believable, three-dimensional results that
-									faithfully recreate the physics, graphics and traffic management of real transport
-									environments.
+									origin-destination data and return believable, three-dimensional results;
+									faithfully recreating the physics, graphics and traffic management of real
+									transport environments.
 								</p>
 								<IntegrationsCollection.Container>
 									<IntegrationsCollection.Entry img="/images/asam.png" alt="Logo of ASAM." />
