@@ -3,25 +3,19 @@
 	export let onClick: () => void;
 </script>
 
-<div class="alignment-helper">
-	<button on:click={onClick}>
-		<div class="plus" class:rotate={expanded}>
-			<div class="line vertical" />
-			<div class="line horizontal" />
-		</div>
-	</button>
-</div>
+<button on:click={onClick}>
+	<div class="plus" class:rotate={expanded}>
+		<div class="line vertical" />
+		<div class="line horizontal" />
+	</div>
+</button>
 
 <style>
-	.alignment-helper {
-		align-self: stretch;
-		aspect-ratio: 1 / 1;
-		display: grid;
-	}
-
 	button {
-		align-self: end;
-		justify-self: end;
+		align-self: start;
+		justify-self: start;
+		margin-left: 60px;
+		margin-top: 60px;
 		background-color: var(--color-primary);
 		width: var(--read-more-buttonn-size);
 		height: var(--read-more-buttonn-size);
@@ -62,5 +56,12 @@
 	.rotate {
 		transform-origin: center center;
 		transform: rotate(45deg);
+	}
+
+	@media (max-width: 600px) {
+		button {
+			margin-left: 20px;
+			margin-top: 20px;
+		}
 	}
 </style>
