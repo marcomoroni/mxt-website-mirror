@@ -67,7 +67,7 @@
 			<Card>
 				<svelte:fragment slot="front">
 					<CardContentScaffold width="1">
-						<h2 class="large-header">Soft Skills Training</h2>
+						<h2 class="large-header">Soft Skills</h2>
 						<p>
 							Beyond procedural knowledge, a modern corporate environment necessitates a workforce
 							with a robust set of soft skills; empathy, leadership, resilience and the ability to
