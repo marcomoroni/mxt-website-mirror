@@ -71,7 +71,7 @@
 		</div>
 
 		<div class="card-container-3 common-card-min-height">
-			<Card backgroundImg={'/images/HighresScreenshot00027.png'}>
+			<Card backgroundImg={'/images/CountessJ_Sequence01.0000_whitebox.jpeg'}>
 				<svelte:fragment slot="front">
 					<CardContentScaffold width="1">
 						<h2 class="large-header white">Designed for accuracy at speed</h2>
