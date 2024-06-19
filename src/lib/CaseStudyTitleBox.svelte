@@ -48,7 +48,9 @@
 
 	.r {
 		display: flex;
-		gap: 20px;
+		column-gap: 20px;
+		row-gap: 5px;
+		flex-wrap: wrap;
 	}
 
 	.case-study,
