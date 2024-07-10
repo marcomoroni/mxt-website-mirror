@@ -8,7 +8,8 @@ export type SectionData = {
 export const sectionsData: Array<SectionData> = [
 	{
 		title: 'Digital Infrastructure',
-		subtitle: 'Improving decision-making and engagement through multidisciplinary visualisations',
+		subtitle:
+			'Simulating the societal, environmental, and economic impact of infrastructure projects with immersive digital twins',
 		href: '/services/digital-infrastructure',
 		associatedState: 'service-1' as 'service-1'
 	},
