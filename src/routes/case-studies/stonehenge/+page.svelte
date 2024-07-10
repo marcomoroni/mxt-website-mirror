@@ -13,6 +13,10 @@
 
 <svelte:head>
 	<title>{mxtHeadTitle('Stonehenge')}</title>
+	<meta property="og:title" content="Stonehenge" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://mxt.co.uk/case-studies/stonehenge/" />
+	<meta property="og:image" content="https://mxt.co.uk/images/HighresScreenshot00016.png" />
 </svelte:head>
 
 <CaseStudyLanding title={caseStudyData.title} leadParagraph={caseStudyData.leadParagraph} />

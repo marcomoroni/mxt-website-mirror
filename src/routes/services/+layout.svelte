@@ -19,6 +19,10 @@
 
 <svelte:head>
 	<title>{mxtHeadTitle('Services')}</title>
+	<meta property="og:title" content="Services" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://mxt.co.uk/services/" />
+	<meta property="og:image" content="https://mxt.co.uk/preview.png" />
 </svelte:head>
 
 <AccessibleHiddenHeader text="Services" />
