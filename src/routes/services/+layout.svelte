@@ -106,26 +106,19 @@
 	}
 
 	.tabs {
+		--gap: 5px;
 		grid-row: 2 / 3;
-		display: flex;
-		flex-direction: row;
-		gap: 5px;
+		display: grid;
+		min-width: min(1020px, calc(300vw - (var(--case-study-margin) * 2) - (var(--gap) * (3 - 1))));
+		grid-auto-flow: column;
+		grid-auto-columns: minmax(0, 1fr);
+		gap: var(--gap);
+		padding-inline: var(--case-study-margin);
 	}
 
 	.tab-item {
-		flex-basis: 0;
-		flex-grow: 1;
-		flex-shrink: 0;
-		min-width: 340px;
 		display: grid;
-	}
-
-	.tab-item:first-child {
-		margin-left: var(--case-study-margin);
-	}
-
-	.tab-item:last-child {
-		margin-right: var(--case-study-margin);
+		overflow: hidden;
 	}
 
 	.bar {
