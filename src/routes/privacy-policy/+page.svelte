@@ -1,3 +1,15 @@
+<script lang="ts">
+	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
+</script>
+
+<svelte:head>
+	<title>{mxtHeadTitle('Privacy policy')}</title>
+	<meta property="og:title" content="Privacy policy" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://mxt.co.uk/privacy-policy/" />
+	<meta property="og:image" content="https://mxt.co.uk/preview.png" />
+</svelte:head>
+
 <div class="container">
 	<h1>Privacy Statement</h1>
 

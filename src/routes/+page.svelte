@@ -2,6 +2,14 @@
 	import MxtLogo from '$lib/MXTLogo.svelte';
 </script>
 
+<svelte:head>
+	<title>MXT</title>
+	<meta property="og:title" content="MXT" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://mxt.co.uk/" />
+	<meta property="og:image" content="https://mxt.co.uk/preview.png" />
+</svelte:head>
+
 <div class="container">
 	<div class="margin-top" />
 	<div class="logo-container">
