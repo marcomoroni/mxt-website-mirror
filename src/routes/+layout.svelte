@@ -132,10 +132,6 @@
 
 <svelte:window bind:scrollY />
 
-<svelte:head>
-	<title>MXT</title>
-</svelte:head>
-
 <div class="aurora-container" aria-hidden="true">
 	<Aurora visible={!auroraHidden} />
 </div>
