@@ -294,30 +294,6 @@
 		width: 30px;
 	}
 
-	@supports (scroll-timeline: --scroll-timeline x) and (animation-timeline: --scroll-timeline) {
-		.top-bar {
-			scroll-timeline: --scroll-timeline x;
-		}
-
-		@keyframes hide-logo {
-			0% {
-				opacity: 1;
-			}
-			100% {
-				opacity: 0;
-			}
-		}
-
-		.left {
-			position: sticky;
-			left: 0;
-			animation-name: hide-logo;
-			animation-timeline: --scroll-timeline;
-			animation-fill-mode: both;
-			animation-range-end: exit 30px;
-		}
-	}
-
 	@media (prefers-reduced-motion: reduce) {
 		.three-container {
 			transition: none;
