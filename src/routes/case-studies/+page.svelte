@@ -58,6 +58,10 @@
 
 <svelte:head>
 	<title>{mxtHeadTitle('Case studies')}</title>
+	<meta property="og:title" content="Case studies" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://mxt.co.uk/case-studies/" />
+	<meta property="og:image" content="https://mxt.co.uk/preview.png" />
 </svelte:head>
 
 <svelte:window bind:scrollY bind:innerHeight={windowHeight} />
