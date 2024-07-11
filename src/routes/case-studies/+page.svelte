@@ -87,6 +87,9 @@
 						comingSoon={caseStudy.comingSoon}
 					/>
 				</div>
+				{#if !caseStudy.comingSoon}
+					<div class="disclosure-indicator" />
+				{/if}
 				<FocusHighlight overflow={8} />
 			</a>
 			<div class="bottom-spacer" />
@@ -118,15 +121,22 @@
 	}
 
 	.box {
+		--box-margin: var(--margin);
 		display: flex;
 		position: relative;
-		width: calc(100% - (var(--margin) * 2));
-		min-height: calc(100dvh - (var(--margin) * 2));
+		width: calc(100% - (var(--box-margin) * 2));
+		min-height: calc(100dvh - (var(--box-margin) * 2));
 		top: 0;
-		left: var(--margin);
+		left: var(--box-margin);
 		text-decoration: none;
 		flex-direction: column;
 		justify-content: flex-end;
+	}
+
+	@media (max-width: 650px) {
+		.box {
+			--box-margin: 10px;
+		}
 	}
 
 	.box:hover .background:not(.coming-soon),
@@ -165,5 +175,19 @@
 		margin-left: 30px;
 		margin-right: 30px;
 		margin-bottom: 30px;
+	}
+
+	.disclosure-indicator {
+		border-right: 2.5px solid var(--color-primary);
+		border-top: 2.5px solid var(--color-primary);
+		height: 12px;
+		position: absolute;
+		right: 16px;
+		top: 50%;
+		margin-top: 5px;
+		-webkit-transform: translateY(0) rotate(45deg) scale(1);
+		-ms-transform: translateY(0) rotate(45deg) scale(1);
+		transform: translateY(0) rotate(45deg) scale(1);
+		width: 12px;
 	}
 </style>
