@@ -108,21 +108,6 @@
 		.otherwise(() => false);
 	$: auroraHidden = $page.route.id !== '/contacts';
 
-	function initialScroll(el: HTMLElement) {
-		let w = el.getElementsByClassName('home-link')[0]!.clientWidth;
-		w -= 30;
-		el.scroll({
-			top: 0,
-			left: w,
-			behavior: 'smooth'
-		});
-	}
-
-	let topBarEl: HTMLElement;
-	function scrollToStartOfTopBar() {
-		topBarEl.scroll({ left: 0, behavior: 'smooth' });
-	}
-
 	const navLinkBackgroundKey = Symbol();
 	const [navLinkBackgroundSend, navLinkBackgroundReceive] = crossfade({
 		duration: 700,
@@ -140,7 +125,7 @@
 	<ThreeScene state={threeState} />
 </div>
 
-<nav class="top-bar" use:initialScroll bind:this={topBarEl}>
+<nav class="top-bar">
 	<div class="left">
 		<a
 			href="/"
@@ -148,7 +133,6 @@
 			aria-label="Home"
 			on:mouseenter={() => (hoveringHomeLink = true)}
 			on:mouseleave={() => (hoveringHomeLink = false)}
-			on:click={scrollToStartOfTopBar}
 		>
 			<div class="logo-container">
 				<MxtLogo style={hoveringHomeLink ? 'default' : 'glass'} />
