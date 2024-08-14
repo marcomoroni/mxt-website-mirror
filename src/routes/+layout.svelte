@@ -113,6 +113,31 @@
 		duration: 700,
 		easing: quintInOut
 	});
+
+	let topBarContainerWidth: number = 0;
+	let topBarWidth: number = 0;
+	let topBarOffsetX: number = 0;
+	function useToShowScrollHints(el: HTMLElement) {
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				topBarWidth = entry.target.scrollWidth;
+			});
+		});
+		observer.observe(el);
+
+		el.onscroll = () => {
+			topBarOffsetX = el.scrollLeft;
+		};
+
+		return {
+			destroy() {
+				observer.disconnect();
+			}
+		};
+	}
+	$: topBarIsScrollable = topBarContainerWidth < topBarWidth;
+	$: showScrollHintLeft = topBarIsScrollable && topBarOffsetX > 0;
+	$: showScrollHintRight = topBarIsScrollable && topBarOffsetX < topBarWidth - topBarContainerWidth;
 </script>
 
 <svelte:window bind:scrollY />
@@ -125,46 +150,58 @@
 	<ThreeScene state={threeState} />
 </div>
 
-<nav class="top-bar">
-	<div class="left">
-		<a
-			href="/"
-			class="home-link"
-			aria-label="Home"
-			on:mouseenter={() => (hoveringHomeLink = true)}
-			on:mouseleave={() => (hoveringHomeLink = false)}
-		>
-			<div class="logo-container">
-				<MxtLogo style={hoveringHomeLink ? 'default' : 'glass'} />
-			</div>
-			<FocusHighlight overflow={-4} />
-		</a>
+<div class="top-bar-container" bind:clientWidth={topBarContainerWidth}>
+	<div class="scroll-hint l" class:hidden={!showScrollHintLeft}>
+		<div class="scroll-hint-icon-container">
+			<div class="scroll-hint-icon" />
+		</div>
 	</div>
-	<div
-		class="central"
-		class:one-is-selected={$page.route.id
-			? navLinks.map(({ href }) => href).includes($page.route.id)
-			: false}
-	>
-		{#each navLinks as navLink}
-			{@const isCurrentPage = $page.route.id === navLink.href}
-			<a href={navLink.href} class="page-link" class:current-page={isCurrentPage}>
-				{navLink.label}
-				{#if isCurrentPage}
-					<div
-						in:navLinkBackgroundSend={{ key: navLinkBackgroundKey }}
-						out:navLinkBackgroundReceive={{ key: navLinkBackgroundKey }}
-						class="page-link-background"
-					/>
-				{/if}
-				<FocusHighlight overflow={6} cornerRadius={10000} />
+	<div class="scroll-hint r" class:hidden={!showScrollHintRight}>
+		<div class="scroll-hint-icon-container">
+			<div class="scroll-hint-icon" />
+		</div>
+	</div>
+	<nav class="top-bar" use:useToShowScrollHints>
+		<div class="left">
+			<a
+				href="/"
+				class="home-link"
+				aria-label="Home"
+				on:mouseenter={() => (hoveringHomeLink = true)}
+				on:mouseleave={() => (hoveringHomeLink = false)}
+			>
+				<div class="logo-container">
+					<MxtLogo style={hoveringHomeLink ? 'default' : 'glass'} />
+				</div>
+				<FocusHighlight overflow={-4} />
 			</a>
-		{/each}
-	</div>
-	<div class="right">
-		<div class="nav-right-margin" />
-	</div>
-</nav>
+		</div>
+		<div
+			class="central"
+			class:one-is-selected={$page.route.id
+				? navLinks.map(({ href }) => href).includes($page.route.id)
+				: false}
+		>
+			{#each navLinks as navLink}
+				{@const isCurrentPage = $page.route.id === navLink.href}
+				<a href={navLink.href} class="page-link" class:current-page={isCurrentPage}>
+					{navLink.label}
+					{#if isCurrentPage}
+						<div
+							in:navLinkBackgroundSend={{ key: navLinkBackgroundKey }}
+							out:navLinkBackgroundReceive={{ key: navLinkBackgroundKey }}
+							class="page-link-background"
+						/>
+					{/if}
+					<FocusHighlight overflow={6} cornerRadius={10000} />
+				</a>
+			{/each}
+		</div>
+		<div class="right">
+			<div class="nav-right-margin" />
+		</div>
+	</nav>
+</div>
 
 <slot />
 
@@ -193,18 +230,21 @@
 		opacity: 0;
 	}
 
-	.top-bar {
+	.top-bar-container {
 		position: absolute;
 		top: 0;
 		left: 0;
 		width: 100%;
+	}
+
+	.top-bar {
 		height: var(--nav-bar-height);
 		z-index: 1;
+		overflow-x: scroll;
+		scrollbar-width: none;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		overflow-x: scroll;
-		scrollbar-width: none;
 		transition: filter 0.5s var(--ease);
 	}
 
@@ -272,6 +312,57 @@
 
 	.nav-right-margin {
 		width: 30px;
+	}
+
+	.scroll-hint {
+		position: absolute;
+		top: 0;
+		height: 100%;
+		width: 50px;
+		z-index: 5;
+		pointer-events: none;
+		display: grid;
+		transition: opacity 0.5s ease-in-out;
+	}
+
+	.scroll-hint.hidden {
+		opacity: 0;
+	}
+
+	.scroll-hint.l {
+		left: 0;
+	}
+
+	.scroll-hint.r {
+		right: 0;
+	}
+
+	.scroll-hint-icon-container {
+		align-self: center;
+		justify-self: center;
+		width: 21px;
+		height: 56px;
+		background: #bcbcbc2c;
+		display: grid;
+		border-radius: 99999px;
+		backdrop-filter: blur(10px);
+	}
+
+	.scroll-hint.l .scroll-hint-icon-container {
+		transform: rotate(180deg);
+	}
+
+	.scroll-hint-icon {
+		align-self: center;
+		justify-self: center;
+		border-right: 2px solid var(--color-primary);
+		border-top: 2px solid var(--color-primary);
+		height: 10px;
+		-webkit-transform: translateY(0) rotate(45deg) scale(1);
+		-ms-transform: translateY(0) rotate(45deg) scale(1);
+		transform: translateY(0) rotate(45deg) scale(1);
+		width: 10px;
+		margin-right: 5px;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
