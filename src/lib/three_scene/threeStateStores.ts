@@ -3,7 +3,7 @@ import { writable } from 'svelte/store';
 
 // --- perhaps better use getContext/setContext where you pass to the child a function to set this state
 export const caseStudiesPageIntersectingCard = writable<
-	undefined | 'case-studies-anchor-a303' | 'case-studies-anchor-p2' | 'case-studies-anchor-p3'
+	undefined | 'case-studies-anchor-a303' | 'case-studies-anchor-dhs' | 'case-studies-anchor-p3'
 >(undefined);
 
 export const servicesPageIntersectingSection = writable<

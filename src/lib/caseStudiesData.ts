@@ -1,7 +1,7 @@
 export const caseStudiesData: Array<{
 	title: string;
 	leadParagraph: string;
-	threeState: 'case-studies-anchor-a303' | 'case-studies-anchor-p2' | 'case-studies-anchor-p3';
+	threeState: 'case-studies-anchor-a303' | 'case-studies-anchor-dhs' | 'case-studies-anchor-p3';
 	href: string;
 	comingSoon: boolean;
 }> = [
@@ -14,12 +14,12 @@ export const caseStudiesData: Array<{
 		comingSoon: false
 	},
 	{
-		title: 'Insight into Driver Behaviour and Attitudes on SMART Motorways',
+		title: 'Insight into Driver Behaviour and Cognitive State on SMART Motorways',
 		leadParagraph:
-			'A mixed-reality simulator study to explore confusion on dynamic hard shoulders motorways',
-		threeState: 'case-studies-anchor-p2',
-		href: '/case-studies/p2/',
-		comingSoon: true
+			'Leveraging mixed reality simulation with integrated behavioural and psychophysiological measures to detect subtle cognitive state changes and enhance understanding of driver’s behaviour.',
+		threeState: 'case-studies-anchor-dhs',
+		href: '/case-studies/dhs/',
+		comingSoon: false
 	},
 	{
 		title: 'Performance and Decision Making through Simulation',

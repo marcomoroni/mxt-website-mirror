@@ -49,10 +49,10 @@
 			| 'home'
 			| 'case-studies'
 			| 'case-studies-anchor-a303'
-			| 'case-studies-anchor-p2'
+			| 'case-studies-anchor-dhs'
 			| 'case-studies-anchor-p3'
 			| 'case-study-a303'
-			| 'case-study-p2'
+			| 'case-study-dhs'
 			| 'case-study-p3'
 			| 'service-1'
 			| 'service-2'
@@ -65,7 +65,7 @@
 			(s) => s ?? 'case-studies'
 		)
 		.with({ path: '/case-studies/stonehenge' }, () => 'case-study-a303')
-		.with({ path: '/case-studies/p2' }, () => 'case-study-p2')
+		.with({ path: '/case-studies/dhs' }, () => 'case-study-dhs')
 		.with({ path: '/case-studies/p3' }, () => 'case-study-p3')
 		.with(
 			{ servicesSection: { data: { associatedState: P.select() } } },
@@ -84,7 +84,7 @@
 			(atTopOfWindow) => !atTopOfWindow
 		)
 		.with(
-			{ path: '/case-studies/p2', atTopOfWindow: P.select() },
+			{ path: '/case-studies/dhs', atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
 		.with(
