@@ -3,6 +3,7 @@
 	import FillAspectRatio from '$lib/FillAspectRatio.svelte';
 	import { caseStudiesData } from '$lib/caseStudiesData';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
+	import DHSIcons from '$lib/DHSIcons.svelte';
 
 	const caseStudyData = caseStudiesData[1];
 	// Define callout positions
@@ -18,6 +19,20 @@
             radius: 15
         }
     ];
+	    // Enum for active section
+		const sections = {
+        BEHAVIOUR: 'behaviour',
+        HEART: 'heart',
+        EYE: 'eye'
+    };
+
+    // Track active section
+    let activeSection = sections.BEHAVIOUR;
+
+    // Function to change active section
+    const setActiveSection = (section: typeof sections[keyof typeof sections]) => {
+        activeSection = section;
+    };
 </script>
 
 <svelte:head>
@@ -77,7 +92,8 @@
     </div>
 	<!-- Right column with paragraphs -->
     <div class="content-text">
-        <p>The simulation was based on an existing section of the M6 motorway between junctions 4 and 8, configured into a loop. It features overhead gantries, advanced motorway indicator signals with supporting variable message signs, speed cameras and emergency areas.</p>
+        <p>The simulation was based on an existing section of the M6 motorway between junctions 4 and 8, configured into a loop. 
+			It features overhead gantries, advanced motorway indicator signals with supporting variable message signs, speed cameras and emergency areas.</p>
 
         <p>Participants, representing a diverse cross-section of the driving population in terms of age and experience (n = 39), were exposed to three scenarios in a within-subject design:</p>
 
@@ -91,13 +107,61 @@
 
         <p>The traffic in the simulation scenarios was designed to reflect free-flow conditions, determined by algorithms to ensure realistic vehicle movement and flow.</p>
 
-        <p>Hypothesis were that DHS scenario would present drivers with higher cognitive load or stress levels compared to the closed and open scenarios, due to the dynamic and variable nature of the hard shoulder's use along the same motorway.</p>
+        <p>Hypothesis were that DHS scenario would present drivers with higher cognitive load or stress levels compared to the closed and open scenarios, 
+			due to the dynamic and variable nature of the hard shoulder's use along the same motorway.</p>
     </div>
 
 </div>
-
 <div class="section-spacer" />
+<div class="analytics-section">
+	 <!-- Fixed title and paragraph -->
+	 <div class="analytics-header">
+        <div class="analytics-title">
+            <h1>MXT Analytics Package</h1>
+        </div>
+        <div class="analytics-intro">
+            <p>To fully leverage our mixed reality simulator, we integrated behavioral and psychophysiological measures. While behavioral metrics provide direct insights into driving performance, they only partially depict the driver's cognitive state.</p>
+            
+            <p>Psychophysiological measures, such as electrocardiogram, eye tracking and oculometrics, detect subtle changes in cognitive state that behavior alone can't reveal, like stress or changes in cognitive load. These measures offer a more comprehensive understanding of driver reactions under different scenarios, leading to better-informed insights into driver's behaviour.</p>
+        </div>
+    </div>
 
+	<div class="analytics-content">
+		<!-- Sidebar -->
+        <div class="analytics-sidebar">
+            <div class="sidebar-icons">
+                <button 
+                    class="sidebar-icon"
+                    class:active={activeSection === sections.BEHAVIOUR}
+                    on:click={() => setActiveSection(sections.BEHAVIOUR)}
+                >
+                    <DHSIcons width="48" height="48">
+                        <div slot="behaviour"></div>
+                    </DHSIcons>
+                </button>
+                <button 
+                    class="sidebar-icon"
+                    class:active={activeSection === sections.HEART}
+                    on:click={() => setActiveSection(sections.HEART)}
+                >
+                    <DHSIcons width="48" height="48">
+                        <div slot="heart"></div>
+                    </DHSIcons>
+                </button>
+                <button 
+                    class="sidebar-icon"
+                    class:active={activeSection === sections.EYE}
+                    on:click={() => setActiveSection(sections.EYE)}
+                >
+                    <DHSIcons width="48" height="48">
+                        <div slot="eye"></div>
+                    </DHSIcons>
+                </button>
+            </div>
+        </div>
+	</div>
+
+</div>
 
 <style>
 	.landing-spacer {
@@ -161,6 +225,72 @@
         pointer-events: none; /* Ensures the SVG doesn't interfere with interactions */
         z-index: 1; /* Places lines above the diagram but below the screenshots */
     }
+    .analytics-section {
+        margin: var(--case-study-margin);
+    }
+
+    .analytics-header {
+        margin-bottom: 4rem;
+    }
+
+    .analytics-title {
+        margin-bottom: 2rem;
+    }
+
+    .analytics-title h1 {
+        font-size: 2.5rem;
+        line-height: 1.2;
+        font-weight: 500;
+        color: var(--color-primary);
+    }
+    .analytics-intro {
+        font-size: 1.25rem;
+        line-height: 1.6;
+    }
+    .analytics-intro p {
+        margin-bottom: 1.5rem;
+    }
+    .analytics-intro p:last-child {
+        margin-bottom: 0;
+    }
+    .analytics-content {
+        display: flex;
+    }
+
+    .analytics-sidebar {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sidebar-icons {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .sidebar-icon {
+        width: 48px;
+        height: 48px;
+        border: none;
+        background: #111;
+        cursor: pointer;
+        opacity: 0.5;
+        transition: opacity 0.3s var(--ease);
+    }
+
+    .sidebar-icon.active {
+        opacity: 1;
+    }
+
+    .sidebar-icon :global(svg) {
+        width: 100%;
+        height: 100%;
+        fill: var(--color-primary);
+    }
+
+    .sidebar-icon.active :global(svg) {
+        fill: var(--color-accent-1);
+    }
 	.highlight { color: #f66b84; }
 	.closed { color: var(--color-accent-1); }     /* #4ca7ce blue */
     .open { color: var(--color-accent-3); }       /* #fcc221 yellow */
@@ -187,6 +317,8 @@
         color: var(--color-primary);
         min-width: 1.5rem;
     }
+
+
 
 </style>
 
