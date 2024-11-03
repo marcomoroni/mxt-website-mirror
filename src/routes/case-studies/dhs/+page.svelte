@@ -1,6 +1,5 @@
 <script lang="ts">
 	import CaseStudyLanding from '$lib/CaseStudyLanding.svelte';
-	import FillAspectRatio from '$lib/FillAspectRatio.svelte';
 	import { caseStudiesData } from '$lib/caseStudiesData';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
 	import DHSIcons from '$lib/DHSIcons.svelte';
@@ -33,6 +32,17 @@
     const setActiveSection = (section: typeof sections[keyof typeof sections]) => {
         activeSection = section;
     };
+
+    $: sectionTitle = {
+        [sections.BEHAVIOUR]: 'Driving Behaviour',
+        [sections.HEART]: 'Heart Rate and Heart Rate Variability',
+        [sections.EYE]: 'Oculometrics and Gaze'
+    }[activeSection];
+
+    // For some customization of the analytics section
+    import { fade } from 'svelte/transition';
+    const FADE_DURATION = 1500; // milliseconds
+
 </script>
 
 <svelte:head>
@@ -133,6 +143,7 @@
                 <button 
                     class="sidebar-icon"
                     class:active={activeSection === sections.BEHAVIOUR}
+                    data-section="behaviour"
                     on:click={() => setActiveSection(sections.BEHAVIOUR)}
                 >
                     <DHSIcons width="48" height="48">
@@ -142,6 +153,7 @@
                 <button 
                     class="sidebar-icon"
                     class:active={activeSection === sections.HEART}
+                    data-section="heart"
                     on:click={() => setActiveSection(sections.HEART)}
                 >
                     <DHSIcons width="48" height="48">
@@ -151,12 +163,72 @@
                 <button 
                     class="sidebar-icon"
                     class:active={activeSection === sections.EYE}
+                    data-section="eye"
                     on:click={() => setActiveSection(sections.EYE)}
                 >
                     <DHSIcons width="48" height="48">
                         <div slot="eye"></div>
                     </DHSIcons>
                 </button>
+            </div>
+            <div class="content-area">
+                <div class="title-container">
+                    {#key sectionTitle}
+                        <h2 class="section-title" transition:fade={{duration: FADE_DURATION}}>
+                            {sectionTitle}
+                        </h2>
+                    {/key}
+                </div>
+                <div class="content-layout">
+                    <div class="image-container">
+                        <div class="image-wrapper">
+                            <img 
+                                src="/images/dhs_case_study_analytics_schematics.png"
+                                alt="MXT Analytics Schematics"
+                            />
+                            <!-- Overlay icons -->
+                            {#if activeSection === sections.BEHAVIOUR}
+                                <div class="overlay-icon behaviour-position" transition:fade={{duration: FADE_DURATION}}>
+                                    <DHSIcons width="48" height="48">
+                                        <div slot="behaviour"></div>
+                                    </DHSIcons>
+                                </div>
+                            {/if}
+                            
+                            {#if activeSection === sections.HEART}
+                                <div class="overlay-icon heart-position" transition:fade={{duration: FADE_DURATION}}>
+                                    <DHSIcons width="48" height="48">
+                                        <div slot="heart"></div>
+                                    </DHSIcons>
+                                </div>
+                            {/if}
+                            
+                            {#if activeSection === sections.EYE}
+                                <div class="overlay-icon eye-position" transition:fade={{duration: FADE_DURATION}}>
+                                    <DHSIcons width="48" height="48">
+                                        <div slot="eye"></div>
+                                    </DHSIcons>
+                                </div>
+                            {/if}
+                        </div>
+                    </div>
+                    
+                    <div class="section-description">
+                        {#each [activeSection] as current (current)}
+                            <div class="description-wrapper" transition:fade={{duration: FADE_DURATION}}>
+                                <p>
+                                    {#if current === sections.HEART}
+                                        Heart rate variability detects variations during high-demand tasks. It is sensitive to both over-arousal and under-arousal states, such as stress and vigilance, making it an effective measure for assessing cognitive workload and physiological responses to stress.
+                                    {:else if current === sections.BEHAVIOUR}
+                                        Average speed, speed variability, and rate of lane changes, can gauge comfort levels, consistency, and cautiousness. These metrics can identify areas where drivers may experience difficulty or uncertainty under different scenarios.
+                                    {:else if current === sections.EYE}
+                                        Eye tracking insights into cognitive load include longer fixations and frequent saccades, indicating higher cognitive effort and active scanning due to the need for acquiring more decisional information. Larger pupil sizes reveal increased mental effort and stress.
+                                    {/if}
+                                </p>
+                            </div>
+                        {/each}
+                    </div>
+                </div>
             </div>
 		</div>
 	</div>
@@ -238,14 +310,15 @@
     }
 
     .analytics-title h1 {
-        font-size: 2.5rem;
-        line-height: 1.2;
-        font-weight: 500;
+        font-size: 34px;
+		font-weight: 500;
+		line-height: 1.4;
         color: var(--color-primary);
     }
     .analytics-intro {
-        font-size: 1.25rem;
-        line-height: 1.6;
+        font-size: 20px;
+		font-weight: 400;
+		line-height: 1.4;
     }
     .analytics-intro p {
         margin-bottom: 1.5rem;
@@ -259,6 +332,79 @@
     }
     .analytics-content {
         display: flex;
+        width: 100%;
+    }
+    .content-area {
+        flex: 1;
+        margin-left: 72px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0 24px;
+    }
+
+    .title-container {
+        height: 40px;
+        position: relative;
+        margin-bottom: 2rem;
+        width: 100%;
+    }
+
+    .section-title {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        margin: 0;
+        color: var(--color-primary);
+        font-size: 30px;
+        font-weight: 500;
+        white-space: nowrap;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .image-wrapper {
+        position: relative;
+        width: fit-content; /* Contains to image size */
+        display: inline-block;
+    }
+
+    .image-container {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    .overlay-icon {
+        position: absolute;
+        width: 48px;
+        height: 48px;
+        
+    }
+
+    /* Position classes using percentages */
+    .behaviour-position {
+        bottom: 23%;
+        left: 37%;
+        color: var(--color-accent-3);
+    }
+
+    .heart-position {
+        top: 60%;
+        left: 16%;
+        color: var(--color-accent-2);
+    }
+
+    .eye-position {
+        top: 22%;
+        right: 16%;
+        color: var(--color-accent-1);
+    }
+
+    .overlay-icon :global(svg) {
+        fill: currentColor;
     }
 
     .sidebar {
@@ -294,11 +440,39 @@
         fill: #f66b84;
     }
 
+    .sidebar-icon[data-section="behaviour"].active :global(svg) {
+        fill: var(--color-accent-3);
+    }
+
+    .sidebar-icon[data-section="heart"].active :global(svg) {
+        fill: var(--color-accent-2);
+    }
+
+    .sidebar-icon[data-section="eye"].active :global(svg) {
+        fill: var(--color-accent-1);
+    }
+
     /* Only apply hover when not active */
     .sidebar-icon:not(.active):hover :global(svg) {
         fill: #f66b84;
-        opacity: 0.7;
+        opacity: 0.3;
     }
+
+    .sidebar-icon[data-section="behaviour"]:not(.active):hover :global(svg) {
+        fill: var(--color-accent-3);
+        opacity: 0.3;
+    }
+
+    .sidebar-icon[data-section="heart"]:not(.active):hover :global(svg) {
+        fill: var(--color-accent-2);
+        opacity: 0.3;
+    }   
+
+    .sidebar-icon[data-section="eye"]:not(.active):hover :global(svg) {
+        fill: var(--color-accent-1);
+        opacity: 0.3;
+    }   
+
     .highlight { color: #f66b84; }
     .closed { color: var(--color-accent-1); }     /* #4ca7ce blue */
     .open { color: var(--color-accent-3); }       /* #fcc221 yellow */
@@ -324,6 +498,33 @@
         font-weight: bold;
         color: var(--color-primary);
         min-width: 1.5rem;
+    }
+
+    .content-layout {
+        display: flex;
+        gap: 48px;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 12px;
+    }
+
+    .section-description {
+        flex: 1;
+        max-width: 400px;
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--color-primary);
+        display: grid;
+    }
+
+    .description-wrapper {
+        grid-row: 1;
+        grid-column: 1;
+    }
+
+    .description-wrapper p {
+        margin: 0;
     }
 
 </style>
