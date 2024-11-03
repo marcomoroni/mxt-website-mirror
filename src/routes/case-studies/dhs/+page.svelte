@@ -126,10 +126,10 @@
         </div>
     </div>
 
-	<div class="analytics-content">
-		<!-- Sidebar -->
-        <div class="analytics-sidebar">
-            <div class="sidebar-icons">
+	<div class="analytics-container">
+		<div class="analytics-content">
+			<!-- Sidebar -->
+            <div class="sidebar">
                 <button 
                     class="sidebar-icon"
                     class:active={activeSection === sections.BEHAVIOUR}
@@ -158,7 +158,7 @@
                     </DHSIcons>
                 </button>
             </div>
-        </div>
+		</div>
 	</div>
 
 </div>
@@ -253,46 +253,54 @@
     .analytics-intro p:last-child {
         margin-bottom: 0;
     }
+    .analytics-container {
+        position: relative;
+        min-height: 400px;
+    }
     .analytics-content {
         display: flex;
     }
 
-    .analytics-sidebar {
+    .sidebar {
+        background-color: var(--color-primary);
+        width: 72px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
         display: flex;
         flex-direction: column;
-    }
-
-    .sidebar-icons {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
     }
 
     .sidebar-icon {
-        width: 48px;
-        height: 48px;
+        width: 72px;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px;
+        margin: 0;
         border: none;
-        background: #111;
+        background: transparent;
         cursor: pointer;
-        opacity: 0.5;
-        transition: opacity 0.3s var(--ease);
-    }
-
-    .sidebar-icon.active {
-        opacity: 1;
     }
 
     .sidebar-icon :global(svg) {
-        width: 100%;
-        height: 100%;
-        fill: var(--color-primary);
+        fill: var(--color-background);
+        transition: fill 0.2s ease;
     }
 
     .sidebar-icon.active :global(svg) {
-        fill: var(--color-accent-1);
+        fill: #f66b84;
     }
-	.highlight { color: #f66b84; }
-	.closed { color: var(--color-accent-1); }     /* #4ca7ce blue */
+
+    /* Only apply hover when not active */
+    .sidebar-icon:not(.active):hover :global(svg) {
+        fill: #f66b84;
+        opacity: 0.7;
+    }
+    .highlight { color: #f66b84; }
+    .closed { color: var(--color-accent-1); }     /* #4ca7ce blue */
     .open { color: var(--color-accent-3); }       /* #fcc221 yellow */
     .mixed { color: var(--color-accent-2); }      /* #f66b84 pink */
     .baseline { color: var(--color-accent-4); }
@@ -317,8 +325,6 @@
         color: var(--color-primary);
         min-width: 1.5rem;
     }
-
-
 
 </style>
 
