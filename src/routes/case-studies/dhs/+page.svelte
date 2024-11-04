@@ -552,20 +552,20 @@
 
     /* Position classes using percentages */
     .behaviour-position {
-        bottom: 23%;
-        left: 37%;
+        bottom: 25%;
+        left: 40%;
         color: var(--color-accent-3);
     }
 
     .heart-position {
-        top: 60%;
-        left: 16%;
+        top: 58%;
+        left: 18%;
         color: var(--color-accent-2);
     }
 
     .eye-position {
-        top: 22%;
-        right: 16%;
+        top: 8%;
+        right: 10%;
         color: var(--color-accent-1);
     }
 
