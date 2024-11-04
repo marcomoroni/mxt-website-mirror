@@ -13,7 +13,7 @@
             radius: 15                 // Circle radius
         },
         {
-            start: { x: 51.5, y: 70.2 },
+            start: { x: 38.6, y: 37 },
             end: { x: 75, y: 100 },
             radius: 15
         }
@@ -41,7 +41,7 @@
 
     // For some customization of the analytics section
     import { fade } from 'svelte/transition';
-    const FADE_DURATION = 1500; // milliseconds
+    const FADE_DURATION = 200; // milliseconds
 
 </script>
 
@@ -117,8 +117,7 @@
 
         <p>The traffic in the simulation scenarios was designed to reflect free-flow conditions, determined by algorithms to ensure realistic vehicle movement and flow.</p>
 
-        <p>Hypothesis were that DHS scenario would present drivers with higher cognitive load or stress levels compared to the closed and open scenarios, 
-			due to the dynamic and variable nature of the hard shoulder's use along the same motorway.</p>
+        <p>The hypothesis was that the mixed DHS scenario would induce higher cognitive load and stress levels in drivers compared to the closed and open scenarios, due to the dynamic and variable use of the hard shoulder.</p>
     </div>
 
 </div>
@@ -130,9 +129,7 @@
             <h1>MXT Analytics Package</h1>
         </div>
         <div class="analytics-intro">
-            <p>To fully leverage our mixed reality simulator, we integrated behavioral and psychophysiological measures. While behavioral metrics provide direct insights into driving performance, they only partially depict the driver's cognitive state.</p>
-            
-            <p>Psychophysiological measures, such as electrocardiogram, eye tracking and oculometrics, detect subtle changes in cognitive state that behavior alone can't reveal, like stress or changes in cognitive load. These measures offer a more comprehensive understanding of driver reactions under different scenarios, leading to better-informed insights into driver's behaviour.</p>
+            <p>To fully leverage our mixed reality simulator, we integrated both behavioral and psychophysiological measures. While behavioral metrics provide direct insights into driving performance, psychophysiological measures like electrocardiogram and eye tracking detect subtle changes in cognitive state—such as stress and cognitive load—that behavior alone can't reveal. This comprehensive approach offers a deeper understanding of driver reactions under different scenarios.</p>
         </div>
     </div>
 
@@ -218,7 +215,7 @@
                             <div class="description-wrapper" transition:fade={{duration: FADE_DURATION}}>
                                 <p>
                                     {#if current === sections.HEART}
-                                        Heart rate variability detects variations during high-demand tasks. It is sensitive to both over-arousal and under-arousal states, such as stress and vigilance, making it an effective measure for assessing cognitive workload and physiological responses to stress.
+                                        Heart rate variability (HRV) is sensitive to shifts in cognitive workload, allowing it to detect physiological responses to both heightened states, such as stress, and lower arousal states, like relaxation. This makes HRV an effective measure for assessing mental effort and stress levels.
                                     {:else if current === sections.BEHAVIOUR}
                                         Average speed, speed variability, and rate of lane changes, can gauge comfort levels, consistency, and cautiousness. These metrics can identify areas where drivers may experience difficulty or uncertainty under different scenarios.
                                     {:else if current === sections.EYE}
@@ -229,9 +226,9 @@
                         {/each}
                     </div>                    
                 </div>
-                <!-- Add new analysis section -->
+                <!-- Add analysis section -->
                 {#if activeSection === sections.HEART}
-                    <div class="analysis-details" transition:fade={{duration: FADE_DURATION}}>
+                    <div class="analysis-details" data-section="heart" transition:fade={{duration: FADE_DURATION}}>
                         <!-- Central diagram with annotations -->
                         <div class="central-diagram">
                             <div class="diagram-content">
@@ -254,23 +251,147 @@
 
                         <!-- Results grid -->
                         <div class="results-grid">
+                            <!-- First result - Image on right -->
                             <div class="result-item">
                                 <div class="result-text">
                                     <p>The heart rates were higher in the mixed scenario compared to the baseline scenario. This suggests that drivers in the mixed scenario were under mental strain and had to work harder to process what was happening on the road.</p>
                                 </div>
-                                <img class="result-image" src="/images/dhs_case_study_hrv_beats_per_minute.png" alt="Heart Rate Analysis" />
+                                <div class="result-image">
+                                    <img src="/images/dhs_case_study_hrv_beats_per_minute.png" alt="Heart Rate Analysis" />
+                                </div>
                             </div>
+                            
+                            <!-- Second result - Image on left -->
                             <div class="result-item">
+                                <div class="result-image">
+                                    <img src="/images/dhs_case_study_hrv_rr20.png" alt="Heart Rate Variability Analysis" />
+                                </div>
                                 <div class="result-text">
                                     <p>When looking at heart rate variability (HRV), we measured how much time passed between heartbeats. A lower HRV, especially the percentage of successive heartbeats that differed by more than 20 milliseconds (pNN20), is often linked to higher stress and mental effort. In the mixed scenario, participants showed significantly lower HRV compared to the other conditions, suggesting they were under more cognitive load and stress in this scenario.</p>
                                 </div>
-                                <img class="result-image" src="/images/dhs_case_study_hrv_rr20.png" alt="Heart Rate Variability Analysis" />
                             </div>
                         </div>
 
                         <!-- Conclusion -->
                         <div class="conclusion">
-                            <p>The results show a clear pattern: in the mixed scenario, participants had not only higher heart rates but also lower heart rate variability. Together, these measures suggest that drivers faced higher cognitive demand and stress in this condition compared to the others.</p>
+                            <p>The results show a clear pattern: in the mixed scenario, participants had not only higher heart rates but also lower heart rate variability. Together, these measures suggest that drivers faced higher cognitive demand and stress in the mixed condition when compared to the baseline.</p>
+                        </div>
+                    </div>
+                {/if}
+                {#if activeSection === sections.BEHAVIOUR}
+                    <div class="analysis-details" data-section="behaviour" transition:fade={{duration: FADE_DURATION}}>
+                        <div class="central-diagram">
+                            <div class="diagram-content">
+                                <img src="/images/dhs_case_study_behaviour_central_diagram.png" alt="Driving Behaviour Metrics" />
+                                
+                                <!-- Left annotation -->
+                                <div class="left-annotation">
+                                    <p>We analyze vehicle speed to gather insights into driver comfort. Frequent speed fluctuations can indicate uncertainty or discomfort in the driving environment.</p>
+                                </div>
+                                
+                                <!-- Right annotations -->
+                                <div class="right-annotation top">
+                                    <p>Frequent lane changes can signal driver aggression or overconfidence depending on the driving environment.</p>
+                                </div>
+                                <div class="right-annotation bottom">
+                                    <p>Time spent over the speed limit can indicate how well drivers adhere to road regulations. Among drivers with similar levels of experience, spending more time speeding may suggest greater driver confidence.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Results grid -->
+                        <div class="results-grid">
+                            <!-- First result - Text left, Image right -->
+                            <div class="result-item">
+                                <div class="result-text">
+                                    <p>In all scenarios — whether the hard shoulder was open, closed, or dynamically mixed — drivers maintained average speeds well below the speed limit, indicating that participants generally adhered to safe driving practices.</p>
+                                </div>
+                                <div class="result-image">
+                                    <img src="/images/dhs_case_study_behaviour_speed.png" alt="Speed Analysis" />
+                                </div>
+                            </div>
+                            
+                            <!-- Second result - Image left, Text right -->
+                            <div class="result-item">
+                                <div class="result-image">
+                                    <img src="/images/dhs_case_study_behaviour_violations.png" alt="Speed Violations Analysis" />
+                                </div>
+                                <div class="result-text">
+                                    <p>However, in the scenario involving active hard shoulders (open and mixed) participants spent overall more time over the speed limit compared to the closed and baseline scenarios. This indicates that the availability of the hard shoulder encourages drivers to increase their speed, leading to more speed limit violations, particularly in free-flow traffic conditions.</p>
+                                </div>
+                            </div>
+                        
+                            <!-- Third result - Text left, Image right -->
+                            <div class="result-item">
+                                <div class="result-text">
+                                    <p>Drivers changed lanes most frequently in the basic scenario. This behaviour indicates that in a familiar three-lane environment drivers felt more comfortable making frequent lane changes, likely because the traffic flow felt more predictable, or they were in general more comfortable.</p>
+                                </div>
+                                <div class="result-image">
+                                    <img src="/images/dhs_case_study_behaviour_lane_change_count.png" alt="Lane Change Analysis" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {/if}
+                {#if activeSection === sections.EYE}
+                    <div class="analysis-details" data-section="eye" transition:fade={{duration: FADE_DURATION}}>
+                        <!-- Central diagrams -->
+                        <div class="central-diagram">
+                            <div class="diagram-content">
+                                <div class="dual-images">
+                                    <img src="/images/dhs_case_study_eye_tracking.png" alt="Eye Tracking Analysis" />
+                                    <img src="/images/dhs_case_study_eye_tracking_heightmap.png" alt="Eye Tracking Heatmap" />
+                                </div>
+                                
+                                <!-- Left annotation -->
+                                <div class="left-annotation top">
+                                    <p>Eye tracking is collected at 1kHz. Oculometrics, such as larger pupil size can suggest increased mental effort, while shorter fixation times might indicate quicker processing of complex information. A higher blink rate may signal stress, and a more focused gaze might reflect greater cognitive demand.</p>
+                                </div>
+                                
+                                <!-- Right annotation -->
+                                <div class="right-annotation top">
+                                    <p>In terms of gaze, we extracted fixations on key areas of interest such as the overhead gantries, advanced motorway indicator, variable message signs. Longer fixations may suggest difficulties in processing information, while shorter duration could indicate quick understanding — or missed details.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Analysis intro text -->
+                        <div class="analysis-intro">
+                            <p>We focused our analysis on drivers when they were approaching key areas of interest, extracting oculometrics (pupil diameter and blinking) and fixation data for each condition only within these areas.</p>
+                        </div>
+
+                        <!-- Results grid -->
+                        <div class="results-grid">
+                            <!-- First result - Text left, Image right -->
+                            <div class="result-item">
+                                <div class="result-text">
+                                    <p>We did not find differences in pupillometry, suggesting that participants were not subjected to increased mental effort in the scenarios with variable hard shoulders.</p>
+                                </div>
+                                <div class="result-image">
+                                    <img src="/images/dhs_case_study_eye_pupil_diameter.png" alt="Pupil Diameter Analysis" />
+                                </div>
+                            </div>
+                            
+                            <!-- Second result - Image left, Text right -->
+                            <div class="result-item">
+                                <div class="result-image">
+                                    <img src="/images/dhs_case_study_eye_blink_rate.png" alt="Blink Rate Analysis" />
+                                </div>
+                                <div class="result-text">
+                                    <p>Interestingly, blink rates when approaching areas of interest were higher in the open and mixed scenarios compared to the baseline. This could indicate that, while overall mental effort remained stable, the dynamic elements of the hard shoulder might have introduced moments of increased cognitive demand or uncertainty, reflected in the higher blink rates.</p>
+                                </div>
+                            </div>
+
+                            <!-- Third result - Text left, Image right -->
+                            <div class="result-item">
+                                <div class="result-text">
+                                    <p>Participants spent more time looking at the variable message signs and motorway indicators in the closed, open, and mixed scenarios, with the longest gaze duration in the mixed scenario (though not statistically different from the open). This suggests that drivers may have needed more time to process the dynamic information, especially in the mixed condition.
+                                        Note that the baseline scenario had none of these elements.</p>
+                                </div>
+                                <div class="result-image">
+                                    <img src="/images/dhs_case_study_eye_gaze_duration.png" alt="Gaze Duration Analysis" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 {/if}
@@ -631,33 +752,43 @@
         border-radius: 4px;
     }
 
+    .right-annotation.top {
+        top: 25%;
+    }
+
+    .right-annotation.bottom {
+        bottom: 25%;
+    }
+
     .results-grid {
-        position: relative;
-        width: 100%;
-        margin: 24px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 16px; /* Small gap between results */
     }
 
     .result-item {
-        position: relative;
-        max-width: 500px; /* Reduced image container width */
+        display: flex;
+        align-items: center;
+        gap: 24px; /* Gap between text and image */
+        max-width: 800px;
         margin: 0 auto;
     }
 
-    .result-image {
-        width: 100%;
-        height: auto;
-        display: block;
-    }
-
     .result-text {
-        position: absolute;
-        width: 300px; /* Increased text width */
-        left: -320px; /* Position text to the left of image */
-        top: 50%;
-        transform: translateY(-50%);
+        flex: 1;
         font-size: 14px;
         line-height: 1.4;
         color: var(--color-primary);
+    }
+
+    .result-image {
+        flex: 1;
+    }
+
+    .result-image img {
+        width: 100%;
+        height: auto;
+        display: block;
     }
 
     .conclusion {
@@ -667,6 +798,180 @@
         text-align: center;
         max-width: 800px;
         margin: 0 auto;
+    }
+
+    /* Common base styles */
+    .central-diagram {
+        background-color: var(--color-background-alt);
+        padding: 24px;
+        border-radius: 8px;
+    }
+
+    /* Heart section specific styles */
+    :global([data-section="heart"]) .diagram-content {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    :global([data-section="heart"]) .left-annotation {
+        position: absolute;
+        left: -200px;
+        width: 180px;
+    }
+
+    :global([data-section="heart"]) .left-annotation.top {
+        top: 50px;
+    }
+
+    :global([data-section="heart"]) .left-annotation.bottom {
+        bottom: 50px;
+    }
+
+    :global([data-section="heart"]) .right-annotation {
+        position: absolute;
+        right: -200px;
+        width: 180px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* Behaviour section specific styles */
+    :global([data-section="behaviour"]) .diagram-content {
+        position: relative;
+        width: 100%;
+        max-width: 400px; /* Different max-width for behaviour */
+        margin: 0 auto;
+    }
+
+    :global([data-section="behaviour"]) .left-annotation {
+        position: absolute;
+        left: -200px;
+        width: 180px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    :global([data-section="behaviour"]) .right-annotation {
+        position: absolute;
+        right: -200px;
+        width: 180px;
+    }
+
+    :global([data-section="behaviour"]) .right-annotation.top {
+        top: 25%;
+    }
+
+    :global([data-section="behaviour"]) .right-annotation.bottom {
+        bottom: 60%;
+    }
+
+    /* Common image styles */
+    .diagram-content img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* Common annotation text styles */
+    .left-annotation p, .right-annotation p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.4;
+        color: var(--color-primary);
+        background-color: var(--color-background);
+        padding: 12px;
+        border-radius: 4px;
+    }
+
+    /* Results grid styles remain the same */
+    .results-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        margin-top: 24px;
+    }
+
+    .result-item {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .result-text {
+        flex: 1;
+        font-size: 14px;
+        line-height: 1.4;
+        color: var(--color-primary);
+    }
+
+    .result-image {
+        flex: 1;
+    }
+
+    .result-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    /* Eye section specific styles */
+    :global([data-section="eye"]) .diagram-content {
+        position: relative;
+        width: 100%;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    :global([data-section="eye"]) .dual-images {
+        display: flex;
+        gap: 24px;
+        justify-content: center;
+        align-items: center;
+    }
+
+    :global([data-section="eye"]) .dual-images img:first-child {
+        width: 30%;
+        height: auto;
+        display: block;
+        object-fit: contain;
+    }
+
+    :global([data-section="eye"]) .dual-images img:last-child {
+        width: 70%;
+        height: auto;
+        display: block;
+        object-fit: contain;
+        aspect-ratio: 16/9;
+    }
+
+    :global([data-section="eye"]) .left-annotation {
+        position: absolute;
+        left: -200px;
+        width: 180px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    :global([data-section="eye"]) .right-annotation {
+        position: absolute;
+        right: -200px;
+        width: 180px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* Analysis intro specific to eye section */
+    :global([data-section="eye"]) .analysis-intro {
+        text-align: center;
+        max-width: 600px;
+        margin: 24px auto;
+        font-size: 14px;
+        line-height: 1.4;
+        color: var(--color-primary);
     }
 
 </style>
