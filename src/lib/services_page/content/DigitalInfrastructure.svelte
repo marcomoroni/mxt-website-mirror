@@ -141,7 +141,7 @@
 								<p>
 									Transport schemes are designed to make customer journeys safer, greener, quicker,
 									and more reliable. The most impactful way of communicating those benefits is to
-									show those customers how their journey’s will chang.
+									show those customers how their journey’s will change.
 								</p>
 								<p>
 									MXT is the first and currently the only UK government provider to combine building
