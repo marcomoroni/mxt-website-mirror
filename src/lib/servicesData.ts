@@ -20,7 +20,7 @@ export const sectionsData: Array<SectionData> = [
 		associatedState: 'service-2' as 'service-2'
 	},
 	{
-		title: 'Learning and Development',
+		title: 'Simulations for Scenario Planning, Learning and Development',
 		subtitle: 'Interactive and immersive learning environments',
 		href: '/services/interactive-and-immersive-learning-environments',
 		associatedState: 'service-3' as 'service-3'
