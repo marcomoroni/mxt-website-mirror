@@ -191,6 +191,7 @@
 
 	.white {
 		color: white;
+		text-shadow: 0px 0px 30px #000000c7;
 	}
 
 	@media (max-width: 1000px) {

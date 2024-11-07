@@ -54,15 +54,14 @@
 		</div>
 
 		<div class="card-container-3 common-card-min-height">
-			<Card>
+			<Card backgroundImg={'/images/SS2 Soft Skills.jpg'}>
 				<svelte:fragment slot="front">
 					<CardContentScaffold width="1">
-						<h2 class="large-header">Soft Skills</h2>
-						<p>
-							Beyond procedural knowledge, a modern corporate environment necessitates a workforce
-							with a robust set of soft skills; empathy, leadership, resilience and the ability to
-							manage through change. It’s often possible — and highly advantageous — to teach teams
-							through immersive, virtual reality experiences.
+						<h2 class="large-header white">Soft Skills Training</h2>
+						<p class="white">
+							Immersive experiences, especially in virtual reality, are very effective for equipping
+							your people with toolsets of soft skills: empathy, resilience, and the ability to
+							manage through change.
 						</p>
 					</CardContentScaffold>
 				</svelte:fragment>
@@ -135,6 +134,7 @@
 
 	.white {
 		color: white;
+		text-shadow: 0px 0px 30px #000000c7;
 	}
 
 	@media (max-width: 1000px) {
