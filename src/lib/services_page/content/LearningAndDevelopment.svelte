@@ -21,10 +21,10 @@
 		</div>
 
 		<div class="card-container-2 common-card-min-height">
-			<Card>
+			<Card backgroundImg={'/images/SS1 Medway Tunnel.JPG'}>
 				<svelte:fragment slot="front">
 					<CardContentScaffold width="1">
-						<h2 class="large-header">Digital Rehearsals</h2>
+						<h2 class="large-header white">Digital Rehearsals</h2>
 					</CardContentScaffold>
 				</svelte:fragment>
 				<svelte:fragment slot="back">
@@ -141,6 +141,10 @@
 
 	.card-container-3 {
 		grid-row: 3;
+	}
+
+	.white {
+		color: white;
 	}
 
 	@media (max-width: 1000px) {
