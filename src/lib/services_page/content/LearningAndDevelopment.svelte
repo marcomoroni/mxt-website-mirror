@@ -11,52 +11,42 @@
 			<Card intro={true}>
 				<div slot="front" class="intro">
 					<p>
-						Immersive technologies for problem-based learning, combined with analytics, have the
-						capacity to transform enterprise learning and development. MXT’s interactive and
-						immersive learning environments are enjoyable and memorable. They are deliverable at
-						scale, offering efficient and effective results right across the organisation.
+						Games technologies, simulation, transform scenario planning, learning and development.
+						MXT’s intuitive, interactive, and immersive simulations are cost-effective, flexible,
+						and memorable. They are deliverable at scale, offering effective results throughout your
+						organisation, into your partners and other key stakeholders.
 					</p>
 				</div>
 			</Card>
 		</div>
 
 		<div class="card-container-2 common-card-min-height">
-			<Card>
+			<Card backgroundImg={'/images/SS1 Medway Tunnel.JPG'}>
 				<svelte:fragment slot="front">
 					<CardContentScaffold width="1">
-						<h2 class="large-header">Digital Rehearsals</h2>
+						<h2 class="large-header white">Digital Rehearsals</h2>
 					</CardContentScaffold>
 				</svelte:fragment>
 				<svelte:fragment slot="back">
 					<CardContentScaffold width="2">
 						<p>
-							MXT’s simulation technology is designed to enable road-transport planning. We can
-							simulate a range of exercises - of critical importance is incident and emergency
-							planning exercises.
+							MXT’s simulation capabilities and models are used to enable road-transport planning,
+							human-centred design, operational exercises, inductions, planning, and training. One
+							single model, such as those MXT produce for tunnels, can be used for multiple use
+							cases ranging from maintenance operations through to emergency planning and can host
+							an array of our simulation capabilities from traffic flows to cyber attacks, from
+							asset locations to data representations.
 						</p>
 						<p>
-							An exercise is a simulation of an emergency situation. Exercises have 3 main purposes:
-						</p>
-						<ul class="with-disc">
-							<li>To validate plans</li>
-							<li>
-								To develop staff competencies and give them practice in carrying out their roles
-							</li>
-							<li>To test well-established procedures</li>
-						</ul>
-						<p>
-							Planning for emergencies cannot be considered reliable until it is exercised and
-							proven to be workable, avoiding the risk of false confidence being placed in the
-							integrity of a written plan. Simulated exercises enable participants to build
-							procedural knowledge and confidence, in their roles, in a safe and repeatable
-							environment before being subjected to the stresses and risks of a costly live
-							rehearsal.
+							Simulated exercises enable participants to build procedural knowledge and confidence,
+							in their roles, in a safe and repeatable environment before being subjected to the
+							stresses and risks of a costly, one-and-done, live rehearsal.
 						</p>
 						<p>
-							A networked software architecture enables scenarios to simulate the division between
-							responders who need to communicate, and be coordinated, in complex road transport
-							environments. An immersive virtual environment brings believability and realism to the
-							simulation.
+							MXT’s networked software architecture enables scenarios to simulate the division
+							between responders who need to communicate, and be coordinated, in complex
+							environments. These are great facilitators of collaboration between stakeholders such
+							as infrastructure operators and the emergency services.
 						</p>
 					</CardContentScaffold>
 				</svelte:fragment>
@@ -64,15 +54,14 @@
 		</div>
 
 		<div class="card-container-3 common-card-min-height">
-			<Card>
+			<Card backgroundImg={'/images/SS2 Soft Skills.jpg'}>
 				<svelte:fragment slot="front">
 					<CardContentScaffold width="1">
-						<h2 class="large-header">Soft Skills</h2>
-						<p>
-							Beyond procedural knowledge, a modern corporate environment necessitates a workforce
-							with a robust set of soft skills; empathy, leadership, resilience and the ability to
-							manage through change. It’s often possible — and highly advantageous — to teach teams
-							through immersive, virtual reality experiences.
+						<h2 class="large-header white">Soft Skills Training</h2>
+						<p class="white">
+							Immersive experiences, especially in virtual reality, are very effective for equipping
+							your people with toolsets of soft skills: empathy, resilience, and the ability to
+							manage through change.
 						</p>
 					</CardContentScaffold>
 				</svelte:fragment>
@@ -141,6 +130,11 @@
 
 	.card-container-3 {
 		grid-row: 3;
+	}
+
+	.white {
+		color: white;
+		text-shadow: 0px 0px 30px #000000c7;
 	}
 
 	@media (max-width: 1000px) {

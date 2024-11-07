@@ -16,8 +16,8 @@
 		<MxtLogo />
 	</div>
 	<div class="type">
-		We are an immersive technology company providing learning, research and visualisation services
-		to transport and infrastructure partners.
+		We are an experiential simulation company providing learning, research and visualisation
+		services to transport and infrastructure partners.
 	</div>
 </div>
 
