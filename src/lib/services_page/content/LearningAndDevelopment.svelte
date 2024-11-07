@@ -11,10 +11,10 @@
 			<Card intro={true}>
 				<div slot="front" class="intro">
 					<p>
-						Immersive technologies for problem-based learning, combined with analytics, have the
-						capacity to transform enterprise learning and development. MXT’s interactive and
-						immersive learning environments are enjoyable and memorable. They are deliverable at
-						scale, offering efficient and effective results right across the organisation.
+						Games technologies, simulation, transform scenario planning, learning and development.
+						MXT’s intuitive, interactive, and immersive simulations are cost-effective, flexible,
+						and memorable. They are deliverable at scale, offering effective results throughout your
+						organisation, into your partners and other key stakeholders.
 					</p>
 				</div>
 			</Card>
