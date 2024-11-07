@@ -30,33 +30,23 @@
 				<svelte:fragment slot="back">
 					<CardContentScaffold width="2">
 						<p>
-							MXT’s simulation technology is designed to enable road-transport planning. We can
-							simulate a range of exercises - of critical importance is incident and emergency
-							planning exercises.
+							MXT’s simulation capabilities and models are used to enable road-transport planning,
+							human-centred design, operational exercises, inductions, planning, and training. One
+							single model, such as those MXT produce for tunnels, can be used for multiple use
+							cases ranging from maintenance operations through to emergency planning and can host
+							an array of our simulation capabilities from traffic flows to cyber attacks, from
+							asset locations to data representations.
 						</p>
 						<p>
-							An exercise is a simulation of an emergency situation. Exercises have 3 main purposes:
-						</p>
-						<ul class="with-disc">
-							<li>To validate plans</li>
-							<li>
-								To develop staff competencies and give them practice in carrying out their roles
-							</li>
-							<li>To test well-established procedures</li>
-						</ul>
-						<p>
-							Planning for emergencies cannot be considered reliable until it is exercised and
-							proven to be workable, avoiding the risk of false confidence being placed in the
-							integrity of a written plan. Simulated exercises enable participants to build
-							procedural knowledge and confidence, in their roles, in a safe and repeatable
-							environment before being subjected to the stresses and risks of a costly live
-							rehearsal.
+							Simulated exercises enable participants to build procedural knowledge and confidence,
+							in their roles, in a safe and repeatable environment before being subjected to the
+							stresses and risks of a costly, one-and-done, live rehearsal.
 						</p>
 						<p>
-							A networked software architecture enables scenarios to simulate the division between
-							responders who need to communicate, and be coordinated, in complex road transport
-							environments. An immersive virtual environment brings believability and realism to the
-							simulation.
+							MXT’s networked software architecture enables scenarios to simulate the division
+							between responders who need to communicate, and be coordinated, in complex
+							environments. These are great facilitators of collaboration between stakeholders such
+							as infrastructure operators and the emergency services.
 						</p>
 					</CardContentScaffold>
 				</svelte:fragment>
