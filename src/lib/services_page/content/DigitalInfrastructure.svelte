@@ -12,11 +12,11 @@
 			<Card intro={true}>
 				<div slot="front" class="intro">
 					<p>
-						MXT produce interactive visualisations for Nationally Significant Infrastructure
-						Projects (NSIPs). Understanding planning applications can be challenging. Our work is to
-						transform your existing data into intuitive and immersive experiences for diverse
-						stakeholders ranging from members of the public and policy makers to designers,
-						engineers and operational teams.
+						MXT produce interactive simulations for Nationally Significant Infrastructure Projects
+						(NSIPs). Understanding planning applications can be challenging. Our work is to
+						transform your existing data into intuitive and simulations for diverse stakeholders
+						ranging from members of the public and policy makers to designers, engineers and
+						operational teams.
 					</p>
 				</div>
 			</Card>
@@ -141,7 +141,7 @@
 								<p>
 									Transport schemes are designed to make customer journeys safer, greener, quicker,
 									and more reliable. The most impactful way of communicating those benefits is to
-									show those customers how their journey’s will chang.
+									show those customers how their journey’s will change.
 								</p>
 								<p>
 									MXT is the first and currently the only UK government provider to combine building
@@ -191,6 +191,7 @@
 
 	.white {
 		color: white;
+		text-shadow: 0px 0px 30px #000000c7;
 	}
 
 	@media (max-width: 1000px) {

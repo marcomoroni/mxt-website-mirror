@@ -59,20 +59,26 @@
 					<CardContentScaffold width="2">
 						<h2 class="small-header">Simulation Hardware</h2>
 						<p>
-							The driving simulator incorporates a compact motion platform and mixed reality camera
-							technology.
+							MXT driving simulation can be deployed across different platforms. The first
+							incorporates our own compact motion platform and advanced mixed reality headset. The
+							second is an “At Desk” simulator rig for flexible onsite deployment and multi-site
+							deployments.
 						</p>
 						<p>
-							Our software immerses drivers in a digital scene, whilst simultaneously incorporating
-							elements of the real world. Drivers can see themselves operating the virtual vehicle.
+							Whichever the most appropriate deployment hardware our driving simulation service
+							delivers:
 						</p>
-						<p>Our compact driving simulator enables:</p>
 						<ul class="with-disc">
-							<li>Multiple innovative ideas be tested under the same conditions</li>
-							<li>Close control of the scenario provides robust evidence of cause and effect</li>
+							<li>Highly realistic, compliant, infrastructure, assets, and delegate experience</li>
+							<li>
+								Bespoke scenario simulations rapidly developed and implemented to your
+								specifications
+							</li>
+							<li>Testing of hypotheses and innovations under the same conditions</li>
+							<li>Close control of scenarios providing robust evidence of cause and effect</li>
 							<li>Safe testing of emergency situations</li>
 							<li>Alignment with Department for Transport’s “Pilots and Trials” guidance</li>
-							<li>Reduces the time to run an on-road live trial</li>
+							<li>A reduction in the time to get to on-road live trials</li>
 						</ul>
 					</CardContentScaffold>
 				</svelte:fragment>
