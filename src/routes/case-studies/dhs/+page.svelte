@@ -433,7 +433,7 @@
 	.m6-diagram img {
         width: 100%;
         height: auto;
-        border: 1px solid #eee;
+        /* border: 1px solid #eee; */
     }
 	.m6-screenshot-photos {
         display: flex;
@@ -547,7 +547,7 @@
         position: absolute;
         width: 48px;
         height: 48px;
-        
+        fill: currentColor;
     }
 
     /* Position classes using percentages */
@@ -567,10 +567,6 @@
         top: 8%;
         right: 10%;
         color: var(--color-accent-1);
-    }
-
-    .overlay-icon :global(svg) {
-        fill: currentColor;
     }
 
     .sidebar {
@@ -597,44 +593,44 @@
         cursor: pointer;
     }
 
-    .sidebar-icon :global(svg) {
+    .sidebar-icon {
         fill: var(--color-background);
         transition: fill 0.2s ease;
     }
 
-    .sidebar-icon.active :global(svg) {
+    .sidebar-icon.active {
         fill: #f66b84;
     }
 
-    .sidebar-icon[data-section="behaviour"].active :global(svg) {
+    .sidebar-icon[data-section="behaviour"].active {
         fill: var(--color-accent-3);
     }
 
-    .sidebar-icon[data-section="heart"].active :global(svg) {
+    .sidebar-icon[data-section="heart"].active  {
         fill: var(--color-accent-2);
     }
 
-    .sidebar-icon[data-section="eye"].active :global(svg) {
+    .sidebar-icon[data-section="eye"].active  {
         fill: var(--color-accent-1);
     }
 
     /* Only apply hover when not active */
-    .sidebar-icon:not(.active):hover :global(svg) {
+    .sidebar-icon:not(.active):hover {
         fill: #f66b84;
         opacity: 0.3;
     }
 
-    .sidebar-icon[data-section="behaviour"]:not(.active):hover :global(svg) {
+    .sidebar-icon[data-section="behaviour"]:not(.active):hover {
         fill: var(--color-accent-3);
         opacity: 0.3;
     }
 
-    .sidebar-icon[data-section="heart"]:not(.active):hover :global(svg) {
+    .sidebar-icon[data-section="heart"]:not(.active):hover  {
         fill: var(--color-accent-2);
         opacity: 0.3;
     }   
 
-    .sidebar-icon[data-section="eye"]:not(.active):hover :global(svg) {
+    .sidebar-icon[data-section="eye"]:not(.active):hover {
         fill: var(--color-accent-1);
         opacity: 0.3;
     }   
@@ -808,28 +804,28 @@
     }
 
     /* Heart section specific styles */
-    :global([data-section="heart"]) .diagram-content {
+    [data-section="heart"] .diagram-content {
         position: relative;
         width: 100%;
         max-width: 600px;
         margin: 0 auto;
     }
 
-    :global([data-section="heart"]) .left-annotation {
+    [data-section="heart"] .left-annotation {
         position: absolute;
         left: -200px;
         width: 180px;
     }
 
-    :global([data-section="heart"]) .left-annotation.top {
+    [data-section="heart"] .left-annotation.top {
         top: 50px;
     }
 
-    :global([data-section="heart"]) .left-annotation.bottom {
+    [data-section="heart"] .left-annotation.bottom {
         bottom: 50px;
     }
 
-    :global([data-section="heart"]) .right-annotation {
+    [data-section="heart"] .right-annotation {
         position: absolute;
         right: -200px;
         width: 180px;
@@ -838,14 +834,14 @@
     }
 
     /* Behaviour section specific styles */
-    :global([data-section="behaviour"]) .diagram-content {
+    [data-section="behaviour"] .diagram-content {
         position: relative;
         width: 100%;
-        max-width: 400px; /* Different max-width for behaviour */
+        max-width: 400px;
         margin: 0 auto;
     }
 
-    :global([data-section="behaviour"]) .left-annotation {
+    [data-section="behaviour"] .left-annotation {
         position: absolute;
         left: -200px;
         width: 180px;
@@ -853,17 +849,17 @@
         transform: translateY(-50%);
     }
 
-    :global([data-section="behaviour"]) .right-annotation {
+    [data-section="behaviour"] .right-annotation {
         position: absolute;
         right: -200px;
         width: 180px;
     }
 
-    :global([data-section="behaviour"]) .right-annotation.top {
+    [data-section="behaviour"] .right-annotation.top {
         top: 25%;
     }
 
-    :global([data-section="behaviour"]) .right-annotation.bottom {
+    [data-section="behaviour"] .right-annotation.bottom {
         bottom: 60%;
     }
 
@@ -919,28 +915,28 @@
     }
 
     /* Eye section specific styles */
-    :global([data-section="eye"]) .diagram-content {
+    [data-section="eye"] .diagram-content {
         position: relative;
         width: 100%;
         max-width: 700px;
         margin: 0 auto;
     }
 
-    :global([data-section="eye"]) .dual-images {
+    [data-section="eye"] .dual-images {
         display: flex;
         gap: 24px;
         justify-content: center;
         align-items: center;
     }
 
-    :global([data-section="eye"]) .dual-images img:first-child {
+    [data-section="eye"] .dual-images img:first-child {
         width: 30%;
         height: auto;
         display: block;
         object-fit: contain;
     }
 
-    :global([data-section="eye"]) .dual-images img:last-child {
+    [data-section="eye"] .dual-images img:last-child {
         width: 70%;
         height: auto;
         display: block;
@@ -948,7 +944,7 @@
         aspect-ratio: 16/9;
     }
 
-    :global([data-section="eye"]) .left-annotation {
+    [data-section="eye"] .left-annotation {
         position: absolute;
         left: -200px;
         width: 180px;
@@ -956,7 +952,7 @@
         transform: translateY(-50%);
     }
 
-    :global([data-section="eye"]) .right-annotation {
+    [data-section="eye"] .right-annotation {
         position: absolute;
         right: -200px;
         width: 180px;
@@ -965,7 +961,7 @@
     }
 
     /* Analysis intro specific to eye section */
-    :global([data-section="eye"]) .analysis-intro {
+    [data-section="eye"] .analysis-intro {
         text-align: center;
         max-width: 600px;
         margin: 24px auto;
