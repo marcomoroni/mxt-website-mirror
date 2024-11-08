@@ -180,32 +180,36 @@
                     <div class="image-container">
                         <div class="image-wrapper">
                             <img 
+                                class="base-schematic"
                                 src="/images/dhs_case_study_analytics_schematics.png"
-                                alt="MXT Analytics Schematics"
+                                alt="MXT Analytics Schematics Base"
                             />
-                            <!-- Overlay icons -->
+                            
                             {#if activeSection === sections.BEHAVIOUR}
-                                <div class="overlay-icon behaviour-position" transition:fade={{duration: FADE_DURATION}}>
-                                    <DHSIcons width="48" height="48">
-                                        <div slot="behaviour"></div>
-                                    </DHSIcons>
-                                </div>
+                                <img 
+                                    class="overlay-schematic behaviour"
+                                    src="/images/dhs_case_study_analytics_schematics_behaviour.png"
+                                    alt="Behaviour Analytics Overlay"
+                                    transition:fade={{duration: FADE_DURATION}}
+                                />
                             {/if}
                             
                             {#if activeSection === sections.HEART}
-                                <div class="overlay-icon heart-position" transition:fade={{duration: FADE_DURATION}}>
-                                    <DHSIcons width="48" height="48">
-                                        <div slot="heart"></div>
-                                    </DHSIcons>
-                                </div>
+                                <img 
+                                    class="overlay-schematic heart"
+                                    src="/images/dhs_case_study_analytics_schematics_hearth.png"
+                                    alt="ECG Analytics Overlay"
+                                    transition:fade={{duration: FADE_DURATION}}
+                                />
                             {/if}
                             
                             {#if activeSection === sections.EYE}
-                                <div class="overlay-icon eye-position" transition:fade={{duration: FADE_DURATION}}>
-                                    <DHSIcons width="48" height="48">
-                                        <div slot="eye"></div>
-                                    </DHSIcons>
-                                </div>
+                                <img 
+                                    class="overlay-schematic eye"
+                                    src="/images/dhs_case_study_analytics_schematics_eye.png"
+                                    alt="Eye Tracking Analytics Overlay"
+                                    transition:fade={{duration: FADE_DURATION}}
+                                />
                             {/if}
                         </div>
                     </div>
@@ -536,37 +540,37 @@
         display: inline-block;
     }
 
+    .base-schematic {
+        width: 100%;
+        height: auto;
+        filter: invert(34%) sepia(2%) saturate(100%) hue-rotate(356deg) brightness(90%) contrast(83%);
+    }
+
+    .overlay-schematic {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .overlay-schematic.behaviour {
+        filter: brightness(0) saturate(100%) invert(78%) sepia(61%) saturate(847%) hue-rotate(340deg) brightness(103%) contrast(98%);
+    }
+
+    .overlay-schematic.heart {
+        filter: brightness(0) saturate(100%) invert(59%) sepia(14%) saturate(4580%) hue-rotate(312deg) brightness(99%) contrast(94%);
+    }
+
+    .overlay-schematic.eye {
+        filter: brightness(0) saturate(100%) invert(57%) sepia(78%) saturate(312%) hue-rotate(152deg) brightness(90%) contrast(94%);
+    }
+
     .image-container {
         flex: 1;
         min-width: 0;
         display: flex;
         justify-content: center;
-    }
-
-    .overlay-icon {
-        position: absolute;
-        width: 48px;
-        height: 48px;
-        fill: currentColor;
-    }
-
-    /* Position classes using percentages */
-    .behaviour-position {
-        bottom: 25%;
-        left: 40%;
-        color: var(--color-accent-3);
-    }
-
-    .heart-position {
-        top: 58%;
-        left: 18%;
-        color: var(--color-accent-2);
-    }
-
-    .eye-position {
-        top: 8%;
-        right: 10%;
-        color: var(--color-accent-1);
     }
 
     .sidebar {
