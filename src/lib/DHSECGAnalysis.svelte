@@ -6,7 +6,31 @@
 <div class="analysis-details" transition:fade={{duration: FADE_DURATION}}>
     <div class="central-diagram">
         <div class="diagram-content">
-            <img src="/images/dhs_case_study_hrv_raw_data.png" alt="Heart Rate Raw Data" />
+            <!-- Replace the single image with this layout -->
+            <div class="ecg-plots-container">
+                <div class="left-plots">
+                    <div class="plot-wrapper">
+                        <img 
+                            src="/images/dhs_case_study_hrv_raw_data_signal_only.png" 
+                            alt="ECG Raw and Cleaned Signal"
+                        />
+                    </div>
+                    <div class="plot-wrapper">
+                        <img 
+                            src="/images/dhs_case_study_hrv_raw_data_heart_rate.png" 
+                            alt="Heart Rate Over Time"
+                        />
+                    </div>
+                </div>
+                <div class="right-plot">
+                    <div class="tall-plot-wrapper">
+                        <img 
+                            src="/images/dhs_case_study_hrv_raw_data_heartbeats.png" 
+                            alt="Individual Heart Beats Analysis"
+                        />
+                    </div>
+                </div>
+            </div>
             
             <div class="left-annotation top">
                 <p>Heart rate increases incrementally with the difficulty of cognitive tasks while driving, indicating heightened mental workload</p>
@@ -16,7 +40,7 @@
             </div>
             
             <div class="right-annotation">
-                <p>We are able to reconstruct and detect the ECG complex, from which we can extract heart rate variability measures to assess cognitive load and stress.</p>
+                <p>We are able to reconstruct and detect the QRS complex (the distinct pattern of electrical activity representing key features of each heartbeat), from which we can extract heart rate variability measures to assess cognitive load and stress.</p>
             </div>
         </div>
     </div>
@@ -68,16 +92,20 @@
     .diagram-content {
         position: relative;
         width: 100%;
-        max-width: 600px;
+        max-width: 800px;
         margin: 0 auto;
     }
 
-    .diagram-content img {
+    /* Combined image styles */
+    .diagram-content img,
+    .plot-wrapper img,
+    .result-image img {
         width: 100%;
         height: auto;
         display: block;
     }
 
+    /* Annotation styles */
     .left-annotation {
         position: absolute;
         left: -200px;
@@ -85,11 +113,11 @@
     }
 
     .left-annotation.top {
-        top: 50px;
+        top: 12.5%;        
     }
 
     .left-annotation.bottom {
-        bottom: 50px;
+        bottom: 12.5%;
     }
 
     .right-annotation {
@@ -110,6 +138,7 @@
         border-radius: 4px;
     }
 
+    /* Results styles */
     .results-grid {
         display: flex;
         flex-direction: column;
@@ -136,12 +165,6 @@
         flex: 1;
     }
 
-    .result-image img {
-        width: 100%;
-        height: auto;
-        display: block;
-    }
-
     .conclusion {
         font-size: 16px;
         line-height: 1.6;
@@ -149,5 +172,38 @@
         text-align: center;
         max-width: 800px;
         margin: 0 auto;
+    }
+
+    /* ECG plots container styles */
+    .ecg-plots-container {
+        display: flex;
+        gap: 12px;
+        background-color: white;
+        padding: 24px;
+        border-radius: 8px;
+        min-height: 500px;
+    }
+
+    .left-plots {
+        flex: 6;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .right-plot {
+        flex: 5;
+        display: flex;
+    }
+
+    .tall-plot-wrapper {
+        height: 100%;
+        width: 100%;
+    }
+
+    .tall-plot-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
 </style>
