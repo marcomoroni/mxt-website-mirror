@@ -112,8 +112,7 @@
         position: absolute;
         left: -200px;
         width: 180px;
-        top: 50%;
-        transform: translateY(-50%);
+        top: 50%;        
     }
 
     .right-annotation {
@@ -123,11 +122,11 @@
     }
 
     .right-annotation.top {
-        top: 25%;
+        top: 10%;
     }
 
     .right-annotation.bottom {
-        bottom: 60%;
+        bottom: 15%;
     }
 
     .left-annotation p, .right-annotation p {
