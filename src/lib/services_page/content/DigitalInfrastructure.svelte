@@ -14,7 +14,7 @@
 					<p>
 						MXT produce interactive simulations for Nationally Significant Infrastructure Projects
 						(NSIPs). Understanding planning applications can be challenging. Our work is to
-						transform your existing data into intuitive and simulations for diverse stakeholders
+						transform your existing data into intuitive simulations for diverse stakeholders
 						ranging from members of the public and policy makers to designers, engineers and
 						operational teams.
 					</p>
