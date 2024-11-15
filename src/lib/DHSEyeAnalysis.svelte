@@ -61,6 +61,11 @@
             </div>
         </div>
     </div>
+
+    <!-- Conclusion -->
+    <div class="conclusion">
+        <p>In conclusion, drivers' eye-tracking data revealed how visual engagement shifted based on scenario complexity: participants spent the most time focusing on signs and indicators in dynamic hard shoulder settings, especially in mixed scenarios, indicating greater processing demands. Higher blink rates in these scenarios suggested moments of increased cognitive load or uncertainty, although overall mental effort remained consistent across conditions.</p>
+    </div>
 </div>
 
 <style>
@@ -172,5 +177,14 @@
         width: 100%;
         height: auto;
         display: block;
+    }
+
+    .conclusion {
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--color-primary);
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
     }
 </style>

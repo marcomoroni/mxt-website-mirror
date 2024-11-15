@@ -66,6 +66,11 @@
             </div>
         </div>
     </div>
+
+    <!-- Conclusion -->
+    <div class="conclusion">
+        <p>In our study, drivers showed a clear tendency to adapt their behavior based on the roadway environment: they drove cautiously in dynamic hard shoulder scenarios, but the availability of an open hard shoulder encouraged more speed limit violations. Frequent lane changes in familiar three-lane settings reflected greater driver confidence and ease, highlighting how familiarity and clarity in road design directly influence driver comfort and adherence to regulations.</p>
+    </div>
 </div>
 
 <style>
@@ -169,5 +174,14 @@
         width: 100%;
         height: auto;
         display: block;
+    }
+
+    .conclusion {
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--color-primary);
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
     }
 </style>
