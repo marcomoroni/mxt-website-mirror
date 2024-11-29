@@ -20,11 +20,21 @@
 		display: flex;
 		flex-direction: column;
 		filter: var(--strong-drop-shadow);
+		pointer-events: none;
+
+		& > * {
+			pointer-events: auto;
+		}
 	}
 
 	.div-margin-top {
 		min-height: calc(var(--nav-bar-height) + 40px);
 		flex: 1 1 0px;
+		pointer-events: none;
+
+		& > * {
+			pointer-events: auto;
+		}
 	}
 
 	.div-margin-bottom {

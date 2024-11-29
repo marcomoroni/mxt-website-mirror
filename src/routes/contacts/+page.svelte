@@ -44,6 +44,11 @@
 		flex-direction: column;
 		align-items: center;
 		position: relative;
+		pointer-events: none;
+
+		& > * {
+			pointer-events: auto;
+		}
 	}
 
 	.vertical-margin {
