@@ -1,5 +1,5 @@
 <footer>
-	<p>© MXTREALITY UK LTD. 2024</p>
+	<p>© MXTREALITY UK LTD. 2025</p>
 	<p><a href="/privacy-policy" class="underline-on-focus">Privacy statement</a></p>
 	<p>Company number: 10431348</p>
 </footer>
