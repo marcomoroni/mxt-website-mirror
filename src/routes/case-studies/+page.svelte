@@ -5,55 +5,6 @@
 	import SecondaryPageLanding from '$lib/SecondaryPageLanding.svelte';
 	import { caseStudiesData } from '$lib/caseStudiesData';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
-	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
-	import { onMount } from 'svelte';
-
-	// `IntersectionObserver` does not work well in this situation becasue getting the first state asyncronously
-	// is not enough.
-
-	let scrollY: number;
-	let windowHeight: number;
-
-	// Note that these are in order.
-	const cards: Array<{
-		el: HTMLElement;
-		threeState: 'case-studies-anchor-a303' | 'case-studies-anchor-p2' | 'case-studies-anchor-p3';
-	}> = [];
-
-	function checkNewState() {
-		let newThreeState:
-			| undefined
-			| 'case-studies-anchor-a303'
-			| 'case-studies-anchor-p2'
-			| 'case-studies-anchor-p3' = undefined;
-		for (const card of cards) {
-			const hasPassedHalfWindow = card.el.getBoundingClientRect().y < windowHeight / 2;
-			if (hasPassedHalfWindow) {
-				newThreeState = card.threeState;
-			} else {
-				break;
-			}
-		}
-
-		caseStudiesPageIntersectingCard.set(newThreeState);
-	}
-
-	$: {
-		if (scrollY) {
-			checkNewState();
-		}
-	}
-
-	onMount(() => {
-		checkNewState();
-	});
-
-	function scrollObserve(
-		el: HTMLElement,
-		threeState: 'case-studies-anchor-a303' | 'case-studies-anchor-p2' | 'case-studies-anchor-p3'
-	) {
-		cards.push({ el, threeState });
-	}
 </script>
 
 <svelte:head>
@@ -63,8 +14,6 @@
 	<meta property="og:url" content="https://mxt.co.uk/case-studies/" />
 	<meta property="og:image" content="https://mxt.co.uk/preview.png" />
 </svelte:head>
-
-<svelte:window bind:scrollY bind:innerHeight={windowHeight} />
 
 <AccessibleHiddenHeader text="Case studies" />
 
@@ -76,7 +25,7 @@
 
 <ul class="case-studies-list">
 	{#each caseStudiesData as caseStudy}
-		<li class="case-study-card" use:scrollObserve={caseStudy.threeState}>
+		<li class="case-study-card">
 			<a
 				class="box"
 				href={caseStudy.comingSoon ? undefined : caseStudy.href}

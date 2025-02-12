@@ -6,10 +6,7 @@
 	import Aurora from '$lib/Aurora.svelte';
 	import ThreeScene from '$lib/three_scene/ThreeScene.svelte';
 	import { P, match } from 'ts-pattern';
-	import {
-		caseStudiesPageIntersectingCard,
-		servicesPageIntersectingSection
-	} from '$lib/three_scene/threeStateStores';
+	import { servicesPageIntersectingSection } from '$lib/three_scene/threeStateStores';
 	import { crossfade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 	import FocusHighlight from '$lib/FocusHighlight.svelte';
@@ -18,6 +15,7 @@
 		getCurrentSectionData as getCurrentServicesSectionData,
 		sectionsData as servicesSectionsData
 	} from '$lib/servicesData';
+	import { caseStudiesData } from '$lib/caseStudiesData';
 
 	const navLinks = [
 		{
@@ -39,39 +37,34 @@
 	let scrollY: number;
 	$: atTopOfWindow = scrollY <= 70;
 
-	$: threeState = match({
-		path: $page.route.id,
-		servicesSection: getCurrentServicesSectionData($page.route.id),
-		caseStudiesPageIntersectingCard: $caseStudiesPageIntersectingCard,
-		servicesPageIntersectingSection: $servicesPageIntersectingSection
-	})
-		.returnType<
-			| 'home'
-			| 'case-studies'
-			| 'case-studies-anchor-a303'
-			| 'case-studies-anchor-p2'
-			| 'case-studies-anchor-p3'
-			| 'case-study-a303'
-			| 'case-study-p2'
-			| 'case-study-p3'
-			| 'service-1'
-			| 'service-2'
-			| 'service-3'
-			| 'contacts'
-		>()
-		.with({ path: '/' }, () => 'home')
-		.with(
-			{ path: '/case-studies', caseStudiesPageIntersectingCard: P.select() },
-			(s) => s ?? 'case-studies'
-		)
-		.with({ path: '/case-studies/stonehenge' }, () => 'case-study-a303')
-		.with({ path: '/case-studies/p2' }, () => 'case-study-p2')
-		.with({ path: '/case-studies/p3' }, () => 'case-study-p3')
-		.with(
-			{ servicesSection: { data: { associatedState: P.select() } } },
-			(associatedState) => associatedState
-		)
-		.otherwise(() => 'contacts');
+	$: threeState = (() => {
+		const route = $page.route.id;
+		const caseStudy = caseStudiesData.find(({ href }) => href == route);
+		console.log(route);
+		if (caseStudy) {
+			if (caseStudy.threeState === 'none') {
+				return 'case-studies';
+			} else {
+				return caseStudy.threeState;
+			}
+		} else {
+			return match({
+				path: route,
+				servicesSection: getCurrentServicesSectionData(route),
+				servicesPageIntersectingSection: $servicesPageIntersectingSection
+			})
+				.returnType<
+					'home' | 'case-studies' | 'service-1' | 'service-2' | 'service-3' | 'contacts'
+				>()
+				.with({ path: '/' }, () => 'home')
+				.with({ path: '/case-studies' }, () => 'case-studies')
+				.with(
+					{ servicesSection: { data: { associatedState: P.select() } } },
+					(associatedState) => associatedState
+				)
+				.otherwise(() => 'contacts');
+		}
+	})();
 
 	$: threeHidden = match({
 		path: $page.route.id,
@@ -91,6 +84,7 @@
 			{ path: '/case-studies/p3', atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
+		.with({ path: '/case-studies', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
 		.with({ path: '/services', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
 		.with(
 			{ path: servicesSectionsData[0].href, atTopOfWindow: P.select() },
