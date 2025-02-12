@@ -35,9 +35,6 @@
 	export let state:
 		| 'home'
 		| 'case-studies'
-		| 'case-studies-anchor-a303'
-		| 'case-studies-anchor-p2'
-		| 'case-studies-anchor-p3'
 		| 'case-study-a303'
 		| 'case-study-p2'
 		| 'case-study-p3'
@@ -51,9 +48,6 @@
 	const stateStore = writable<
 		| 'home'
 		| 'case-studies'
-		| 'case-studies-anchor-a303'
-		| 'case-studies-anchor-p2'
-		| 'case-studies-anchor-p3'
 		| 'case-study-a303'
 		| 'case-study-p2'
 		| 'case-study-p3'
@@ -97,7 +91,6 @@
 				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
 					match($s)
 						.returnType<'KeepRotating' | { At: number }>()
-						.with('case-studies-anchor-a303', () => ({ At: 0 }))
 						.with('case-study-a303', () => ({ At: 0 }))
 						.otherwise(() => 'KeepRotating')
 				),
@@ -112,8 +105,6 @@
 						.returnType<PaletteName>()
 						.with('case-study-p2', () => 'hidden')
 						.with('case-study-p3', () => 'hidden')
-						.with('case-studies-anchor-p3', () => 'dim')
-						.with('case-studies-anchor-p2', () => 'dim')
 						.with('service-1', () => 'service-1')
 						.with('service-2', () => 'service-2')
 						.with('service-3', () => 'service-3')
@@ -128,7 +119,6 @@
 				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
 					match($s)
 						.returnType<'KeepRotating' | { At: number }>()
-						.with('case-studies-anchor-p2', () => ({ At: 0 }))
 						.with('case-study-p2', () => ({ At: 0 }))
 						.otherwise(() => 'KeepRotating')
 				),
@@ -143,8 +133,6 @@
 						.returnType<PaletteName>()
 						.with('case-study-p3', () => 'hidden')
 						.with('case-study-a303', () => 'hidden')
-						.with('case-studies-anchor-a303', () => 'dim')
-						.with('case-studies-anchor-p3', () => 'dim')
 						.with('service-1', () => 'service-1')
 						.with('service-2', () => 'service-2')
 						.with('service-3', () => 'service-3')
@@ -162,7 +150,6 @@
 				polarAngleDegAnimatedClockwise: derived(stateStore, ($s) =>
 					match($s)
 						.returnType<'KeepRotating' | { At: number }>()
-						.with('case-studies-anchor-p3', () => ({ At: 0 }))
 						.with('case-study-p3', () => ({ At: 0 }))
 						.otherwise(() => 'KeepRotating')
 				),
@@ -177,8 +164,6 @@
 						.returnType<PaletteName>()
 						.with('case-study-p2', () => 'hidden')
 						.with('case-study-a303', () => 'hidden')
-						.with('case-studies-anchor-a303', () => 'dim')
-						.with('case-studies-anchor-p2', () => 'dim')
 						.with('service-1', () => 'service-1')
 						.with('service-2', () => 'service-2')
 						.with('service-3', () => 'service-3')
@@ -339,9 +324,6 @@
 				match($s)
 					.returnType<'KeepRotating' | { At: number }>()
 					.with('case-studies', () => ({ At: 180 }))
-					.with('case-studies-anchor-a303', () => ({ At: 180 }))
-					.with('case-studies-anchor-p2', () => ({ At: 180 }))
-					.with('case-studies-anchor-p3', () => ({ At: 180 }))
 					.with('case-study-a303', () => ({ At: 180 }))
 					.with('case-study-p2', () => ({ At: 180 }))
 					.with('case-study-p3', () => ({ At: 180 }))
@@ -354,9 +336,6 @@
 						'case-studies',
 						() => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenCaseStudyLanding - 90
 					)
-					.with('case-studies-anchor-a303', () => 0 * dioramaOwnPolarAngleMultWhenSmall)
-					.with('case-studies-anchor-p2', () => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenSmall)
-					.with('case-studies-anchor-p3', () => (360 / 3) * 2 * dioramaOwnPolarAngleMultWhenSmall)
 					.with('case-study-a303', () => 0 * dioramaOwnPolarAngleMultWhenSmall)
 					.with('case-study-p2', () => (360 / 3) * 1 * dioramaOwnPolarAngleMultWhenSmall)
 					.with('case-study-p3', () => (360 / 3) * 2 * dioramaOwnPolarAngleMultWhenSmall)
@@ -366,9 +345,6 @@
 		dioramasOwnPolarAngleMult: derived(stateStore, ($s) =>
 			match($s)
 				.with('case-studies', () => dioramaOwnPolarAngleMultWhenCaseStudyLanding)
-				.with('case-studies-anchor-a303', () => dioramaOwnPolarAngleMultWhenSmall)
-				.with('case-studies-anchor-p2', () => dioramaOwnPolarAngleMultWhenSmall)
-				.with('case-studies-anchor-p3', () => dioramaOwnPolarAngleMultWhenSmall)
 				.with('case-study-a303', () => dioramaOwnPolarAngleMultWhenSmall)
 				.with('case-study-p2', () => dioramaOwnPolarAngleMultWhenSmall)
 				.with('case-study-p3', () => dioramaOwnPolarAngleMultWhenSmall)
