@@ -8,7 +8,7 @@
 	import { accentColourInServicesProps } from '$lib/three_scene/threeStateStores';
 
 	$: currentSectionIndex = (() => {
-		const sectionData = getCurrentSectionData($page.route.id);
+		const sectionData = getCurrentSectionData($page.url.pathname);
 		if (sectionData === undefined) {
 			console.error('this should never happen');
 			return 0;

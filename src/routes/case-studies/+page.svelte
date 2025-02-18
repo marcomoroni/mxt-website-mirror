@@ -3,8 +3,9 @@
 	import CaseStudyTitleBox from '$lib/CaseStudyTitleBox.svelte';
 	import FocusHighlight from '$lib/FocusHighlight.svelte';
 	import SecondaryPageLanding from '$lib/SecondaryPageLanding.svelte';
-	import { caseStudiesData } from '$lib/caseStudiesData';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
+
+	export let data;
 </script>
 
 <svelte:head>
@@ -24,11 +25,11 @@
 <div class="landing-spacer" />
 
 <ul class="case-studies-list">
-	{#each caseStudiesData as caseStudy}
+	{#each data.caseStudies as caseStudy}
 		<li class="case-study-card">
 			<a
 				class="box"
-				href={caseStudy.comingSoon ? undefined : caseStudy.href}
+				href={caseStudy.comingSoon ? undefined : caseStudy.slug}
 				class:coming-soon={caseStudy.comingSoon}
 			>
 				<div class="border-when-hovered" class:coming-soon={caseStudy.comingSoon} />
