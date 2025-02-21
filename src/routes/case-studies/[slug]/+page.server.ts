@@ -1,6 +1,5 @@
 import fs from 'fs';
 import fm from 'front-matter';
-import { micromark } from 'micromark';
 
 export function load({ params }) {
 	const caseStudiesFolder = 'src/content/case-studies';
@@ -11,11 +10,11 @@ export function load({ params }) {
 		comingSoon: boolean;
 		sort: number;
 		linkPreviewImage?: string;
+		body: Array<string | { gallery: Array<{ src: string; alt: string; caption: string }> }>;
 	}>(fs.readFileSync(`${caseStudiesFolder}/${params.slug}.md`, 'utf-8'));
 	return {
 		caseStudy: {
 			slug: params.slug,
-			body: micromark(fileContent.body),
 			...fileContent.attributes
 		}
 	};

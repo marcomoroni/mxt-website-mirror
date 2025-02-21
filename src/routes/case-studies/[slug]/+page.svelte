@@ -1,9 +1,15 @@
 <script lang="ts">
+	import Carousel from '$lib/Carousel.svelte';
 	import CaseStudyLanding from '$lib/CaseStudyLanding.svelte';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
+	import { micromark } from 'micromark';
 
 	export let data;
 	const { caseStudy } = data;
+
+	function markdownToHTML(text: string): string {
+		return micromark(text, { allowDangerousHtml: true });
+	}
 </script>
 
 <svelte:head>
@@ -18,4 +24,28 @@
 
 <CaseStudyLanding title={caseStudy.title} leadParagraph={caseStudy.leadParagraph} />
 
-{@html caseStudy.body}
+<div class="body">
+	{#each caseStudy.body as bodySection}
+		{#if typeof bodySection === 'string'}
+			{@html markdownToHTML(bodySection)}
+		{:else}
+			<Carousel entries={bodySection.gallery} />
+		{/if}
+	{/each}
+</div>
+
+<style>
+	.body {
+		display: contents;
+		--body-width: 800px;
+		--body-margin: var(--case-study-margin);
+	}
+
+	.body :global(p) {
+		padding-left: var(--body-margin);
+		padding-right: var(--body-margin);
+		max-width: calc(var(--body-width) + (var(--body-margin) * 2));
+		margin-left: auto;
+		margin-right: auto;
+	}
+</style>
