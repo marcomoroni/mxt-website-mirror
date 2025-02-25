@@ -13,15 +13,17 @@ body:
     generational opportunity to remove much of the traffic from this iconic landscape and restore
     Stonehenge to something like its original setting.
   - gallery:
-      - src: /images/HighresScreenshot00003.png
-        alt: Stonenge in the digital environment.
-        caption: ...
-      - src: /images/Lord Parkinson VR Pod.jpeg
-        alt: An entrance of the new A303 tunnel.
-        caption: ...
-      - src: /images/HighresScreenshot00007.png
-        alt: Cars on the current A303 interecting a walking path.
-        caption: ...
+      caption: |
+        Significant infrastructural interventions within a UNESCO world heritage site produce a complex communication challenge. With the responsibility of informing and assuring various stakeholders about the impact of the proposed tunnel, National Highways felt a method beyond traditional presentations and illustrations was needed.
+      images:
+        - src: /images/HighresScreenshot00003.png
+          alt: Stonenge in the digital environment.
+        - src: /images/Lord Parkinson VR Pod.jpeg
+          alt: An entrance of the new A303 tunnel.
+        - src: /images/HighresScreenshot00009.png
+          alt: An entrance of the new A303 tunnel.
+        - src: /images/HighresScreenshot00007.png
+          alt: Cars on the current A303 interecting a walking path.
   - |
     Significant infrastructural interventions within a UNESCO world heritage site produce a
     complex communication challenge. With the responsibility of informing and assuring various

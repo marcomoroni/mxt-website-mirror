@@ -29,7 +29,7 @@
 		{#if typeof bodySection === 'string'}
 			{@html markdownToHTML(bodySection)}
 		{:else}
-			<Carousel entries={bodySection.gallery} />
+			<Carousel caption={bodySection.gallery.caption} entries={bodySection.gallery.images} />
 		{/if}
 	{/each}
 </div>

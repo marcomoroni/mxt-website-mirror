@@ -10,7 +10,10 @@ export function load({ params }) {
 		comingSoon: boolean;
 		sort: number;
 		linkPreviewImage?: string;
-		body: Array<string | { gallery: Array<{ src: string; alt: string; caption: string }> }>;
+		body: Array<
+			| string
+			| { gallery: { caption?: string | undefined; images: Array<{ src: string; alt: string }> } }
+		>;
 	}>(fs.readFileSync(`${caseStudiesFolder}/${params.slug}.md`, 'utf-8'));
 	return {
 		caseStudy: {
