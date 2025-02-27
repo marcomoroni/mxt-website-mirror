@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Carousel from '$lib/Carousel.svelte';
+	import Insight from '$lib/case_study_insight/Insight.svelte';
+	import InsightItem from '$lib/case_study_insight/InsightItem.svelte';
 	import CaseStudyLanding from '$lib/CaseStudyLanding.svelte';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
 	import { micromark } from 'micromark';
@@ -28,8 +30,19 @@
 	{#each caseStudy.body as bodySection}
 		{#if typeof bodySection === 'string'}
 			{@html markdownToHTML(bodySection)}
-		{:else}
+		{:else if 'gallery' in bodySection}
 			<Carousel caption={bodySection.gallery.caption} entries={bodySection.gallery.images} />
+		{:else}
+			<Insight>
+				{#each bodySection.insight.sections as insightSection}
+					<InsightItem expanded={insightSection.expanded}>
+						<svelte:fragment slot="title">{insightSection.title}</svelte:fragment>
+						<svelte:fragment slot="body">
+							{@html markdownToHTML(insightSection.body)}
+						</svelte:fragment>
+					</InsightItem>
+				{/each}
+			</Insight>
 		{/if}
 	{/each}
 </div>
@@ -41,7 +54,7 @@
 		--body-margin: var(--case-study-margin);
 	}
 
-	.body :global(p) {
+	.body > :global(p) {
 		padding-left: var(--body-margin);
 		padding-right: var(--body-margin);
 		max-width: calc(var(--body-width) + (var(--body-margin) * 2));

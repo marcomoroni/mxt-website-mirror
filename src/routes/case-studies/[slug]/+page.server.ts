@@ -13,6 +13,12 @@ export function load({ params }) {
 		body: Array<
 			| string
 			| { gallery: { caption?: string | undefined; images: Array<{ src: string; alt: string }> } }
+			| {
+					insight: {
+						collapsable: boolean;
+						sections: Array<{ title: string; expanded?: boolean; body: string }>;
+					};
+			  }
 		>;
 	}>(fs.readFileSync(`${caseStudiesFolder}/${params.slug}.md`, 'utf-8'));
 	return {
