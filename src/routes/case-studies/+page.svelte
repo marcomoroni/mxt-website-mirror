@@ -58,8 +58,9 @@
 
 	.case-study-card {
 		--margin: 40px;
-		width: 100%;
+		--box-margin: var(--margin);
 		filter: var(--strong-drop-shadow);
+		margin-inline: var(--box-margin);
 	}
 
 	.background {
@@ -75,20 +76,18 @@
 	}
 
 	.box {
-		--box-margin: var(--margin);
 		display: flex;
 		position: relative;
-		width: calc(100% - (var(--box-margin) * 2));
-		min-height: calc(100dvh - (var(--box-margin) * 2));
-		top: 0;
-		left: var(--box-margin);
+		min-height: 450px;
+		max-width: 1000px;
+		margin-inline: auto;
 		text-decoration: none;
 		flex-direction: column;
 		justify-content: flex-end;
 	}
 
 	@media (max-width: 650px) {
-		.box {
+		.case-study-card {
 			--box-margin: 10px;
 		}
 	}
