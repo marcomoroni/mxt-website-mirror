@@ -56,7 +56,8 @@
 	}
 
 	.body > :global(p),
-	.body > :global(h2) {
+	.body > :global(h2),
+	.body > :global(ul) {
 		padding-left: var(--body-margin);
 		padding-right: var(--body-margin);
 		max-width: calc(var(--body-width) + (var(--body-margin) * 2));
@@ -69,6 +70,15 @@
 		font-size: 19px;
 		margin-top: 50px;
 		margin-bottom: 20px;
+	}
+
+	.body > :global(ul) {
+		list-style-type: disc;
+		margin-block: 8px;
+	}
+
+	.body > :global(ul) > :global(li) {
+		margin-left: 25px;
 	}
 
 	.margin-end {
