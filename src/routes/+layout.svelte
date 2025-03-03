@@ -20,15 +20,15 @@
 	const navLinks = [
 		{
 			label: 'Services',
-			href: '/services'
+			href: '/services/'
 		},
 		{
 			label: 'Case studies',
-			href: '/case-studies'
+			href: '/case-studies/'
 		},
 		{
 			label: 'Contacts',
-			href: '/contacts'
+			href: '/contacts/'
 		}
 	];
 
@@ -38,9 +38,8 @@
 	$: atTopOfWindow = scrollY <= 70;
 
 	$: threeState = (() => {
-		const route = $page.route.id;
-		const caseStudy = caseStudiesData.find(({ href }) => href == route);
-		console.log(route);
+		const path = $page.url.pathname;
+		const caseStudy = caseStudiesData.find(({ href }) => href == path);
 		if (caseStudy) {
 			if (caseStudy.threeState === 'none') {
 				return 'case-studies';
@@ -49,15 +48,15 @@
 			}
 		} else {
 			return match({
-				path: route,
-				servicesSection: getCurrentServicesSectionData(route),
+				path: path,
+				servicesSection: getCurrentServicesSectionData(path),
 				servicesPageIntersectingSection: $servicesPageIntersectingSection
 			})
 				.returnType<
 					'home' | 'case-studies' | 'service-1' | 'service-2' | 'service-3' | 'contacts'
 				>()
 				.with({ path: '/' }, () => 'home')
-				.with({ path: '/case-studies' }, () => 'case-studies')
+				.with({ path: '/case-studies/' }, () => 'case-studies')
 				.with(
 					{ servicesSection: { data: { associatedState: P.select() } } },
 					(associatedState) => associatedState
@@ -67,40 +66,40 @@
 	})();
 
 	$: threeHidden = match({
-		path: $page.route.id,
+		url: $page.url.pathname,
 		atTopOfWindow
 	})
 		.returnType<boolean>()
-		.with({ path: '/contacts' }, () => true)
+		.with({ url: '/contacts/' }, () => true)
 		.with(
-			{ path: '/case-studies/stonehenge', atTopOfWindow: P.select() },
+			{ url: '/case-studies/stonehenge/', atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
 		.with(
-			{ path: '/case-studies/p2', atTopOfWindow: P.select() },
+			{ url: '/case-studies/p2/', atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
 		.with(
-			{ path: '/case-studies/p3', atTopOfWindow: P.select() },
+			{ url: '/case-studies/p3/', atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
-		.with({ path: '/case-studies', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
-		.with({ path: '/services', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
+		.with({ url: '/case-studies/', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
+		.with({ url: '/services/', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
 		.with(
-			{ path: servicesSectionsData[0].href, atTopOfWindow: P.select() },
-			(atTopOfWindow) => !atTopOfWindow
-		)
-		.with(
-			{ path: servicesSectionsData[1].href, atTopOfWindow: P.select() },
+			{ url: servicesSectionsData[0].href, atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
 		.with(
-			{ path: servicesSectionsData[2].href, atTopOfWindow: P.select() },
+			{ url: servicesSectionsData[1].href, atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
-		.with({ path: '/privacy-policy' }, () => true)
+		.with(
+			{ url: servicesSectionsData[2].href, atTopOfWindow: P.select() },
+			(atTopOfWindow) => !atTopOfWindow
+		)
+		.with({ url: '/privacy-policy/' }, () => true)
 		.otherwise(() => false);
-	$: auroraHidden = $page.route.id !== '/contacts';
+	$: auroraHidden = $page.url.pathname !== '/contacts/';
 
 	const navLinkBackgroundKey = Symbol();
 	const [navLinkBackgroundSend, navLinkBackgroundReceive] = crossfade({
@@ -172,12 +171,12 @@
 		</div>
 		<div
 			class="central"
-			class:one-is-selected={$page.route.id
-				? navLinks.map(({ href }) => href).includes($page.route.id)
+			class:one-is-selected={$page.url.pathname
+				? navLinks.map(({ href }) => href).includes($page.url.pathname)
 				: false}
 		>
 			{#each navLinks as navLink}
-				{@const isCurrentPage = $page.route.id === navLink.href}
+				{@const isCurrentPage = $page.url.pathname.startsWith(navLink.href)}
 				<a href={navLink.href} class="page-link" class:current-page={isCurrentPage}>
 					{navLink.label}
 					{#if isCurrentPage}

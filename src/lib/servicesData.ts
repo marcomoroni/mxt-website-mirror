@@ -10,19 +10,19 @@ export const sectionsData: Array<SectionData> = [
 		title: 'Digital Infrastructure',
 		subtitle:
 			'Simulating the societal, environmental, and economic impact of infrastructure projects with immersive digital twins',
-		href: '/services/digital-infrastructure',
+		href: '/services/digital-infrastructure/',
 		associatedState: 'service-1' as 'service-1'
 	},
 	{
 		title: 'Driving Simulation',
 		subtitle: 'Behavioural science and road safety research',
-		href: '/services/driving-simulation',
+		href: '/services/driving-simulation/',
 		associatedState: 'service-2' as 'service-2'
 	},
 	{
 		title: 'Simulations for Scenario Planning, Learning and Development',
 		subtitle: 'Interactive and immersive learning environments',
-		href: '/services/interactive-and-immersive-learning-environments',
+		href: '/services/interactive-and-immersive-learning-environments/',
 		associatedState: 'service-3' as 'service-3'
 	}
 ];
@@ -33,7 +33,7 @@ export function getCurrentSectionData(
 	pageRouteId: string | null
 ): { data: SectionData; index: number } | undefined {
 	let index: number | undefined = undefined;
-	if (pageRouteId === '/services') {
+	if (pageRouteId === '/services/') {
 		index = 0;
 	} else {
 		index = sectionsData.findIndex(({ href }) => href === pageRouteId);
