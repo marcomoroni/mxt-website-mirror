@@ -96,6 +96,11 @@
 		height: 15px;
 	}
 
+	.body :global(p),
+	.body :global(h4) {
+		text-wrap: pretty;
+	}
+
 	.body :global(h4) {
 		/* text-align: center; */
 		opacity: 0.8;

@@ -46,12 +46,42 @@ body:
         - src: /images/HighresScreenshot00027.png
           alt: The Countess Roundabout at night.
   - |
-    ## Development
-
     The development phase spanned an initial three months, during which a data-driven and human-centered approach was adopted to create an immersive experience that respects the unique requirements and sensitivities of the Stonehenge landscape.
 
-    .........map
+    ## Data acquisition and usage
 
+    Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK.
+
+    The Environment Agency National LIDAR Programme provides accurate elevation data at 1m spatial resolution for all of England and is at the core of our workflow.
+
+    We use the dataset to generate the environment's terrain. We use a Vegetation Object Model (VOM), a derivative of the dataset, to procedurally generate the environment's diverse foliage and trees with an accuracy of 95%.
+
+    We generate ground cover using UKCEH Land Cover Maps, which describes land parcels via 21 distinct habitat classes.
+
+    The UKCEH digital river network of Great Britain supplies the river centre line of rivers canals, surface pipes and channels.
+
+    High resolution (12.5cm) aerial imagery via APGB contract adds depth and detail.
+
+    The infrastructure is built upon Building Information Modelling retrieved from Bentley's ProjectWise. Beyond that, the built environment is generated via Ordnance Survey's National Geographic Database (NGD), including:
+
+    * OS MasterMap Highways Network
+    * Building Features
+    * Structures
+
+    2,000 simulated vehicles are generated via a PTV Vissim dataset, capturing class 4 and heavy articulated vehicles.
+
+    Each car and truck affects the noise, light and overall perception of the site.
+  - gallery:
+      caption: |
+        The environment is procedurally generated based on real data.
+      images:
+        - src: /images/A303_Map_Features_Base.png
+          alt:
+        - src: /images/A303_Map_Features_Natural.png
+          alt:
+        - src: /images/A303_Map_Features_Human-made.png
+          alt:
+  - |
     ## Human-centered design approach
 
     Early and continuing input from AmW’s heritage team and consistent two-weekly delivery of software changes to National Highways ensures new ideas could be tried and course corrections were small.

@@ -8,7 +8,7 @@ body:
   - |
     Understanding how drivers interact with and comprehend various road conditions is crucial for enhancing road safety, efficiency, and informing policy. In collaboration with WSP, we conducted a study for Highways England to investigate driver responses and cognitive load when navigating dynamic hard shoulder motorways. This initiative responded to the Transport Select Committee's recommendation to pause DHS conversions and aimed to identify factors affecting driver comprehension and provide insights for future improvements.
 
-    ## Some title
+    ## Scenarios
 
     The simulation was based on an existing section of the M6 motorway between junctions 4 and 8, configured into a loop. It features overhead gantries, advanced motorway indicator signals with supporting variable message signs, speed cameras and emergency areas.
   - gallery:
@@ -46,9 +46,7 @@ body:
           body: |
             Average speed, speed variability, and rate of lane changes, can gauge comfort levels, consistency, and cautiousness. These metrics can identify areas where drivers may experience difficulty or uncertainty under different scenarios.
 
-            ..... intro image
-
-            #### Collected data (?)
+            #### Collected data
 
             We analyze vehicle speed to gather insights into driver comfort. Frequent speed fluctuations can indicate uncertainty or discomfort in the driving environment.
 
@@ -56,7 +54,7 @@ body:
 
             Time spent over the speed limit can indicate how well drivers adhere to road regulations. Among drivers with similar levels of experience, spending more time speeding may suggest greater driver confidence.
 
-            ![Driving behaviour metrics](/images/dhs_case_study_behaviour_central_diagram.png)
+            #### Results
 
             In all scenarios — whether the hard shoulder was open, closed, or dynamically mixed — drivers maintained average speeds well below the speed limit, indicating that participants generally adhered to safe driving practices.
 
@@ -77,9 +75,7 @@ body:
           body: |
             Heart rate variability (HRV) is sensitive to shifts in cognitive workload, allowing it to detect physiological responses to both heightened states, such as stress, and lower arousal states, like relaxation. This makes HRV an effective measure for assessing mental effort and stress levels.
 
-            ..... intro image
-
-            #### Collected data (?)
+            #### Collected data
 
             Heart rate increases incrementally with the difficulty of cognitive tasks while driving, indicating heightened mental workload.
 
@@ -110,7 +106,7 @@ body:
           body: |
             Eye tracking insights into cognitive load include longer fixations and frequent saccades, indicating higher cognitive effort and active scanning due to the need for acquiring more decisional information. Larger pupil sizes reveal increased mental effort and stress.
 
-            #### Collected data (?)
+            #### Collected data
 
             Eye tracking is collected at 1kHz. Oculometrics, such as larger pupil size can suggest increased mental effort, while shorter fixation times might indicate quicker processing of complex information. A higher blink rate may signal stress, and a more focused gaze might reflect greater cognitive demand.
 
