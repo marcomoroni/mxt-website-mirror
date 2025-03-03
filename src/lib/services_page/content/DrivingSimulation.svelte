@@ -2,9 +2,11 @@
 	import Card from './Card.svelte';
 	import CardContentScaffold from './CardContentScaffold.svelte';
 	import Content from './Content.svelte';
+
+	export let caseStudies: Array<{ title: string; slug: string }>;
 </script>
 
-<Content>
+<Content {caseStudies}>
 	<div class="grid">
 		<div class="card-container-1">
 			<Card intro={true}>

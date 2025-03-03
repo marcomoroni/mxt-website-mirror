@@ -12,62 +12,111 @@ body:
     experiences. The A303 Amesbury to Berwick Down (Stonehenge) Road Scheme presents a
     generational opportunity to remove much of the traffic from this iconic landscape and restore
     Stonehenge to something like its original setting.
+
+    Significant infrastructural interventions within a UNESCO world heritage site produce a
+    complex communication challenge. With the responsibility of informing and assuring various
+    stakeholders about the impact of the proposed tunnel, National Highways felt a method beyond
+    traditional presentations and illustrations was needed.
+
+    A collaboration between National Highways, their technical partner AmW (AECOM, Mace and WSP),
+    and the human experience design company MXT, led to the production of an immersive Virtual
+    Reality (VR) experience. This VR experience was designed with two core principles:
+
+    * Freedom: Users should be able to explore the entire World Heritage Site, getting a
+      before-and-after view of the infrastructural changes.
+    * Accuracy: Every aspect of the virtual environment had to be supported by real-world data.
+
+    The result was a 36 km<sup>2</sup> interactive environment synthesising a terabyte of raw information
+    to produce a digital mirror of Stonehenge and its surroundings accessible in virtual reality, desktop
+    and shared immersive spaces.
   - gallery:
       caption: |
-        Significant infrastructural interventions within a UNESCO world heritage site produce a complex communication challenge. With the responsibility of informing and assuring various stakeholders about the impact of the proposed tunnel, National Highways felt a method beyond traditional presentations and illustrations was needed.
+        The virtual environment captured in real-time.
       images:
         - src: /images/HighresScreenshot00003.png
           alt: Stonenge in the digital environment.
-        - src: /images/Lord Parkinson VR Pod.jpeg
-          alt: An entrance of the new A303 tunnel.
         - src: /images/HighresScreenshot00009.png
           alt: An entrance of the new A303 tunnel.
         - src: /images/HighresScreenshot00007.png
           alt: Cars on the current A303 interecting a walking path.
+        - src: /images/HighresScreenshot00013.png
+          alt: A roundabout at night.
+        - src: /images/HighresScreenshot00018.png
+          alt: The proposed Green Bridge.
+        - src: /images/HighresScreenshot00027.png
+          alt: The Countess Roundabout at night.
   - |
-    Significant infrastructural interventions within a UNESCO world heritage site produce a
-    complex communication challenge. With the responsibility of informing and assuring various
-    stakeholders about the impact of the proposed tunnel, National Highways felt a method beyond
-    traditional presentations and illustrations was needed.
+    The development phase spanned an initial three months, during which a data-driven and human-centered approach was adopted to create an immersive experience that respects the unique requirements and sensitivities of the Stonehenge landscape.
 
-    A collaboration between National Highways, their technical partner AmW (AECOM, Mace and WSP),
-    and the human experience design company MXT, led to the production of an immersive Virtual
-    Reality (VR) experience. This VR experience was designed with two core principles:
+    ## Data acquisition and usage
 
-    * Freedom: Users should be able to explore the entire World Heritage Site, getting a
-      before-and-after view of the infrastructural changes.
-    * Accuracy: Every aspect of the virtual environment had to be supported by real-world data.
+    Accuracy and transparency were ensured by using only publicly available data, particularly emphasizing the standard resources submitted as part of the planning application to the National Inspectorate. MXT has since used this approach to create other realistic environments, quickly, across the UK.
 
-    The result was a 36 km<sup>2</sup> interactive environment synthesising a terabyte of raw information
-    to produce a digital mirror of Stonehenge and its surroundings accessible in virtual reality, desktop
-    and shared immersive spaces.
-  - insight:
-      collapsable: true
-      sections:
-        - title: Section 1 very very very very very very very very very very very very very very very very very very very long long long long long long long long long title
-          body: Hello
-        - title: Section 2
-          body: Significant infrastructural interventions within a UNESCO world heritage site produce a complex communication challenge. With the responsibility of informing and assuring various stakeholders about the impact of the proposed tunnel, National Highways felt a method beyond traditional presentations and illustrations was needed.
-        - title: Section 3
-          expanded: true
-          body: Hello
+    The Environment Agency National LIDAR Programme provides accurate elevation data at 1m spatial resolution for all of England and is at the core of our workflow.
+
+    We use the dataset to generate the environment's terrain. We use a Vegetation Object Model (VOM), a derivative of the dataset, to procedurally generate the environment's diverse foliage and trees with an accuracy of 95%.
+
+    We generate ground cover using UKCEH Land Cover Maps, which describes land parcels via 21 distinct habitat classes.
+
+    The UKCEH digital river network of Great Britain supplies the river centre line of rivers canals, surface pipes and channels.
+
+    High resolution (12.5cm) aerial imagery via APGB contract adds depth and detail.
+
+    The infrastructure is built upon Building Information Modelling retrieved from Bentley's ProjectWise. Beyond that, the built environment is generated via Ordnance Survey's National Geographic Database (NGD), including:
+
+    * OS MasterMap Highways Network
+    * Building Features
+    * Structures
+
+    2,000 simulated vehicles are generated via a PTV Vissim dataset, capturing class 4 and heavy articulated vehicles.
+
+    Each car and truck affects the noise, light and overall perception of the site.
+  - gallery:
+      caption: |
+        The environment is procedurally generated based on real data.
+      images:
+        - src: /images/A303_Map_Features_Base.png
+          alt:
+        - src: /images/A303_Map_Features_Natural.png
+          alt:
+        - src: /images/A303_Map_Features_Human-made.png
+          alt:
   - |
-    Significant infrastructural interventions within a UNESCO world heritage site produce a
-    complex communication challenge. With the responsibility of informing and assuring various
-    stakeholders about the impact of the proposed tunnel, National Highways felt a method beyond
-    traditional presentations and illustrations was needed.
+    ## Human-centered design approach
 
-    A collaboration between National Highways, their technical partner AmW (AECOM, Mace and WSP),
-    and the human experience design company MXT, led to the production of an immersive Virtual
-    Reality (VR) experience. This VR experience was designed with two core principles:
+    Early and continuing input from AmW’s heritage team and consistent two-weekly delivery of software changes to National Highways ensures new ideas could be tried and course corrections were small.
 
-    * Freedom: Users should be able to explore the entire World Heritage Site, getting a
-      before-and-after view of the infrastructural changes.
-    * Accuracy: Every aspect of the virtual environment had to be supported by real-world data.
+    Interactive workshops were convened early and often with external heritage professionals with working knowledge of the WHS landscape, and with audiences that had no heritage background or site-specific knowledge to ensure the truthfulness of the experience was accessible to all users.
 
-    The result was a 36 km<sup>2</sup> interactive environment synthesising a terabyte of raw information
-    to produce a digital mirror of Stonehenge and its surroundings accessible in virtual reality, desktop
-    and shared immersive spaces.
+    Various gameplay features were introduced as a result of their feedback including:
+
+    * Presentation Modes: Both desktop and VR presentations were developed, accommodating users who sought immersive experiences in VR as well as those who preferred collaborative settings by way of large touchscreens and immersive domes.
+    * Time Transition: The users ability to alter the time of day. This showcased the visual relationships the heritage monuments share with the skies and astronomical events, enhancing the historical context.
+    * Aerial Perspective: Recognizing that some users are more familiar with the landscape topologically, an aerial view mode was added. This catered to users who preferred understanding the landscape akin to traditional maps.
+  - gallery:
+      caption: |
+        The user interface in VR and on desktop.
+      images:
+        - src: /images/HighresScreenshot00001.png
+          alt: The controls in virtual reality.
+        - src: /images/HighresScreenshot00005.png
+          alt: The environment seen from a high point with the Heritage Areas highlighted.
+        - src: /images/desktop_menu.jpg
+          alt: The controls in desktop.
+  - |
+    ## Results and impact
+
+    The coordinated efforts to marry scheme traffic and environmental data were described as remarkable by the joint world heritage centre and ICOMOS advisory mission and represents a first for a UK Government sponsored infrastructure project.
+  - gallery:
+      images:
+        - src: /images/DSC02898.JPG
+          alt: A person using the Stonehenge VR experience.
+        - src: /images/DSC02900.JPG
+          alt: A poster with the map that can be explored in the VR experience.
+        - src: /images/Lord Parkinson VR Pod.jpeg
+          alt: Lord Parkinson using the Stonehenge VR experience.
+        - src: /images/Dome_Night.jpg
+          alt: The outside of a dome used for the A303 experience.
 ---
 
 Hello

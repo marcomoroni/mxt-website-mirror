@@ -4,9 +4,11 @@
 	import Content from './Content.svelte';
 	import * as ColumnsCardContent from './columns-card-content';
 	import * as IntegrationsCollection from './integrations-collection';
+
+	export let caseStudies: Array<{ title: string; slug: string }>;
 </script>
 
-<Content caseStudyIndexes={[0]}>
+<Content {caseStudies} relatedCaseStudies={['stonehenge']}>
 	<div class="grid">
 		<div class="card-container-1">
 			<Card intro={true}>
