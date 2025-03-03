@@ -25,7 +25,7 @@
 </svelte:head>
 
 <CaseStudyLanding title={caseStudy.title} leadParagraph={caseStudy.leadParagraph} />
-
+<div class="margin-start" />
 <div class="body">
 	{#each caseStudy.body as bodySection}
 		{#if typeof bodySection === 'string'}
@@ -63,6 +63,7 @@
 		max-width: calc(var(--body-width) + (var(--body-margin) * 2));
 		margin-left: auto;
 		margin-right: auto;
+		text-wrap: pretty;
 	}
 
 	.body > :global(h2) {
@@ -79,6 +80,10 @@
 
 	.body > :global(ul) > :global(li) {
 		margin-left: 25px;
+	}
+
+	.margin-start {
+		margin-bottom: 80px;
 	}
 
 	.margin-end {

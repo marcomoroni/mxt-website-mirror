@@ -32,12 +32,18 @@
 
 <style>
 	.root {
-		background-color: #efe9e6;
+		--insight-background-color: #efe9e6;
+		background-color: var(--insight-background-color);
 		--padding-horizontal: 18px;
 	}
 
 	.top {
 		display: grid;
+		position: sticky;
+		top: 0;
+		background-color: var(--insight-background-color);
+		isolation: isolate;
+		z-index: 1;
 	}
 
 	.title,
@@ -69,7 +75,8 @@
 	.body-collapsable-container {
 		display: grid;
 		grid-template-rows: 0fr;
-		transition: grid-template-rows 500ms;
+		transition: grid-template-rows 700ms;
+		isolation: isolate;
 	}
 
 	.body {
@@ -87,5 +94,20 @@
 
 	.body-spacer-bottom {
 		height: 15px;
+	}
+
+	.body :global(h4) {
+		/* text-align: center; */
+		opacity: 0.8;
+		font-weight: 600;
+		margin-top: 16px;
+		margin-bottom: 12px;
+		font-size: 15px;
+	}
+
+	.body :global(img) {
+		margin-block: 16px;
+		max-height: 580px;
+		margin-inline: auto;
 	}
 </style>

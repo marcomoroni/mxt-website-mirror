@@ -45,16 +45,6 @@ body:
           alt: The proposed Green Bridge.
         - src: /images/HighresScreenshot00027.png
           alt: The Countess Roundabout at night.
-  - insight:
-      collapsable: true
-      sections:
-        - title: Section 1 very very very very very very very very very very very very very very very very very very very long long long long long long long long long title
-          body: Hello
-        - title: Section 2
-          body: Significant infrastructural interventions within a UNESCO world heritage site produce a complex communication challenge. With the responsibility of informing and assuring various stakeholders about the impact of the proposed tunnel, National Highways felt a method beyond traditional presentations and illustrations was needed.
-        - title: Section 3
-          expanded: true
-          body: Hello
   - |
     ## Development
 
