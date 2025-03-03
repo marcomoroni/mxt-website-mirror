@@ -15,7 +15,10 @@
 		getCurrentSectionData as getCurrentServicesSectionData,
 		sectionsData as servicesSectionsData
 	} from '$lib/servicesData';
-	import { caseStudiesData } from '$lib/caseStudiesData';
+	import type { LayoutData } from './$types';
+
+	export let data: LayoutData;
+	const { caseStudies } = data;
 
 	const navLinks = [
 		{
@@ -39,7 +42,7 @@
 
 	$: threeState = (() => {
 		const path = $page.url.pathname;
-		const caseStudy = caseStudiesData.find(({ href }) => href == path);
+		const caseStudy = caseStudies.find(({ slug }) => `/case-studies/${slug}/` == path);
 		if (caseStudy) {
 			if (caseStudy.threeState === 'none') {
 				return 'case-studies';
@@ -71,18 +74,6 @@
 	})
 		.returnType<boolean>()
 		.with({ url: '/contacts/' }, () => true)
-		.with(
-			{ url: '/case-studies/stonehenge/', atTopOfWindow: P.select() },
-			(atTopOfWindow) => !atTopOfWindow
-		)
-		.with(
-			{ url: '/case-studies/p2/', atTopOfWindow: P.select() },
-			(atTopOfWindow) => !atTopOfWindow
-		)
-		.with(
-			{ url: '/case-studies/p3/', atTopOfWindow: P.select() },
-			(atTopOfWindow) => !atTopOfWindow
-		)
 		.with({ url: '/case-studies/', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
 		.with({ url: '/services/', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
 		.with(
@@ -98,7 +89,12 @@
 			(atTopOfWindow) => !atTopOfWindow
 		)
 		.with({ url: '/privacy-policy/' }, () => true)
-		.otherwise(() => false);
+		.otherwise(({ url, atTopOfWindow }) => {
+			if (url.startsWith('/case-studies/')) {
+				return !atTopOfWindow;
+			}
+			return false;
+		});
 	$: auroraHidden = $page.url.pathname !== '/contacts/';
 
 	const navLinkBackgroundKey = Symbol();

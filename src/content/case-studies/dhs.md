@@ -1,7 +1,7 @@
 ---
-title: Insight into Driver Behaviour and Attitudes on SMART Motorways
-leadParagraph: A mixed-reality simulator study to explore confusion on dynamic hard shoulders motorways
-threeState: none
+title: Insight into Driver Behaviour and Cognitive State on SMART Motorways
+leadParagraph: Leveraging mixed reality simulation with integrated behavioural and psychophysiological measures to detect subtle cognitive state changes and enhance understanding of driver’s behaviour.
+threeState: case-study-dhs
 comingSoon: false
 sort: 1
 body:

@@ -6,6 +6,10 @@
 	import Tab from '$lib/services_page/Tab.svelte';
 	import * as Content from '$lib/services_page/content';
 	import { accentColourInServicesProps } from '$lib/three_scene/threeStateStores';
+	import type { LayoutData } from './$types';
+
+	export let data: LayoutData;
+	const { caseStudies } = data;
 
 	$: currentSectionIndex = (() => {
 		const sectionData = getCurrentSectionData($page.url.pathname);
@@ -60,11 +64,11 @@
 			style:display={currentSectionIndex === i ? 'block' : 'none'}
 		>
 			{#if i === 0}
-				<Content.DigitalInfrastructure />
+				<Content.DigitalInfrastructure {caseStudies} />
 			{:else if i === 1}
-				<Content.DrivingSimulation />
+				<Content.DrivingSimulation {caseStudies} />
 			{:else if i === 2}
-				<Content.LearningAndDevelopment />
+				<Content.LearningAndDevelopment {caseStudies} />
 			{/if}
 		</section>
 	{/each}
