@@ -64,7 +64,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 16px;
-		--max-image-width: calc(var(--body-width) + 120px);
+		--max-image-width: calc(var(--body-width) + 160px);
 		margin-block: 50px;
 	}
 

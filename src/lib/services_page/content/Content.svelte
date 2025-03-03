@@ -1,17 +1,18 @@
 <script lang="ts">
-	import { caseStudiesData } from '$lib/caseStudiesData';
-
-	export let caseStudyIndexes: Array<number> = [];
+	export let caseStudies: Array<{ title: string; slug: string }>;
+	export let relatedCaseStudies: Array<string> = [];
 </script>
 
 <div class="content">
 	<slot />
-	{#if caseStudyIndexes.length > 0}
+	{#if relatedCaseStudies.length > 0}
 		<h2 class="case-study-links-header">Related case studies</h2>
 		<ul class="case-study-links with-disc">
-			{#each caseStudyIndexes as caseStudyIndex}
-				{@const caseStudyData = caseStudiesData[caseStudyIndex]}
-				<li><a href={caseStudyData.href}>{caseStudyData.title}</a></li>
+			{#each relatedCaseStudies as relatedCaseStudy}
+				{@const caseStudyData = caseStudies.find(({ slug }) => slug === relatedCaseStudy)}
+				{#if caseStudyData}
+					<li><a href={`/case-studies/${caseStudyData.slug}/`}>{caseStudyData.title}</a></li>
+				{/if}
 			{/each}
 		</ul>
 	{/if}

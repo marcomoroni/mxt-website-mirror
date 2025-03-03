@@ -15,6 +15,6 @@
 		margin-block: 50px;
 		padding-left: var(--body-margin);
 		padding-right: var(--body-margin);
-		max-width: calc(var(--body-width) + 120px + (var(--body-margin) * 2));
+		max-width: calc(var(--body-width) + 160px + (var(--body-margin) * 2));
 	}
 </style>
