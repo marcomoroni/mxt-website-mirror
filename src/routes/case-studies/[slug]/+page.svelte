@@ -46,6 +46,7 @@
 		{/if}
 	{/each}
 </div>
+<div class="margin-end" />
 
 <style>
 	.body {
@@ -54,11 +55,23 @@
 		--body-margin: var(--case-study-margin);
 	}
 
-	.body > :global(p) {
+	.body > :global(p),
+	.body > :global(h2) {
 		padding-left: var(--body-margin);
 		padding-right: var(--body-margin);
 		max-width: calc(var(--body-width) + (var(--body-margin) * 2));
 		margin-left: auto;
 		margin-right: auto;
+	}
+
+	.body > :global(h2) {
+		font-weight: 640;
+		font-size: 19px;
+		margin-top: 50px;
+		margin-bottom: 20px;
+	}
+
+	.margin-end {
+		margin-top: 80px;
 	}
 </style>
