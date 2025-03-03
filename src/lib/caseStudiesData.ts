@@ -9,7 +9,7 @@ export const caseStudiesData: Array<{
 		title: 'Visualising the Stonehenge World Heritage site landscape',
 		leadParagraph:
 			'Harnessing the power of immersive technologies for complex infrastructure projects',
-		href: '/case-studies/stonehenge',
+		href: '/case-studies/stonehenge/',
 		threeState: 'case-study-a303',
 		comingSoon: false
 	},
@@ -17,14 +17,14 @@ export const caseStudiesData: Array<{
 		title: 'Insight into Driver Behaviour and Attitudes on SMART Motorways',
 		leadParagraph:
 			'A mixed-reality simulator study to explore confusion on dynamic hard shoulders motorways',
-		href: '/case-studies/p2',
+		href: '/case-studies/p2/',
 		threeState: 'none',
 		comingSoon: false
 	},
 	{
 		title: 'Performance and Decision Making through Simulation',
 		leadParagraph: "Driving Simulation for National Highways' Traffic Officers",
-		href: '/case-studies/p3',
+		href: '/case-studies/p3/',
 		threeState: 'case-study-p3',
 		comingSoon: false
 	}
