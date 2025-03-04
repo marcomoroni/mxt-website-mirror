@@ -134,5 +134,3 @@ body:
 
             In conclusion, drivers' eye-tracking data revealed how visual engagement shifted based on scenario complexity: participants spent the most time focusing on signs and indicators in dynamic hard shoulder settings, especially in mixed scenarios, indicating greater processing demands. Higher blink rates in these scenarios suggested moments of increased cognitive load or uncertainty, although overall mental effort remained consistent across conditions.
 ---
-
-Hello

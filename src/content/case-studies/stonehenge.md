@@ -118,12 +118,3 @@ body:
         - src: /images/Dome_Night.jpg
           alt: The outside of a dome used for the A303 experience.
 ---
-
-Hello
-
-<div class="gallery">
-    <div class="image container">
-    </div>
-    <div class="image container">
-    </div>
-<div>
