@@ -6,10 +6,7 @@
 	import Aurora from '$lib/Aurora.svelte';
 	import ThreeScene from '$lib/three_scene/ThreeScene.svelte';
 	import { P, match } from 'ts-pattern';
-	import {
-		caseStudiesPageIntersectingCard,
-		servicesPageIntersectingSection
-	} from '$lib/three_scene/threeStateStores';
+	import { servicesPageIntersectingSection } from '$lib/three_scene/threeStateStores';
 	import { crossfade } from 'svelte/transition';
 	import { quintInOut } from 'svelte/easing';
 	import FocusHighlight from '$lib/FocusHighlight.svelte';
@@ -18,19 +15,23 @@
 		getCurrentSectionData as getCurrentServicesSectionData,
 		sectionsData as servicesSectionsData
 	} from '$lib/servicesData';
+	import type { LayoutData } from './$types';
+
+	export let data: LayoutData;
+	const { caseStudies } = data;
 
 	const navLinks = [
 		{
 			label: 'Services',
-			href: '/services'
+			href: '/services/'
 		},
 		{
 			label: 'Case studies',
-			href: '/case-studies'
+			href: '/case-studies/'
 		},
 		{
 			label: 'Contacts',
-			href: '/contacts'
+			href: '/contacts/'
 		}
 	];
 
@@ -39,74 +40,62 @@
 	let scrollY: number;
 	$: atTopOfWindow = scrollY <= 70;
 
-	$: threeState = match({
-		path: $page.route.id,
-		servicesSection: getCurrentServicesSectionData($page.route.id),
-		caseStudiesPageIntersectingCard: $caseStudiesPageIntersectingCard,
-		servicesPageIntersectingSection: $servicesPageIntersectingSection
-	})
-		.returnType<
-			| 'home'
-			| 'case-studies'
-			| 'case-studies-anchor-a303'
-			| 'case-studies-anchor-p2'
-			| 'case-studies-anchor-p3'
-			| 'case-study-a303'
-			| 'case-study-p2'
-			| 'case-study-p3'
-			| 'service-1'
-			| 'service-2'
-			| 'service-3'
-			| 'contacts'
-		>()
-		.with({ path: '/' }, () => 'home')
-		.with(
-			{ path: '/case-studies', caseStudiesPageIntersectingCard: P.select() },
-			(s) => s ?? 'case-studies'
-		)
-		.with({ path: '/case-studies/stonehenge' }, () => 'case-study-a303')
-		.with({ path: '/case-studies/p2' }, () => 'case-study-p2')
-		.with({ path: '/case-studies/p3' }, () => 'case-study-p3')
-		.with(
-			{ servicesSection: { data: { associatedState: P.select() } } },
-			(associatedState) => associatedState
-		)
-		.otherwise(() => 'contacts');
+	$: threeState = (() => {
+		const path = $page.url.pathname;
+		const caseStudy = caseStudies.find(({ slug }) => `/case-studies/${slug}/` == path);
+		if (caseStudy) {
+			if (caseStudy.threeState === 'none') {
+				return 'case-studies';
+			} else {
+				return caseStudy.threeState;
+			}
+		} else {
+			return match({
+				path: path,
+				servicesSection: getCurrentServicesSectionData(path),
+				servicesPageIntersectingSection: $servicesPageIntersectingSection
+			})
+				.returnType<
+					'home' | 'case-studies' | 'service-1' | 'service-2' | 'service-3' | 'contacts'
+				>()
+				.with({ path: '/' }, () => 'home')
+				.with({ path: '/case-studies/' }, () => 'case-studies')
+				.with(
+					{ servicesSection: { data: { associatedState: P.select() } } },
+					(associatedState) => associatedState
+				)
+				.otherwise(() => 'contacts');
+		}
+	})();
 
 	$: threeHidden = match({
-		path: $page.route.id,
+		url: $page.url.pathname,
 		atTopOfWindow
 	})
 		.returnType<boolean>()
-		.with({ path: '/contacts' }, () => true)
+		.with({ url: '/contacts/' }, () => true)
+		.with({ url: '/case-studies/', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
+		.with({ url: '/services/', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
 		.with(
-			{ path: '/case-studies/stonehenge', atTopOfWindow: P.select() },
+			{ url: servicesSectionsData[0].href, atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
 		.with(
-			{ path: '/case-studies/p2', atTopOfWindow: P.select() },
+			{ url: servicesSectionsData[1].href, atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
 		.with(
-			{ path: '/case-studies/p3', atTopOfWindow: P.select() },
+			{ url: servicesSectionsData[2].href, atTopOfWindow: P.select() },
 			(atTopOfWindow) => !atTopOfWindow
 		)
-		.with({ path: '/services', atTopOfWindow: P.select() }, (atTopOfWindow) => !atTopOfWindow)
-		.with(
-			{ path: servicesSectionsData[0].href, atTopOfWindow: P.select() },
-			(atTopOfWindow) => !atTopOfWindow
-		)
-		.with(
-			{ path: servicesSectionsData[1].href, atTopOfWindow: P.select() },
-			(atTopOfWindow) => !atTopOfWindow
-		)
-		.with(
-			{ path: servicesSectionsData[2].href, atTopOfWindow: P.select() },
-			(atTopOfWindow) => !atTopOfWindow
-		)
-		.with({ path: '/privacy-policy' }, () => true)
-		.otherwise(() => false);
-	$: auroraHidden = $page.route.id !== '/contacts';
+		.with({ url: '/privacy-policy/' }, () => true)
+		.otherwise(({ url, atTopOfWindow }) => {
+			if (url.startsWith('/case-studies/')) {
+				return !atTopOfWindow;
+			}
+			return false;
+		});
+	$: auroraHidden = $page.url.pathname !== '/contacts/';
 
 	const navLinkBackgroundKey = Symbol();
 	const [navLinkBackgroundSend, navLinkBackgroundReceive] = crossfade({
@@ -178,12 +167,12 @@
 		</div>
 		<div
 			class="central"
-			class:one-is-selected={$page.route.id
-				? navLinks.map(({ href }) => href).includes($page.route.id)
+			class:one-is-selected={$page.url.pathname
+				? navLinks.map(({ href }) => href).includes($page.url.pathname)
 				: false}
 		>
 			{#each navLinks as navLink}
-				{@const isCurrentPage = $page.route.id === navLink.href}
+				{@const isCurrentPage = $page.url.pathname.startsWith(navLink.href)}
 				<a href={navLink.href} class="page-link" class:current-page={isCurrentPage}>
 					{navLink.label}
 					{#if isCurrentPage}

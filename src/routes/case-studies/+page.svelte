@@ -3,57 +3,9 @@
 	import CaseStudyTitleBox from '$lib/CaseStudyTitleBox.svelte';
 	import FocusHighlight from '$lib/FocusHighlight.svelte';
 	import SecondaryPageLanding from '$lib/SecondaryPageLanding.svelte';
-	import { caseStudiesData } from '$lib/caseStudiesData';
 	import { mxtHeadTitle } from '$lib/mxtHeadTitle';
-	import { caseStudiesPageIntersectingCard } from '$lib/three_scene/threeStateStores';
-	import { onMount } from 'svelte';
 
-	// `IntersectionObserver` does not work well in this situation becasue getting the first state asyncronously
-	// is not enough.
-
-	let scrollY: number;
-	let windowHeight: number;
-
-	// Note that these are in order.
-	const cards: Array<{
-		el: HTMLElement;
-		threeState: 'case-studies-anchor-a303' | 'case-studies-anchor-p2' | 'case-studies-anchor-p3';
-	}> = [];
-
-	function checkNewState() {
-		let newThreeState:
-			| undefined
-			| 'case-studies-anchor-a303'
-			| 'case-studies-anchor-p2'
-			| 'case-studies-anchor-p3' = undefined;
-		for (const card of cards) {
-			const hasPassedHalfWindow = card.el.getBoundingClientRect().y < windowHeight / 2;
-			if (hasPassedHalfWindow) {
-				newThreeState = card.threeState;
-			} else {
-				break;
-			}
-		}
-
-		caseStudiesPageIntersectingCard.set(newThreeState);
-	}
-
-	$: {
-		if (scrollY) {
-			checkNewState();
-		}
-	}
-
-	onMount(() => {
-		checkNewState();
-	});
-
-	function scrollObserve(
-		el: HTMLElement,
-		threeState: 'case-studies-anchor-a303' | 'case-studies-anchor-p2' | 'case-studies-anchor-p3'
-	) {
-		cards.push({ el, threeState });
-	}
+	export let data;
 </script>
 
 <svelte:head>
@@ -64,8 +16,6 @@
 	<meta property="og:image" content="https://mxt.co.uk/preview.png" />
 </svelte:head>
 
-<svelte:window bind:scrollY bind:innerHeight={windowHeight} />
-
 <AccessibleHiddenHeader text="Case studies" />
 
 <SecondaryPageLanding
@@ -75,11 +25,11 @@
 <div class="landing-spacer" />
 
 <ul class="case-studies-list">
-	{#each caseStudiesData as caseStudy}
-		<li class="case-study-card" use:scrollObserve={caseStudy.threeState}>
+	{#each data.caseStudies as caseStudy}
+		<li class="case-study-card">
 			<a
 				class="box"
-				href={caseStudy.comingSoon ? undefined : caseStudy.href}
+				href={caseStudy.comingSoon ? undefined : caseStudy.slug}
 				class:coming-soon={caseStudy.comingSoon}
 			>
 				<div class="border-when-hovered" class:coming-soon={caseStudy.comingSoon} />
@@ -108,8 +58,9 @@
 
 	.case-study-card {
 		--margin: 40px;
-		width: 100%;
+		--box-margin: var(--margin);
 		filter: var(--strong-drop-shadow);
+		margin-inline: var(--box-margin);
 	}
 
 	.background {
@@ -125,20 +76,18 @@
 	}
 
 	.box {
-		--box-margin: var(--margin);
 		display: flex;
 		position: relative;
-		width: calc(100% - (var(--box-margin) * 2));
-		min-height: calc(100dvh - (var(--box-margin) * 2));
-		top: 0;
-		left: var(--box-margin);
+		min-height: 450px;
+		max-width: 1000px;
+		margin-inline: auto;
 		text-decoration: none;
 		flex-direction: column;
 		justify-content: flex-end;
 	}
 
 	@media (max-width: 650px) {
-		.box {
+		.case-study-card {
 			--box-margin: 10px;
 		}
 	}

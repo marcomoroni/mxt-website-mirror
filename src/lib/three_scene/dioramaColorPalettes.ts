@@ -1,6 +1,6 @@
 import { accentColor1, accentColor2, accentColor3, backgroundColor } from '$lib/cssValues';
 
-export type PaletteName = 'default' | 'dim' | 'hidden' | 'service-1' | 'service-2' | 'service-3';
+export type PaletteName = 'default' | 'hidden' | 'service-1' | 'service-2' | 'service-3';
 
 export function dioramaColorPalettes() {
 	const palettes = new Map([
@@ -14,18 +14,6 @@ export function dioramaColorPalettes() {
 				accentColor3: 'ColouredNoise',
 				accentColor4: 'ColouredNoise',
 				highlightColor: 'white'
-			}
-		],
-		[
-			'dim' as PaletteName,
-			{
-				baseColor: '#F2ECEA',
-				baseShadowColor: '#AAAAAA',
-				accentColor1: '#E9E2DE',
-				accentColor2: '#E9E2DE',
-				accentColor3: '#E9E2DE',
-				accentColor4: '#C0BBB1',
-				highlightColor: '#F9F7F6'
 			}
 		],
 		[

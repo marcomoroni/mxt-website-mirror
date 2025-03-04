@@ -42,7 +42,7 @@
 	}
 
 	.case-study-title-box-container {
-		margin-left: 40px;
-		margin-right: 40px;
+		margin-left: var(--case-study-margin);
+		margin-right: var(--case-study-margin);
 	}
 </style>
