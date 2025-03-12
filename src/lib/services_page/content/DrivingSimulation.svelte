@@ -21,7 +21,14 @@
 			</Card>
 		</div>
 
-		<div class="card-container-2 common-card-min-height">
+		<div class="card-container-2">
+			<!-- svelte-ignore a11y-media-has-caption -->
+			<video class="video" autoplay controls muted>
+				<source src="/videos/drivingsim.mp4" type="video/mp4" />
+			</video>
+		</div>
+
+		<div class="card-container-3 common-card-min-height">
 			<Card>
 				<svelte:fragment slot="front">
 					<CardContentScaffold width="1">
@@ -50,7 +57,7 @@
 			</Card>
 		</div>
 
-		<div class="card-container-3 common-card-min-height">
+		<div class="card-container-4 common-card-min-height">
 			<Card
 				backgroundImg={'/images/rig-diagram.png'}
 				customBackgroundColor={'white'}
@@ -87,7 +94,7 @@
 			</Card>
 		</div>
 
-		<div class="card-container-4 common-card-min-height">
+		<div class="card-container-5 common-card-min-height">
 			<Card>
 				<svelte:fragment slot="front">
 					<CardContentScaffold width="1">
@@ -121,7 +128,7 @@
 			</Card>
 		</div>
 
-		<div class="card-container-5 common-card-min-height">
+		<div class="card-container-6 common-card-min-height">
 			<Card>
 				<svelte:fragment slot="front">
 					<CardContentScaffold width="1">
@@ -161,23 +168,32 @@
 	}
 
 	.card-container-2 {
-		grid-column: 1 / 2;
+		grid-column: 1 / 3;
 		grid-row: 2 / 3;
 	}
 
 	.card-container-3 {
-		grid-column: 2 / 3;
-		grid-row: 2 / 3;
-	}
-
-	.card-container-4 {
 		grid-column: 1 / 2;
 		grid-row: 3 / 4;
 	}
 
-	.card-container-5 {
+	.card-container-4 {
 		grid-column: 2 / 3;
 		grid-row: 3 / 4;
+	}
+
+	.card-container-5 {
+		grid-column: 1 / 2;
+		grid-row: 4 / 5;
+	}
+
+	.card-container-6 {
+		grid-column: 2 / 3;
+		grid-row: 4 / 5;
+	}
+
+	.video {
+		width: 100%;
 	}
 
 	@media (max-width: 1000px) {
