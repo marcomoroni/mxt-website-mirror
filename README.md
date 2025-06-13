@@ -48,7 +48,16 @@ The project uses [TypeScript](https://www.typescriptlang.org/) to add type safet
 
 ## Deploying
 
-Refer to the `.gitlab-ci.yml` file.
+The site is hosted on GitHub Pages with a custom domain (mxt.co.uk).
+
+The setup is the following:
+
+- The site is built and deployed with the GitHub Action in the `.github/workflows/deploy.yml` file.
+- In the repository settings for GitHub Pages:
+  - GitHub Pages has been enabled;
+  - the source is set to GitHub Actions;
+  - the custom domain is set accordingly.
+- In the DNS provider, the instructions on [how to configure a cutom domain](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#configuring-an-apex-domain) has been followed. If the repository changes ownership the `CNAME` needs to be updated.
 
 ## Keeping it up-to-date
 
